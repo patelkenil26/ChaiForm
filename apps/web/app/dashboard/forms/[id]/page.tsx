@@ -14,6 +14,9 @@ import {
   GlobeIcon,
   LinkIcon,
   XIcon,
+  SlidersHorizontalIcon,
+  ClockIcon,
+  UsersIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -38,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useGetForm, useUpdateFormVisibility } from "~/hooks/api/form";
+import { useGetForm, useUpdateFormVisibility, useUpdateFormSettings } from "~/hooks/api/form";
 import {
   useGetFields,
   useCreateField,
@@ -293,18 +296,189 @@ function FieldForm({
   );
 }
 
+function FormLimitsDialog({
+  open,
+  onOpenChange,
+  form,
+  onSave,
+  isSaving,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  form: NonNullable<ReturnType<typeof useGetForm>["form"]>;
+  onSave: (settings: { closesAt: Date | null; responseLimit: number | null }) => Promise<void>;
+  isSaving: boolean;
+}) {
+  const [hasExpiry, setHasExpiry] = useState(false);
+  const [expiryValue, setExpiryValue] = useState("");
+  const [hasLimit, setHasLimit] = useState(false);
+  const [limitValue, setLimitValue] = useState("");
+
+  useEffect(() => {
+    if (open && form) {
+      if (form.closesAt) {
+        setHasExpiry(true);
+        const d = new Date(form.closesAt);
+        const pad = (n: number) => String(n).padStart(2, "0");
+        const formatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        setExpiryValue(formatted);
+      } else {
+        setHasExpiry(false);
+        setExpiryValue("");
+      }
+
+      if (form.responseLimit) {
+        setHasLimit(true);
+        setLimitValue(String(form.responseLimit));
+      } else {
+        setHasLimit(false);
+        setLimitValue("");
+      }
+    }
+  }, [open, form]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const closesAt = hasExpiry && expiryValue ? new Date(expiryValue) : null;
+    const responseLimit = hasLimit && limitValue ? parseInt(limitValue, 10) : null;
+    await onSave({ closesAt, responseLimit });
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <SlidersHorizontalIcon className="size-5 text-primary" />
+            Form Limits & Expiry
+          </DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
+          {/* Submission status banner */}
+          <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/40 text-xs">
+            <span className="text-muted-foreground">Current Submissions:</span>
+            <span className="font-semibold text-foreground">
+              {form.submissionCount} {form.responseLimit ? `/ ${form.responseLimit}` : "responses"}
+            </span>
+          </div>
+
+          {/* Expiry Date Section */}
+          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="toggle-expiry" className="text-sm font-medium cursor-pointer">
+                  Schedule Expiration
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Automatically close form after specific date & time
+                </p>
+              </div>
+              <Switch
+                id="toggle-expiry"
+                checked={hasExpiry}
+                onCheckedChange={setHasExpiry}
+              />
+            </div>
+
+            {hasExpiry && (
+              <div className="pt-2">
+                <FieldLabel htmlFor="expiry-datetime">Close on (Date & Time)</FieldLabel>
+                <Input
+                  id="expiry-datetime"
+                  type="datetime-local"
+                  value={expiryValue}
+                  onChange={(e) => setExpiryValue(e.target.value)}
+                  className="text-sm"
+                  required={hasExpiry}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Response Limit Section */}
+          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="toggle-limit" className="text-sm font-medium cursor-pointer">
+                  Response Cap
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Limit maximum number of accepted submissions
+                </p>
+              </div>
+              <Switch
+                id="toggle-limit"
+                checked={hasLimit}
+                onCheckedChange={setHasLimit}
+              />
+            </div>
+
+            {hasLimit && (
+              <div className="pt-2">
+                <FieldLabel htmlFor="response-cap">Max Responses</FieldLabel>
+                <Input
+                  id="response-cap"
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 100"
+                  value={limitValue}
+                  onChange={(e) => setLimitValue(e.target.value)}
+                  className="text-sm"
+                  required={hasLimit}
+                />
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className="mt-2">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Settings"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function FormBuilderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);
 
   const { form } = useGetForm(formId);
   const { updateFormVisibilityAsync, isLoading: isUpdatingVisibility } = useUpdateFormVisibility();
+  const { updateFormSettingsAsync, isLoading: isUpdatingSettings } = useUpdateFormSettings();
   const { fields, isLoading } = useGetFields(formId);
   const { createFieldAsync, isError: isCreateError, error: createError } = useCreateField(formId);
   const { updateFieldAsync } = useUpdateField(formId);
   const { deleteFieldAsync } = useDeleteField(formId);
 
   const [createOpen, setCreateOpen] = useState(false);
+  const [limitsOpen, setLimitsOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
+
+  const handleSaveSettings = async ({
+    closesAt,
+    responseLimit,
+  }: {
+    closesAt: Date | null;
+    responseLimit: number | null;
+  }) => {
+    try {
+      await updateFormSettingsAsync({
+        formId,
+        closesAt,
+        responseLimit,
+      });
+      toast.success("Form limits & expiry settings updated!");
+    } catch {
+      toast.error("Failed to update form settings");
+    }
+  };
 
   const handleTogglePublish = async (checked: boolean) => {
     try {
@@ -429,6 +603,39 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                       </>
                     )}
                   </Badge>
+
+                  {form.closesAt && (
+                    <Badge
+                      variant="outline"
+                      className={`text-xs gap-1 ${
+                        form.isExpired
+                          ? "border-destructive text-destructive bg-destructive/10"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <ClockIcon className="size-3" />
+                      {form.isExpired
+                        ? "Expired"
+                        : `Closes: ${new Date(form.closesAt).toLocaleDateString([], {
+                            month: "short",
+                            day: "numeric",
+                          })}`}
+                    </Badge>
+                  )}
+
+                  {form.responseLimit && (
+                    <Badge
+                      variant="outline"
+                      className={`text-xs gap-1 ${
+                        form.isLimitReached
+                          ? "border-amber-500 text-amber-600 bg-amber-500/10"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <UsersIcon className="size-3" />
+                      {form.submissionCount} / {form.responseLimit}
+                    </Badge>
+                  )}
                 </div>
               )}
             </div>
@@ -486,7 +693,17 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           </span>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setLimitsOpen(true)}
+            className="h-8 text-xs gap-1.5"
+          >
+            <SlidersHorizontalIcon className="size-3.5 text-muted-foreground" />
+            Limits & Expiry
+          </Button>
+
           <Label className="text-xs text-muted-foreground font-normal">Visibility:</Label>
           <Select
             value={form?.visibility ?? "UNLISTED"}
@@ -629,6 +846,17 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Form Limits & Expiry modal */}
+      {form && (
+        <FormLimitsDialog
+          open={limitsOpen}
+          onOpenChange={setLimitsOpen}
+          form={form}
+          onSave={handleSaveSettings}
+          isSaving={isUpdatingSettings}
+        />
+      )}
     </div>
   );
 }

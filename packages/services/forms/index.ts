@@ -1,4 +1,4 @@
-import db, { and, asc, desc, eq } from "@repo/database";
+import db, { and, asc, count, desc, eq } from "@repo/database";
 import {
     createFormInput,
     CreateFormInputType,
@@ -8,15 +8,18 @@ import {
     ListFormsByUserIdInputType,
     updateFormVisibilityInput,
     UpdateFormVisibilityInputType,
+    updateFormSettingsInput,
+    UpdateFormSettingsInputType,
     FormVisibilityType,
 } from "./model";
 import { formsTable } from '@repo/database/models/form'
 import { formFieldsTable } from '@repo/database/models/form-field'
+import { formSubmissionTable } from '@repo/database/models/form-submission'
 
 
 class FormService {
     public async createForm(payload: CreateFormInputType) {
-        const { title, description, createdBy, visibility, isPublished } = await createFormInput.parseAsync(payload);
+        const { title, description, createdBy, visibility, isPublished, closesAt, responseLimit } = await createFormInput.parseAsync(payload);
 
         const result = await db.insert(formsTable).values({
             title,
@@ -24,6 +27,8 @@ class FormService {
             createdBy,
             visibility,
             isPublished,
+            closesAt,
+            responseLimit,
         }).returning({
             id: formsTable.id,
         })
@@ -42,6 +47,8 @@ class FormService {
             description: formsTable.description,
             visibility: formsTable.visibility,
             isPublished: formsTable.isPublished,
+            closesAt: formsTable.closesAt,
+            responseLimit: formsTable.responseLimit,
             createdAt: formsTable.createdAt,
             updatedAt: formsTable.updatedAt,
         }).from(formsTable).where(eq(formsTable.createdBy, userId)).orderBy(desc(formsTable.createdAt))
@@ -58,6 +65,8 @@ class FormService {
                 description: formsTable.description,
                 visibility: formsTable.visibility,
                 isPublished: formsTable.isPublished,
+                closesAt: formsTable.closesAt,
+                responseLimit: formsTable.responseLimit,
                 createdAt: formsTable.createdAt,
                 updatedAt: formsTable.updatedAt,
                 field: {
@@ -79,20 +88,53 @@ class FormService {
 
         if (rows.length === 0) return null
 
-        const { id, title, description, visibility, isPublished, createdAt, updatedAt } = rows[0]!
+        const [subCountResult] = await db
+            .select({ count: count() })
+            .from(formSubmissionTable)
+            .where(eq(formSubmissionTable.formId, formId));
+
+        const submissionCount = subCountResult ? Number(subCountResult.count) : 0;
+
+        const { id, title, description, visibility, isPublished, closesAt, responseLimit, createdAt, updatedAt } = rows[0]!
         const fields = rows
             .filter(r => r.field?.id !== null)
             .map(r => r.field as NonNullable<typeof r.field>)
 
-        return { id, title, description, visibility, isPublished, createdAt, updatedAt, fields }
+        const isExpired = closesAt ? new Date() > new Date(closesAt) : false;
+        const isLimitReached = responseLimit ? submissionCount >= responseLimit : false;
+        const isOpen = isPublished && !isExpired && !isLimitReached;
+
+        return {
+            id,
+            title,
+            description,
+            visibility,
+            isPublished,
+            closesAt,
+            responseLimit,
+            submissionCount,
+            isOpen,
+            isExpired,
+            isLimitReached,
+            createdAt,
+            updatedAt,
+            fields,
+        }
     }
 
-    public async updateFormVisibility(payload: UpdateFormVisibilityInputType) {
-        const { formId, userId, visibility, isPublished } = await updateFormVisibilityInput.parseAsync(payload);
+    public async updateFormSettings(payload: UpdateFormSettingsInputType) {
+        const { formId, userId, visibility, isPublished, closesAt, responseLimit } = await updateFormSettingsInput.parseAsync(payload);
 
-        const updateData: { visibility?: FormVisibilityType; isPublished?: boolean } = {};
+        const updateData: {
+            visibility?: FormVisibilityType;
+            isPublished?: boolean;
+            closesAt?: Date | null;
+            responseLimit?: number | null;
+        } = {};
         if (visibility !== undefined) updateData.visibility = visibility;
         if (isPublished !== undefined) updateData.isPublished = isPublished;
+        if (closesAt !== undefined) updateData.closesAt = closesAt;
+        if (responseLimit !== undefined) updateData.responseLimit = responseLimit;
 
         const result = await db.update(formsTable)
             .set(updateData)
@@ -101,6 +143,8 @@ class FormService {
                 id: formsTable.id,
                 visibility: formsTable.visibility,
                 isPublished: formsTable.isPublished,
+                closesAt: formsTable.closesAt,
+                responseLimit: formsTable.responseLimit,
             });
 
         if (!result || result.length === 0 || !result[0]) {
@@ -108,6 +152,10 @@ class FormService {
         }
 
         return result[0];
+    }
+
+    public async updateFormVisibility(payload: UpdateFormVisibilityInputType) {
+        return this.updateFormSettings(payload);
     }
 
     public async listPublicForms() {

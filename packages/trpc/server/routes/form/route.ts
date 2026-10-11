@@ -10,6 +10,8 @@ import {
     getFormOutputModel,
     updateFormVisibilityInputModel,
     updateFormVisibilityOutputModel,
+    updateFormSettingsInputModel,
+    updateFormSettingsOutputModel,
     listPublicFormsOutputModel,
 } from "./model";
 
@@ -29,13 +31,15 @@ export const formProcedures = {
         .input(createFormInputModel)
         .output(createFormOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { title, description, visibility, isPublished } = input;
+            const { title, description, visibility, isPublished, closesAt, responseLimit } = input;
             const { id } = await formService.createForm({
                 title,
                 description,
                 createdBy: ctx.user.id,
                 visibility,
                 isPublished,
+                closesAt,
+                responseLimit,
             });
             return { id };
         }),
@@ -82,12 +86,37 @@ export const formProcedures = {
         .input(updateFormVisibilityInputModel)
         .output(updateFormVisibilityOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { formId, visibility, isPublished } = input;
+            const { formId, visibility, isPublished, closesAt, responseLimit } = input;
             return await formService.updateFormVisibility({
                 formId,
                 userId: ctx.user.id,
                 visibility,
                 isPublished,
+                closesAt,
+                responseLimit,
+            });
+        }),
+
+    updateFormSettings: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/updateFormSettings"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(updateFormSettingsInputModel)
+        .output(updateFormSettingsOutputModel)
+        .mutation(async ({ input, ctx }) => {
+            const { formId, visibility, isPublished, closesAt, responseLimit } = input;
+            return await formService.updateFormSettings({
+                formId,
+                userId: ctx.user.id,
+                visibility,
+                isPublished,
+                closesAt,
+                responseLimit,
             });
         }),
 

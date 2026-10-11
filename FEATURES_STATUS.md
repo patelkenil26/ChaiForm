@@ -73,7 +73,7 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
   - Live modal ya split-view screen jisme creator bina live link share kiye respondent experience test kar sake.
 - [ ] **Conditional Logic Between Questions**:
   - Smart branching (e.g., agar question 1 me "Yes" select kiya toh question 2 dikhao, agar "No" toh skip to question 4).
-- [ ] **Form Expiry & Response Limits**:
+- [x] **Form Expiry & Response Limits**:
   - Expiry date/time set karna (e.g., "Closes on 31st Oct").
   - Maximum response cap lagana (e.g., "Accept only first 100 responses").
 - [ ] **CSV / Excel Export for Responses**:

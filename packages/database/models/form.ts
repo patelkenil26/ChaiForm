@@ -1,4 +1,4 @@
-import { boolean, pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { usersTable } from "./user";
 
 export const formVisibilityEnum = pgEnum('form_visibility_enum', [
@@ -14,6 +14,9 @@ export const formsTable = pgTable("forms", {
 
     visibility: formVisibilityEnum('visibility').default('UNLISTED').notNull(),
     isPublished: boolean('is_published').default(true).notNull(),
+
+    closesAt: timestamp("closes_at"),
+    responseLimit: integer("response_limit"),
 
     createdBy: uuid('created_by').references(() => usersTable.id),
 

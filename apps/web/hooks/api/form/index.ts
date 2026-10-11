@@ -77,6 +77,25 @@ export const useUpdateFormVisibility = () => {
     return { updateFormVisibilityAsync, updateFormVisibility, error, isError, isLoading };
 };
 
+export const useUpdateFormSettings = () => {
+    const utils = trpc.useUtils();
+
+    const {
+        mutateAsync: updateFormSettingsAsync,
+        mutate: updateFormSettings,
+        error,
+        isError,
+        isPending: isLoading,
+    } = trpc.form.updateFormSettings.useMutation({
+        onSuccess: async (data) => {
+            await utils.form.getForm.invalidate({ formId: data.id });
+            await utils.form.listForms.invalidate();
+        },
+    });
+
+    return { updateFormSettingsAsync, updateFormSettings, error, isError, isLoading };
+};
+
 export const useListPublicForms = () => {
     const { data: publicForms, error, isFetched, isFetching, isLoading, status } =
         trpc.form.listPublicForms.useQuery();

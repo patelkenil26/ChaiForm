@@ -11,6 +11,8 @@ import {
   GlobeIcon,
   LinkIcon,
   PlusIcon,
+  ClockIcon,
+  UsersIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -173,10 +175,28 @@ export default function FormsPage() {
                   <TableCell className="font-medium">
                     <Link
                       href={`/dashboard/forms/${form.id}`}
-                      className="hover:underline hover:text-primary transition-colors"
+                      className="hover:underline hover:text-primary transition-colors block"
                     >
                       {form.title}
                     </Link>
+                    {(form.closesAt || form.responseLimit) && (
+                      <div className="flex items-center gap-2 mt-1">
+                        {form.closesAt && (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                            <ClockIcon className="size-3 text-amber-500" />
+                            {new Date() > new Date(form.closesAt)
+                              ? "Expired"
+                              : `Closes ${new Date(form.closesAt).toLocaleDateString()}`}
+                          </span>
+                        )}
+                        {form.responseLimit && (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                            <UsersIcon className="size-3 text-blue-500" />
+                            Limit: {form.responseLimit}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </TableCell>
 
                   {/* Status Toggle & Badge */}

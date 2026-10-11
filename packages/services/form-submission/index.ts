@@ -1,4 +1,4 @@
-import db, { eq, desc } from '@repo/database'
+import db, { eq, desc, count } from '@repo/database'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
 import { formsTable } from '@repo/database/models/form'
 import { type SubmitFormInputType, submitFormInput, type GetFormSubmissionsInputType, getFormSubmissionsInput } from './model'
@@ -9,7 +9,11 @@ class FormSubmissionService {
         const { formId, values } = await submitFormInput.parseAsync(payload)
 
         const form = await db
-            .select({ isPublished: formsTable.isPublished })
+            .select({
+                isPublished: formsTable.isPublished,
+                closesAt: formsTable.closesAt,
+                responseLimit: formsTable.responseLimit,
+            })
             .from(formsTable)
             .where(eq(formsTable.id, formId))
             .limit(1)
@@ -18,8 +22,26 @@ class FormSubmissionService {
             throw new Error('Form not found')
         }
 
-        if (!form[0]?.isPublished) {
+        const formData = form[0]!
+
+        if (!formData.isPublished) {
             throw new Error('This form is currently closed and not accepting responses')
+        }
+
+        if (formData.closesAt && new Date() > new Date(formData.closesAt)) {
+            throw new Error('This form has expired and is no longer accepting responses')
+        }
+
+        if (formData.responseLimit) {
+            const [subCountResult] = await db
+                .select({ count: count() })
+                .from(formSubmissionTable)
+                .where(eq(formSubmissionTable.formId, formId));
+
+            const currentCount = subCountResult ? Number(subCountResult.count) : 0;
+            if (currentCount >= formData.responseLimit) {
+                throw new Error('This form has reached its maximum response limit and is no longer accepting responses');
+            }
         }
 
         const result = await db

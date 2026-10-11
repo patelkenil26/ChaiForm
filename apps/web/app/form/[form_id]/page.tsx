@@ -2,7 +2,8 @@
 
 import { use, useState } from "react";
 import { useForm } from "react-hook-form";
-import { StarIcon } from "lucide-react";
+import { StarIcon, ClockIcon, UsersIcon } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
@@ -309,18 +310,23 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
 
   const onSubmit = async (data: Record<string, unknown>) => {
     if (!form) return;
-    const values = form.fields
-      .filter((field) => data[field.labelKey] !== undefined && data[field.labelKey] !== "")
-      .map((field) => {
-        const rawVal = data[field.labelKey];
-        const stringVal = Array.isArray(rawVal) ? rawVal.join(", ") : String(rawVal);
-        return {
-          formFieldId: field.id,
-          value: stringVal,
-        };
-      });
-    await submitFormAsync({ formId, values });
-    setSubmitted(true);
+    try {
+      const values = form.fields
+        .filter((field) => data[field.labelKey] !== undefined && data[field.labelKey] !== "")
+        .map((field) => {
+          const rawVal = data[field.labelKey];
+          const stringVal = Array.isArray(rawVal) ? rawVal.join(", ") : String(rawVal);
+          return {
+            formFieldId: field.id,
+            value: stringVal,
+          };
+        });
+      await submitFormAsync({ formId, values });
+      setSubmitted(true);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to submit form";
+      toast.error(msg);
+    }
   };
 
   if (isLoading) {
@@ -342,14 +348,34 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     );
   }
 
-  if (!form.isPublished) {
+  const isFormClosed = !form.isOpen || !form.isPublished || form.isExpired || form.isLimitReached;
+
+  if (isFormClosed) {
+    let closedTitle = "Form is Closed";
+    let closedMessage = "This form is currently not accepting responses.";
+
+    if (form.isExpired && form.closesAt) {
+      closedTitle = "Form has Expired";
+      closedMessage = `This form closed on ${new Date(form.closesAt).toLocaleString([], {
+        dateStyle: "medium",
+        timeStyle: "short",
+      })} and is no longer accepting responses.`;
+    } else if (form.isLimitReached && form.responseLimit) {
+      closedTitle = "Response Limit Reached";
+      closedMessage = `This form has reached its maximum response capacity (${form.responseLimit} responses) and is no longer accepting new submissions.`;
+    } else if (!form.isPublished) {
+      closedTitle = "Submissions Paused";
+      closedMessage = "The creator has paused submissions for this form. Please check back later.";
+    }
+
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center space-y-2 max-w-sm rounded-xl border p-8 bg-card shadow-sm">
-          <h1 className="text-xl font-bold tracking-tight">Form is Closed</h1>
-          <p className="text-sm text-muted-foreground">
-            This form is currently not accepting responses. Please contact the creator if you need access.
-          </p>
+        <div className="text-center space-y-3 max-w-md rounded-2xl border p-8 bg-card shadow-sm">
+          <div className="mx-auto size-12 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <ClockIcon className="size-6" />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight">{closedTitle}</h1>
+          <p className="text-sm text-muted-foreground">{closedMessage}</p>
         </div>
       </div>
     );
@@ -374,6 +400,20 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     <div className="min-h-screen bg-background flex items-start justify-center py-16 px-4">
       <div className="w-full max-w-lg">
         <div className="mb-8">
+          <div className="flex items-center gap-2 flex-wrap mb-2">
+            {form.closesAt && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
+                <ClockIcon className="size-3 text-amber-500" />
+                Closes {new Date(form.closesAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}
+              </span>
+            )}
+            {form.responseLimit && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
+                <UsersIcon className="size-3 text-blue-500" />
+                {form.submissionCount} / {form.responseLimit} responses
+              </span>
+            )}
+          </div>
           <h1 className="text-2xl font-bold tracking-tight">{form.title}</h1>
           {form.description && (
             <p className="mt-2 text-sm text-muted-foreground">{form.description}</p>
