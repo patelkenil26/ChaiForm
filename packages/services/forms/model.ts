@@ -62,3 +62,18 @@ export const getFormByIdInput = z.object({
 
 export type GetFormByIdInputType = z.infer<typeof getFormByIdInput>
 
+export const cloneFormInput = z.object({
+    formId: z.string().uuid().describe('UUID of the form to clone'),
+    userId: z.string().uuid().describe('UUID of the owner user'),
+})
+
+export type CloneFormInputType = z.infer<typeof cloneFormInput>
+
+export const archiveFormInput = z.object({
+    formId: z.string().uuid().describe('UUID of the form to archive or unarchive'),
+    userId: z.string().uuid().describe('UUID of the owner user'),
+    isArchived: z.boolean().describe('Archive status (true to archive, false to restore)'),
+})
+
+export type ArchiveFormInputType = z.infer<typeof archiveFormInput>
+

@@ -31,6 +31,7 @@ export const listFormsOutputModel = z.array(
         description: z.string().nullable().optional().describe("Description of the form"),
         visibility: formVisibilityEnum.describe("Visibility mode of the form"),
         isPublished: z.boolean().describe("Publish status of the form"),
+        isArchived: z.boolean().default(false).describe("Whether form is archived"),
         closesAt: z.date().nullable().optional().describe("Expiry timestamp"),
         responseLimit: z.number().nullable().optional().describe("Max response cap"),
         slug: z.string().nullable().optional().describe("Custom URL slug"),
@@ -51,6 +52,7 @@ export const getFormOutputModel = z.object({
     description: z.string().nullable().optional(),
     visibility: formVisibilityEnum,
     isPublished: z.boolean(),
+    isArchived: z.boolean().default(false),
     closesAt: z.date().nullable().optional(),
     responseLimit: z.number().nullable().optional(),
     slug: z.string().nullable().optional(),
@@ -64,6 +66,24 @@ export const getFormOutputModel = z.object({
     updatedAt: z.date().nullable(),
     fields: z.array(formFieldObject),
 }).nullable();
+
+export const cloneFormInputModel = z.object({
+    formId: z.string().uuid().describe("UUID of the form to clone"),
+});
+
+export const cloneFormOutputModel = z.object({
+    id: z.string().describe("ID of the newly cloned form"),
+});
+
+export const archiveFormInputModel = z.object({
+    formId: z.string().uuid().describe("UUID of the form to archive or unarchive"),
+    isArchived: z.boolean().describe("Archive status: true to archive, false to restore"),
+});
+
+export const archiveFormOutputModel = z.object({
+    id: z.string(),
+    isArchived: z.boolean(),
+});
 
 export const updateFormVisibilityInputModel = z.object({
     formId: z.string().uuid().describe("UUID of the form"),

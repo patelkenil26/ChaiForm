@@ -96,11 +96,12 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     );
   }
 
-  const isFormClosed = !form.isOpen || !form.isPublished || form.isExpired || form.isLimitReached;
+  const isFormClosed = !form.isOpen || !form.isPublished || form.isExpired || form.isLimitReached || form.isArchived;
 
   if (isFormClosed) {
     return (
       <FormClosedScreen
+        isArchived={form.isArchived}
         isExpired={form.isExpired}
         closesAt={form.closesAt}
         isLimitReached={form.isLimitReached}

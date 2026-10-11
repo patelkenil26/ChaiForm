@@ -57,6 +57,13 @@
       "when": 1791715972955,
       "tag": "0007_outstanding_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791719812680,
+      "tag": "0008_abnormal_bushwacker",
+      "breakpoints": true
     }
   ]
 }

@@ -11,6 +11,10 @@ import {
     UpdateFormVisibilityInputType,
     updateFormSettingsInput,
     UpdateFormSettingsInputType,
+    cloneFormInput,
+    CloneFormInputType,
+    archiveFormInput,
+    ArchiveFormInputType,
     FormVisibilityType,
 } from "./model";
 import { formsTable } from '@repo/database/models/form'
@@ -103,6 +107,7 @@ class FormService {
             description: formsTable.description,
             visibility: formsTable.visibility,
             isPublished: formsTable.isPublished,
+            isArchived: formsTable.isArchived,
             closesAt: formsTable.closesAt,
             responseLimit: formsTable.responseLimit,
             slug: formsTable.slug,
@@ -117,6 +122,7 @@ class FormService {
             description: f.description,
             visibility: f.visibility,
             isPublished: f.isPublished,
+            isArchived: f.isArchived,
             closesAt: f.closesAt,
             responseLimit: f.responseLimit,
             slug: f.slug,
@@ -142,6 +148,7 @@ class FormService {
                 description: formsTable.description,
                 visibility: formsTable.visibility,
                 isPublished: formsTable.isPublished,
+                isArchived: formsTable.isArchived,
                 closesAt: formsTable.closesAt,
                 responseLimit: formsTable.responseLimit,
                 slug: formsTable.slug,
@@ -168,7 +175,7 @@ class FormService {
 
         if (rows.length === 0) return null
 
-        const { id, title, description, visibility, isPublished, closesAt, responseLimit, slug, passwordHash, passwordSalt, createdAt, updatedAt } = rows[0]!
+        const { id, title, description, visibility, isPublished, isArchived, closesAt, responseLimit, slug, passwordHash, passwordSalt, createdAt, updatedAt } = rows[0]!
 
         const isPasswordProtected = Boolean(passwordHash);
         let isUnlocked = true;
@@ -198,7 +205,7 @@ class FormService {
 
         const isExpired = closesAt ? new Date() > new Date(closesAt) : false;
         const isLimitReached = responseLimit ? submissionCount >= responseLimit : false;
-        const isOpen = isPublished && !isExpired && !isLimitReached;
+        const isOpen = isPublished && !isExpired && !isLimitReached && !isArchived;
 
         return {
             id,
@@ -206,6 +213,7 @@ class FormService {
             description,
             visibility,
             isPublished,
+            isArchived,
             closesAt,
             responseLimit,
             slug,
@@ -315,9 +323,93 @@ class FormService {
             updatedAt: formsTable.updatedAt,
         })
         .from(formsTable)
-        .where(and(eq(formsTable.visibility, 'PUBLIC'), eq(formsTable.isPublished, true)))
+        .where(and(eq(formsTable.visibility, 'PUBLIC'), eq(formsTable.isPublished, true), eq(formsTable.isArchived, false)))
         .orderBy(desc(formsTable.createdAt));
+    }
+
+    public async cloneForm(payload: CloneFormInputType) {
+        const { formId, userId } = await cloneFormInput.parseAsync(payload);
+
+        // Fetch original form
+        const originalRows = await db
+            .select()
+            .from(formsTable)
+            .where(and(eq(formsTable.id, formId), eq(formsTable.createdBy, userId)))
+            .limit(1);
+
+        if (!originalRows || originalRows.length === 0) {
+            throw new Error("Form not found or you don't have permission to clone it");
+        }
+
+        const original = originalRows[0]!;
+
+        // Generate clean duplicate title
+        const baseTitle = original.title.endsWith("(Copy)")
+            ? original.title
+            : `${original.title} (Copy)`;
+        const newTitle = baseTitle.length > 55 ? baseTitle.slice(0, 55) : baseTitle;
+
+        // Create new duplicate form
+        const [clonedForm] = await db
+            .insert(formsTable)
+            .values({
+                title: newTitle,
+                description: original.description,
+                visibility: 'UNLISTED',
+                isPublished: false, // Start as draft for safety
+                closesAt: original.closesAt,
+                responseLimit: original.responseLimit,
+                slug: null, // Slugs must be unique, creator can customize later
+                isArchived: false,
+                createdBy: userId,
+            })
+            .returning({ id: formsTable.id });
+
+        if (!clonedForm?.id) {
+            throw new Error("Failed to clone form");
+        }
+
+        // Fetch fields belonging to the original form
+        const originalFields = await db
+            .select()
+            .from(formFieldsTable)
+            .where(eq(formFieldsTable.formId, formId))
+            .orderBy(asc(formFieldsTable.index));
+
+        if (originalFields.length > 0) {
+            await db.insert(formFieldsTable).values(
+                originalFields.map((field) => ({
+                    formId: clonedForm.id,
+                    label: field.label,
+                    labelKey: field.labelKey,
+                    type: field.type,
+                    description: field.description,
+                    placeholder: field.placeholder,
+                    isRequired: field.isRequired,
+                    options: field.options,
+                    index: field.index,
+                }))
+            );
+        }
+
+        return { id: clonedForm.id };
+    }
+
+    public async archiveForm(payload: ArchiveFormInputType) {
+        const { formId, userId, isArchived } = await archiveFormInput.parseAsync(payload);
+
+        const [updated] = await db
+            .update(formsTable)
+            .set({ isArchived })
+            .where(and(eq(formsTable.id, formId), eq(formsTable.createdBy, userId)))
+            .returning({ id: formsTable.id, isArchived: formsTable.isArchived });
+
+        if (!updated) {
+            throw new Error("Form not found or you don't have permission to update it");
+        }
+
+        return updated;
     }
 }
 
-export default FormService;
+export default FormService;

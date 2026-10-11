@@ -93,7 +93,7 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
   - 1-click starter templates (Hiring Application, Event RSVP, Customer Satisfaction, Quiz).
 - [x] **Response Filtering, Search & Pagination**:
   - Submissions table me text search, date range filter, aur large datasets ke liye pagination (10/25/50 per page).
-- [ ] **Form Clone & Archive Support**:
+- [x] **Form Clone & Archive Support**:
   - **Duplicate / Clone**: Existing form ka clone banana (same fields ke saath).
   - **Archive**: Inactive forms ko safely archive karna bina delete kiye.
 - [ ] **Multi-Page / One-Question-at-a-Time Experience**:

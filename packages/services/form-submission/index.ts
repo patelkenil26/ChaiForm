@@ -18,6 +18,7 @@ class FormSubmissionService {
             .select({
                 id: formsTable.id,
                 isPublished: formsTable.isPublished,
+                isArchived: formsTable.isArchived,
                 closesAt: formsTable.closesAt,
                 responseLimit: formsTable.responseLimit,
                 passwordHash: formsTable.passwordHash,
@@ -33,6 +34,10 @@ class FormSubmissionService {
 
         const formData = form[0]!
         const resolvedFormId = formData.id
+
+        if (formData.isArchived) {
+            throw new Error('This form has been archived and is no longer accepting responses')
+        }
 
         if (!formData.isPublished) {
             throw new Error('This form is currently closed and not accepting responses')

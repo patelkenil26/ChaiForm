@@ -14,6 +14,7 @@ import {
   QrCodeIcon,
   LockIcon,
   SlidersHorizontalIcon,
+  ArchiveIcon,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -34,6 +35,7 @@ export interface BuilderFormData {
   slug?: string | null;
   isPublished: boolean;
   visibility: "PUBLIC" | "UNLISTED";
+  isArchived?: boolean;
   closesAt?: Date | string | null;
   isExpired?: boolean;
   responseLimit?: number | null;
@@ -164,6 +166,16 @@ export function BuilderHeader({
                     >
                       <LockIcon className="size-3" />
                       Password Protected
+                    </Badge>
+                  )}
+
+                  {form.isArchived && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs gap-1 border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                    >
+                      <ArchiveIcon className="size-3" />
+                      Archived
                     </Badge>
                   )}
                 </div>

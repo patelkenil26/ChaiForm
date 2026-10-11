@@ -13,6 +13,10 @@ import {
     updateFormSettingsInputModel,
     updateFormSettingsOutputModel,
     listPublicFormsOutputModel,
+    cloneFormInputModel,
+    cloneFormOutputModel,
+    archiveFormInputModel,
+    archiveFormOutputModel,
 } from "./model";
 
 const TAGS = ["Form"];
@@ -138,6 +142,43 @@ export const formProcedures = {
         .output(listPublicFormsOutputModel)
         .query(async () => {
             return await formService.listPublicForms();
+        }),
+
+    cloneForm: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/cloneForm"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(cloneFormInputModel)
+        .output(cloneFormOutputModel)
+        .mutation(async ({ input, ctx }) => {
+            return await formService.cloneForm({
+                formId: input.formId,
+                userId: ctx.user.id,
+            });
+        }),
+
+    archiveForm: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/archiveForm"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(archiveFormInputModel)
+        .output(archiveFormOutputModel)
+        .mutation(async ({ input, ctx }) => {
+            return await formService.archiveForm({
+                formId: input.formId,
+                userId: ctx.user.id,
+                isArchived: input.isArchived,
+            });
         }),
 };
 

@@ -111,3 +111,41 @@ export const useListPublicForms = () => {
     };
 };
 
+export const useCloneForm = () => {
+    const utils = trpc.useUtils();
+
+    const {
+        mutateAsync: cloneFormAsync,
+        mutate: cloneForm,
+        error,
+        isError,
+        isPending: isLoading,
+    } = trpc.form.cloneForm.useMutation({
+        onSuccess: async () => {
+            await utils.form.listForms.invalidate();
+        },
+    });
+
+    return { cloneFormAsync, cloneForm, error, isError, isLoading };
+};
+
+export const useArchiveForm = () => {
+    const utils = trpc.useUtils();
+
+    const {
+        mutateAsync: archiveFormAsync,
+        mutate: archiveForm,
+        error,
+        isError,
+        isPending: isLoading,
+    } = trpc.form.archiveForm.useMutation({
+        onSuccess: async (data) => {
+            await utils.form.getForm.invalidate({ formId: data.id });
+            await utils.form.listForms.invalidate();
+        },
+    });
+
+    return { archiveFormAsync, archiveForm, error, isError, isLoading };
+};
+
+

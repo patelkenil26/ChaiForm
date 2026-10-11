@@ -1,6 +1,6 @@
 "use client";
 
-import { ClockIcon, UsersIcon, PauseCircleIcon } from "lucide-react";
+import { ClockIcon, UsersIcon, PauseCircleIcon, ArchiveIcon } from "lucide-react";
 
 export interface FormClosedScreenProps {
   isExpired?: boolean;
@@ -8,6 +8,7 @@ export interface FormClosedScreenProps {
   isLimitReached?: boolean;
   responseLimit?: number | null;
   isPublished?: boolean;
+  isArchived?: boolean;
 }
 
 export function FormClosedScreen({
@@ -16,13 +17,19 @@ export function FormClosedScreen({
   isLimitReached,
   responseLimit,
   isPublished = true,
+  isArchived,
 }: FormClosedScreenProps) {
   let title = "Form is Closed";
   let message = "This form is currently not accepting responses.";
   let Icon = PauseCircleIcon;
   let iconColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
 
-  if (isExpired && closesAt) {
+  if (isArchived) {
+    title = "Form is Archived";
+    message = "This form has been archived and is no longer accepting responses.";
+    Icon = ArchiveIcon;
+    iconColor = "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+  } else if (isExpired && closesAt) {
     title = "Form has Expired";
     message = `This form closed on ${new Date(closesAt).toLocaleString([], {
       dateStyle: "medium",
