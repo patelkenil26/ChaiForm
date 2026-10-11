@@ -18,6 +18,9 @@ export function LandingFooter() {
 
         {/* Links */}
         <div className="flex items-center gap-6">
+          <Link href="/explore" className="hover:text-foreground transition-colors">
+            Templates
+          </Link>
           <Link href="/forms" className="hover:text-foreground transition-colors">
             Forms
           </Link>

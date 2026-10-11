@@ -1,5 +1,5 @@
 import { createHmac, randomBytes } from "crypto";
-import db, { and, asc, count, desc, eq, ne, or } from "@repo/database";
+import db, { and, asc, count, desc, eq, ilike, inArray, ne, or } from "@repo/database";
 import {
     createFormInput,
     CreateFormInputType,
@@ -7,6 +7,8 @@ import {
     GetFormByIdInputType,
     listFormsByUserIdInput,
     ListFormsByUserIdInputType,
+    listPublicFormsFilterInput,
+    ListPublicFormsFilterInputType,
     updateFormVisibilityInput,
     UpdateFormVisibilityInputType,
     updateFormSettingsInput,
@@ -18,6 +20,7 @@ import {
     recordFormViewInput,
     RecordFormViewInputType,
     FormVisibilityType,
+    FormCategoryType,
 } from "./model";
 import { formsTable } from '@repo/database/models/form'
 import { formFieldsTable } from '@repo/database/models/form-field'
@@ -53,7 +56,7 @@ class FormService {
     }
 
     public async createForm(payload: CreateFormInputType) {
-        const { title, description, createdBy, visibility, isPublished, closesAt, responseLimit, slug, password } = await createFormInput.parseAsync(payload);
+        const { title, description, category, createdBy, visibility, isPublished, closesAt, responseLimit, slug, password } = await createFormInput.parseAsync(payload);
 
         let normalizedSlug: string | null = null;
         if (slug) {
@@ -83,6 +86,7 @@ class FormService {
         const result = await db.insert(formsTable).values({
             title,
             description,
+            category: category ?? 'GENERAL',
             createdBy,
             visibility,
             isPublished,
@@ -107,6 +111,7 @@ class FormService {
             id: formsTable.id,
             title: formsTable.title,
             description: formsTable.description,
+            category: formsTable.category,
             visibility: formsTable.visibility,
             isPublished: formsTable.isPublished,
             isArchived: formsTable.isArchived,
@@ -123,6 +128,7 @@ class FormService {
             id: f.id,
             title: f.title,
             description: f.description,
+            category: f.category ?? 'GENERAL',
             visibility: f.visibility,
             isPublished: f.isPublished,
             isArchived: f.isArchived,
@@ -150,6 +156,7 @@ class FormService {
                 id: formsTable.id,
                 title: formsTable.title,
                 description: formsTable.description,
+                category: formsTable.category,
                 visibility: formsTable.visibility,
                 isPublished: formsTable.isPublished,
                 isArchived: formsTable.isArchived,
@@ -180,7 +187,7 @@ class FormService {
 
         if (rows.length === 0) return null
 
-        const { id, title, description, visibility, isPublished, isArchived, closesAt, responseLimit, slug, passwordHash, passwordSalt, views, createdAt, updatedAt } = rows[0]!
+        const { id, title, description, category, visibility, isPublished, isArchived, closesAt, responseLimit, slug, passwordHash, passwordSalt, views, createdAt, updatedAt } = rows[0]!
 
         const isPasswordProtected = Boolean(passwordHash);
         let isUnlocked = true;
@@ -216,6 +223,7 @@ class FormService {
             id,
             title,
             description,
+            category: category ?? 'GENERAL',
             visibility,
             isPublished,
             isArchived,
@@ -236,9 +244,10 @@ class FormService {
     }
 
     public async updateFormSettings(payload: UpdateFormSettingsInputType) {
-        const { formId, userId, visibility, isPublished, closesAt, responseLimit, slug, password } = await updateFormSettingsInput.parseAsync(payload);
+        const { formId, userId, category, visibility, isPublished, closesAt, responseLimit, slug, password } = await updateFormSettingsInput.parseAsync(payload);
 
         const updateData: {
+            category?: FormCategoryType;
             visibility?: FormVisibilityType;
             isPublished?: boolean;
             closesAt?: Date | null;
@@ -247,6 +256,7 @@ class FormService {
             passwordHash?: string | null;
             passwordSalt?: string | null;
         } = {};
+        if (category !== undefined) updateData.category = category;
         if (visibility !== undefined) updateData.visibility = visibility;
         if (isPublished !== undefined) updateData.isPublished = isPublished;
         if (closesAt !== undefined) updateData.closesAt = closesAt;
@@ -320,31 +330,84 @@ class FormService {
         return this.updateFormSettings(payload);
     }
 
-    public async listPublicForms() {
-        return await db.select({
+    public async listPublicForms(payload?: ListPublicFormsFilterInputType) {
+        const filter = await listPublicFormsFilterInput.parseAsync(payload);
+
+        const conditions = [
+            eq(formsTable.visibility, 'PUBLIC'),
+            eq(formsTable.isPublished, true),
+            eq(formsTable.isArchived, false),
+        ];
+
+        if (filter?.category && filter.category !== 'ALL') {
+            conditions.push(eq(formsTable.category, filter.category));
+        }
+
+        if (filter?.search && filter.search.trim() !== '') {
+            const term = `%${filter.search.trim()}%`;
+            conditions.push(or(ilike(formsTable.title, term), ilike(formsTable.description, term))!);
+        }
+
+        const publicForms = await db.select({
             id: formsTable.id,
             title: formsTable.title,
             description: formsTable.description,
+            slug: formsTable.slug,
+            category: formsTable.category,
+            views: formsTable.views,
             createdAt: formsTable.createdAt,
             updatedAt: formsTable.updatedAt,
         })
         .from(formsTable)
-        .where(and(eq(formsTable.visibility, 'PUBLIC'), eq(formsTable.isPublished, true), eq(formsTable.isArchived, false)))
+        .where(and(...conditions))
         .orderBy(desc(formsTable.createdAt));
+
+        if (publicForms.length === 0) return [];
+
+        const formIds = publicForms.map(f => f.id);
+        const fieldCounts = await db
+            .select({
+                formId: formFieldsTable.formId,
+                count: count(formFieldsTable.id),
+            })
+            .from(formFieldsTable)
+            .where(inArray(formFieldsTable.formId, formIds))
+            .groupBy(formFieldsTable.formId);
+
+        const countMap = new Map(fieldCounts.map(fc => [fc.formId, Number(fc.count)]));
+
+        return publicForms.map(f => ({
+            id: f.id,
+            title: f.title,
+            description: f.description,
+            slug: f.slug,
+            category: f.category ?? 'GENERAL',
+            views: f.views ?? 0,
+            fieldsCount: countMap.get(f.id) ?? 0,
+            createdAt: f.createdAt,
+            updatedAt: f.updatedAt,
+        }));
     }
 
     public async cloneForm(payload: CloneFormInputType) {
-        const { formId, userId } = await cloneFormInput.parseAsync(payload);
+        const { formId, userId, allowPublicTemplate } = await cloneFormInput.parseAsync(payload);
 
-        // Fetch original form
+        // Fetch original form: allow if owned by user or if it's a public published template
+        const whereClause = allowPublicTemplate
+            ? or(
+                and(eq(formsTable.id, formId), eq(formsTable.createdBy, userId)),
+                and(eq(formsTable.id, formId), eq(formsTable.visibility, 'PUBLIC'), eq(formsTable.isPublished, true))
+              )
+            : and(eq(formsTable.id, formId), eq(formsTable.createdBy, userId));
+
         const originalRows = await db
             .select()
             .from(formsTable)
-            .where(and(eq(formsTable.id, formId), eq(formsTable.createdBy, userId)))
+            .where(whereClause)
             .limit(1);
 
         if (!originalRows || originalRows.length === 0) {
-            throw new Error("Form not found or you don't have permission to clone it");
+            throw new Error("Form or template not found or not accessible to clone");
         }
 
         const original = originalRows[0]!;
@@ -361,6 +424,7 @@ class FormService {
             .values({
                 title: newTitle,
                 description: original.description,
+                category: original.category,
                 visibility: 'UNLISTED',
                 isPublished: false, // Start as draft for safety
                 closesAt: original.closesAt,

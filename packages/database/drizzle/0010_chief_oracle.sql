@@ -1,0 +1,1 @@
+ALTER TABLE "forms" ADD COLUMN "category" varchar(50) DEFAULT 'GENERAL' NOT NULL;

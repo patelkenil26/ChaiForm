@@ -33,6 +33,12 @@ export function LandingNavbar() {
         {/* Center Nav Links */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-muted-foreground">
           <a
+            href="#templates"
+            className="transition-colors hover:text-primary text-xs lg:text-sm font-medium"
+          >
+            Templates
+          </a>
+          <a
             href="#features"
             className="transition-colors hover:text-foreground text-xs lg:text-sm"
           >

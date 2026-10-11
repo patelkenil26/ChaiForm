@@ -17,6 +17,7 @@ export const formsTable = pgTable("forms", {
 
     closesAt: timestamp("closes_at"),
     responseLimit: integer("response_limit"),
+    category: varchar("category", { length: 50 }).default("GENERAL").notNull(),
 
     slug: varchar("slug", { length: 60 }).unique(),
 

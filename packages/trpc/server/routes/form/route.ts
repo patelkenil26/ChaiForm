@@ -12,7 +12,10 @@ import {
     updateFormVisibilityOutputModel,
     updateFormSettingsInputModel,
     updateFormSettingsOutputModel,
+    listPublicFormsInputModel,
     listPublicFormsOutputModel,
+    useTemplateInputModel,
+    useTemplateOutputModel,
     cloneFormInputModel,
     cloneFormOutputModel,
     archiveFormInputModel,
@@ -140,10 +143,29 @@ export const formProcedures = {
                 tags: TAGS,
             },
         })
-        .input(z.undefined())
+        .input(listPublicFormsInputModel)
         .output(listPublicFormsOutputModel)
-        .query(async () => {
-            return await formService.listPublicForms();
+        .query(async ({ input }) => {
+            return await formService.listPublicForms(input);
+        }),
+
+    useTemplate: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/useTemplate"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(useTemplateInputModel)
+        .output(useTemplateOutputModel)
+        .mutation(async ({ input, ctx }) => {
+            return await formService.cloneForm({
+                formId: input.formId,
+                userId: ctx.user.id,
+                allowPublicTemplate: true,
+            });
         }),
 
     cloneForm: authenticatedProcedure

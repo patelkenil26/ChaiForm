@@ -55,20 +55,6 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip="Create Form"
-              className="w-full bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground shadow-xs"
-            >
-              <Link href="/forms" className="flex items-center gap-2">
-                <IconCirclePlusFilled className="size-4 shrink-0" />
-                <span className="font-medium">Create Form</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
         <SidebarMenu className="gap-1">
           {items.map((item) => {
             const active = isItemActive(item.url)

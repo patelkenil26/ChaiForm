@@ -6,11 +6,6 @@
 
 Yaha wo features hain jo requirement document ke hisaab se aage develop karne baki hain:
 
-### 1.1 Public Explore & Template Gallery
-- [ ] **Explore / Gallery Page** (`/explore` ya `/templates`): Jahan saare `PUBLIC` forms cards format me showcase hon.
-- [ ] Category filters (Surveys, Feedback, Quizzes, Event Registrations).
-- [ ] "Use this template" / "Fill Form" buttons.
-
 ### 1.2 Creative Themes System (Coming Soon)
 - [ ] **Coming Soon Trigger Added**: Top navigation header aur Form Builder me "Themes (Soon)" button add kiya gaya hai jisme upcoming presets preview dialog khulta hai.
 - [ ] **Theme Presets (Planned)**: Form ke liye visual themes choose karne ka option:
@@ -202,3 +197,12 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
   - 6 realistic production forms (Course Enrollment, Job Application, Customer Survey, Event Registration, Product Feedback, Contact Us).
   - Diverse polymorphic input fields populated.
   - Pre-seeded responses for instant testing of tables, search, analytics charts, and CSV/JSON export.
+
+### 2.20 Public Explore & Template Gallery (`/explore` & `/templates`)
+- [x] **Explore & Template Showcase Page**: Modern responsive grid showcasing all `PUBLIC` forms with category badges, questions counter, and views metric.
+- [x] **Category Filter Pills**: Interactive pills (`All`, `Surveys`, `Feedback`, `Events`, `Job Applications`, `Quizzes`) with real-time text search.
+- [x] **"Fill Form" & "Use this template" Flow**:
+  - `Fill Form` direct public preview link opening the live responder in a new tab.
+  - `Use Template` 1-click clone mutation duplicating the template and all fields into the logged-in user's workspace, redirecting immediately to the Form Builder.
+- [x] **Database & Backend Procedures**: `category` column in `forms` table, migration `0010_chief_oracle.sql`, `listPublicForms` procedure with search and category filtering, and `useTemplate` clone procedure.
+- [x] **Navigation Access**: Seamless links in Landing Page Navbar, Dashboard Sidebar, and Site Header.

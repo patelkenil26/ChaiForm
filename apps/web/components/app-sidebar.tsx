@@ -8,6 +8,7 @@ import {
   IconClipboardText,
   IconForms,
   IconInbox,
+  IconCompass,
 } from "@tabler/icons-react";
 
 import { NavMain } from "~/components/nav-main";
@@ -39,6 +40,11 @@ const navMain = [
     title: "Submissions",
     url: "/submissions",
     icon: IconInbox,
+  },
+  {
+    title: "Explore Templates",
+    url: "/explore",
+    icon: IconCompass,
   },
 ];
 

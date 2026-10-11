@@ -3,6 +3,16 @@ import z from "zod";
 export const formVisibilitySchema = z.enum(['PUBLIC', 'UNLISTED']);
 export type FormVisibilityType = z.infer<typeof formVisibilitySchema>;
 
+export const formCategorySchema = z.enum([
+    'GENERAL',
+    'SURVEYS',
+    'FEEDBACK',
+    'QUIZZES',
+    'EVENTS',
+    'APPLICATIONS'
+]);
+export type FormCategoryType = z.infer<typeof formCategorySchema>;
+
 export const slugSchema = z
     .string()
     .min(3, "Slug must be at least 3 characters")
@@ -12,6 +22,7 @@ export const slugSchema = z
 export const createFormInput = z.object({
     title: z.string().max(55).describe("Title of the form"),
     description: z.string().max(300).optional().describe("Description of the form"),
+    category: formCategorySchema.default('GENERAL').optional().describe("Category of the form"),
     createdBy: z.string().uuid().describe('UUID of the user creating the form'),
     visibility: formVisibilitySchema.default('UNLISTED').describe("Visibility mode of the form"),
     isPublished: z.boolean().default(true).describe("Publish status of the form"),
@@ -39,6 +50,7 @@ export type UpdateFormVisibilityInputType = z.infer<typeof updateFormVisibilityI
 export const updateFormSettingsInput = z.object({
     formId: z.string().uuid().describe('UUID of the form'),
     userId: z.string().uuid().describe('UUID of the owner user'),
+    category: formCategorySchema.optional().describe('Category of the form'),
     visibility: formVisibilitySchema.optional().describe('Visibility mode of the form'),
     isPublished: z.boolean().optional().describe('Publish status of the form'),
     closesAt: z.date().nullable().optional().describe('Expiry date/time of the form (null to remove)'),
@@ -65,9 +77,17 @@ export type GetFormByIdInputType = z.infer<typeof getFormByIdInput>
 export const cloneFormInput = z.object({
     formId: z.string().uuid().describe('UUID of the form to clone'),
     userId: z.string().uuid().describe('UUID of the owner user'),
+    allowPublicTemplate: z.boolean().default(false).optional().describe('Allow cloning if form is a public template'),
 })
 
 export type CloneFormInputType = z.infer<typeof cloneFormInput>
+
+export const listPublicFormsFilterInput = z.object({
+    category: z.string().optional(),
+    search: z.string().optional(),
+}).optional();
+
+export type ListPublicFormsFilterInputType = z.infer<typeof listPublicFormsFilterInput>;
 
 export const archiveFormInput = z.object({
     formId: z.string().uuid().describe('UUID of the form to archive or unarchive'),

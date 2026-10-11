@@ -97,19 +97,6 @@ export const useUpdateFormSettings = () => {
     return { updateFormSettingsAsync, updateFormSettings, error, isError, isLoading };
 };
 
-export const useListPublicForms = () => {
-    const { data: publicForms, error, isFetched, isFetching, isLoading, status } =
-        trpc.form.listPublicForms.useQuery();
-
-    return {
-        publicForms,
-        error,
-        isFetched,
-        isFetching,
-        isLoading,
-        status,
-    };
-};
 
 export const useCloneForm = () => {
     const utils = trpc.useUtils();
@@ -155,6 +142,39 @@ export const useRecordFormView = () => {
     } = trpc.form.recordView.useMutation();
 
     return { recordViewAsync, recordView };
+};
+
+export const useListPublicForms = (filters?: { category?: string; search?: string }) => {
+    const { data: publicForms, error, isFetched, isFetching, isLoading, status, refetch } =
+        trpc.form.listPublicForms.useQuery(filters);
+
+    return {
+        publicForms,
+        error,
+        isFetched,
+        isFetching,
+        isLoading,
+        status,
+        refetch,
+    };
+};
+
+export const useUseTemplate = () => {
+    const utils = trpc.useUtils();
+
+    const {
+        mutateAsync: useTemplateAsync,
+        mutate: useTemplate,
+        error,
+        isError,
+        isPending: isLoading,
+    } = trpc.form.useTemplate.useMutation({
+        onSuccess: async () => {
+            await utils.form.listForms.invalidate();
+        },
+    });
+
+    return { useTemplateAsync, useTemplate, error, isError, isLoading };
 };
 
 

@@ -71,6 +71,13 @@
       "when": 1791726760524,
       "tag": "0009_last_doctor_faustus",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791736293493,
+      "tag": "0010_chief_oracle",
+      "breakpoints": true
     }
   ]
 }
