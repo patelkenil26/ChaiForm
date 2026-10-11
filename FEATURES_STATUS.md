@@ -91,7 +91,7 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
   - Community exploration hub jahan trending aur public forms display hon.
 - [ ] **Form Templates & Theme Gallery**:
   - 1-click starter templates (Hiring Application, Event RSVP, Customer Satisfaction, Quiz).
-- [ ] **Response Filtering, Search & Pagination**:
+- [x] **Response Filtering, Search & Pagination**:
   - Submissions table me text search, date range filter, aur large datasets ke liye pagination (10/25/50 per page).
 - [ ] **Form Clone & Archive Support**:
   - **Duplicate / Clone**: Existing form ka clone banana (same fields ke saath).
