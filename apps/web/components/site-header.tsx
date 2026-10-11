@@ -6,6 +6,7 @@ import { IconClipboardPlus } from "@tabler/icons-react"
 import { Button } from "~/components/ui/button"
 import { Separator } from "~/components/ui/separator"
 import { SidebarTrigger } from "~/components/ui/sidebar"
+import { ThemesComingSoonButton } from "~/components/themes/themes-modal"
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -28,6 +29,7 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-semibold">{getPageTitle()}</h1>
         <div className="ml-auto flex items-center gap-2">
+          <ThemesComingSoonButton />
           {pathname !== "/forms" && pathname !== "/dashboard/forms" && (
             <Button size="sm" asChild variant="outline" className="hidden sm:inline-flex">
               <Link href="/forms">

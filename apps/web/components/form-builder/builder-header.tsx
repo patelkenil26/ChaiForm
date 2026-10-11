@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { ThemesComingSoonButton } from "~/components/themes/themes-modal";
 
 export interface BuilderFormData {
   id: string;
@@ -188,6 +189,7 @@ export function BuilderHeader({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <ThemesComingSoonButton />
           <Button variant="outline" size="sm" asChild>
             <Link href={`/forms/${formId}/submissions`}>
               <BarChart3Icon className="size-3.5 mr-1.5" />

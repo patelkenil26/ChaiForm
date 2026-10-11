@@ -11,8 +11,9 @@ Yaha wo features hain jo requirement document ke hisaab se aage develop karne ba
 - [ ] Category filters (Surveys, Feedback, Quizzes, Event Registrations).
 - [ ] "Use this template" / "Fill Form" buttons.
 
-### 1.2 Creative Themes System
-- [ ] **Theme Presets**: Form ke liye visual themes choose karne ka option:
+### 1.2 Creative Themes System (Coming Soon)
+- [ ] **Coming Soon Trigger Added**: Top navigation header aur Form Builder me "Themes (Soon)" button add kiya gaya hai jisme upcoming presets preview dialog khulta hai.
+- [ ] **Theme Presets (Planned)**: Form ke liye visual themes choose karne ka option:
   - *Movies & Cinema*
   - *Anime Aesthetic*
   - *Cyberpunk / Terminal Tech*
