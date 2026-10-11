@@ -75,7 +75,7 @@ export function BuilderHeader({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="/dashboard/forms">
+            <Link href="/forms">
               <ArrowLeftIcon className="size-4" />
               <span className="sr-only">Back to forms</span>
             </Link>
@@ -189,7 +189,7 @@ export function BuilderHeader({
 
         <div className="flex items-center gap-2 flex-wrap">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/forms/${formId}/submissions`}>
+            <Link href={`/forms/${formId}/submissions`}>
               <BarChart3Icon className="size-3.5 mr-1.5" />
               Submissions
             </Link>

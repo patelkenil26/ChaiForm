@@ -17,7 +17,7 @@ import {
   IconArrowRight,
   IconEye,
 } from "@tabler/icons-react";
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -75,7 +75,7 @@ export default function DashboardPage() {
       setOpen(false);
       toast.success("Form created successfully!");
       if (res?.id) {
-        router.push(`/dashboard/forms/${res.id}`);
+        router.push(`/forms/${res.id}`);
       }
     } catch {
       toast.error("Failed to create form");
@@ -184,7 +184,7 @@ export default function DashboardPage() {
           </div>
           {totalForms > 0 && (
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/dashboard/forms" className="gap-1.5 text-xs font-medium">
+              <Link href="/forms" className="gap-1.5 text-xs font-medium">
                 View All Forms
                 <IconArrowRight className="size-3.5" />
               </Link>
@@ -261,13 +261,13 @@ export default function DashboardPage() {
                 <CardFooter className="flex items-center justify-between gap-2 border-t pt-3">
                   <div className="flex items-center gap-1.5">
                     <Button variant="outline" size="sm" asChild className="gap-1.5 text-xs">
-                      <Link href={`/dashboard/forms/${form.id}`}>
+                      <Link href={`/forms/${form.id}`}>
                         <PencilIcon className="size-3.5" />
                         Builder
                       </Link>
                     </Button>
                     <Button variant="ghost" size="sm" asChild className="gap-1.5 text-xs">
-                      <Link href={`/dashboard/forms/${form.id}/submissions`}>
+                      <Link href={`/forms/${form.id}/submissions`}>
                         <IconChartBar className="size-3.5" />
                         Responses
                       </Link>
@@ -384,7 +384,8 @@ export default function DashboardPage() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="gap-2">
+                {isSubmitting && <Loader2 className="size-4 animate-spin" />}
                 {isSubmitting ? "Creating..." : "Create Form"}
               </Button>
             </DialogFooter>

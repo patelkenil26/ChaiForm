@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { XIcon } from "lucide-react";
+import { XIcon, Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
@@ -199,7 +199,8 @@ export function FieldForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting} className="gap-2">
+          {isSubmitting && <Loader2 className="size-4 animate-spin" />}
           {isSubmitting ? "Saving..." : submitLabel}
         </Button>
       </DialogFooter>

@@ -159,139 +159,159 @@ export function QrCodeDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-md sm:max-w-lg p-6">
-          <DialogHeader>
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-primary/10 rounded-lg text-primary">
+        <DialogContent className="max-w-md sm:max-w-2xl max-h-[92vh] overflow-y-auto p-5 sm:p-6">
+          <DialogHeader className="pb-2 border-b">
+            <div className="flex items-center gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
                 <QrCodeIcon className="size-5" />
               </div>
               <div>
-                <DialogTitle className="text-lg">Form QR Code</DialogTitle>
+                <DialogTitle className="text-base sm:text-lg font-semibold tracking-tight">
+                  Form QR Code
+                </DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground">
-                  Scan instantly from phone camera, posters, or event desks.
+                  Scan instantly with phone cameras, event posters, or print desks.
                 </DialogDescription>
               </div>
             </div>
           </DialogHeader>
 
-          {/* QR Code Preview Card */}
-          <div className="flex flex-col items-center justify-center p-6 bg-muted/40 rounded-2xl border mt-2">
-            <div className="p-4 bg-white rounded-2xl shadow-sm border border-neutral-200 flex flex-col items-center">
-              {dataUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={dataUrl}
-                  alt={`QR code for ${title}`}
-                  className="size-52 sm:size-60 object-contain rounded-lg"
-                />
-              ) : (
-                <div className="size-52 sm:size-60 flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-                </div>
-              )}
-              <p className="text-[11px] font-medium text-neutral-500 mt-2 tracking-wide uppercase">
-                Scan with phone camera
-              </p>
-            </div>
-
-            {/* Target URL Pill */}
-            <div className="w-full mt-4 flex items-center justify-between gap-2 px-3 py-1.5 bg-background border rounded-lg text-xs font-mono text-muted-foreground">
-              <span className="truncate" title={url}>
-                {url}
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 px-2 text-xs shrink-0"
-                onClick={handleCopyLink}
-              >
-                {copiedLink ? (
-                  <CheckIcon className="size-3 text-emerald-500" />
+          {/* Responsive Two-Column Layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-5 pt-1">
+            {/* Left: QR Code Card & Color Theme (2 cols on sm) */}
+            <div className="sm:col-span-2 flex flex-col items-center justify-center bg-muted/40 rounded-xl p-4 border border-border/60">
+              <div className="p-3 bg-white rounded-xl shadow-xs border border-neutral-200 flex flex-col items-center">
+                {dataUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={dataUrl}
+                    alt={`QR code for ${title}`}
+                    className="size-36 sm:size-40 object-contain rounded"
+                  />
                 ) : (
-                  <CopyIcon className="size-3" />
+                  <div className="size-36 sm:size-40 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-primary" />
+                  </div>
                 )}
-                <span className="ml-1">{copiedLink ? "Copied" : "Copy"}</span>
-              </Button>
-            </div>
-          </div>
+                <span className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mt-2">
+                  Scan with camera
+                </span>
+              </div>
 
-          {/* Color Customizer */}
-          <div className="mt-3">
-            <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mb-2">
-              <PaletteIcon className="size-3.5" />
-              <span>QR Theme Color:</span>
+              {/* Theme Color Presets */}
+              <div className="mt-3 flex flex-col items-center gap-1.5 w-full">
+                <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
+                  <PaletteIcon className="size-3" /> Color Palette
+                </span>
+                <div className="flex items-center gap-2">
+                  {COLOR_PRESETS.map((color) => {
+                    const isSelected = selectedColor === color.hex;
+                    return (
+                      <button
+                        key={color.hex}
+                        type="button"
+                        title={color.name}
+                        onClick={() => setSelectedColor(color.hex)}
+                        className={`size-6 rounded-full transition-all flex items-center justify-center cursor-pointer border ${
+                          isSelected
+                            ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-110 border-transparent"
+                            : "border-black/20 hover:scale-105 opacity-80 hover:opacity-100"
+                        }`}
+                        style={{ backgroundColor: color.hex }}
+                      >
+                        {isSelected && <CheckIcon className="size-3 text-white drop-shadow-xs" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {COLOR_PRESETS.map((color) => {
-                const isSelected = selectedColor === color.hex;
-                return (
-                  <button
-                    key={color.hex}
-                    type="button"
-                    onClick={() => setSelectedColor(color.hex)}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition border cursor-pointer ${
-                      isSelected
-                        ? "border-primary bg-primary/10 font-medium text-foreground"
-                        : "border-transparent bg-muted/60 hover:bg-muted text-muted-foreground"
-                    }`}
+
+            {/* Right: Info, URL, & Actions (3 cols on sm) */}
+            <div className="sm:col-span-3 flex flex-col justify-between gap-4">
+              <div>
+                <Badge variant="outline" className="text-[10px] font-mono text-muted-foreground mb-1.5">
+                  Shareable Link
+                </Badge>
+                <h3 className="text-base font-semibold leading-snug line-clamp-1">{title}</h3>
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                  Anyone with this QR code can instantly open and submit this form from any mobile browser.
+                </p>
+
+                {/* Target URL Pill */}
+                <div className="mt-3 flex items-center gap-1.5 p-1.5 pl-2.5 rounded-lg border bg-muted/40 text-xs font-mono text-muted-foreground">
+                  <span className="truncate flex-1 select-all" title={url}>
+                    {url}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="h-7 px-2.5 text-xs shrink-0 gap-1 font-sans"
+                    onClick={handleCopyLink}
                   >
-                    <span
-                      className="size-3 rounded-full border border-black/10 shrink-0"
-                      style={{ backgroundColor: color.hex }}
-                    />
-                    <span>{color.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+                    {copiedLink ? (
+                      <CheckIcon className="size-3 text-emerald-500" />
+                    ) : (
+                      <CopyIcon className="size-3" />
+                    )}
+                    <span>{copiedLink ? "Copied" : "Copy"}</span>
+                  </Button>
+                </div>
+              </div>
 
-          {/* Action Buttons Grid */}
-          <div className="grid grid-cols-2 gap-2 mt-4 pt-2 border-t">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDownloadPng}
-              disabled={!dataUrl}
-              className="gap-1.5 h-9"
-            >
-              <DownloadIcon className="size-3.5" />
-              <span>Download PNG (1024px)</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDownloadSvg}
-              disabled={!svgString}
-              className="gap-1.5 h-9"
-            >
-              <FileCodeIcon className="size-3.5" />
-              <span>Download SVG (Vector)</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyImage}
-              disabled={!dataUrl}
-              className="gap-1.5 h-9"
-            >
-              {copiedImage ? (
-                <CheckIcon className="size-3.5 text-emerald-500" />
-              ) : (
-                <CopyIcon className="size-3.5" />
-              )}
-              <span>{copiedImage ? "Copied Image!" : "Copy Image"}</span>
-            </Button>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={handlePrintFlyer}
-              disabled={!dataUrl}
-              className="gap-1.5 h-9"
-            >
-              <PrinterIcon className="size-3.5" />
-              <span>Print Poster Flyer</span>
-            </Button>
+              {/* Action Buttons Grid */}
+              <div className="flex flex-col gap-2 pt-2 border-t">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownloadPng}
+                    disabled={!dataUrl}
+                    className="h-8.5 gap-1.5 text-xs font-medium"
+                  >
+                    <DownloadIcon className="size-3.5" />
+                    <span>PNG (1024px)</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownloadSvg}
+                    disabled={!svgString}
+                    className="h-8.5 gap-1.5 text-xs font-medium"
+                  >
+                    <FileCodeIcon className="size-3.5" />
+                    <span>Vector (SVG)</span>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyImage}
+                    disabled={!dataUrl}
+                    className="h-8.5 gap-1.5 text-xs font-medium"
+                  >
+                    {copiedImage ? (
+                      <CheckIcon className="size-3.5 text-emerald-500" />
+                    ) : (
+                      <CopyIcon className="size-3.5" />
+                    )}
+                    <span>{copiedImage ? "Copied!" : "Copy Image"}</span>
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handlePrintFlyer}
+                    disabled={!dataUrl}
+                    className="h-8.5 gap-1.5 text-xs font-medium shadow-xs"
+                  >
+                    <PrinterIcon className="size-3.5" />
+                    <span>Print Flyer</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

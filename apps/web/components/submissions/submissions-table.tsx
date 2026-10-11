@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { SearchXIcon } from "lucide-react";
+import { SearchXIcon, StarIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Button } from "~/components/ui/button";
@@ -312,7 +312,7 @@ export function SubmissionsTable({
 
                 return (
                   <TableRow key={submission.id} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="text-muted-foreground text-sm whitespace-nowrap font-mono text-xs">
+                    <TableCell className="text-muted-foreground text-sm whitespace-nowrap font-mono text-xs" suppressHydrationWarning>
                       {submission.createdAt
                         ? new Date(submission.createdAt).toLocaleString([], {
                             dateStyle: "medium",
@@ -327,7 +327,8 @@ export function SubmissionsTable({
                           {val !== undefined && val !== "" ? (
                             field.type === "RATING" ? (
                               <span className="inline-flex items-center gap-1 font-medium text-amber-500">
-                                <span>★</span> {val} / 5
+                                <StarIcon className="size-3.5 fill-amber-400 text-amber-500" />
+                                <span>{val} / 5</span>
                               </span>
                             ) : (
                               val

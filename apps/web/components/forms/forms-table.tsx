@@ -34,6 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export interface FormListItem {
   id: string;
@@ -89,11 +90,36 @@ export function FormsTable({
         </TableHeader>
         <TableBody>
           {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={6} className="h-28 text-center text-muted-foreground">
-                Loading forms...
-              </TableCell>
-            </TableRow>
+            Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell>
+                  <div className="space-y-2 py-1">
+                    <Skeleton className="h-4 w-40" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-20 rounded-full" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-7 w-24 rounded-md" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-48" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-16" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <Skeleton className="size-8 rounded-md" />
+                    <Skeleton className="size-8 rounded-md" />
+                    <Skeleton className="size-8 rounded-md" />
+                    <Skeleton className="size-8 rounded-md" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
           ) : !forms || forms.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} className="h-32 text-center text-muted-foreground">
@@ -110,7 +136,7 @@ export function FormsTable({
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Link
-                        href={`/dashboard/forms/${form.id}`}
+                        href={`/forms/${form.id}`}
                         className="hover:underline hover:text-primary transition-colors block"
                       >
                         {form.title}
@@ -134,7 +160,7 @@ export function FormsTable({
                           </span>
                         )}
                         {form.closesAt && (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground" suppressHydrationWarning>
                             <ClockIcon className="size-3 text-amber-500" />
                             {isExpired
                               ? "Expired"
@@ -230,7 +256,7 @@ export function FormsTable({
                     {form.description ?? "—"}
                   </TableCell>
 
-                  <TableCell className="text-muted-foreground text-xs">
+                  <TableCell className="text-muted-foreground text-xs" suppressHydrationWarning>
                     {form.createdAt ? new Date(form.createdAt).toLocaleDateString() : "—"}
                   </TableCell>
 
@@ -238,7 +264,7 @@ export function FormsTable({
                     <div className="flex items-center justify-end gap-1">
                       {/* Edit Builder */}
                       <Button variant="ghost" size="icon" asChild title="Edit in builder">
-                        <Link href={`/dashboard/forms/${form.id}`}>
+                        <Link href={`/forms/${form.id}`}>
                           <PencilIcon className="size-4" />
                           <span className="sr-only">Edit {form.title}</span>
                         </Link>
@@ -246,7 +272,7 @@ export function FormsTable({
 
                       {/* Submissions */}
                       <Button variant="ghost" size="icon" asChild title="View Submissions">
-                        <Link href={`/dashboard/forms/${form.id}/submissions`}>
+                        <Link href={`/forms/${form.id}/submissions`}>
                           <BarChart3Icon className="size-4" />
                           <span className="sr-only">Submissions for {form.title}</span>
                         </Link>

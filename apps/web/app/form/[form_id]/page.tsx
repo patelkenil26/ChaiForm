@@ -1,10 +1,11 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ClockIcon, UsersIcon, LockIcon } from "lucide-react";
+import { ClockIcon, UsersIcon, LockIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import { FieldGroup } from "~/components/ui/field";
 import { useGetForm } from "~/hooks/api/form";
 import { useSubmitForm } from "~/hooks/api/form-submission";
@@ -48,6 +49,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -77,10 +79,49 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     }
   };
 
+  // Hotkey support: Ctrl+Enter or Cmd+Enter to submit form from anywhere
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        handleSubmit(onSubmit as Parameters<typeof handleSubmit>[0])();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSubmit, onSubmit]);
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">Loading form...</p>
+      <div className="min-h-screen bg-background flex items-start justify-center py-16 px-4 animate-in fade-in duration-300">
+        <div className="w-full max-w-lg space-y-8">
+          {/* Header Skeleton */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-24 rounded-full" />
+              <Skeleton className="h-5 w-32 rounded-full" />
+            </div>
+            <Skeleton className="h-8 w-3/4 rounded-lg" />
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-2/3 rounded" />
+          </div>
+
+          {/* Field Skeletons */}
+          <div className="space-y-5 pt-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="space-y-2.5 p-4 rounded-xl border bg-card/60">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-3 w-12" />
+                </div>
+                <Skeleton className="h-10 w-full rounded-md" />
+              </div>
+            ))}
+          </div>
+
+          {/* Submit Button Skeleton */}
+          <Skeleton className="h-11 w-full rounded-xl" />
+        </div>
       </div>
     );
   }
@@ -123,7 +164,15 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
   }
 
   if (submitted) {
-    return <FormSuccessScreen />;
+    return (
+      <FormSuccessScreen
+        formTitle={form.title}
+        onReset={() => {
+          reset();
+          setSubmitted(false);
+        }}
+      />
+    );
   }
 
   const sortedFields = [...(form.fields ?? [])].sort(
@@ -179,9 +228,33 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
           </FieldGroup>
 
           {sortedFields.length > 0 && (
-            <Button type="submit" className="mt-8 w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
+            <div className="mt-8 flex flex-col items-center gap-2">
+              <Button
+                type="submit"
+                className="w-full h-11 text-sm font-medium transition-all shadow-sm gap-2"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2Icon className="size-4 animate-spin" />
+                    <span>Submitting response...</span>
+                  </>
+                ) : (
+                  <span>Submit Response</span>
+                )}
+              </Button>
+              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground select-none">
+                <span>Tip: Press</span>
+                <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-medium rounded border bg-muted shadow-2xs">
+                  Ctrl
+                </kbd>
+                <span>+</span>
+                <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-medium rounded border bg-muted shadow-2xs">
+                  Enter ↵
+                </kbd>
+                <span>to submit from anywhere</span>
+              </div>
+            </div>
           )}
         </form>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { GlobeIcon, LinkIcon } from "lucide-react";
+import { GlobeIcon, LinkIcon, Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
 import {
@@ -158,7 +158,8 @@ export function CreateFormDialog({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="gap-2">
+              {isSubmitting && <Loader2 className="size-4 animate-spin" />}
               {isSubmitting ? "Creating..." : "Create Form"}
             </Button>
           </DialogFooter>

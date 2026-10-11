@@ -7,6 +7,7 @@ import {
   IconSettings,
   IconClipboardText,
   IconForms,
+  IconInbox,
 } from "@tabler/icons-react";
 
 import { NavMain } from "~/components/nav-main";
@@ -31,18 +32,23 @@ const navMain = [
   },
   {
     title: "Forms",
-    url: "/dashboard/forms",
+    url: "/forms",
     icon: IconClipboardText,
+  },
+  {
+    title: "Submissions",
+    url: "/submissions",
+    icon: IconInbox,
   },
 ];
 
-const navSecondary = [
-  {
-    title: "Settings",
-    url: "#",
-    icon: IconSettings,
-  },
-];
+// const navSecondary = [
+//   {
+//     title: "Settings",
+//     url: "#",
+//     icon: IconSettings,
+//   },
+// ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser();
@@ -74,7 +80,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
-        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={currentUser} />

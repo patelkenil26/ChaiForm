@@ -2,6 +2,7 @@
 
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -17,7 +18,11 @@ type LoginFormValues = {
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const { signInUserWithEmailAndPasswordAsync } = useSignIn();
   const router = useRouter();
-  const { register, handleSubmit } = useForm<LoginFormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
       password: "",
@@ -71,7 +76,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               />
             </Field>
             <Field>
-              <Button type="submit">Login</Button>
+              <Button type="submit" disabled={isSubmitting} className="w-full gap-2">
+                {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                {isSubmitting ? "Signing in..." : "Login"}
+              </Button>
 
               <FieldDescription className="text-center">
                 Don&apos;t have an account? <a href="/signup">Sign up</a>

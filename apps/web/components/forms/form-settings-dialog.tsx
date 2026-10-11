@@ -9,6 +9,7 @@ import {
   LinkIcon,
   ClockIcon,
   UsersIcon,
+  Loader2,
 } from "lucide-react";
 import {
   Dialog,
@@ -340,7 +341,8 @@ export function FormSettingsDialog({
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isSaving}>
+            <Button type="submit" disabled={isSaving} className="gap-2">
+              {isSaving && <Loader2 className="size-4 animate-spin" />}
               {isSaving ? "Saving..." : "Save Settings"}
             </Button>
           </DialogFooter>

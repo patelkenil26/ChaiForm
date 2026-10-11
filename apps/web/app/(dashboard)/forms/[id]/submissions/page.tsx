@@ -23,10 +23,10 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
   const isLoading = fieldsLoading || submissionsLoading;
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-6 max-w-6xl">
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
-          <Link href={`/dashboard/forms/${formId}`}>
+          <Link href={`/forms/${formId}`}>
             <ArrowLeftIcon className="size-4" />
             <span className="sr-only">Back to form builder</span>
           </Link>

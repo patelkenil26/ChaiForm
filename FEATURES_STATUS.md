@@ -46,7 +46,7 @@ Yaha wo features hain jo requirement document ke hisaab se aage develop karne ba
 - [ ] **Respondent Confirmation**: Agar form me email field ho toh respondent ko "Thank you for submitting" email bhejna.
 
 ### 1.7 SaaS Public Pages
-- [ ] **Landing Page** (`/`):
+- [x] **Landing Page** (`/`):
   - Hero Section with product showcase & CTA buttons.
   - Feature highlights (Conversational forms, Type-safe APIs, Real-time analytics).
   - Live interactive demo preview.
@@ -54,10 +54,10 @@ Yaha wo features hain jo requirement document ke hisaab se aage develop karne ba
   - Free vs Pro vs Enterprise tier comparison cards.
 
 ### 1.8 Demo Ready Seeded Data & Credentials
-- [ ] `pnpm seed` database script jo single command me:
-  - Demo user account create kare (`demo@chaiform.com` / `password123`).
-  - 4-5 ready-made creative themed forms create kare (e.g. *Anime Quiz, Startup Feedback, Movie Poll*).
-  - Har form me sample submissions pre-fill kare taaki judges/reviewers dashboard open karte hi populated data dekh sakein.
+- [x] `pnpm --filter @repo/database seed` database script:
+  - 6 realistic production forms (Course Enrollment, Job Application, Customer Survey, Event Registration, Product Feedback, Contact Us).
+  - Har form me diverse input fields (Rating, Dropdown, Multi-Choice, Radio, Yes/No, Phone, URL, Date, Time, Textarea).
+  - Sample submissions pre-filled taaki submissions viewer, filtering, aur CSV export turant test ho sake.
 
 ### 1.9 Security & Anti-Spam
 - [ ] Public `/form/submitForm` endpoint par rate-limiting (e.g. max 10 submissions per minute per IP).
@@ -100,8 +100,8 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
   - Authentic Typeform-style single-question slider view with smooth keyboard navigation (Press `Enter` to next).
 - [ ] **Super Admin Dashboard**:
   - Platform-wide stats (total users, total forms created across the platform, system health).
-- [ ] **Better UX States & Polished Product Experience**:
-  - Micro-interactions, skeleton loading animations, confetti animation on submission, hotkeys support.
+- [x] **Better UX States & Polished Product Experience**:
+  - Micro-interactions, skeleton loading animations, confetti animation on submission, hotkeys support (`Ctrl+Enter` / `Cmd+Enter`), mutation loading spinners across all buttons and dialogs.
 
 ---
 

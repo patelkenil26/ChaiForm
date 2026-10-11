@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   BuilderHeader,
   type BuilderFormData,
@@ -37,8 +38,13 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   const { updateFormVisibilityAsync, isLoading: isUpdatingVisibility } = useUpdateFormVisibility();
   const { updateFormSettingsAsync, isLoading: isUpdatingSettings } = useUpdateFormSettings();
   const { fields, isLoading } = useGetFields(formId);
-  const { createFieldAsync, isError: isCreateError, error: createError } = useCreateField(formId);
-  const { updateFieldAsync } = useUpdateField(formId);
+  const {
+    createFieldAsync,
+    isLoading: isCreatingField,
+    isError: isCreateError,
+    error: createError,
+  } = useCreateField(formId);
+  const { updateFieldAsync, isLoading: isUpdatingField } = useUpdateField(formId);
   const { deleteFieldAsync } = useDeleteField(formId);
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -138,7 +144,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   };
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-6 max-w-4xl">
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
       <BuilderHeader
         form={form as BuilderFormData | null | undefined}
         formId={formId}
@@ -155,7 +161,25 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
       {/* Fields List */}
       <div className="flex flex-col gap-3">
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">Loading fields...</p>
+          Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between p-4 rounded-xl border bg-card/60 gap-4"
+            >
+              <div className="flex items-center gap-3">
+                <Skeleton className="size-5 rounded" />
+                <div className="space-y-1.5">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-3 w-28" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-6 w-16 rounded-full" />
+                <Skeleton className="size-8 rounded-md" />
+                <Skeleton className="size-8 rounded-md" />
+              </div>
+            </div>
+          ))
         ) : !fields || fields.length === 0 ? (
           <div className="rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">
             No fields yet. Add your first field.
@@ -182,7 +206,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           <FieldForm
             defaultValues={DEFAULT_VALUES}
             onSubmit={handleCreate}
-            isSubmitting={false}
+            isSubmitting={isCreatingField}
             onCancel={() => setCreateOpen(false)}
             submitLabel="Add Field"
           />
@@ -211,7 +235,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                 options: editingField.options ?? ["Option 1", "Option 2"],
               }}
               onSubmit={handleUpdate}
-              isSubmitting={false}
+              isSubmitting={isUpdatingField}
               onCancel={() => setEditingField(null)}
               submitLabel="Save Changes"
             />

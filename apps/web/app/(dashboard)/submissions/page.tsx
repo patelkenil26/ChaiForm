@@ -1,0 +1,311 @@
+"use client";
+
+import { Suspense, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  IconInbox,
+  IconClipboardText,
+  IconExternalLink,
+  IconCheck,
+  IconCopy,
+  IconPencil,
+  IconPlus,
+  IconChartBar,
+} from "@tabler/icons-react";
+import { toast } from "sonner";
+
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Badge } from "~/components/ui/badge";
+import { Skeleton } from "~/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
+  SubmissionsTable,
+  type SubmissionField,
+  type SubmissionItem,
+} from "~/components/submissions/submissions-table";
+import { useListForms } from "~/hooks/api/form";
+import { useGetFields } from "~/hooks/api/form-field";
+import { useGetFormSubmissions } from "~/hooks/api/form-submission";
+
+function SubmissionsHubContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialFormId = searchParams.get("formId");
+
+  const { forms, isLoading: formsLoading } = useListForms();
+  const [selectedFormId, setSelectedFormId] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+
+  // Auto-select first form or sync from searchParams
+  useEffect(() => {
+    if (!forms || forms.length === 0) return;
+
+    if (initialFormId && forms.some((f) => f.id === initialFormId)) {
+      setSelectedFormId(initialFormId);
+    } else if (!selectedFormId || !forms.some((f) => f.id === selectedFormId)) {
+      setSelectedFormId(forms[0]?.id ?? "");
+    }
+  }, [forms, initialFormId, selectedFormId]);
+
+  const handleFormChange = (newFormId: string) => {
+    setSelectedFormId(newFormId);
+    router.replace(`/submissions?formId=${newFormId}`, { scroll: false });
+  };
+
+  const currentForm = useMemo(
+    () => forms?.find((f) => f.id === selectedFormId),
+    [forms, selectedFormId]
+  );
+
+  const { fields, isLoading: fieldsLoading } = useGetFields(selectedFormId || "");
+  const { submissions, isLoading: submissionsLoading } = useGetFormSubmissions(selectedFormId || "");
+
+  const isDataLoading = fieldsLoading || submissionsLoading;
+
+  const handleCopyLink = () => {
+    if (!currentForm) return;
+    const target = currentForm.slug || currentForm.id;
+    const url = `${window.location.origin}/form/${target}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success("Public form link copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (formsLoading) {
+    return (
+      <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 w-full rounded-xl" />
+          ))}
+        </div>
+        <Skeleton className="h-96 w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  if (!forms || forms.length === 0) {
+    return (
+      <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Submissions</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            View, filter, and export respondent answers across all your forms.
+          </p>
+        </div>
+
+        <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed">
+          <div className="flex size-14 items-center justify-center rounded-full bg-muted mb-4">
+            <IconInbox className="size-7 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold">No forms created yet</h3>
+          <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+            Once you create forms and collect responses, all submissions will appear here for filtering and export.
+          </p>
+          <Button asChild className="mt-6 gap-2">
+            <Link href="/forms">
+              <IconPlus className="size-4" />
+              Create Your First Form
+            </Link>
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  const formTarget = currentForm?.slug || currentForm?.id;
+  const submissionsCount = submissions?.length ?? 0;
+  const fieldsCount = fields?.length ?? 0;
+
+  return (
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
+      {/* Top Header & Switcher */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <IconInbox className="size-5" />
+            </div>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                Submissions & Responses
+              </h1>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Inspect live answers, filter by date, search responses, and export data.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Form Selector Dropdown & Actions */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground hidden sm:inline">
+              Form:
+            </span>
+            <Select value={selectedFormId} onValueChange={handleFormChange}>
+              <SelectTrigger className="w-[220px] md:w-[280px] h-9 text-xs">
+                <SelectValue placeholder="Select a form..." />
+              </SelectTrigger>
+              <SelectContent>
+                {forms.map((f) => (
+                  <SelectItem key={f.id} value={f.id} className="text-xs">
+                    <span className="flex items-center gap-2">
+                      <span className="truncate max-w-[170px] font-medium">{f.title}</span>
+                      {f.isPublished ? (
+                        <span className="size-1.5 rounded-full bg-emerald-500 shrink-0" title="Published" />
+                      ) : (
+                        <span className="size-1.5 rounded-full bg-amber-500 shrink-0" title="Draft" />
+                      )}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {currentForm && (
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 gap-1.5 text-xs"
+                onClick={handleCopyLink}
+                title="Copy Public Link"
+              >
+                {copied ? (
+                  <IconCheck className="size-3.5 text-emerald-500" />
+                ) : (
+                  <IconCopy className="size-3.5" />
+                )}
+                <span className="hidden md:inline">Share</span>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 gap-1.5 text-xs"
+                asChild
+                title="Open Form Builder"
+              >
+                <Link href={`/forms/${currentForm.id}`}>
+                  <IconPencil className="size-3.5" />
+                  <span className="hidden md:inline">Builder</span>
+                </Link>
+              </Button>
+
+              <Button
+                variant="default"
+                size="sm"
+                className="h-9 gap-1.5 text-xs"
+                asChild
+                title="Open Live Public Form"
+              >
+                <Link href={`/form/${formTarget}`} target="_blank">
+                  <IconExternalLink className="size-3.5" />
+                  <span>Live Form</span>
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Summary Stats Row */}
+      {currentForm && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          <Card className="p-4">
+            <span className="text-xs font-medium text-muted-foreground">Total Responses</span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold">
+                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : submissionsCount}
+              </span>
+              <span className="text-[11px] text-muted-foreground">collected</span>
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <span className="text-xs font-medium text-muted-foreground">Form Questions</span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold">
+                {fieldsLoading ? <Skeleton className="h-7 w-12" /> : fieldsCount}
+              </span>
+              <span className="text-[11px] text-muted-foreground">fields</span>
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <span className="text-xs font-medium text-muted-foreground">Status</span>
+            <div className="mt-1 flex items-center gap-1.5">
+              {currentForm.isPublished ? (
+                <Badge
+                  variant="default"
+                  className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs font-normal"
+                >
+                  Published
+                </Badge>
+              ) : (
+                <Badge
+                  variant="secondary"
+                  className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs font-normal"
+                >
+                  Draft
+                </Badge>
+              )}
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <span className="text-xs font-medium text-muted-foreground">Visibility</span>
+            <div className="mt-1 flex items-center gap-1.5">
+              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
+                {currentForm.visibility === "PUBLIC" ? "Public" : "Unlisted"}
+              </Badge>
+              {currentForm.isPasswordProtected && (
+                <Badge variant="outline" className="text-[11px] font-normal text-primary">
+                  Password
+                </Badge>
+              )}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Main Submissions Table */}
+      <SubmissionsTable
+        fields={fields as SubmissionField[] | undefined}
+        submissions={submissions as SubmissionItem[] | undefined}
+        isLoading={isDataLoading}
+        formTitle={currentForm?.title}
+      />
+    </div>
+  );
+}
+
+export default function SubmissionsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-6">
+          <Skeleton className="h-10 w-48 mb-4" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      }
+    >
+      <SubmissionsHubContent />
+    </Suspense>
+  );
+}

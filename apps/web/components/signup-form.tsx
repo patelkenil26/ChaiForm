@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, type SubmitHandler } from "react-hook-form";
-
+import { Loader2 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import {
@@ -103,8 +103,9 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
           />
         </Field>
         <Field>
-          <Button type="submit" disabled={isSubmitting}>
-            Create Account
+          <Button type="submit" disabled={isSubmitting} className="w-full gap-2">
+            {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+            {isSubmitting ? "Creating account..." : "Create Account"}
           </Button>
         </Field>
         

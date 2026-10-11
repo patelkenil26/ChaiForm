@@ -12,9 +12,9 @@ export function SiteHeader() {
 
   const getPageTitle = () => {
     if (pathname === "/dashboard") return "Dashboard"
-    if (pathname === "/dashboard/forms") return "Forms"
-    if (pathname?.includes("/submissions")) return "Submissions"
-    if (pathname?.startsWith("/dashboard/forms/")) return "Form Builder"
+    if (pathname === "/forms") return "Forms"
+    if (pathname?.includes("/submissions") || pathname === "/submissions") return "Submissions"
+    if (pathname?.startsWith("/forms/") ) return "Form Builder"
     return "ChaiForm"
   }
 
@@ -28,9 +28,9 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-semibold">{getPageTitle()}</h1>
         <div className="ml-auto flex items-center gap-2">
-          {pathname !== "/dashboard/forms" && (
+          {pathname !== "/forms" && pathname !== "/dashboard/forms" && (
             <Button size="sm" asChild variant="outline" className="hidden sm:inline-flex">
-              <Link href="/dashboard/forms">
+              <Link href="/forms">
                 <IconClipboardPlus className="size-4 mr-1.5" />
                 Forms
               </Link>
