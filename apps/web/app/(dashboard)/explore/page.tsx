@@ -179,122 +179,100 @@ export default function DashboardExplorePage() {
         </div>
       </div>
 
-      {/* Top Section: FOLDERS */}
-      <div className="flex flex-col gap-3">
+      {/* Category Filter Toolbar: Short Rounded Rectangle Chips */}
+      <div className="flex flex-col gap-3 border-b border-border/60 pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <IconFolderOpen className="size-4 text-primary" />
-            <h2 className="text-sm font-semibold tracking-tight">
-              Template Folders
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Categories
             </h2>
-            <span className="text-xs text-muted-foreground">
-              (Click a folder to filter)
-            </span>
           </div>
 
-          {selectedFolder !== "ALL" && (
-            <button
-              type="button"
-              onClick={() => setSelectedFolder("ALL")}
-              className="text-xs text-primary hover:underline cursor-pointer font-medium"
-            >
-              Reset to All Folders
-            </button>
-          )}
+          <div className="flex items-center gap-3 text-xs">
+            {selectedFolder !== "ALL" && (
+              <button
+                type="button"
+                onClick={() => setSelectedFolder("ALL")}
+                className="text-primary hover:underline cursor-pointer font-medium"
+              >
+                Reset to All
+              </button>
+            )}
+            <span className="text-muted-foreground">
+              {isAllLoading ? (
+                "Loading..."
+              ) : (
+                `Showing ${filteredForms.length} template${filteredForms.length === 1 ? "" : "s"}`
+              )}
+            </span>
+          </div>
         </div>
 
-        {/* Folders Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+        {/* Compact Rectangle Rounded Filter Chips */}
+        <div className="flex flex-wrap items-center gap-2">
           {FOLDER_CATEGORIES.map((folder) => {
             const isSelected = selectedFolder === folder.id;
             const count = folderCounts[folder.id] ?? 0;
 
             return (
-              <Card
+              <button
                 key={folder.id}
+                type="button"
                 onClick={() => setSelectedFolder(folder.id)}
-                className={`relative flex flex-col justify-between p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
+                className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all cursor-pointer select-none ${
                   isSelected
-                    ? "border-primary bg-primary/10 shadow-sm ring-1 ring-primary"
-                    : "border-border/70 bg-card/60 hover:bg-card hover:border-border hover:shadow-xs"
+                    ? "border-primary bg-primary/10 text-foreground ring-1 ring-primary/40 shadow-xs"
+                    : "border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-card hover:border-border"
                 }`}
               >
-                {/* Folder Icon & Count */}
-                <div className="flex items-center justify-between gap-1 mb-2">
-                  <div
-                    className={`flex size-8 items-center justify-center rounded-lg border ${folder.iconBg}`}
-                  >
-                    {isSelected ? (
-                      <IconFolderFilled className="size-4.5" />
-                    ) : (
-                      <IconFolder className="size-4.5" />
-                    )}
-                  </div>
-
-                  <Badge
-                    variant="outline"
-                    className={`text-[10px] px-1.5 py-0 h-4 font-mono ${
-                      isSelected
-                        ? "border-primary/40 bg-primary/20 text-primary font-semibold"
-                        : "text-muted-foreground border-border"
-                    }`}
-                  >
-                    {isAllLoading ? "-" : count}
-                  </Badge>
+                {/* Folder Icon with preserved category color styling */}
+                <div
+                  className={`flex size-5 items-center justify-center rounded border text-[10px] ${folder.iconBg}`}
+                >
+                  {isSelected ? (
+                    <IconFolderFilled className="size-3" />
+                  ) : (
+                    <IconFolder className="size-3" />
+                  )}
                 </div>
 
                 {/* Folder Name */}
-                <div>
-                  <h3
-                    className={`text-xs font-semibold truncate ${
-                      isSelected ? "text-foreground" : "text-foreground/90"
-                    }`}
-                  >
-                    {folder.name}
-                  </h3>
-                  <p className="text-[10px] text-muted-foreground truncate mt-0.5">
-                    {folder.description}
-                  </p>
-                </div>
+                <span className={isSelected ? "font-semibold text-foreground" : ""}>
+                  {folder.name}
+                </span>
 
-                {/* Selected Indicator Pill */}
-                {isSelected && (
-                  <div className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-primary" />
-                )}
-              </Card>
+                {/* Count Badge */}
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-mono leading-none ${
+                    isSelected
+                      ? "bg-primary/20 text-primary font-semibold"
+                      : "bg-muted text-muted-foreground group-hover:text-foreground"
+                  }`}
+                >
+                  {isAllLoading ? "-" : count}
+                </span>
+              </button>
             );
           })}
         </div>
-      </div>
 
-      {/* Active Folder Filter Bar */}
-      <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-3 pt-2">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-muted-foreground">Active Folder:</span>
-          <Badge
-            variant="outline"
-            className={`font-medium gap-1 text-xs py-0.5 ${activeCategoryMeta?.iconBg}`}
-          >
-            <IconFolderFilled className="size-3" />
-            <span>{activeCategoryMeta?.name}</span>
-          </Badge>
-          {searchQuery && (
-            <Badge variant="secondary" className="text-xs">
-              Search: &quot;{searchQuery}&quot;
+        {/* Search query pill if active */}
+        {searchQuery && (
+          <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+            <span>Filtered by keyword:</span>
+            <Badge variant="secondary" className="gap-1 text-xs">
+              <span>&quot;{searchQuery}&quot;</span>
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="hover:text-foreground ml-0.5"
+              >
+                <IconX className="size-3" />
+              </button>
             </Badge>
-          )}
-        </div>
-
-        <div className="text-xs text-muted-foreground">
-          {isAllLoading ? (
-            <span>Loading templates...</span>
-          ) : (
-            <span>
-              Showing {filteredForms.length} template
-              {filteredForms.length === 1 ? "" : "s"}
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Bottom Section: TEMPLATES GRID */}

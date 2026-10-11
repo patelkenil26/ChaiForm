@@ -41,10 +41,10 @@ Yaha wo advanced bonus features hain jo product ke next phase me implement karne
   - Live modal ya split-view screen jisme creator bina live link share kiye respondent experience test kar sake.
 - [ ] **Conditional Logic Between Questions**:
   - Smart branching (e.g., agar question 1 me "Yes" select kiya toh question 2 dikhao, agar "No" toh skip to question 4).
-- [ ] **Public Explore Page for Community Forms**:
-  - Community exploration hub jahan trending aur public forms display hon.
-- [ ] **Form Templates & Starter Packs**:
-  - 1-click starter templates (Hiring Application, Event RSVP, Customer Satisfaction, Quiz).
+- [x] **Public Explore Page for Community Forms** (Completed - `/explore`):
+  - Community exploration hub jahan trending aur public forms display hote hain.
+- [x] **Form Templates & Starter Packs** (Completed):
+  - 1-click starter templates (Hiring Application, Event RSVP, Customer Satisfaction, Quiz) with 1-click "Use Template" clone flow.
 - [ ] **Multi-Page / One-Question-at-a-Time Experience**:
   - Authentic Typeform-style single-question slider view with smooth keyboard navigation (Press `Enter` to next).
 - [ ] **Super Admin Dashboard**:

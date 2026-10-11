@@ -35,10 +35,14 @@ const nextConfig = {
     ];
   },
   async rewrites() {
+    const rawApiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!rawApiUrl) return [];
+    const apiTarget = rawApiUrl.endsWith("/trpc") ? rawApiUrl : `${rawApiUrl}/trpc`;
+
     return [
       {
         source: "/trpc/:path*",
-        destination: "http://localhost:8000/trpc/:path*",
+        destination: `${apiTarget}/:path*`,
       },
     ];
   },
