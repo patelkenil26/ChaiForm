@@ -1,0 +1,44 @@
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { IconClipboardPlus } from "@tabler/icons-react"
+import { Button } from "~/components/ui/button"
+import { Separator } from "~/components/ui/separator"
+import { SidebarTrigger } from "~/components/ui/sidebar"
+
+export function SiteHeader() {
+  const pathname = usePathname()
+
+  const getPageTitle = () => {
+    if (pathname === "/dashboard") return "Dashboard"
+    if (pathname === "/dashboard/forms") return "Forms"
+    if (pathname?.includes("/submissions")) return "Submissions"
+    if (pathname?.startsWith("/dashboard/forms/")) return "Form Builder"
+    return "ChaiForm"
+  }
+
+  return (
+    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+      <div className="flex w-full items-center gap-2 px-4 lg:px-6">
+        <SidebarTrigger className="-ml-1" />
+        <Separator
+          orientation="vertical"
+          className="mx-2 data-[orientation=vertical]:h-4"
+        />
+        <h1 className="text-base font-semibold">{getPageTitle()}</h1>
+        <div className="ml-auto flex items-center gap-2">
+          {pathname !== "/dashboard/forms" && (
+            <Button size="sm" asChild variant="outline" className="hidden sm:inline-flex">
+              <Link href="/dashboard/forms">
+                <IconClipboardPlus className="size-4 mr-1.5" />
+                Forms
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
+  )
+}
+

@@ -20,6 +20,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.8",
     "dotenv-cli": "^11.0.0"
   }
 }
