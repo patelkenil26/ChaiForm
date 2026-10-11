@@ -19,6 +19,9 @@ export const formsTable = pgTable("forms", {
     responseLimit: integer("response_limit"),
 
     slug: varchar("slug", { length: 60 }).unique(),
+
+    passwordHash: varchar("password_hash", { length: 255 }),
+    passwordSalt: varchar("password_salt", { length: 64 }),
     
     createdBy: uuid('created_by').references(() => usersTable.id),
 

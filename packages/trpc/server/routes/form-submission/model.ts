@@ -10,6 +10,7 @@ export const submitFormInputModel = z.object({
             })
         )
         .min(1),
+    password: z.string().optional().describe("Password for password-protected form"),
 });
 
 export const submitFormOutputModel = z.object({

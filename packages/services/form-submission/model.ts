@@ -6,6 +6,7 @@ export const submitFormInput = z.object({
         formFieldId: z.string().uuid().describe('UUID of the form field'),
         value: z.string().describe('Answer value for this field'),
     })).min(1, 'At least one field value is required'),
+    password: z.string().optional().describe('Password for password-protected form'),
 })
 
 export type SubmitFormInputType = z.infer<typeof submitFormInput>

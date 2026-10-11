@@ -18,8 +18,10 @@ import {
   ClockIcon,
   UsersIcon,
   QrCodeIcon,
+  LockIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { FormSettingsDialog, type FormSettingsPayload } from "~/components/forms/form-settings-dialog";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -298,215 +300,6 @@ function FieldForm({
   );
 }
 
-function FormLimitsDialog({
-  open,
-  onOpenChange,
-  form,
-  onSave,
-  isSaving,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  form: NonNullable<ReturnType<typeof useGetForm>["form"]>;
-  onSave: (settings: { closesAt: Date | null; responseLimit: number | null; slug: string | null }) => Promise<void>;
-  isSaving: boolean;
-}) {
-  const [hasExpiry, setHasExpiry] = useState(false);
-  const [expiryValue, setExpiryValue] = useState("");
-  const [hasLimit, setHasLimit] = useState(false);
-  const [limitValue, setLimitValue] = useState("");
-  const [hasSlug, setHasSlug] = useState(false);
-  const [slugValue, setSlugValue] = useState("");
-
-  useEffect(() => {
-    if (open && form) {
-      if (form.closesAt) {
-        setHasExpiry(true);
-        const d = new Date(form.closesAt);
-        const pad = (n: number) => String(n).padStart(2, "0");
-        const formatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        setExpiryValue(formatted);
-      } else {
-        setHasExpiry(false);
-        setExpiryValue("");
-      }
-
-      if (form.responseLimit) {
-        setHasLimit(true);
-        setLimitValue(String(form.responseLimit));
-      } else {
-        setHasLimit(false);
-        setLimitValue("");
-      }
-
-      if (form.slug) {
-        setHasSlug(true);
-        setSlugValue(form.slug);
-      } else {
-        setHasSlug(false);
-        setSlugValue("");
-      }
-    }
-  }, [open, form]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const closesAt = hasExpiry && expiryValue ? new Date(expiryValue) : null;
-    const responseLimit = hasLimit && limitValue ? parseInt(limitValue, 10) : null;
-    const slug = hasSlug && slugValue.trim() ? slugValue.toLowerCase().trim() : null;
-    await onSave({ closesAt, responseLimit, slug });
-    onOpenChange(false);
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <SlidersHorizontalIcon className="size-5 text-primary" />
-            Form Settings, URL & Limits
-          </DialogTitle>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
-          {/* Submission status banner */}
-          <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/40 text-xs">
-            <span className="text-muted-foreground">Current Submissions:</span>
-            <span className="font-semibold text-foreground">
-              {form.submissionCount} {form.responseLimit ? `/ ${form.responseLimit}` : "responses"}
-            </span>
-          </div>
-
-          {/* Custom Slug / Clean URL Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="toggle-slug" className="text-sm font-medium cursor-pointer">
-                  Custom Clean URL
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Personalize the public link with a short slug
-                </p>
-              </div>
-              <Switch
-                id="toggle-slug"
-                checked={hasSlug}
-                onCheckedChange={setHasSlug}
-              />
-            </div>
-
-            {hasSlug && (
-              <div className="pt-2 space-y-1.5">
-                <FieldLabel htmlFor="custom-slug">Public URL Slug</FieldLabel>
-                <div className="flex items-center rounded-md border bg-muted/40 px-3 focus-within:ring-1 focus-within:ring-ring">
-                  <span className="text-xs text-muted-foreground font-mono select-none">
-                    /form/
-                  </span>
-                  <input
-                    id="custom-slug"
-                    type="text"
-                    placeholder="my-form-name"
-                    value={slugValue}
-                    onChange={(e) => {
-                      const val = e.target.value
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")
-                        .replace(/[^a-z0-9-]/g, "");
-                      setSlugValue(val);
-                    }}
-                    className="w-full bg-transparent px-1.5 py-2 text-xs font-mono outline-none"
-                    required={hasSlug}
-                  />
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  Letters, numbers, and hyphens only (min 3 chars).
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Expiry Date Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="toggle-expiry" className="text-sm font-medium cursor-pointer">
-                  Schedule Expiration
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Automatically close form after specific date & time
-                </p>
-              </div>
-              <Switch
-                id="toggle-expiry"
-                checked={hasExpiry}
-                onCheckedChange={setHasExpiry}
-              />
-            </div>
-
-            {hasExpiry && (
-              <div className="pt-2">
-                <FieldLabel htmlFor="expiry-datetime">Close on (Date & Time)</FieldLabel>
-                <Input
-                  id="expiry-datetime"
-                  type="datetime-local"
-                  value={expiryValue}
-                  onChange={(e) => setExpiryValue(e.target.value)}
-                  className="text-sm"
-                  required={hasExpiry}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Response Limit Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="toggle-limit" className="text-sm font-medium cursor-pointer">
-                  Response Cap
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Limit maximum number of accepted submissions
-                </p>
-              </div>
-              <Switch
-                id="toggle-limit"
-                checked={hasLimit}
-                onCheckedChange={setHasLimit}
-              />
-            </div>
-
-            {hasLimit && (
-              <div className="pt-2">
-                <FieldLabel htmlFor="response-cap">Max Responses</FieldLabel>
-                <Input
-                  id="response-cap"
-                  type="number"
-                  min="1"
-                  placeholder="e.g. 100"
-                  value={limitValue}
-                  onChange={(e) => setLimitValue(e.target.value)}
-                  className="text-sm"
-                  required={hasLimit}
-                />
-              </div>
-            )}
-          </div>
-
-          <DialogFooter className="mt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save Settings"}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 export default function FormBuilderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);
 
@@ -523,21 +316,11 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   const [qrOpen, setQrOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
 
-  const handleSaveSettings = async ({
-    closesAt,
-    responseLimit,
-    slug,
-  }: {
-    closesAt: Date | null;
-    responseLimit: number | null;
-    slug: string | null;
-  }) => {
+  const handleSaveSettings = async (settings: FormSettingsPayload) => {
     try {
       await updateFormSettingsAsync({
         formId,
-        closesAt,
-        responseLimit,
-        slug,
+        ...settings,
       });
       toast.success("Form settings updated!");
     } catch (err: unknown) {
@@ -709,6 +492,13 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                     >
                       <UsersIcon className="size-3" />
                       {form.submissionCount} / {form.responseLimit}
+                    </Badge>
+                  )}
+
+                  {form.isPasswordProtected && (
+                    <Badge variant="outline" className="text-xs gap-1 border-primary/20 bg-primary/5 text-primary">
+                      <LockIcon className="size-3" />
+                      Password Protected
                     </Badge>
                   )}
                 </div>
@@ -926,9 +716,9 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
         </DialogContent>
       </Dialog>
 
-      {/* Form Limits & Expiry modal */}
+      {/* Form Settings, Limits & Password modal */}
       {form && (
-        <FormLimitsDialog
+        <FormSettingsDialog
           open={limitsOpen}
           onOpenChange={setLimitsOpen}
           form={form}

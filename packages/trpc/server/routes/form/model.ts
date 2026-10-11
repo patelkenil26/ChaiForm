@@ -17,6 +17,7 @@ export const createFormInputModel = z.object({
     closesAt: z.coerce.date().nullable().optional().describe("Expiry date/time of the form"),
     responseLimit: z.number().int().positive().nullable().optional().describe("Maximum response cap"),
     slug: slugModel.nullable().optional().describe("Custom clean URL slug"),
+    password: z.string().min(1).max(50).nullable().optional().describe("Optional password for protecting the form"),
 });
 
 export const createFormOutputModel = z.object({
@@ -33,6 +34,7 @@ export const listFormsOutputModel = z.array(
         closesAt: z.date().nullable().optional().describe("Expiry timestamp"),
         responseLimit: z.number().nullable().optional().describe("Max response cap"),
         slug: z.string().nullable().optional().describe("Custom URL slug"),
+        isPasswordProtected: z.boolean().default(false).describe("Whether form is password protected"),
         createdAt: z.date().nullable().describe("Creation timestamp"),
         updatedAt: z.date().nullable().describe("Last updated timestamp"),
     })
@@ -40,6 +42,7 @@ export const listFormsOutputModel = z.array(
 
 export const getFormInputModel = z.object({
     formId: z.string().min(1).describe("UUID or slug of the form"),
+    password: z.string().optional().describe("Optional password to unlock protected form"),
 });
 
 export const getFormOutputModel = z.object({
@@ -51,6 +54,8 @@ export const getFormOutputModel = z.object({
     closesAt: z.date().nullable().optional(),
     responseLimit: z.number().nullable().optional(),
     slug: z.string().nullable().optional(),
+    isPasswordProtected: z.boolean().default(false),
+    isUnlocked: z.boolean().default(true),
     submissionCount: z.number().default(0),
     isOpen: z.boolean().default(true),
     isExpired: z.boolean().default(false),
@@ -67,6 +72,7 @@ export const updateFormVisibilityInputModel = z.object({
     closesAt: z.coerce.date().nullable().optional().describe("Expiry date/time of the form"),
     responseLimit: z.number().int().positive().nullable().optional().describe("Maximum response cap"),
     slug: slugModel.nullable().optional().describe("Custom clean URL slug"),
+    password: z.string().min(1).max(50).nullable().optional().describe("Password for form (null to remove, undefined to keep unchanged)"),
 });
 
 export const updateFormVisibilityOutputModel = z.object({
@@ -85,6 +91,7 @@ export const updateFormSettingsInputModel = z.object({
     closesAt: z.coerce.date().nullable().optional().describe("Expiry date/time of the form (null to remove)"),
     responseLimit: z.number().int().positive().nullable().optional().describe("Maximum response cap (null to remove)"),
     slug: slugModel.nullable().optional().describe("Custom clean URL slug (null to remove)"),
+    password: z.string().min(1).max(50).nullable().optional().describe("Password to protect form (null to remove, undefined to keep unchanged)"),
 });
 
 export const updateFormSettingsOutputModel = z.object({
@@ -94,6 +101,7 @@ export const updateFormSettingsOutputModel = z.object({
     closesAt: z.date().nullable().optional(),
     responseLimit: z.number().nullable().optional(),
     slug: z.string().nullable().optional(),
+    isPasswordProtected: z.boolean().default(false),
 });
 
 export const listPublicFormsOutputModel = z.array(

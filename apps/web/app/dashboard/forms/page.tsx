@@ -14,6 +14,7 @@ import {
   ClockIcon,
   UsersIcon,
   QrCodeIcon,
+  LockIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -205,6 +206,12 @@ export default function FormsPage() {
                           <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
                             <UsersIcon className="size-3 text-blue-500" />
                             Limit: {form.responseLimit}
+                          </span>
+                        )}
+                        {form.isPasswordProtected && (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
+                            <LockIcon className="size-3" />
+                            Protected
                           </span>
                         )}
                       </div>

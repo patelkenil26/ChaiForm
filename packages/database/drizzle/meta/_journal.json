@@ -50,6 +50,13 @@
       "when": 1791714326855,
       "tag": "0006_daffy_onslaught",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791715972955,
+      "tag": "0007_outstanding_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

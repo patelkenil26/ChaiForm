@@ -31,7 +31,7 @@ export const formProcedures = {
         .input(createFormInputModel)
         .output(createFormOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { title, description, visibility, isPublished, closesAt, responseLimit, slug } = input;
+            const { title, description, visibility, isPublished, closesAt, responseLimit, slug, password } = input;
             const { id } = await formService.createForm({
                 title,
                 description,
@@ -41,6 +41,7 @@ export const formProcedures = {
                 closesAt,
                 responseLimit,
                 slug,
+                password,
             });
             return { id };
         }),
@@ -72,7 +73,7 @@ export const formProcedures = {
         .input(getFormInputModel)
         .output(getFormOutputModel)
         .query(async ({ input }) => {
-            return await formService.getFormById({ formId: input.formId });
+            return await formService.getFormById({ formId: input.formId, password: input.password });
         }),
 
     updateFormVisibility: authenticatedProcedure
@@ -87,7 +88,7 @@ export const formProcedures = {
         .input(updateFormVisibilityInputModel)
         .output(updateFormVisibilityOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { formId, visibility, isPublished, closesAt, responseLimit, slug } = input;
+            const { formId, visibility, isPublished, closesAt, responseLimit, slug, password } = input;
             return await formService.updateFormVisibility({
                 formId,
                 userId: ctx.user.id,
@@ -96,6 +97,7 @@ export const formProcedures = {
                 closesAt,
                 responseLimit,
                 slug,
+                password,
             });
         }),
 
@@ -111,7 +113,7 @@ export const formProcedures = {
         .input(updateFormSettingsInputModel)
         .output(updateFormSettingsOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { formId, visibility, isPublished, closesAt, responseLimit, slug } = input;
+            const { formId, visibility, isPublished, closesAt, responseLimit, slug, password } = input;
             return await formService.updateFormSettings({
                 formId,
                 userId: ctx.user.id,
@@ -120,6 +122,7 @@ export const formProcedures = {
                 closesAt,
                 responseLimit,
                 slug,
+                password,
             });
         }),
 

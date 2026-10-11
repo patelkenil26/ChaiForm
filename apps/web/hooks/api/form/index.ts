@@ -44,9 +44,9 @@ export const useListForms = () => {
     };
 };
 
-export const useGetForm = (formId: string) => {
-    const { data: form, error, isFetched, isFetching, isLoading, status } =
-        trpc.form.getForm.useQuery({ formId });
+export const useGetForm = (formId: string, password?: string) => {
+    const { data: form, error, isFetched, isFetching, isLoading, status, refetch } =
+        trpc.form.getForm.useQuery({ formId, password }, { retry: false });
 
     return {
         form,
@@ -55,6 +55,7 @@ export const useGetForm = (formId: string) => {
         isFetching,
         isLoading,
         status,
+        refetch,
     };
 };
 

@@ -2,8 +2,10 @@
 
 import { use, useState } from "react";
 import { useForm } from "react-hook-form";
-import { StarIcon, ClockIcon, UsersIcon } from "lucide-react";
+import { StarIcon, ClockIcon, UsersIcon, LockIcon } from "lucide-react";
 import { toast } from "sonner";
+import { FormUnlockCard } from "~/components/forms/form-unlock-card";
+import { trpc } from "~/trpc/client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
@@ -296,9 +298,31 @@ function FormFieldInput({
 
 export default function PublicFormPage({ params }: { params: Promise<{ form_id: string }> }) {
   const { form_id: formId } = use(params);
-  const { form, isLoading } = useGetForm(formId);
+  const [enteredPassword, setEnteredPassword] = useState<string | undefined>(undefined);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+  const { form, isLoading } = useGetForm(formId, enteredPassword);
   const { submitFormAsync } = useSubmitForm();
   const [submitted, setSubmitted] = useState(false);
+  const utils = trpc.useUtils();
+
+  const handleUnlock = async (pwd: string) => {
+    setIsUnlocking(true);
+    try {
+      const res = await utils.form.getForm.fetch({ formId, password: pwd });
+      if (res && res.isUnlocked) {
+        setEnteredPassword(pwd);
+        toast.success("Form unlocked!");
+      } else {
+        throw new Error("Invalid password");
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Invalid form password";
+      toast.error(msg);
+      throw new Error(msg);
+    } finally {
+      setIsUnlocking(false);
+    }
+  };
 
   const {
     register,
@@ -321,7 +345,11 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
             value: stringVal,
           };
         });
-      await submitFormAsync({ formId: form.id, values });
+      await submitFormAsync({
+        formId: form.id,
+        values,
+        password: enteredPassword,
+      });
       setSubmitted(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to submit form";
@@ -381,6 +409,18 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     );
   }
 
+  // If the form is password-protected and not yet unlocked by respondent
+  if (form.isPasswordProtected && !form.isUnlocked) {
+    return (
+      <FormUnlockCard
+        title={form.title}
+        description={form.description}
+        onUnlock={handleUnlock}
+        isUnlocking={isUnlocking}
+      />
+    );
+  }
+
   if (submitted) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -411,6 +451,12 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
               <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
                 <UsersIcon className="size-3 text-blue-500" />
                 {form.submissionCount} / {form.responseLimit} responses
+              </span>
+            )}
+            {form.isPasswordProtected && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                <LockIcon className="size-3" />
+                Unlocked Access
               </span>
             )}
           </div>

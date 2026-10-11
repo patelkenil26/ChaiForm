@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto'
 import db, { eq, desc, count, or } from '@repo/database'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
 import { formsTable } from '@repo/database/models/form'
@@ -6,7 +7,7 @@ import { type SubmitFormInputType, submitFormInput, type GetFormSubmissionsInput
 class FormSubmissionService {
 
     public async submitForm(payload: SubmitFormInputType) {
-        const { formId, values } = await submitFormInput.parseAsync(payload)
+        const { formId, values, password } = await submitFormInput.parseAsync(payload)
 
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(formId)
         const whereCondition = isUuid
@@ -19,6 +20,8 @@ class FormSubmissionService {
                 isPublished: formsTable.isPublished,
                 closesAt: formsTable.closesAt,
                 responseLimit: formsTable.responseLimit,
+                passwordHash: formsTable.passwordHash,
+                passwordSalt: formsTable.passwordSalt,
             })
             .from(formsTable)
             .where(whereCondition)
@@ -33,6 +36,16 @@ class FormSubmissionService {
 
         if (!formData.isPublished) {
             throw new Error('This form is currently closed and not accepting responses')
+        }
+
+        if (formData.passwordHash) {
+            if (!password) {
+                throw new Error('This form is password protected. Password is required to submit.')
+            }
+            const hash = createHmac('sha256', formData.passwordSalt!).update(password).digest('hex')
+            if (hash !== formData.passwordHash) {
+                throw new Error('Invalid form password. Submission rejected.')
+            }
         }
 
         if (formData.closesAt && new Date() > new Date(formData.closesAt)) {
