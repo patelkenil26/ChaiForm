@@ -15,6 +15,8 @@ import {
     CloneFormInputType,
     archiveFormInput,
     ArchiveFormInputType,
+    recordFormViewInput,
+    RecordFormViewInputType,
     FormVisibilityType,
 } from "./model";
 import { formsTable } from '@repo/database/models/form'
@@ -112,6 +114,7 @@ class FormService {
             responseLimit: formsTable.responseLimit,
             slug: formsTable.slug,
             passwordHash: formsTable.passwordHash,
+            views: formsTable.views,
             createdAt: formsTable.createdAt,
             updatedAt: formsTable.updatedAt,
         }).from(formsTable).where(eq(formsTable.createdBy, userId)).orderBy(desc(formsTable.createdAt))
@@ -127,6 +130,7 @@ class FormService {
             responseLimit: f.responseLimit,
             slug: f.slug,
             isPasswordProtected: Boolean(f.passwordHash),
+            views: f.views ?? 0,
             createdAt: f.createdAt,
             updatedAt: f.updatedAt,
         }));
@@ -154,6 +158,7 @@ class FormService {
                 slug: formsTable.slug,
                 passwordHash: formsTable.passwordHash,
                 passwordSalt: formsTable.passwordSalt,
+                views: formsTable.views,
                 createdAt: formsTable.createdAt,
                 updatedAt: formsTable.updatedAt,
                 field: {
@@ -175,7 +180,7 @@ class FormService {
 
         if (rows.length === 0) return null
 
-        const { id, title, description, visibility, isPublished, isArchived, closesAt, responseLimit, slug, passwordHash, passwordSalt, createdAt, updatedAt } = rows[0]!
+        const { id, title, description, visibility, isPublished, isArchived, closesAt, responseLimit, slug, passwordHash, passwordSalt, views, createdAt, updatedAt } = rows[0]!
 
         const isPasswordProtected = Boolean(passwordHash);
         let isUnlocked = true;
@@ -220,6 +225,7 @@ class FormService {
             isPasswordProtected,
             isUnlocked,
             submissionCount,
+            views: views ?? 0,
             isOpen,
             isExpired,
             isLimitReached,
@@ -410,6 +416,30 @@ class FormService {
 
         return updated;
     }
+
+    public async recordFormView(payload: RecordFormViewInputType) {
+        const { formId } = await recordFormViewInput.parseAsync(payload);
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(formId);
+        const condition = isUuid
+            ? or(eq(formsTable.id, formId), eq(formsTable.slug, formId))
+            : eq(formsTable.slug, formId);
+
+        const [form] = await db
+            .select({ id: formsTable.id, views: formsTable.views })
+            .from(formsTable)
+            .where(condition);
+
+        if (!form) return { success: false, views: 0 };
+
+        const nextViews = (form.views ?? 0) + 1;
+        await db
+            .update(formsTable)
+            .set({ views: nextViews })
+            .where(eq(formsTable.id, form.id));
+
+        return { success: true, views: nextViews };
+    }
 }
 
 export default FormService;
+

@@ -24,6 +24,7 @@ export const formsTable = pgTable("forms", {
     passwordSalt: varchar("password_salt", { length: 64 }),
 
     isArchived: boolean('is_archived').default(false).notNull(),
+    views: integer('views').default(0).notNull(),
     
     createdBy: uuid('created_by').references(() => usersTable.id),
 

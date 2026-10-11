@@ -17,6 +17,8 @@ import {
     cloneFormOutputModel,
     archiveFormInputModel,
     archiveFormOutputModel,
+    recordViewInputModel,
+    recordViewOutputModel,
 } from "./model";
 
 const TAGS = ["Form"];
@@ -180,7 +182,22 @@ export const formProcedures = {
                 isArchived: input.isArchived,
             });
         }),
+
+    recordView: publicProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/recordView"),
+                tags: TAGS,
+            },
+        })
+        .input(recordViewInputModel)
+        .output(recordViewOutputModel)
+        .mutation(async ({ input }) => {
+            return await formService.recordFormView({ formId: input.formId });
+        }),
 };
 
 export const formRouter = router(formProcedures);
+
 

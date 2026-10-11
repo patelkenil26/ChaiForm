@@ -12,6 +12,7 @@ import {
   IconPencil,
   IconPlus,
   IconChartBar,
+  IconTable,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -31,6 +33,7 @@ import {
   type SubmissionField,
   type SubmissionItem,
 } from "~/components/submissions/submissions-table";
+import { FormAnalyticsView } from "~/components/analytics/form-analytics-view";
 import { useListForms } from "~/hooks/api/form";
 import { useGetFields } from "~/hooks/api/form-field";
 import { useGetFormSubmissions } from "~/hooks/api/form-submission";
@@ -284,13 +287,38 @@ function SubmissionsHubContent() {
         </div>
       )}
 
-      {/* Main Submissions Table */}
-      <SubmissionsTable
-        fields={fields as SubmissionField[] | undefined}
-        submissions={submissions as SubmissionItem[] | undefined}
-        isLoading={isDataLoading}
-        formTitle={currentForm?.title}
-      />
+      {/* Main Content Tabs: Analytics vs Responses Table */}
+      <Tabs defaultValue="analytics" className="w-full">
+        <TabsList className="mb-2">
+          <TabsTrigger value="analytics" className="gap-1.5 text-xs">
+            <IconChartBar className="size-3.5 text-primary" />
+            <span>Analytics & Charts</span>
+          </TabsTrigger>
+          <TabsTrigger value="responses" className="gap-1.5 text-xs">
+            <IconTable className="size-3.5 text-blue-500" />
+            <span>Responses Table ({submissionsCount})</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="analytics" className="pt-2">
+          <FormAnalyticsView
+            formTitle={currentForm?.title}
+            viewsCount={currentForm?.views ?? 0}
+            submissions={submissions as SubmissionItem[] | undefined}
+            fields={fields as SubmissionField[] | undefined}
+            isLoading={isDataLoading}
+          />
+        </TabsContent>
+
+        <TabsContent value="responses" className="pt-2">
+          <SubmissionsTable
+            fields={fields as SubmissionField[] | undefined}
+            submissions={submissions as SubmissionItem[] | undefined}
+            isLoading={isDataLoading}
+            formTitle={currentForm?.title}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

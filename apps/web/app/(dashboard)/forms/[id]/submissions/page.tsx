@@ -2,13 +2,15 @@
 
 import { use } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, BarChart3Icon, TablePropertiesIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   SubmissionsTable,
   type SubmissionField,
   type SubmissionItem,
 } from "~/components/submissions/submissions-table";
+import { FormAnalyticsView } from "~/components/analytics/form-analytics-view";
 import { useGetForm } from "~/hooks/api/form";
 import { useGetFields } from "~/hooks/api/form-field";
 import { useGetFormSubmissions } from "~/hooks/api/form-submission";
@@ -33,20 +35,46 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
         </Button>
         <div>
           <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-            Submissions {form?.title ? `— ${form.title}` : ""}
+            Submissions & Analytics {form?.title ? `— ${form.title}` : ""}
           </h1>
           <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
-            View, search, filter, and export all respondent answers collected by this form.
+            Monitor impressions, visual timeline charts, filter responses, and export data.
           </p>
         </div>
       </div>
 
-      <SubmissionsTable
-        fields={fields as SubmissionField[] | undefined}
-        submissions={submissions as SubmissionItem[] | undefined}
-        isLoading={isLoading}
-        formTitle={form?.title}
-      />
+      <Tabs defaultValue="analytics" className="w-full">
+        <TabsList className="mb-2">
+          <TabsTrigger value="analytics" className="gap-1.5 text-xs">
+            <BarChart3Icon className="size-3.5 text-primary" />
+            <span>Analytics & Charts</span>
+          </TabsTrigger>
+          <TabsTrigger value="responses" className="gap-1.5 text-xs">
+            <TablePropertiesIcon className="size-3.5 text-blue-500" />
+            <span>Responses Table ({submissions?.length ?? 0})</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="analytics" className="pt-2">
+          <FormAnalyticsView
+            formTitle={form?.title}
+            viewsCount={form?.views ?? 0}
+            submissions={submissions as SubmissionItem[] | undefined}
+            fields={fields as SubmissionField[] | undefined}
+            isLoading={isLoading}
+          />
+        </TabsContent>
+
+        <TabsContent value="responses" className="pt-2">
+          <SubmissionsTable
+            fields={fields as SubmissionField[] | undefined}
+            submissions={submissions as SubmissionItem[] | undefined}
+            isLoading={isLoading}
+            formTitle={form?.title}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
+

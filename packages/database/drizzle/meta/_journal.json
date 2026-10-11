@@ -64,6 +64,13 @@
       "when": 1791719812680,
       "tag": "0008_abnormal_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791726760524,
+      "tag": "0009_last_doctor_faustus",
+      "breakpoints": true
     }
   ]
 }

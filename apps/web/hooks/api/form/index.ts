@@ -148,4 +148,14 @@ export const useArchiveForm = () => {
     return { archiveFormAsync, archiveForm, error, isError, isLoading };
 };
 
+export const useRecordFormView = () => {
+    const {
+        mutateAsync: recordViewAsync,
+        mutate: recordView,
+    } = trpc.form.recordView.useMutation();
+
+    return { recordViewAsync, recordView };
+};
+
+
 

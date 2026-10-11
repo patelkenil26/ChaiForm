@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { FieldGroup } from "~/components/ui/field";
-import { useGetForm } from "~/hooks/api/form";
+import { useGetForm, useRecordFormView } from "~/hooks/api/form";
 import { useSubmitForm } from "~/hooks/api/form-submission";
 import { trpc } from "~/trpc/client";
 import { FormFieldRenderer } from "~/components/public-form/form-field-renderer";
@@ -21,9 +21,18 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
   const [enteredPassword, setEnteredPassword] = useState<string | undefined>(undefined);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const { form, isLoading } = useGetForm(formId, enteredPassword);
+  const { recordView } = useRecordFormView();
+  const [viewRecorded, setViewRecorded] = useState(false);
   const { submitFormAsync } = useSubmitForm();
   const [submitted, setSubmitted] = useState(false);
   const utils = trpc.useUtils();
+
+  useEffect(() => {
+    if (form?.id && !viewRecorded) {
+      recordView({ formId: form.id });
+      setViewRecorded(true);
+    }
+  }, [form?.id, viewRecorded, recordView]);
 
   const handleUnlock = async (pwd: string) => {
     setIsUnlocking(true);

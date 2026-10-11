@@ -77,3 +77,9 @@ export const archiveFormInput = z.object({
 
 export type ArchiveFormInputType = z.infer<typeof archiveFormInput>
 
+export const recordFormViewInput = z.object({
+    formId: z.string().min(1).describe('UUID or custom slug of the form'),
+})
+
+export type RecordFormViewInputType = z.infer<typeof recordFormViewInput>
+

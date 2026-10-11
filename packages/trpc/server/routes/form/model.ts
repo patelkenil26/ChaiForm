@@ -36,6 +36,7 @@ export const listFormsOutputModel = z.array(
         responseLimit: z.number().nullable().optional().describe("Max response cap"),
         slug: z.string().nullable().optional().describe("Custom URL slug"),
         isPasswordProtected: z.boolean().default(false).describe("Whether form is password protected"),
+        views: z.number().default(0).describe("Total impressions/views"),
         createdAt: z.date().nullable().describe("Creation timestamp"),
         updatedAt: z.date().nullable().describe("Last updated timestamp"),
     })
@@ -59,6 +60,7 @@ export const getFormOutputModel = z.object({
     isPasswordProtected: z.boolean().default(false),
     isUnlocked: z.boolean().default(true),
     submissionCount: z.number().default(0),
+    views: z.number().default(0),
     isOpen: z.boolean().default(true),
     isExpired: z.boolean().default(false),
     isLimitReached: z.boolean().default(false),
@@ -135,6 +137,16 @@ export const listPublicFormsOutputModel = z.array(
     })
 );
 
+export const recordViewInputModel = z.object({
+    formId: z.string().min(1).describe("UUID or slug of the form"),
+});
+
+export const recordViewOutputModel = z.object({
+    success: z.boolean(),
+    views: z.number(),
+});
+
 // Re-export for seamless backward compatibility
 export * from "../form-field/model";
 export * from "../form-submission/model";
+
