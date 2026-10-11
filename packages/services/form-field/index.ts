@@ -29,7 +29,7 @@ class FormFieldService {
     }
 
     public async createField(payload: CreateFieldInputType) {
-        const { label, type, formId, description, placeholder, isRequired } =
+        const { label, type, formId, description, placeholder, isRequired, options } =
             await createFieldInput.parseAsync(payload)
 
         const labelKey = toLabelKey(label)
@@ -37,7 +37,7 @@ class FormFieldService {
 
         const result = await db
             .insert(formFieldsTable)
-            .values({ label, labelKey, type, formId, description, placeholder, isRequired, index })
+            .values({ label, labelKey, type, formId, description, placeholder, isRequired, options, index })
             .returning({ id: formFieldsTable.id })
 
         if (!result || result.length === 0 || !result[0]?.id)
@@ -55,6 +55,7 @@ class FormFieldService {
         if ('description' in updates) patch.description = updates.description ?? null
         if ('placeholder' in updates) patch.placeholder = updates.placeholder ?? null
         if (updates.isRequired !== undefined) patch.isRequired = updates.isRequired
+        if ('options' in updates) patch.options = updates.options ?? null
 
         if (Object.keys(patch).length === 0) throw new Error(`No fields provided to update`)
 
@@ -81,6 +82,7 @@ class FormFieldService {
                 description: formFieldsTable.description,
                 placeholder: formFieldsTable.placeholder,
                 isRequired: formFieldsTable.isRequired,
+                options: formFieldsTable.options,
                 index: formFieldsTable.index,
             })
             .from(formFieldsTable)

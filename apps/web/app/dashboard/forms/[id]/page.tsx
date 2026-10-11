@@ -13,6 +13,7 @@ import {
   BarChart3Icon,
   GlobeIcon,
   LinkIcon,
+  XIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -45,15 +46,39 @@ import {
   useDeleteField,
 } from "~/hooks/api/form-field";
 
-const FIELD_TYPES = ["TEXT", "NUMBER", "EMAIL", "YES_NO", "PASSWORD"] as const;
+const FIELD_TYPES = [
+  "TEXT",
+  "TEXTAREA",
+  "NUMBER",
+  "EMAIL",
+  "PHONE",
+  "URL",
+  "DATE",
+  "TIME",
+  "YES_NO",
+  "PASSWORD",
+  "SELECT",
+  "RADIO",
+  "CHECKBOX",
+  "RATING",
+] as const;
 type FieldType = (typeof FIELD_TYPES)[number];
 
 const FIELD_TYPE_LABELS: Record<FieldType, string> = {
-  TEXT: "Text",
+  TEXT: "Short Text",
+  TEXTAREA: "Long Text (Paragraph)",
   NUMBER: "Number",
-  EMAIL: "Email",
-  YES_NO: "Yes / No",
+  EMAIL: "Email Address",
+  PHONE: "Phone Number",
+  URL: "Website / URL",
+  DATE: "Date Picker",
+  TIME: "Time Picker",
+  YES_NO: "Yes / No Toggle",
   PASSWORD: "Password",
+  SELECT: "Dropdown (Single Select)",
+  RADIO: "Single Choice (Radio)",
+  CHECKBOX: "Multiple Choice (Checkbox)",
+  RATING: "Rating (1-5 Stars)",
 };
 
 type FieldFormValues = {
@@ -62,6 +87,7 @@ type FieldFormValues = {
   description: string;
   placeholder: string;
   isRequired: boolean;
+  options: string[];
 };
 
 type FieldRow = {
@@ -72,6 +98,7 @@ type FieldRow = {
   description?: string | null;
   placeholder?: string | null;
   isRequired: boolean;
+  options?: string[] | null;
   index: string;
 };
 
@@ -81,6 +108,7 @@ const DEFAULT_VALUES: FieldFormValues = {
   description: "",
   placeholder: "",
   isRequired: false,
+  options: ["Option 1", "Option 2"],
 };
 
 function FieldForm({
@@ -100,27 +128,31 @@ function FieldForm({
     defaultValues,
   });
 
+  const [newOptionInput, setNewOptionInput] = useState("");
+
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
   const type = watch("type");
-  const hasPlaceholder = type !== "YES_NO";
+  const isChoiceType = type === "SELECT" || type === "RADIO" || type === "CHECKBOX";
+  const hasPlaceholder =
+    type !== "YES_NO" && type !== "RATING" && type !== "CHECKBOX" && type !== "RADIO";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="label">Label</FieldLabel>
+          <FieldLabel htmlFor="label">Label / Question</FieldLabel>
           <Input
             id="label"
-            placeholder="e.g. Full Name"
+            placeholder="e.g. What is your email address?"
             {...register("label", { required: true, maxLength: 100 })}
           />
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="type">Type</FieldLabel>
+          <FieldLabel htmlFor="type">Field Type</FieldLabel>
           <Controller
             name="type"
             control={control}
@@ -129,7 +161,7 @@ function FieldForm({
                 <SelectTrigger id="type" className="w-full">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-72">
                   {FIELD_TYPES.map((t) => (
                     <SelectItem key={t} value={t}>
                       {FIELD_TYPE_LABELS[t]}
@@ -141,11 +173,85 @@ function FieldForm({
           />
         </Field>
 
+        {isChoiceType && (
+          <Field>
+            <FieldLabel>Options / Choices</FieldLabel>
+            <Controller
+              name="options"
+              control={control}
+              render={({ field }) => {
+                const currentOptions = field.value || [];
+
+                const handleAdd = () => {
+                  if (!newOptionInput.trim()) return;
+                  field.onChange([...currentOptions, newOptionInput.trim()]);
+                  setNewOptionInput("");
+                };
+
+                const handleRemove = (idxToRemove: number) => {
+                  field.onChange(currentOptions.filter((_, i) => i !== idxToRemove));
+                };
+
+                return (
+                  <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3">
+                    <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto">
+                      {currentOptions.map((opt, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md border bg-card text-xs shadow-2xs"
+                        >
+                          <span className="truncate">{opt}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemove(i)}
+                            className="text-muted-foreground hover:text-destructive transition-colors"
+                          >
+                            <XIcon className="size-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                      {currentOptions.length === 0 && (
+                        <p className="text-xs text-muted-foreground italic py-1">
+                          No options added yet. Add at least one option below.
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Input
+                        placeholder="Add an option..."
+                        value={newOptionInput}
+                        onChange={(e) => setNewOptionInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleAdd();
+                          }
+                        }}
+                        className="h-8 text-xs"
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={handleAdd}
+                        className="h-8 text-xs shrink-0"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                );
+              }}
+            />
+          </Field>
+        )}
+
         <Field>
-          <FieldLabel htmlFor="description">Description</FieldLabel>
+          <FieldLabel htmlFor="description">Helper Text / Description</FieldLabel>
           <Textarea
             id="description"
-            placeholder="Helper text shown below the field (optional)"
+            placeholder="Subtext shown below the question (optional)"
+            rows={2}
             {...register("description")}
           />
         </Field>
@@ -155,13 +261,13 @@ function FieldForm({
             <FieldLabel htmlFor="placeholder">Placeholder</FieldLabel>
             <Input
               id="placeholder"
-              placeholder="e.g. Enter your name"
+              placeholder="e.g. Type your answer here..."
               {...register("placeholder")}
             />
           </Field>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pt-1">
           <Controller
             name="isRequired"
             control={control}
@@ -169,8 +275,8 @@ function FieldForm({
               <Checkbox id="isRequired" checked={field.value} onCheckedChange={field.onChange} />
             )}
           />
-          <Label htmlFor="isRequired" className="text-sm font-medium">
-            Required field
+          <Label htmlFor="isRequired" className="text-sm font-medium cursor-pointer">
+            Required question
           </Label>
         </div>
       </FieldGroup>
@@ -231,6 +337,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   };
 
   const handleCreate: SubmitHandler<FieldFormValues> = async (values) => {
+    const isChoice = values.type === "SELECT" || values.type === "RADIO" || values.type === "CHECKBOX";
     await createFieldAsync({
       formId,
       label: values.label,
@@ -238,12 +345,18 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
       description: values.description || undefined,
       placeholder: values.placeholder || undefined,
       isRequired: values.isRequired,
+      options: isChoice
+        ? values.options?.length
+          ? values.options
+          : ["Option 1", "Option 2"]
+        : undefined,
     });
     setCreateOpen(false);
   };
 
   const handleUpdate: SubmitHandler<FieldFormValues> = async (values) => {
     if (!editingField) return;
+    const isChoice = values.type === "SELECT" || values.type === "RADIO" || values.type === "CHECKBOX";
     await updateFieldAsync({
       fieldId: editingField.id,
       label: values.label,
@@ -251,6 +364,11 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
       description: values.description || null,
       placeholder: values.placeholder || null,
       isRequired: values.isRequired,
+      options: isChoice
+        ? values.options?.length
+          ? values.options
+          : ["Option 1", "Option 2"]
+        : null,
     });
     setEditingField(null);
   };
@@ -424,6 +542,20 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                 {field.description && (
                   <p className="text-xs text-muted-foreground truncate">{field.description}</p>
                 )}
+                {field.options && field.options.length > 0 && (
+                  <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                    <span className="text-[11px] text-muted-foreground">Options:</span>
+                    {field.options.map((opt, i) => (
+                      <Badge
+                        key={i}
+                        variant="secondary"
+                        className="text-[10px] py-0 px-1.5 font-normal"
+                      >
+                        {opt}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
                 <p className="text-xs text-muted-foreground/60 font-mono">{field.labelKey}</p>
               </div>
 
@@ -487,6 +619,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                 description: editingField.description ?? "",
                 placeholder: editingField.placeholder ?? "",
                 isRequired: editingField.isRequired,
+                options: editingField.options ?? ["Option 1", "Option 2"],
               }}
               onSubmit={handleUpdate}
               isSubmitting={false}

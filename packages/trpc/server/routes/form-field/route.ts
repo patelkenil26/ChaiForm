@@ -43,7 +43,7 @@ export const formFieldProcedures = {
         .input(createFieldInputModel)
         .output(createFieldOutputModel)
         .mutation(async ({ input }) => {
-            const { formId, label, type, description, placeholder, isRequired } = input;
+            const { formId, label, type, description, placeholder, isRequired, options } = input;
             const result = await formFieldService.createField({
                 formId,
                 label,
@@ -51,6 +51,7 @@ export const formFieldProcedures = {
                 description,
                 placeholder,
                 isRequired,
+                options,
             });
             return result;
         }),
@@ -67,7 +68,7 @@ export const formFieldProcedures = {
         .input(updateFieldInputModel)
         .output(updateFieldOutputModel)
         .mutation(async ({ input }) => {
-            const { fieldId, label, type, description, placeholder, isRequired } = input;
+            const { fieldId, label, type, description, placeholder, isRequired, options } = input;
             const result = await formFieldService.updateField({
                 fieldId,
                 label,
@@ -75,6 +76,7 @@ export const formFieldProcedures = {
                 description,
                 placeholder,
                 isRequired,
+                options,
             });
             return result;
         }),

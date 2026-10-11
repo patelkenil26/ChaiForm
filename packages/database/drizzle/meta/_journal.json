@@ -29,6 +29,13 @@
       "when": 1791707072767,
       "tag": "0003_fearless_next_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791710285883,
+      "tag": "0004_sturdy_arachne",
+      "breakpoints": true
     }
   ]
 }

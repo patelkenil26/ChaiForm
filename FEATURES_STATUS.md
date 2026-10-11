@@ -28,10 +28,12 @@ Yaha wo features hain jo requirement document ke hisaab se aage develop karne ba
 - [ ] Custom font families, background wallpapers/gradients aur custom button accents.
 
 ### 1.4 Additional Field Types
-- [ ] **Dropdown / Select**: Single select from customizable options list.
-- [ ] **Multi-select Checkbox**: Multiple choices select karne ke liye.
-- [ ] **Rating**: 1-5 Stars ya 1-10 scale rating component.
-- [ ] **Date Picker**: Calendar date selection field.
+- [x] **Dropdown / Select**: Single select from customizable options list.
+- [x] **Multi-select Checkbox**: Multiple choices select karne ke liye.
+- [x] **Single Choice (Radio)**: Mutually exclusive option list selection.
+- [x] **Rating**: 1-5 Stars interactive rating component with preview.
+- [x] **Date & Time Pickers**: Calendar date & time selection fields.
+- [x] **Long Text (Textarea)**, **Phone Number**, **Website (URL)**, **Password**, **Yes/No Toggle**.
 
 ### 1.5 Analytics & Performance Insights
 - [ ] **Form Level Stats**: Total Form Views (Impressions), Total Starts, Total Completions, Drop-off rate (%).

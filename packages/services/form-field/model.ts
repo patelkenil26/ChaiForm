@@ -1,6 +1,23 @@
 import { z } from 'zod'
 
-const fieldTypeEnum = z.enum(['TEXT', 'NUMBER', 'EMAIL', 'YES_NO', 'PASSWORD'])
+export const fieldTypeEnum = z.enum([
+    'TEXT',
+    'TEXTAREA',
+    'NUMBER',
+    'EMAIL',
+    'PHONE',
+    'URL',
+    'DATE',
+    'TIME',
+    'YES_NO',
+    'PASSWORD',
+    'SELECT',
+    'RADIO',
+    'CHECKBOX',
+    'RATING',
+])
+
+export type FieldType = z.infer<typeof fieldTypeEnum>
 
 export const createFieldInput = z.object({
     label: z.string().max(100).describe('Display label for the field'),
@@ -9,6 +26,7 @@ export const createFieldInput = z.object({
     description: z.string().optional().describe('Helper text shown below the field'),
     placeholder: z.string().optional().describe('Placeholder text for the field'),
     isRequired: z.boolean().optional().default(false).describe('Whether the field is required'),
+    options: z.array(z.string()).optional().describe('Options list for choice fields (SELECT, RADIO, CHECKBOX)'),
 })
 
 export type CreateFieldInputType = z.infer<typeof createFieldInput>
@@ -20,6 +38,7 @@ export const updateFieldInput = z.object({
     description: z.string().optional().nullable().describe('Updated helper text'),
     placeholder: z.string().optional().nullable().describe('Updated placeholder text'),
     isRequired: z.boolean().optional().describe('Updated required flag'),
+    options: z.array(z.string()).optional().nullable().describe('Updated options list'),
 })
 
 export type UpdateFieldInputType = z.infer<typeof updateFieldInput>

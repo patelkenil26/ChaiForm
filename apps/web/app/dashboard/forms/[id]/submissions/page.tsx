@@ -98,7 +98,15 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
                       const val = valueMap.get(field.id);
                       return (
                         <TableCell key={field.id}>
-                          {val !== undefined && val !== "" ? val : (
+                          {val !== undefined && val !== "" ? (
+                            field.type === "RATING" ? (
+                              <span className="inline-flex items-center gap-1 font-medium text-amber-500">
+                                <span>★</span> {val} / 5
+                              </span>
+                            ) : (
+                              val
+                            )
+                          ) : (
                             <span className="text-muted-foreground/50">—</span>
                           )}
                         </TableCell>
