@@ -179,8 +179,13 @@ export default function FormsPage() {
                     >
                       {form.title}
                     </Link>
-                    {(form.closesAt || form.responseLimit) && (
-                      <div className="flex items-center gap-2 mt-1">
+                    {(form.slug || form.closesAt || form.responseLimit) && (
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {form.slug && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
+                            /form/{form.slug}
+                          </span>
+                        )}
                         {form.closesAt && (
                           <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
                             <ClockIcon className="size-3 text-amber-500" />
@@ -282,7 +287,8 @@ export default function FormsPage() {
                         size="icon"
                         title="Copy Public Link"
                         onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/form/${form.id}`);
+                          const target = form.slug || form.id;
+                          navigator.clipboard.writeText(`${window.location.origin}/form/${target}`);
                           toast.success("Form link copied to clipboard!");
                         }}
                       >
@@ -290,7 +296,7 @@ export default function FormsPage() {
                         <span className="sr-only">Copy Link</span>
                       </Button>
                       <Button variant="ghost" size="icon" asChild title="Open Public Form">
-                        <Link href={`/form/${form.id}`} target="_blank">
+                        <Link href={`/form/${form.slug || form.id}`} target="_blank">
                           <ExternalLinkIcon className="size-4" />
                           <span className="sr-only">Open {form.title}</span>
                         </Link>

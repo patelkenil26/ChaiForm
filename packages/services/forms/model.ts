@@ -3,6 +3,12 @@ import z from "zod";
 export const formVisibilitySchema = z.enum(['PUBLIC', 'UNLISTED']);
 export type FormVisibilityType = z.infer<typeof formVisibilitySchema>;
 
+export const slugSchema = z
+    .string()
+    .min(3, "Slug must be at least 3 characters")
+    .max(60, "Slug cannot exceed 60 characters")
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug can only contain lowercase letters, numbers, and single hyphens (e.g. 'my-form-2026')");
+
 export const createFormInput = z.object({
     title: z.string().max(55).describe("Title of the form"),
     description: z.string().max(300).optional().describe("Description of the form"),
@@ -11,6 +17,7 @@ export const createFormInput = z.object({
     isPublished: z.boolean().default(true).describe("Publish status of the form"),
     closesAt: z.date().nullable().optional().describe("Expiry date/time of the form"),
     responseLimit: z.number().int().positive().nullable().optional().describe("Maximum response cap"),
+    slug: slugSchema.nullable().optional().describe("Custom clean URL slug"),
 })
 
 export type CreateFormInputType = z.infer<typeof createFormInput>
@@ -22,6 +29,7 @@ export const updateFormVisibilityInput = z.object({
     isPublished: z.boolean().optional().describe('Publish status of the form'),
     closesAt: z.date().nullable().optional().describe('Expiry date/time of the form'),
     responseLimit: z.number().int().positive().nullable().optional().describe('Maximum response cap'),
+    slug: slugSchema.nullable().optional().describe("Custom clean URL slug"),
 })
 
 export type UpdateFormVisibilityInputType = z.infer<typeof updateFormVisibilityInput>
@@ -33,6 +41,7 @@ export const updateFormSettingsInput = z.object({
     isPublished: z.boolean().optional().describe('Publish status of the form'),
     closesAt: z.date().nullable().optional().describe('Expiry date/time of the form (null to remove)'),
     responseLimit: z.number().int().positive().nullable().optional().describe('Maximum response cap (null to remove)'),
+    slug: slugSchema.nullable().optional().describe('Custom clean URL slug (null to remove)'),
 })
 
 export type UpdateFormSettingsInputType = z.infer<typeof updateFormSettingsInput>
@@ -44,7 +53,7 @@ export const listFormsByUserIdInput = z.object({
 export type ListFormsByUserIdInputType = z.infer<typeof listFormsByUserIdInput>
 
 export const getFormByIdInput = z.object({
-    formId: z.string().uuid().describe('UUID of the form'),
+    formId: z.string().min(1).describe('UUID or custom slug of the form'),
 })
 
 export type GetFormByIdInputType = z.infer<typeof getFormByIdInput>

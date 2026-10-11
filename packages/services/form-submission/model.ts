@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const submitFormInput = z.object({
-    formId: z.string().uuid().describe('UUID of the form being submitted'),
+    formId: z.string().min(1).describe('UUID or slug of the form being submitted'),
     values: z.array(z.object({
         formFieldId: z.string().uuid().describe('UUID of the form field'),
         value: z.string().describe('Answer value for this field'),

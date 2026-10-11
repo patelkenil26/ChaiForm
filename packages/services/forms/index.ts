@@ -1,4 +1,4 @@
-import db, { and, asc, count, desc, eq } from "@repo/database";
+import db, { and, asc, count, desc, eq, ne, or } from "@repo/database";
 import {
     createFormInput,
     CreateFormInputType,
@@ -16,10 +16,47 @@ import { formsTable } from '@repo/database/models/form'
 import { formFieldsTable } from '@repo/database/models/form-field'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
 
+const RESERVED_SLUGS = new Set([
+    "api",
+    "admin",
+    "dashboard",
+    "form",
+    "forms",
+    "auth",
+    "login",
+    "signup",
+    "signin",
+    "submit",
+    "explore",
+    "templates",
+    "submissions",
+    "new",
+    "settings",
+    "help",
+    "support",
+]);
 
 class FormService {
     public async createForm(payload: CreateFormInputType) {
-        const { title, description, createdBy, visibility, isPublished, closesAt, responseLimit } = await createFormInput.parseAsync(payload);
+        const { title, description, createdBy, visibility, isPublished, closesAt, responseLimit, slug } = await createFormInput.parseAsync(payload);
+
+        let normalizedSlug: string | null = null;
+        if (slug) {
+            normalizedSlug = slug.toLowerCase().trim();
+            if (RESERVED_SLUGS.has(normalizedSlug)) {
+                throw new Error(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
+            }
+
+            const existing = await db
+                .select({ id: formsTable.id })
+                .from(formsTable)
+                .where(eq(formsTable.slug, normalizedSlug))
+                .limit(1);
+
+            if (existing.length > 0) {
+                throw new Error(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
+            }
+        }
 
         const result = await db.insert(formsTable).values({
             title,
@@ -29,6 +66,7 @@ class FormService {
             isPublished,
             closesAt,
             responseLimit,
+            slug: normalizedSlug,
         }).returning({
             id: formsTable.id,
         })
@@ -49,6 +87,7 @@ class FormService {
             isPublished: formsTable.isPublished,
             closesAt: formsTable.closesAt,
             responseLimit: formsTable.responseLimit,
+            slug: formsTable.slug,
             createdAt: formsTable.createdAt,
             updatedAt: formsTable.updatedAt,
         }).from(formsTable).where(eq(formsTable.createdBy, userId)).orderBy(desc(formsTable.createdAt))
@@ -58,6 +97,13 @@ class FormService {
 
     public async getFormById(payload: GetFormByIdInputType) {
         const { formId } = await getFormByIdInput.parseAsync(payload)
+
+        // Check if formId is a UUID or a custom slug
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(formId);
+        const condition = isUuid
+            ? or(eq(formsTable.id, formId), eq(formsTable.slug, formId))
+            : eq(formsTable.slug, formId);
+
         const rows = await db
             .select({
                 id: formsTable.id,
@@ -67,6 +113,7 @@ class FormService {
                 isPublished: formsTable.isPublished,
                 closesAt: formsTable.closesAt,
                 responseLimit: formsTable.responseLimit,
+                slug: formsTable.slug,
                 createdAt: formsTable.createdAt,
                 updatedAt: formsTable.updatedAt,
                 field: {
@@ -83,22 +130,22 @@ class FormService {
             })
             .from(formsTable)
             .leftJoin(formFieldsTable, eq(formFieldsTable.formId, formsTable.id))
-            .where(eq(formsTable.id, formId))
+            .where(condition)
             .orderBy(asc(formFieldsTable.index))
 
         if (rows.length === 0) return null
 
-        const [subCountResult] = await db
-            .select({ count: count() })
-            .from(formSubmissionTable)
-            .where(eq(formSubmissionTable.formId, formId));
-
-        const submissionCount = subCountResult ? Number(subCountResult.count) : 0;
-
-        const { id, title, description, visibility, isPublished, closesAt, responseLimit, createdAt, updatedAt } = rows[0]!
+        const { id, title, description, visibility, isPublished, closesAt, responseLimit, slug, createdAt, updatedAt } = rows[0]!
         const fields = rows
             .filter(r => r.field?.id !== null)
             .map(r => r.field as NonNullable<typeof r.field>)
+
+        const [subCountResult] = await db
+            .select({ count: count() })
+            .from(formSubmissionTable)
+            .where(eq(formSubmissionTable.formId, id));
+
+        const submissionCount = subCountResult ? Number(subCountResult.count) : 0;
 
         const isExpired = closesAt ? new Date() > new Date(closesAt) : false;
         const isLimitReached = responseLimit ? submissionCount >= responseLimit : false;
@@ -112,6 +159,7 @@ class FormService {
             isPublished,
             closesAt,
             responseLimit,
+            slug,
             submissionCount,
             isOpen,
             isExpired,
@@ -123,18 +171,42 @@ class FormService {
     }
 
     public async updateFormSettings(payload: UpdateFormSettingsInputType) {
-        const { formId, userId, visibility, isPublished, closesAt, responseLimit } = await updateFormSettingsInput.parseAsync(payload);
+        const { formId, userId, visibility, isPublished, closesAt, responseLimit, slug } = await updateFormSettingsInput.parseAsync(payload);
 
         const updateData: {
             visibility?: FormVisibilityType;
             isPublished?: boolean;
             closesAt?: Date | null;
             responseLimit?: number | null;
+            slug?: string | null;
         } = {};
         if (visibility !== undefined) updateData.visibility = visibility;
         if (isPublished !== undefined) updateData.isPublished = isPublished;
         if (closesAt !== undefined) updateData.closesAt = closesAt;
         if (responseLimit !== undefined) updateData.responseLimit = responseLimit;
+
+        if (slug !== undefined) {
+            if (slug === null || slug.trim() === "") {
+                updateData.slug = null;
+            } else {
+                const normalizedSlug = slug.toLowerCase().trim();
+                if (RESERVED_SLUGS.has(normalizedSlug)) {
+                    throw new Error(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
+                }
+
+                // Check uniqueness against other forms
+                const existing = await db
+                    .select({ id: formsTable.id })
+                    .from(formsTable)
+                    .where(and(eq(formsTable.slug, normalizedSlug), ne(formsTable.id, formId)))
+                    .limit(1);
+
+                if (existing.length > 0) {
+                    throw new Error(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
+                }
+                updateData.slug = normalizedSlug;
+            }
+        }
 
         const result = await db.update(formsTable)
             .set(updateData)
@@ -145,6 +217,7 @@ class FormService {
                 isPublished: formsTable.isPublished,
                 closesAt: formsTable.closesAt,
                 responseLimit: formsTable.responseLimit,
+                slug: formsTable.slug,
             });
 
         if (!result || result.length === 0 || !result[0]) {

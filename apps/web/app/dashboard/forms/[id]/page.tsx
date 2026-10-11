@@ -306,13 +306,15 @@ function FormLimitsDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   form: NonNullable<ReturnType<typeof useGetForm>["form"]>;
-  onSave: (settings: { closesAt: Date | null; responseLimit: number | null }) => Promise<void>;
+  onSave: (settings: { closesAt: Date | null; responseLimit: number | null; slug: string | null }) => Promise<void>;
   isSaving: boolean;
 }) {
   const [hasExpiry, setHasExpiry] = useState(false);
   const [expiryValue, setExpiryValue] = useState("");
   const [hasLimit, setHasLimit] = useState(false);
   const [limitValue, setLimitValue] = useState("");
+  const [hasSlug, setHasSlug] = useState(false);
+  const [slugValue, setSlugValue] = useState("");
 
   useEffect(() => {
     if (open && form) {
@@ -334,6 +336,14 @@ function FormLimitsDialog({
         setHasLimit(false);
         setLimitValue("");
       }
+
+      if (form.slug) {
+        setHasSlug(true);
+        setSlugValue(form.slug);
+      } else {
+        setHasSlug(false);
+        setSlugValue("");
+      }
     }
   }, [open, form]);
 
@@ -341,7 +351,8 @@ function FormLimitsDialog({
     e.preventDefault();
     const closesAt = hasExpiry && expiryValue ? new Date(expiryValue) : null;
     const responseLimit = hasLimit && limitValue ? parseInt(limitValue, 10) : null;
-    await onSave({ closesAt, responseLimit });
+    const slug = hasSlug && slugValue.trim() ? slugValue.toLowerCase().trim() : null;
+    await onSave({ closesAt, responseLimit, slug });
     onOpenChange(false);
   };
 
@@ -351,17 +362,65 @@ function FormLimitsDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <SlidersHorizontalIcon className="size-5 text-primary" />
-            Form Limits & Expiry
+            Form Settings, URL & Limits
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
           {/* Submission status banner */}
           <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/40 text-xs">
             <span className="text-muted-foreground">Current Submissions:</span>
             <span className="font-semibold text-foreground">
               {form.submissionCount} {form.responseLimit ? `/ ${form.responseLimit}` : "responses"}
             </span>
+          </div>
+
+          {/* Custom Slug / Clean URL Section */}
+          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="toggle-slug" className="text-sm font-medium cursor-pointer">
+                  Custom Clean URL
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Personalize the public link with a short slug
+                </p>
+              </div>
+              <Switch
+                id="toggle-slug"
+                checked={hasSlug}
+                onCheckedChange={setHasSlug}
+              />
+            </div>
+
+            {hasSlug && (
+              <div className="pt-2 space-y-1.5">
+                <FieldLabel htmlFor="custom-slug">Public URL Slug</FieldLabel>
+                <div className="flex items-center rounded-md border bg-muted/40 px-3 focus-within:ring-1 focus-within:ring-ring">
+                  <span className="text-xs text-muted-foreground font-mono select-none">
+                    /form/
+                  </span>
+                  <input
+                    id="custom-slug"
+                    type="text"
+                    placeholder="my-form-name"
+                    value={slugValue}
+                    onChange={(e) => {
+                      const val = e.target.value
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")
+                        .replace(/[^a-z0-9-]/g, "");
+                      setSlugValue(val);
+                    }}
+                    className="w-full bg-transparent px-1.5 py-2 text-xs font-mono outline-none"
+                    required={hasSlug}
+                  />
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  Letters, numbers, and hyphens only (min 3 chars).
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Expiry Date Section */}
@@ -464,19 +523,23 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   const handleSaveSettings = async ({
     closesAt,
     responseLimit,
+    slug,
   }: {
     closesAt: Date | null;
     responseLimit: number | null;
+    slug: string | null;
   }) => {
     try {
       await updateFormSettingsAsync({
         formId,
         closesAt,
         responseLimit,
+        slug,
       });
-      toast.success("Form limits & expiry settings updated!");
-    } catch {
-      toast.error("Failed to update form settings");
+      toast.success("Form settings updated!");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to update form settings";
+      toast.error(msg);
     }
   };
 
@@ -551,8 +614,10 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
     await deleteFieldAsync({ fieldId });
   };
 
+  const publicPath = form?.slug ? `/form/${form.slug}` : `/form/${formId}`;
+
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/form/${formId}`);
+    navigator.clipboard.writeText(`${window.location.origin}${publicPath}`);
     toast.success("Public form link copied to clipboard!");
   };
 
@@ -572,7 +637,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                 {form?.title || "Form Builder"}
               </h1>
               {form && (
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   {form.isPublished ? (
                     <Badge
                       variant="default"
@@ -603,6 +668,13 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                       </>
                     )}
                   </Badge>
+
+                  {form.slug && (
+                    <Badge variant="outline" className="text-xs font-mono text-muted-foreground gap-1">
+                      <LinkIcon className="size-3" />
+                      /form/{form.slug}
+                    </Badge>
+                  )}
 
                   {form.closesAt && (
                     <Badge
@@ -657,7 +729,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
             Share Link
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/form/${formId}`} target="_blank">
+            <Link href={publicPath} target="_blank">
               <ExternalLinkIcon className="size-3.5 mr-1.5" />
               Live Form
             </Link>

@@ -43,6 +43,13 @@
       "when": 1791712282343,
       "tag": "0005_young_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791714326855,
+      "tag": "0006_daffy_onslaught",
+      "breakpoints": true
     }
   ]
 }

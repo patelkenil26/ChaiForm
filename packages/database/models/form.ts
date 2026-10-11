@@ -18,6 +18,8 @@ export const formsTable = pgTable("forms", {
     closesAt: timestamp("closes_at"),
     responseLimit: integer("response_limit"),
 
+    slug: varchar("slug", { length: 60 }).unique(),
+    
     createdBy: uuid('created_by').references(() => usersTable.id),
 
     createdAt: timestamp("created_at").defaultNow(),

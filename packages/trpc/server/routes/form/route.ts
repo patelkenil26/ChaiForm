@@ -31,7 +31,7 @@ export const formProcedures = {
         .input(createFormInputModel)
         .output(createFormOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { title, description, visibility, isPublished, closesAt, responseLimit } = input;
+            const { title, description, visibility, isPublished, closesAt, responseLimit, slug } = input;
             const { id } = await formService.createForm({
                 title,
                 description,
@@ -40,6 +40,7 @@ export const formProcedures = {
                 isPublished,
                 closesAt,
                 responseLimit,
+                slug,
             });
             return { id };
         }),
@@ -86,7 +87,7 @@ export const formProcedures = {
         .input(updateFormVisibilityInputModel)
         .output(updateFormVisibilityOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { formId, visibility, isPublished, closesAt, responseLimit } = input;
+            const { formId, visibility, isPublished, closesAt, responseLimit, slug } = input;
             return await formService.updateFormVisibility({
                 formId,
                 userId: ctx.user.id,
@@ -94,6 +95,7 @@ export const formProcedures = {
                 isPublished,
                 closesAt,
                 responseLimit,
+                slug,
             });
         }),
 
@@ -109,7 +111,7 @@ export const formProcedures = {
         .input(updateFormSettingsInputModel)
         .output(updateFormSettingsOutputModel)
         .mutation(async ({ input, ctx }) => {
-            const { formId, visibility, isPublished, closesAt, responseLimit } = input;
+            const { formId, visibility, isPublished, closesAt, responseLimit, slug } = input;
             return await formService.updateFormSettings({
                 formId,
                 userId: ctx.user.id,
@@ -117,6 +119,7 @@ export const formProcedures = {
                 isPublished,
                 closesAt,
                 responseLimit,
+                slug,
             });
         }),
 

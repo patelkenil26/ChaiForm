@@ -321,7 +321,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
             value: stringVal,
           };
         });
-      await submitFormAsync({ formId, values });
+      await submitFormAsync({ formId: form.id, values });
       setSubmitted(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to submit form";

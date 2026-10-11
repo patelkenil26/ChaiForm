@@ -81,7 +81,7 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
 - [ ] **Interactive Charts & Analytics Dashboard**:
   - Question-by-question breakdown (e.g., Yes/No pie chart, ratings distribution bar chart).
   - Daily & weekly submission trend graphs.
-- [ ] **Custom Form Slugs**:
+- [x] **Custom Form Slugs**:
   - Raw UUID id (`/form/c9b3...`) ki jagah personalized clean URLs (e.g., `/form/hackathon-2026` ya `/form/startup-pitch`).
 - [ ] **QR Code Sharing**:
   - Form link ke liye instant high-res QR code generator (print outs, posters, event desks ke liye).
