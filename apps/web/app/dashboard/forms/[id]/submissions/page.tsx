@@ -13,7 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { useGetFields, useGetFormSubmissions } from "~/hooks/api/form";
+import { useGetFields } from "~/hooks/api/form-field";
+import { useGetFormSubmissions } from "~/hooks/api/form-submission";
 
 export default function SubmissionsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);

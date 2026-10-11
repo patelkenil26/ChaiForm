@@ -7,7 +7,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "~/components/ui/field";
-import { useGetForm, useSubmitForm } from "~/hooks/api/form";
+import { useGetForm } from "~/hooks/api/form";
+import { useSubmitForm } from "~/hooks/api/form-submission";
 
 type FieldType = "TEXT" | "NUMBER" | "EMAIL" | "YES_NO" | "PASSWORD";
 
@@ -132,6 +133,19 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
         <div className="text-center space-y-2">
           <h1 className="text-xl font-semibold">Form not found</h1>
           <p className="text-sm text-muted-foreground">This form doesn't exist or has been removed.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!form.isPublished) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center space-y-2 max-w-sm rounded-xl border p-8 bg-card shadow-sm">
+          <h1 className="text-xl font-bold tracking-tight">Form is Closed</h1>
+          <p className="text-sm text-muted-foreground">
+            This form is currently not accepting responses. Please contact the creator if you need access.
+          </p>
         </div>
       </div>
     );

@@ -1,11 +1,26 @@
 import db, { eq, desc } from '@repo/database'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
+import { formsTable } from '@repo/database/models/form'
 import { type SubmitFormInputType, submitFormInput, type GetFormSubmissionsInputType, getFormSubmissionsInput } from './model'
 
 class FormSubmissionService {
 
     public async submitForm(payload: SubmitFormInputType) {
         const { formId, values } = await submitFormInput.parseAsync(payload)
+
+        const form = await db
+            .select({ isPublished: formsTable.isPublished })
+            .from(formsTable)
+            .where(eq(formsTable.id, formId))
+            .limit(1)
+
+        if (!form || form.length === 0) {
+            throw new Error('Form not found')
+        }
+
+        if (!form[0]?.isPublished) {
+            throw new Error('This form is currently closed and not accepting responses')
+        }
 
         const result = await db
             .insert(formSubmissionTable)

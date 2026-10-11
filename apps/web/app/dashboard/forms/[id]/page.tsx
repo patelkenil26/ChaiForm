@@ -11,12 +11,15 @@ import {
   ExternalLinkIcon,
   CopyIcon,
   BarChart3Icon,
+  GlobeIcon,
+  LinkIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -34,13 +37,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { useGetForm, useUpdateFormVisibility } from "~/hooks/api/form";
 import {
-  useGetForm,
   useGetFields,
   useCreateField,
   useUpdateField,
   useDeleteField,
-} from "~/hooks/api/form";
+} from "~/hooks/api/form-field";
 
 const FIELD_TYPES = ["TEXT", "NUMBER", "EMAIL", "YES_NO", "PASSWORD"] as const;
 type FieldType = (typeof FIELD_TYPES)[number];
@@ -188,6 +191,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   const { id: formId } = use(params);
 
   const { form } = useGetForm(formId);
+  const { updateFormVisibilityAsync, isLoading: isUpdatingVisibility } = useUpdateFormVisibility();
   const { fields, isLoading } = useGetFields(formId);
   const { createFieldAsync, isError: isCreateError, error: createError } = useCreateField(formId);
   const { updateFieldAsync } = useUpdateField(formId);
@@ -195,6 +199,36 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
 
   const [createOpen, setCreateOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
+
+  const handleTogglePublish = async (checked: boolean) => {
+    try {
+      await updateFormVisibilityAsync({
+        formId,
+        isPublished: checked,
+      });
+      toast.success(
+        checked
+          ? "Form published! Live and accepting responses."
+          : "Form unpublished! Submissions are now paused."
+      );
+    } catch {
+      toast.error("Failed to update publish status");
+    }
+  };
+
+  const handleSelectVisibility = async (value: "PUBLIC" | "UNLISTED") => {
+    try {
+      await updateFormVisibilityAsync({
+        formId,
+        visibility: value,
+      });
+      toast.success(
+        `Form visibility set to ${value === "PUBLIC" ? "Public" : "Unlisted"}`
+      );
+    } catch {
+      toast.error("Failed to update visibility");
+    }
+  };
 
   const handleCreate: SubmitHandler<FieldFormValues> = async (values) => {
     await createFieldAsync({
@@ -241,10 +275,46 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
             </Link>
           </Button>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-              {form?.title || "Form Builder"}
-            </h1>
-            <p className="text-xs md:text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                {form?.title || "Form Builder"}
+              </h1>
+              {form && (
+                <div className="flex items-center gap-1.5">
+                  {form.isPublished ? (
+                    <Badge
+                      variant="default"
+                      className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs gap-1"
+                    >
+                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Published
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant="secondary"
+                      className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs gap-1"
+                    >
+                      <span className="size-1.5 rounded-full bg-amber-500" />
+                      Draft (Closed)
+                    </Badge>
+                  )}
+                  <Badge variant="outline" className="text-xs text-muted-foreground gap-1">
+                    {form.visibility === "PUBLIC" ? (
+                      <>
+                        <GlobeIcon className="size-3 text-blue-500" />
+                        Public
+                      </>
+                    ) : (
+                      <>
+                        <LinkIcon className="size-3 text-muted-foreground" />
+                        Unlisted
+                      </>
+                    )}
+                  </Badge>
+                </div>
+              )}
+            </div>
+            <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
               {form?.description || "Design fields and questions for this form"}
             </p>
           </div>
@@ -271,6 +341,58 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
             <PlusIcon className="size-3.5" />
             Add Field
           </Button>
+        </div>
+      </div>
+
+      {/* Creator Controls: Publishing Status & Visibility Mode */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border bg-card/60 backdrop-blur-sm p-3.5 px-4 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="form-publish-switch"
+              checked={form?.isPublished ?? true}
+              disabled={isUpdatingVisibility || !form}
+              onCheckedChange={handleTogglePublish}
+            />
+            <Label
+              htmlFor="form-publish-switch"
+              className="text-sm font-medium cursor-pointer select-none"
+            >
+              {form?.isPublished ? "Accepting Responses" : "Responses Paused"}
+            </Label>
+          </div>
+          <span className="text-xs text-muted-foreground hidden md:inline">
+            {form?.isPublished
+              ? "(Form is published and accepting submissions)"
+              : "(Form is closed; visitors will see a closed message)"}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <Label className="text-xs text-muted-foreground font-normal">Visibility:</Label>
+          <Select
+            value={form?.visibility ?? "UNLISTED"}
+            disabled={isUpdatingVisibility || !form}
+            onValueChange={handleSelectVisibility}
+          >
+            <SelectTrigger className="h-8 text-xs w-[130px] gap-1.5">
+              <SelectValue placeholder="Visibility" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="UNLISTED" className="text-xs">
+                <span className="flex items-center gap-1.5">
+                  <LinkIcon className="size-3.5 text-muted-foreground" />
+                  Unlisted
+                </span>
+              </SelectItem>
+              <SelectItem value="PUBLIC" className="text-xs">
+                <span className="flex items-center gap-1.5">
+                  <GlobeIcon className="size-3.5 text-blue-500" />
+                  Public
+                </span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

@@ -228,9 +228,26 @@ export default function DashboardPage() {
                     <CardTitle className="line-clamp-1 text-base font-semibold">
                       {form.title}
                     </CardTitle>
-                    <Badge variant="outline" className="text-xs shrink-0">
-                      Active
-                    </Badge>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {form.isPublished ? (
+                        <Badge
+                          variant="default"
+                          className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border-emerald-500/20 text-xs font-normal"
+                        >
+                          Published
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="secondary"
+                          className="bg-amber-500/15 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border-amber-500/20 text-xs font-normal"
+                        >
+                          Draft
+                        </Badge>
+                      )}
+                      <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
+                        {form.visibility === "PUBLIC" ? "Public" : "Unlisted"}
+                      </Badge>
+                    </div>
                   </div>
                   <CardDescription className="line-clamp-2 text-xs">
                     {form.description || "No description provided"}
