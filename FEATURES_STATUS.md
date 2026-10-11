@@ -4,9 +4,42 @@
 
 ## 🚀 1. Pending Features (Jo Features Baki Hain)
 
-Yaha wo features hain jo requirement document ke hisaab se aage develop karne baki hain:
+Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
 
-### 1.2 Creative Themes System (Coming Soon)
+### 1.1 Authentication & Session Fixes (High Priority)
+- [ ] **Logout Flow Fix**:
+  - Logout sahi se work nahi kar raha hai — HTTP-only auth cookies clear karna, tRPC/React Query cache purge karna, aur smooth redirect to `/login` with toast notification.
+- [ ] **Forgot Password & Password Reset Flow**:
+  - Forgot password request UI (`/forgot-password`), backend reset token/email dispatch, aur secure new password update page (`/reset-password`).
+
+### 1.2 Routing & Navigation Cleanup (High Priority)
+- [ ] **Inconsistent Routing & Redirects Fix**:
+  - Navigation links aur redirects ko fix karna (Dashboard sidebar, top navbar, form builder headers, aur public explorer ke beech consistent routing).
+  - Active route highlighting, dynamic breadcrumbs, aur safe fallback redirects handle karna.
+
+### 1.3 Landing Page UI Overhaul & Design Consistency (High Priority)
+- [ ] **Cohesive Visual Theme & Polish**:
+  - Landing page ka overall UI ek clean, modern aur cohesive theme ke sath elevate karna.
+  - Sabhi sections (Hero, Feature Highlights, Interactive Sandbox Demo, Social Proof, Footer) me consistent typography, subtle borders, aur harmonious colors apply karna.
+- [ ] **Section-by-Section Visual Enhancement**:
+  - Hero section CTA and badges refinement.
+  - Interactive form demo sandbox ko aur sleek banana.
+  - High-impact visual accents aur responsive mobile layout polishing.
+
+### 1.4 Creator Dashboard UI & Feature Enhancements (High Priority)
+- [ ] **Global Analytics & Performance Metric Cards**:
+  - Stat cards ko real dynamic platform metrics se link karna (Total Live Responses, Total Views across all forms, Global Completion Rate %).
+  - Visual trend badges (+12% this week, completion percentage) aur modern dark card aesthetic.
+- [ ] **Recent Submissions Live Activity Feed Widget**:
+  - Dashboard par ek interactive "Recent Activity / Latest Submissions" feed jahan latest responses, form titles aur time ago timestamps show hon.
+- [ ] **Quick Starter Templates Launcher Bar**:
+  - Dashboard banner ke niche 1-click popular starter template shortcuts (e.g. "Job Application", "Event RSVP", "Customer CSAT", "Explore All").
+- [ ] **Dashboard Forms Search & Filter Controls**:
+  - Dashboard page par instant form title search bar aur status filters (All, Published, Drafts).
+- [ ] **Polished Empty States & Micro-Interactions**:
+  - Modern empty state illustration with animated create form trigger, keyboard shortcut hints (`Ctrl+K` or `N` to create form).
+
+### 1.5 Creative Themes System (Coming Soon)
 - [ ] **Coming Soon Trigger Added**: Top navigation header aur Form Builder me "Themes (Soon)" button add kiya gaya hai jisme upcoming presets preview dialog khulta hai.
 - [ ] **Theme Presets (Planned)**: Form ke liye visual themes choose karne ka option:
   - *Movies & Cinema*
@@ -16,24 +49,24 @@ Yaha wo features hain jo requirement document ke hisaab se aage develop karne ba
   - *Nature / Calm*
 - [ ] Custom font families, background wallpapers/gradients aur custom button accents.
 
-### 1.3 Email Notification Flow
+### 1.6 Email Notification Flow
 - [ ] Email provider integration (Resend ya Nodemailer).
 - [ ] **Creator Notification**: Jab koi user form bhare toh creator ko new submission ki email alert.
 - [ ] **Respondent Confirmation**: Agar form me email field ho toh respondent ko "Thank you for submitting" email bhejna.
 
-### 1.4 SaaS Public Pricing Page
+### 1.7 SaaS Public Pricing Page
 - [ ] **Pricing Page** (`/pricing`):
   - Free vs Pro vs Enterprise tier comparison cards.
   - Monthly / Yearly billing toggle.
   - Feature checklist breakdown.
 
-### 1.5 Security & Anti-Spam
+### 1.8 Security & Anti-Spam
 - [ ] Public `/form/submitForm` endpoint par rate-limiting (e.g. max 10 submissions per minute per IP).
 - [ ] Honeypot hidden input field spam bots ko block karne ke liye.
 
 ---
 
-### 🌟 1.6 Advance & Bonus Features (Pending)
+### 🌟 1.9 Advance & Bonus Features (Pending)
 
 Yaha wo advanced bonus features hain jo product ke next phase me implement karne baki hain:
 
@@ -206,3 +239,46 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
   - `Use Template` 1-click clone mutation duplicating the template and all fields into the logged-in user's workspace, redirecting immediately to the Form Builder.
 - [x] **Database & Backend Procedures**: `category` column in `forms` table, migration `0010_chief_oracle.sql`, `listPublicForms` procedure with search and category filtering, and `useTemplate` clone procedure.
 - [x] **Navigation Access**: Seamless links in Landing Page Navbar, Dashboard Sidebar, and Site Header.
+
+---
+
+## 🦄 3. Unique Market Differentiators & Killer Features (ChaiForm Innovations)
+
+Yeh wo 5 unique features hain jo ChaiForm ko generic Google Forms ya Typeform clone se alag karke ek **Developer-First & Business-Ready Innovation Platform** banate hain:
+
+### 3.1 🎨 Chameleon Theme (Host Website Auto-Match Embed)
+- [ ] **Zero-CSS Native Look**:
+  - Embed form host website ke background, border-radius, aur typography ko auto-inherit kare.
+  - Ugly third-party white-box iframe issue eliminate karna — client ki dark/light website me seamlessly blend ho jaye.
+- [ ] **1-Click Embed Snippet Generator**:
+  - Form Share dialog me responsive `<iframe>` code snippet with auto-resize script.
+  - Floating Popup / Feedback button widget code (slide-over drawer on button click).
+
+### 3.2 ⚡ Instant WhatsApp & Telegram Lead Alerts (Zero-Zapier Dependency)
+- [ ] **Instant Mobile Notifications**:
+  - Form submission aate hi creator/client ke WhatsApp (`+91...`) ya Telegram bot par instant lead alert bhejna.
+  - Freelancers ke clients ke liye game-changer feature — bina email ya dashboard khole instantly lead dekhna aur call karna.
+- [ ] **Creator Notification Settings**:
+  - Form settings me WhatsApp Number aur Telegram Chat ID configure karne ka clean toggle.
+
+### 3.3 🎙️ Voice-to-Form / Conversational AI Fill (Mobile Lead Booster)
+- [ ] **Mobile Voice Input**:
+  - Form me chhota mic icon (`Speak your answers`).
+  - Respondent mobile par bol kar answer de sake (e.g., *"Mera naam Rahul hai, mujhe real estate website banwani hai, budget 50k hai"*).
+- [ ] **Smart AI Field Extraction**:
+  - LLM/Speech-to-text integration jo voice audio/transcript se automatically form ke fields (Name, Budget, Details) extract karke auto-populate kare.
+  - Mobile drop-off rate 70% kam karne ke liye killer feature.
+
+### 3.4 🌟 Feedback Form to "Wall of Love" (Testimonials Carousel Generator)
+- [ ] **2-in-1 Form + Testimonials Platform**:
+  - Rating & Feedback form se aane wale responses me se creator dashboard me 5-star reviews ko "Approve for Wall of Love" mark kar sake.
+- [ ] **Embeddable Reviews Carousel / Grid Widget**:
+  - Approved reviews ka ek sundar animated review carousel / masonry grid widget ban jaye jise client apni landing page par embed kar sake (saving $29/mo Senja.io cost).
+
+### 3.5 🛠️ Headless Developer SDK (`@repo/sdk` / React Hook)
+- [ ] **`useChaiForm` React Hook**:
+  - Next.js / React developers ke liye lightweight headless hook:
+    `const { fields, submit, isLoading } = useChaiForm('form_id');`
+  - Developer chahe toh apni custom UI build kare, jabki validation, submissions handling, aur backend ChaiForm sambhale.
+- [ ] **Public Form JSON Schema Endpoint**:
+  - `/api/forms/[id]/schema` endpoint jo dynamic JSON schema expose kare kisi bhi frontend stack (Vue, Svelte, Mobile App) ke liye.
