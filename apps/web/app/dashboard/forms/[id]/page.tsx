@@ -17,6 +17,7 @@ import {
   SlidersHorizontalIcon,
   ClockIcon,
   UsersIcon,
+  QrCodeIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -24,6 +25,7 @@ import { Badge } from "~/components/ui/badge";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
+import { QrCodeDialog } from "~/components/qr-code-dialog";
 import {
   Dialog,
   DialogContent,
@@ -518,6 +520,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
 
   const [createOpen, setCreateOpen] = useState(false);
   const [limitsOpen, setLimitsOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
 
   const handleSaveSettings = async ({
@@ -728,6 +731,10 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
             <CopyIcon className="size-3.5 mr-1.5" />
             Share Link
           </Button>
+          <Button variant="outline" size="sm" onClick={() => setQrOpen(true)}>
+            <QrCodeIcon className="size-3.5 mr-1.5" />
+            QR Code
+          </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href={publicPath} target="_blank">
               <ExternalLinkIcon className="size-3.5 mr-1.5" />
@@ -927,6 +934,17 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           form={form}
           onSave={handleSaveSettings}
           isSaving={isUpdatingSettings}
+        />
+      )}
+
+      {/* QR Code Sharing modal */}
+      {form && (
+        <QrCodeDialog
+          open={qrOpen}
+          onOpenChange={setQrOpen}
+          url={`${typeof window !== "undefined" ? window.location.origin : ""}${publicPath}`}
+          title={form.title}
+          slug={form.slug}
         />
       )}
     </div>

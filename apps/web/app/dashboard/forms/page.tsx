@@ -13,11 +13,13 @@ import {
   PlusIcon,
   ClockIcon,
   UsersIcon,
+  QrCodeIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Switch } from "~/components/ui/switch";
+import { QrCodeDialog } from "~/components/qr-code-dialog";
 import {
   Dialog,
   DialogContent,
@@ -55,6 +57,11 @@ type CreateFormValues = {
 export default function FormsPage() {
   const [open, setOpen] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [selectedQrForm, setSelectedQrForm] = useState<{
+    title: string;
+    url: string;
+    slug?: string | null;
+  } | null>(null);
   const { createFormAsync, isError, error } = useCreateForm();
   const { forms, isLoading } = useListForms();
   const { updateFormVisibilityAsync } = useUpdateFormVisibility();
@@ -295,6 +302,22 @@ export default function FormsPage() {
                         <CopyIcon className="size-4" />
                         <span className="sr-only">Copy Link</span>
                       </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="QR Code"
+                        onClick={() => {
+                          const target = form.slug || form.id;
+                          setSelectedQrForm({
+                            title: form.title,
+                            url: `${window.location.origin}/form/${target}`,
+                            slug: form.slug,
+                          });
+                        }}
+                      >
+                        <QrCodeIcon className="size-4" />
+                        <span className="sr-only">QR Code for {form.title}</span>
+                      </Button>
                       <Button variant="ghost" size="icon" asChild title="Open Public Form">
                         <Link href={`/form/${form.slug || form.id}`} target="_blank">
                           <ExternalLinkIcon className="size-4" />
@@ -415,6 +438,19 @@ export default function FormsPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* QR Code Sharing Dialog */}
+      {selectedQrForm && (
+        <QrCodeDialog
+          open={!!selectedQrForm}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) setSelectedQrForm(null);
+          }}
+          url={selectedQrForm.url}
+          title={selectedQrForm.title}
+          slug={selectedQrForm.slug}
+        />
+      )}
     </div>
   );
 }

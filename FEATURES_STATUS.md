@@ -83,7 +83,7 @@ Yaha wo advanced bonus features hain jo product ko ek next-level production SaaS
   - Daily & weekly submission trend graphs.
 - [x] **Custom Form Slugs**:
   - Raw UUID id (`/form/c9b3...`) ki jagah personalized clean URLs (e.g., `/form/hackathon-2026` ya `/form/startup-pitch`).
-- [ ] **QR Code Sharing**:
+- [x] **QR Code Sharing**:
   - Form link ke liye instant high-res QR code generator (print outs, posters, event desks ke liye).
 - [ ] **Password-Protected Forms**:
   - Private confidential forms ke liye access password set karna (respondent password enter karne ke baad hi fill kar sake).
