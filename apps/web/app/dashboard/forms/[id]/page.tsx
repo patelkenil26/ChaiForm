@@ -1,50 +1,27 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
-import Link from "next/link";
-import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import {
-  PlusIcon,
-  PencilIcon,
-  Trash2Icon,
-  ArrowLeftIcon,
-  ExternalLinkIcon,
-  CopyIcon,
-  BarChart3Icon,
-  GlobeIcon,
-  LinkIcon,
-  XIcon,
-  SlidersHorizontalIcon,
-  ClockIcon,
-  UsersIcon,
-  QrCodeIcon,
-  LockIcon,
-} from "lucide-react";
+import { use, useState } from "react";
+import { type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { FormSettingsDialog, type FormSettingsPayload } from "~/components/forms/form-settings-dialog";
-import { Button } from "~/components/ui/button";
-import { Badge } from "~/components/ui/badge";
-import { Checkbox } from "~/components/ui/checkbox";
-import { Label } from "~/components/ui/label";
-import { Switch } from "~/components/ui/switch";
 import { QrCodeDialog } from "~/components/qr-code-dialog";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "~/components/ui/dialog";
-import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+  BuilderHeader,
+  type BuilderFormData,
+} from "~/components/form-builder/builder-header";
+import { BuilderFieldCard } from "~/components/form-builder/builder-field-card";
+import { FieldForm } from "~/components/form-builder/field-form";
+import {
+  DEFAULT_VALUES,
+  type FieldFormValues,
+  type FieldRow,
+} from "~/components/form-builder/field-types";
 import { useGetForm, useUpdateFormVisibility, useUpdateFormSettings } from "~/hooks/api/form";
 import {
   useGetFields,
@@ -52,253 +29,6 @@ import {
   useUpdateField,
   useDeleteField,
 } from "~/hooks/api/form-field";
-
-const FIELD_TYPES = [
-  "TEXT",
-  "TEXTAREA",
-  "NUMBER",
-  "EMAIL",
-  "PHONE",
-  "URL",
-  "DATE",
-  "TIME",
-  "YES_NO",
-  "PASSWORD",
-  "SELECT",
-  "RADIO",
-  "CHECKBOX",
-  "RATING",
-] as const;
-type FieldType = (typeof FIELD_TYPES)[number];
-
-const FIELD_TYPE_LABELS: Record<FieldType, string> = {
-  TEXT: "Short Text",
-  TEXTAREA: "Long Text (Paragraph)",
-  NUMBER: "Number",
-  EMAIL: "Email Address",
-  PHONE: "Phone Number",
-  URL: "Website / URL",
-  DATE: "Date Picker",
-  TIME: "Time Picker",
-  YES_NO: "Yes / No Toggle",
-  PASSWORD: "Password",
-  SELECT: "Dropdown (Single Select)",
-  RADIO: "Single Choice (Radio)",
-  CHECKBOX: "Multiple Choice (Checkbox)",
-  RATING: "Rating (1-5 Stars)",
-};
-
-type FieldFormValues = {
-  label: string;
-  type: FieldType;
-  description: string;
-  placeholder: string;
-  isRequired: boolean;
-  options: string[];
-};
-
-type FieldRow = {
-  id: string;
-  label: string;
-  labelKey: string;
-  type: FieldType;
-  description?: string | null;
-  placeholder?: string | null;
-  isRequired: boolean;
-  options?: string[] | null;
-  index: string;
-};
-
-const DEFAULT_VALUES: FieldFormValues = {
-  label: "",
-  type: "TEXT",
-  description: "",
-  placeholder: "",
-  isRequired: false,
-  options: ["Option 1", "Option 2"],
-};
-
-function FieldForm({
-  onSubmit,
-  isSubmitting,
-  defaultValues,
-  onCancel,
-  submitLabel,
-}: {
-  onSubmit: SubmitHandler<FieldFormValues>;
-  isSubmitting: boolean;
-  defaultValues: FieldFormValues;
-  onCancel: () => void;
-  submitLabel: string;
-}) {
-  const { register, handleSubmit, control, watch, reset } = useForm<FieldFormValues>({
-    defaultValues,
-  });
-
-  const [newOptionInput, setNewOptionInput] = useState("");
-
-  useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
-
-  const type = watch("type");
-  const isChoiceType = type === "SELECT" || type === "RADIO" || type === "CHECKBOX";
-  const hasPlaceholder =
-    type !== "YES_NO" && type !== "RATING" && type !== "CHECKBOX" && type !== "RADIO";
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FieldGroup>
-        <Field>
-          <FieldLabel htmlFor="label">Label / Question</FieldLabel>
-          <Input
-            id="label"
-            placeholder="e.g. What is your email address?"
-            {...register("label", { required: true, maxLength: 100 })}
-          />
-        </Field>
-
-        <Field>
-          <FieldLabel htmlFor="type">Field Type</FieldLabel>
-          <Controller
-            name="type"
-            control={control}
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger id="type" className="w-full">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent className="max-h-72">
-                  {FIELD_TYPES.map((t) => (
-                    <SelectItem key={t} value={t}>
-                      {FIELD_TYPE_LABELS[t]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </Field>
-
-        {isChoiceType && (
-          <Field>
-            <FieldLabel>Options / Choices</FieldLabel>
-            <Controller
-              name="options"
-              control={control}
-              render={({ field }) => {
-                const currentOptions = field.value || [];
-
-                const handleAdd = () => {
-                  if (!newOptionInput.trim()) return;
-                  field.onChange([...currentOptions, newOptionInput.trim()]);
-                  setNewOptionInput("");
-                };
-
-                const handleRemove = (idxToRemove: number) => {
-                  field.onChange(currentOptions.filter((_, i) => i !== idxToRemove));
-                };
-
-                return (
-                  <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3">
-                    <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto">
-                      {currentOptions.map((opt, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md border bg-card text-xs shadow-2xs"
-                        >
-                          <span className="truncate">{opt}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemove(i)}
-                            className="text-muted-foreground hover:text-destructive transition-colors"
-                          >
-                            <XIcon className="size-3.5" />
-                          </button>
-                        </div>
-                      ))}
-                      {currentOptions.length === 0 && (
-                        <p className="text-xs text-muted-foreground italic py-1">
-                          No options added yet. Add at least one option below.
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Input
-                        placeholder="Add an option..."
-                        value={newOptionInput}
-                        onChange={(e) => setNewOptionInput(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            handleAdd();
-                          }
-                        }}
-                        className="h-8 text-xs"
-                      />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        onClick={handleAdd}
-                        className="h-8 text-xs shrink-0"
-                      >
-                        Add
-                      </Button>
-                    </div>
-                  </div>
-                );
-              }}
-            />
-          </Field>
-        )}
-
-        <Field>
-          <FieldLabel htmlFor="description">Helper Text / Description</FieldLabel>
-          <Textarea
-            id="description"
-            placeholder="Subtext shown below the question (optional)"
-            rows={2}
-            {...register("description")}
-          />
-        </Field>
-
-        {hasPlaceholder && (
-          <Field>
-            <FieldLabel htmlFor="placeholder">Placeholder</FieldLabel>
-            <Input
-              id="placeholder"
-              placeholder="e.g. Type your answer here..."
-              {...register("placeholder")}
-            />
-          </Field>
-        )}
-
-        <div className="flex items-center gap-2 pt-1">
-          <Controller
-            name="isRequired"
-            control={control}
-            render={({ field }) => (
-              <Checkbox id="isRequired" checked={field.value} onCheckedChange={field.onChange} />
-            )}
-          />
-          <Label htmlFor="isRequired" className="text-sm font-medium cursor-pointer">
-            Required question
-          </Label>
-        </div>
-      </FieldGroup>
-
-      <DialogFooter className="mt-6">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : submitLabel}
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-}
 
 export default function FormBuilderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);
@@ -409,197 +139,20 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-6 max-w-4xl">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/dashboard/forms">
-              <ArrowLeftIcon className="size-4" />
-              <span className="sr-only">Back to forms</span>
-            </Link>
-          </Button>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                {form?.title || "Form Builder"}
-              </h1>
-              {form && (
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  {form.isPublished ? (
-                    <Badge
-                      variant="default"
-                      className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs gap-1"
-                    >
-                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Published
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="secondary"
-                      className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs gap-1"
-                    >
-                      <span className="size-1.5 rounded-full bg-amber-500" />
-                      Draft (Closed)
-                    </Badge>
-                  )}
-                  <Badge variant="outline" className="text-xs text-muted-foreground gap-1">
-                    {form.visibility === "PUBLIC" ? (
-                      <>
-                        <GlobeIcon className="size-3 text-blue-500" />
-                        Public
-                      </>
-                    ) : (
-                      <>
-                        <LinkIcon className="size-3 text-muted-foreground" />
-                        Unlisted
-                      </>
-                    )}
-                  </Badge>
+      <BuilderHeader
+        form={form as BuilderFormData | null | undefined}
+        formId={formId}
+        publicPath={publicPath}
+        isUpdatingVisibility={isUpdatingVisibility}
+        onCopyLink={handleCopyLink}
+        onOpenQr={() => setQrOpen(true)}
+        onOpenLimits={() => setLimitsOpen(true)}
+        onAddField={() => setCreateOpen(true)}
+        onTogglePublish={handleTogglePublish}
+        onSelectVisibility={handleSelectVisibility}
+      />
 
-                  {form.slug && (
-                    <Badge variant="outline" className="text-xs font-mono text-muted-foreground gap-1">
-                      <LinkIcon className="size-3" />
-                      /form/{form.slug}
-                    </Badge>
-                  )}
-
-                  {form.closesAt && (
-                    <Badge
-                      variant="outline"
-                      className={`text-xs gap-1 ${
-                        form.isExpired
-                          ? "border-destructive text-destructive bg-destructive/10"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      <ClockIcon className="size-3" />
-                      {form.isExpired
-                        ? "Expired"
-                        : `Closes: ${new Date(form.closesAt).toLocaleDateString([], {
-                            month: "short",
-                            day: "numeric",
-                          })}`}
-                    </Badge>
-                  )}
-
-                  {form.responseLimit && (
-                    <Badge
-                      variant="outline"
-                      className={`text-xs gap-1 ${
-                        form.isLimitReached
-                          ? "border-amber-500 text-amber-600 bg-amber-500/10"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      <UsersIcon className="size-3" />
-                      {form.submissionCount} / {form.responseLimit}
-                    </Badge>
-                  )}
-
-                  {form.isPasswordProtected && (
-                    <Badge variant="outline" className="text-xs gap-1 border-primary/20 bg-primary/5 text-primary">
-                      <LockIcon className="size-3" />
-                      Password Protected
-                    </Badge>
-                  )}
-                </div>
-              )}
-            </div>
-            <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
-              {form?.description || "Design fields and questions for this form"}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 flex-wrap">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/forms/${formId}/submissions`}>
-              <BarChart3Icon className="size-3.5 mr-1.5" />
-              Submissions
-            </Link>
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleCopyLink}>
-            <CopyIcon className="size-3.5 mr-1.5" />
-            Share Link
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => setQrOpen(true)}>
-            <QrCodeIcon className="size-3.5 mr-1.5" />
-            QR Code
-          </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={publicPath} target="_blank">
-              <ExternalLinkIcon className="size-3.5 mr-1.5" />
-              Live Form
-            </Link>
-          </Button>
-          <Button size="sm" onClick={() => setCreateOpen(true)} className="gap-1.5">
-            <PlusIcon className="size-3.5" />
-            Add Field
-          </Button>
-        </div>
-      </div>
-
-      {/* Creator Controls: Publishing Status & Visibility Mode */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border bg-card/60 backdrop-blur-sm p-3.5 px-4 shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Switch
-              id="form-publish-switch"
-              checked={form?.isPublished ?? true}
-              disabled={isUpdatingVisibility || !form}
-              onCheckedChange={handleTogglePublish}
-            />
-            <Label
-              htmlFor="form-publish-switch"
-              className="text-sm font-medium cursor-pointer select-none"
-            >
-              {form?.isPublished ? "Accepting Responses" : "Responses Paused"}
-            </Label>
-          </div>
-          <span className="text-xs text-muted-foreground hidden md:inline">
-            {form?.isPublished
-              ? "(Form is published and accepting submissions)"
-              : "(Form is closed; visitors will see a closed message)"}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setLimitsOpen(true)}
-            className="h-8 text-xs gap-1.5"
-          >
-            <SlidersHorizontalIcon className="size-3.5 text-muted-foreground" />
-            Limits & Expiry
-          </Button>
-
-          <Label className="text-xs text-muted-foreground font-normal">Visibility:</Label>
-          <Select
-            value={form?.visibility ?? "UNLISTED"}
-            disabled={isUpdatingVisibility || !form}
-            onValueChange={handleSelectVisibility}
-          >
-            <SelectTrigger className="h-8 text-xs w-[130px] gap-1.5">
-              <SelectValue placeholder="Visibility" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="UNLISTED" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <LinkIcon className="size-3.5 text-muted-foreground" />
-                  Unlisted
-                </span>
-              </SelectItem>
-              <SelectItem value="PUBLIC" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <GlobeIcon className="size-3.5 text-blue-500" />
-                  Public
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
+      {/* Fields List */}
       <div className="flex flex-col gap-3">
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Loading fields...</p>
@@ -609,62 +162,12 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           </div>
         ) : (
           fields.map((field) => (
-            <div
+            <BuilderFieldCard
               key={field.id}
-              className="flex items-start justify-between gap-4 rounded-lg border bg-card p-4"
-            >
-              <div className="flex flex-col gap-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium text-sm">{field.label}</span>
-                  <Badge variant="outline" className="text-xs">
-                    {FIELD_TYPE_LABELS[field.type as FieldType]}
-                  </Badge>
-                  {field.isRequired && (
-                    <Badge variant="secondary" className="text-xs">
-                      Required
-                    </Badge>
-                  )}
-                </div>
-                {field.description && (
-                  <p className="text-xs text-muted-foreground truncate">{field.description}</p>
-                )}
-                {field.options && field.options.length > 0 && (
-                  <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
-                    <span className="text-[11px] text-muted-foreground">Options:</span>
-                    {field.options.map((opt, i) => (
-                      <Badge
-                        key={i}
-                        variant="secondary"
-                        className="text-[10px] py-0 px-1.5 font-normal"
-                      >
-                        {opt}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground/60 font-mono">{field.labelKey}</p>
-              </div>
-
-              <div className="flex items-center gap-1 shrink-0">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setEditingField(field as FieldRow)}
-                >
-                  <PencilIcon className="size-4" />
-                  <span className="sr-only">Edit {field.label}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:text-destructive"
-                  onClick={() => handleDelete(field.id)}
-                >
-                  <Trash2Icon className="size-4" />
-                  <span className="sr-only">Delete {field.label}</span>
-                </Button>
-              </div>
-            </div>
+              field={field as FieldRow}
+              onEdit={(f) => setEditingField(f)}
+              onDelete={handleDelete}
+            />
           ))
         )}
       </div>
@@ -716,7 +219,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
         </DialogContent>
       </Dialog>
 
-      {/* Form Settings, Limits & Password modal */}
+      {/* Form Settings, Limits, Slug & Password modal */}
       {form && (
         <FormSettingsDialog
           open={limitsOpen}
