@@ -17,6 +17,7 @@ import {
   BuilderHeader,
   type BuilderFormData,
 } from "~/components/form-builder/builder-header";
+import { BuilderPreviewModal } from "~/components/form-builder/builder-preview-modal";
 import { BuilderFieldCard } from "~/components/form-builder/builder-field-card";
 import { FieldForm } from "~/components/form-builder/field-form";
 import {
@@ -60,7 +61,20 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   const [createOpen, setCreateOpen] = useState(false);
   const [limitsOpen, setLimitsOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
+
+  // Keyboard shortcut Ctrl+P / Cmd+P to toggle Live Preview
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        setPreviewOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleSaveSettings = async (settings: FormSettingsPayload) => {
     try {
@@ -163,6 +177,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
         onCopyLink={handleCopyLink}
         onOpenQr={() => setQrOpen(true)}
         onOpenLimits={() => setLimitsOpen(true)}
+        onOpenPreview={() => setPreviewOpen(true)}
         onAddField={() => setCreateOpen(true)}
         onTogglePublish={handleTogglePublish}
         onSelectVisibility={handleSelectVisibility}
@@ -274,6 +289,15 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           slug={form.slug}
         />
       )}
+
+      {/* Live Form Preview Simulator Modal */}
+      <BuilderPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        form={form as BuilderFormData | null | undefined}
+        fields={(fields as FieldRow[] | undefined) ?? []}
+        publicPath={publicPath}
+      />
     </div>
   );
 }

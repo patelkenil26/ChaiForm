@@ -15,6 +15,7 @@ import {
   LockIcon,
   SlidersHorizontalIcon,
   ArchiveIcon,
+  EyeIcon,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -54,6 +55,7 @@ interface BuilderHeaderProps {
   onOpenQr: () => void;
   onOpenLimits: () => void;
   onAddField: () => void;
+  onOpenPreview: () => void;
   onTogglePublish: (checked: boolean) => void;
   onSelectVisibility: (visibility: "PUBLIC" | "UNLISTED") => void;
 }
@@ -67,6 +69,7 @@ export function BuilderHeader({
   onOpenQr,
   onOpenLimits,
   onAddField,
+  onOpenPreview,
   onTogglePublish,
   onSelectVisibility,
 }: BuilderHeaderProps) {
@@ -203,6 +206,15 @@ export function BuilderHeader({
           <Button variant="outline" size="sm" onClick={onOpenQr}>
             <QrCodeIcon className="size-3.5 mr-1.5" />
             QR Code
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onOpenPreview}
+            className="gap-1.5 border-primary/25 hover:border-primary/50 text-foreground shadow-2xs font-medium"
+          >
+            <EyeIcon className="size-3.5 text-primary" />
+            <span>Preview</span>
           </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href={publicPath} target="_blank">
