@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { FormSettingsDialog, type FormSettingsPayload } from "~/components/forms/form-settings-dialog";
@@ -30,9 +31,18 @@ import {
   useUpdateField,
   useDeleteField,
 } from "~/hooks/api/form-field";
+import { useUser } from "~/hooks/api/auth";
 
 export default function FormBuilderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);
+  const router = useRouter();
+  const { user, isLoading: isUserLoading } = useUser();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.replace(`/login?redirect=${encodeURIComponent(`/forms/${formId}`)}`);
+    }
+  }, [user, isUserLoading, router, formId]);
 
   const { form } = useGetForm(formId);
   const { updateFormVisibilityAsync, isLoading: isUpdatingVisibility } = useUpdateFormVisibility();

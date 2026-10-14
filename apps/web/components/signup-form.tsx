@@ -14,7 +14,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { trpc } from "~/trpc/client";
 import { useSignup } from "~/hooks/api/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type SignupFormValues = {
   name: string;
@@ -26,6 +27,8 @@ type SignupFormValues = {
 export function SignupForm({ className, ...props }: React.ComponentProps<"form">) {
   const { createUserWithEmailAndPasswordAsync } = useSignup();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   const {
     register,
@@ -41,14 +44,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
   });
 
   const onSubmit: SubmitHandler<SignupFormValues> = async (values) => {
-    console.log(values);
-    const { id } = await createUserWithEmailAndPasswordAsync({
+    await createUserWithEmailAndPasswordAsync({
       email: values.email,
       fullName: values.name,
       password: values.password,
     });
-    console.log(`User created with ID=${id}`);
-    router.replace("/dashboard");
+    router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
   };
 
   return (
@@ -112,7 +113,10 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
         <Field>
           
           <FieldDescription className="px-6 text-center">
-            Already have an account? <a href="/login">Sign in</a>
+            Already have an account?{" "}
+            <Link href="/login" className="underline underline-offset-4 hover:text-foreground">
+              Sign in
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

@@ -31,34 +31,37 @@ export function LandingNavbar() {
         </Link>
 
         {/* Center Nav Links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-muted-foreground">
-          <a
-            href="#templates"
-            className="transition-colors hover:text-primary text-xs lg:text-sm font-medium"
+        <nav className="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium text-muted-foreground">
+          <Link
+            href="/explore"
+            className="transition-colors hover:text-primary text-xs lg:text-sm font-medium flex items-center gap-1.5"
           >
-            Templates
-          </a>
+            <span>Templates</span>
+            <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4 border-primary/30 text-primary bg-primary/5 font-normal">
+              Gallery
+            </Badge>
+          </Link>
           <a
-            href="#features"
+            href="/#features"
             className="transition-colors hover:text-foreground text-xs lg:text-sm"
           >
             Features
           </a>
           <a
-            href="#live-demo"
+            href="/#live-demo"
             className="flex items-center gap-1 transition-colors hover:text-foreground text-xs lg:text-sm"
           >
             <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Live Demo
           </a>
           <a
-            href="#architecture"
+            href="/#architecture"
             className="transition-colors hover:text-foreground text-xs lg:text-sm"
           >
             Architecture
           </a>
           <a
-            href="#comparison"
+            href="/#comparison"
             className="transition-colors hover:text-foreground text-xs lg:text-sm"
           >
             Why ChaiForm

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { ClockIcon, UsersIcon, LockIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
@@ -137,10 +138,25 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
 
   if (!form) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-2">
-          <h1 className="text-xl font-semibold">Form not found</h1>
-          <p className="text-sm text-muted-foreground">This form doesn't exist or has been removed.</p>
+      <div className="min-h-screen flex items-center justify-center p-6 text-center bg-background">
+        <div className="flex max-w-sm flex-col items-center gap-4">
+          <div className="flex aspect-square size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground border">
+            <LockIcon className="size-5" />
+          </div>
+          <div className="space-y-1.5">
+            <h1 className="text-xl font-bold tracking-tight">Form Not Available</h1>
+            <p className="text-sm text-muted-foreground">
+              This form doesn&apos;t exist, may be private, or has been deleted by its author.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 pt-2">
+            <Button asChild size="sm" variant="outline">
+              <Link href="/">Back to Home</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link href="/explore">Explore Templates</Link>
+            </Button>
+          </div>
         </div>
       </div>
     );

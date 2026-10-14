@@ -1,7 +1,8 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, BarChart3Icon, TablePropertiesIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -14,9 +15,18 @@ import { FormAnalyticsView } from "~/components/analytics/form-analytics-view";
 import { useGetForm } from "~/hooks/api/form";
 import { useGetFields } from "~/hooks/api/form-field";
 import { useGetFormSubmissions } from "~/hooks/api/form-submission";
+import { useUser } from "~/hooks/api/auth";
 
 export default function SubmissionsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: formId } = use(params);
+  const router = useRouter();
+  const { user, isLoading: isUserLoading } = useUser();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.replace(`/login?redirect=${encodeURIComponent(`/forms/${formId}/submissions`)}`);
+    }
+  }, [user, isUserLoading, router, formId]);
 
   const { form } = useGetForm(formId);
   const { fields, isLoading: fieldsLoading } = useGetFields(formId);

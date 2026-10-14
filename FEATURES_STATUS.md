@@ -12,10 +12,15 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
 - [x] **Forgot Password & Password Reset Flow** (Completed):
   - Forgot password request UI (`/forgot-password`), backend JWT reset token generation, direct reset link preview, validation, aur secure new password update page (`/reset-password`).
 
-### 1.2 Routing & Navigation Cleanup (High Priority)
-- [ ] **Inconsistent Routing & Redirects Fix**:
-  - Navigation links aur redirects ko fix karna (Dashboard sidebar, top navbar, form builder headers, aur public explorer ke beech consistent routing).
-  - Active route highlighting, dynamic breadcrumbs, aur safe fallback redirects handle karna.
+### 1.2 Routing & Navigation Cleanup (Completed)
+- [x] **Inconsistent Routing & Redirects Fix**:
+  - **Dynamic Interactive Breadcrumbs**: `SiteHeader` ab route ke hisab se interactive Radix breadcrumbs render karta hai (`Dashboard`, `Forms`, `Builder`, `Submissions`, `Templates Gallery`).
+  - **Active Route Highlighting**: `NavMain` dashboard sidebar me active route, sub-routes (`/explore`, `/templates`, `/forms/*`, `/submissions`) ko automatically detect karke active highlight styling apply karta hai.
+  - **Safe Fallback & Contextual Redirects**: Unauthenticated users jab protected routes (`/dashboard`, `/forms`, `/forms/[id]`, `/submissions`) visit karte hain toh automatic return URL preserve hota hai (`/login?redirect=...`). Login aur Signup form return URL ko read karke usi target page par redirect karte hain.
+  - **Auth & Route Aliases in Next.js Config**: `/sign-in` & `/signin` -> `/login`, `/register` & `/sign-up` -> `/signup`, `/dashboard/forms` -> `/forms`, `/dashboard/submissions` -> `/submissions`, `/dashboard/explore` -> `/explore`.
+  - **Custom Branded 404 & Error Boundaries**: Dedicated `app/not-found.tsx` aur `app/error.tsx` add kiye gaye hain with retry and direct dashboard/explore navigation links.
+  - **Public Explorer & Form Fill Polish**: Public forms me 404/not found state par safe home/explore actions, aur landing navbar me direct Templates Gallery link provide kiya gaya.
+
 
 ### 1.3 Landing Page UI Overhaul & Design Consistency (High Priority)
 - [ ] **Cohesive Visual Theme & Polish**:

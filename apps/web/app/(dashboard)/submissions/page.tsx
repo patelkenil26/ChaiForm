@@ -48,9 +48,10 @@ function SubmissionsHubContent() {
 
   useEffect(() => {
     if (!isUserLoading && !user) {
-      router.replace("/login");
+      const redirectUrl = initialFormId ? `/submissions?formId=${initialFormId}` : "/submissions";
+      router.replace(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
     }
-  }, [user, isUserLoading, router]);
+  }, [user, isUserLoading, router, initialFormId]);
 
   const { forms, isLoading: formsLoading } = useListForms();
   const [selectedFormId, setSelectedFormId] = useState<string>("");

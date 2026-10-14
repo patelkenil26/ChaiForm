@@ -49,6 +49,9 @@ export function NavMain({
         !pathname.includes("/submissions")
       )
     }
+    if (url === "/explore") {
+      return pathname === "/explore" || pathname === "/templates" || pathname.startsWith("/explore/")
+    }
     return pathname === url || pathname.startsWith(url + "/")
   }
 

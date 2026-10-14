@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { cn } from "~/lib/utils";
@@ -19,6 +19,9 @@ type LoginFormValues = {
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const { signInUserWithEmailAndPasswordAsync } = useSignIn();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
+
   const {
     register,
     handleSubmit,
@@ -31,12 +34,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   });
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (values) => {
-    console.log(values);
-    const { id } = await signInUserWithEmailAndPasswordAsync({
+    await signInUserWithEmailAndPasswordAsync({
       email: values.email,
       password: values.password,
     });
-    router.replace("/dashboard");
+    router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
   };
 
   return (

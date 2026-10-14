@@ -32,7 +32,7 @@ export default function FormsPage() {
 
   useEffect(() => {
     if (!isUserLoading && !user) {
-      router.replace("/login");
+      router.replace("/login?redirect=/forms");
     }
   }, [user, isUserLoading, router]);
 
