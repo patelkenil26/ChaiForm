@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { IconClipboardPlus, IconCompass } from "@tabler/icons-react"
@@ -15,9 +16,14 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb"
 import { ThemesComingSoonButton } from "~/components/themes/themes-modal"
+import {
+  GlobalCommandPalette,
+  CommandSearchTrigger,
+} from "~/components/global-command-palette"
 
 export function SiteHeader() {
   const pathname = usePathname()
+  const [searchOpen, setSearchOpen] = useState(false)
 
   const renderBreadcrumbs = () => {
     if (!pathname || pathname === "/dashboard") {
@@ -159,8 +165,9 @@ export function SiteHeader() {
           </Breadcrumb>
         </div>
         <div className="ml-auto flex items-center gap-2 shrink-0">
+          <CommandSearchTrigger onClick={() => setSearchOpen(true)} />
           {pathname !== "/explore" && pathname !== "/templates" && (
-            <Button size="sm" asChild variant="ghost" className="hidden sm:inline-flex text-xs gap-1.5 text-muted-foreground hover:text-foreground">
+            <Button size="sm" asChild variant="ghost" className="hidden md:inline-flex text-xs gap-1.5 text-muted-foreground hover:text-foreground">
               <Link href="/explore">
                 <IconCompass className="size-3.5" />
                 <span>Explore</span>
@@ -169,7 +176,7 @@ export function SiteHeader() {
           )}
           <ThemesComingSoonButton />
           {pathname !== "/forms" && pathname !== "/dashboard/forms" && (
-            <Button size="sm" asChild variant="outline" className="hidden sm:inline-flex text-xs">
+            <Button size="sm" asChild variant="outline" className="hidden lg:inline-flex text-xs">
               <Link href="/forms">
                 <IconClipboardPlus className="size-3.5 mr-1.5" />
                 Forms
@@ -178,6 +185,9 @@ export function SiteHeader() {
           )}
         </div>
       </div>
+
+      {/* Global Workspace Command Palette */}
+      <GlobalCommandPalette open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   )
 }

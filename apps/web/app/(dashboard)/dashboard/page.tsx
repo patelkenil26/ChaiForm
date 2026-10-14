@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -16,6 +16,8 @@ import {
   IconListCheck,
   IconArrowRight,
   IconEye,
+  IconSearch,
+  IconX,
 } from "@tabler/icons-react";
 import { PencilIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -54,6 +56,8 @@ export default function DashboardPage() {
   const { user, isLoading: isUserLoading } = useUser();
   const [open, setOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -63,6 +67,34 @@ export default function DashboardPage() {
 
   const { createFormAsync, isError, error } = useCreateForm();
   const { forms, isLoading } = useListForms();
+
+  const publishedCount = useMemo(
+    () => forms?.filter((f) => f.isPublished).length ?? 0,
+    [forms]
+  );
+  const draftCount = useMemo(
+    () => forms?.filter((f) => !f.isPublished).length ?? 0,
+    [forms]
+  );
+
+  const filteredForms = useMemo(() => {
+    if (!forms) return [];
+    return forms.filter((f) => {
+      // 1. Status Filter
+      if (statusFilter === "PUBLISHED" && !f.isPublished) return false;
+      if (statusFilter === "DRAFT" && f.isPublished) return false;
+
+      // 2. Search Query Filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesTitle = f.title.toLowerCase().includes(q);
+        const matchesDesc = f.description?.toLowerCase().includes(q) ?? false;
+        const matchesSlug = f.slug?.toLowerCase().includes(q) ?? false;
+        if (!matchesTitle && !matchesDesc && !matchesSlug) return false;
+      }
+      return true;
+    });
+  }, [forms, statusFilter, searchQuery]);
 
   const {
     register,
@@ -200,6 +232,82 @@ export default function DashboardPage() {
           )}
         </div>
 
+        {/* Search & Status Filter Controls Bar */}
+        {totalForms > 0 && (
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-1">
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-md">
+              <IconSearch className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              <Input
+                type="text"
+                placeholder="Filter forms by title or description..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-8 h-9 text-xs sm:text-sm bg-card"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer"
+                >
+                  <IconX className="size-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Status Filter Tabs */}
+            <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/60 border border-border/50 self-start sm:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={() => setStatusFilter("ALL")}
+                className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                  statusFilter === "ALL"
+                    ? "bg-background text-foreground shadow-2xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span>All</span>
+                <Badge variant="secondary" className="px-1 py-0 text-[10px] h-4">
+                  {totalForms}
+                </Badge>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setStatusFilter("PUBLISHED")}
+                className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                  statusFilter === "PUBLISHED"
+                    ? "bg-background text-foreground shadow-2xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span className="size-1.5 rounded-full bg-emerald-500" />
+                <span>Live</span>
+                <Badge variant="outline" className="px-1 py-0 text-[10px] h-4 border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
+                  {publishedCount}
+                </Badge>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setStatusFilter("DRAFT")}
+                className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                  statusFilter === "DRAFT"
+                    ? "bg-background text-foreground shadow-2xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span className="size-1.5 rounded-full bg-amber-500" />
+                <span>Drafts</span>
+                <Badge variant="outline" className="px-1 py-0 text-[10px] h-4 border-amber-500/30 text-amber-600 dark:text-amber-400">
+                  {draftCount}
+                </Badge>
+              </button>
+            </div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -224,9 +332,33 @@ export default function DashboardPage() {
               Create Your First Form
             </Button>
           </Card>
+        ) : filteredForms.length === 0 ? (
+          <Card className="flex flex-col items-center justify-center p-10 text-center border-dashed">
+            <div className="flex size-12 items-center justify-center rounded-full bg-muted mb-3">
+              <IconSearch className="size-5 text-muted-foreground" />
+            </div>
+            <h3 className="text-base font-semibold">No matching forms found</h3>
+            <p className="mt-1 text-xs text-muted-foreground max-w-sm">
+              {searchQuery
+                ? `No forms matched your search "${searchQuery}" in ${statusFilter.toLowerCase()} forms.`
+                : `You don't have any ${statusFilter.toLowerCase()} forms right now.`}
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchQuery("");
+                setStatusFilter("ALL");
+              }}
+              className="mt-4 text-xs gap-1.5"
+            >
+              <IconX className="size-3.5" />
+              Reset Filters
+            </Button>
+          </Card>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {forms.map((form) => (
+            {filteredForms.map((form) => (
               <Card
                 key={form.id}
                 className="flex flex-col justify-between transition-all duration-200 hover:border-primary/50 hover:shadow-md"

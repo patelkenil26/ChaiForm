@@ -39,8 +39,11 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
   - Dashboard par ek interactive "Recent Activity / Latest Submissions" feed jahan latest responses, form titles aur time ago timestamps show hon.
 - [ ] **Quick Starter Templates Launcher Bar**:
   - Dashboard banner ke niche 1-click popular starter template shortcuts (e.g. "Job Application", "Event RSVP", "Customer CSAT", "Explore All").
-- [ ] **Dashboard Forms Search & Filter Controls**:
-  - Dashboard page par instant form title search bar aur status filters (All, Published, Drafts).
+- [x] **Dashboard Forms Search & Filter Controls** (Completed):
+  - **Global Command Search (`Ctrl+K`)**: `CommandSearchTrigger` button in header + `GlobalCommandPalette` dialog showing grouped results (Your Forms, Curated Templates, Navigation, Quick Actions).
+  - **Dashboard In-Page Real-Time Search**: Instant title/description filter input with clear button and zero-latency client-side reactive rendering.
+  - **Status Filter Tabs**: `All`, `Live` (emerald badge count), and `Drafts` (amber badge count) toggle buttons with friendly empty search result cards.
+  - **Forms Manager Hub In-Page Search**: `/forms` page par bhi active/archived tabs ke sath in-page live search bar integrated.
 - [ ] **Polished Empty States & Micro-Interactions**:
   - Modern empty state illustration with animated create form trigger, keyboard shortcut hints (`Ctrl+K` or `N` to create form).
 
