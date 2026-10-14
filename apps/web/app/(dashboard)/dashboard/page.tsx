@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -42,6 +42,7 @@ import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { useCreateForm, useListForms } from "~/hooks/api/form";
+import { useUser } from "~/hooks/api/auth";
 
 type CreateFormValues = {
   title: string;
@@ -50,8 +51,15 @@ type CreateFormValues = {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { user, isLoading: isUserLoading } = useUser();
   const [open, setOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.replace("/login");
+    }
+  }, [user, isUserLoading, router]);
 
   const { createFormAsync, isError, error } = useCreateForm();
   const { forms, isLoading } = useListForms();

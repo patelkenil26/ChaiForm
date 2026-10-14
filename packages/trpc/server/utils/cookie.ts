@@ -7,11 +7,13 @@ const ONE_DAY = 24 * ONE_HOUR;
 const ONE_MONTH = 30 * ONE_DAY;
 const ONE_YEAR = 12 * ONE_MONTH;
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const defaultCookieOption: CookieOptions = {
     path: "/",
     httpOnly: true,
-    secure: false,
-    sameSite: "strict",
+    secure: isProduction,
+    sameSite: "lax",
     maxAge: ONE_YEAR
 }
 
@@ -21,7 +23,7 @@ export function createCookieFactory(res: Response) {
         value: string,
         opts: CookieOptions = defaultCookieOption
     ) {
-        res.cookie(name, value, opts)
+        res.cookie(name, value, { ...defaultCookieOption, ...opts })
     }
 }
 
@@ -32,8 +34,15 @@ export function getCookieFactory(req: Request) {
 }
 
 export function clearCookieFactory(res: Response) {
-    return function clearCookie(name: string) {
-        res.clearCookie(name)
+    return function clearCookie(name: string, opts?: CookieOptions) {
+        res.clearCookie(name, {
+            path: "/",
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "lax",
+            maxAge: 0,
+            ...opts,
+        })
     }
 }
 
@@ -50,5 +59,11 @@ export function getAuthenticationCookie(ctx: TRPCContext) {
 }
 
 export function clearAuthenticationCookie(ctx: TRPCContext) {
-    ctx.clearCookie(AUTHENTICATION_COOKIE_NAME)
+    ctx.clearCookie(AUTHENTICATION_COOKIE_NAME, {
+        path: "/",
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        maxAge: 0,
+    })
 }

@@ -7,10 +7,10 @@
 Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
 
 ### 1.1 Authentication & Session Fixes (High Priority)
-- [ ] **Logout Flow Fix**:
-  - Logout sahi se work nahi kar raha hai — HTTP-only auth cookies clear karna, tRPC/React Query cache purge karna, aur smooth redirect to `/login` with toast notification.
-- [ ] **Forgot Password & Password Reset Flow**:
-  - Forgot password request UI (`/forgot-password`), backend reset token/email dispatch, aur secure new password update page (`/reset-password`).
+- [x] **Logout Flow Fix** (Completed):
+  - HTTP-only auth cookies clear karna, tRPC/React Query cache purge, Next.js server cookie store clear, aur smooth redirect to `/login` with toast notification.
+- [x] **Forgot Password & Password Reset Flow** (Completed):
+  - Forgot password request UI (`/forgot-password`), backend JWT reset token generation, direct reset link preview, validation, aur secure new password update page (`/reset-password`).
 
 ### 1.2 Routing & Navigation Cleanup (High Priority)
 - [ ] **Inconsistent Routing & Redirects Fix**:

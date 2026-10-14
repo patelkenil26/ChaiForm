@@ -2,6 +2,7 @@
 
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
@@ -60,12 +61,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
             <Field>
               <div className="flex items-center">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <a
+                <Link
                   href="/forgot-password"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </div>
               <Input
                 id="password"
@@ -82,7 +83,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </Button>
 
               <FieldDescription className="text-center">
-                Don&apos;t have an account? <a href="/signup">Sign up</a>
+                Don&apos;t have an account? <Link href="/signup" className="underline underline-offset-4 hover:text-foreground">Sign up</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

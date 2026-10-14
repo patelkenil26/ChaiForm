@@ -1,7 +1,18 @@
 import { randomBytes, createHmac } from 'node:crypto'
 import { db, eq } from "@repo/database";
-import { createUserWithEmailAndPasswordInput, CreateUserWithEmailAndPasswordInputType, generateUserTokenPayload, GenerateUserTokenPayloadType, signInUserWithEmailAndPasswordInput, SignInUserWithEmailAndPasswordInputType } from "./model";
-import { usersTable } from "@repo/database/models/user"
+import {
+  createUserWithEmailAndPasswordInput,
+  CreateUserWithEmailAndPasswordInputType,
+  generateUserTokenPayload,
+  GenerateUserTokenPayloadType,
+  signInUserWithEmailAndPasswordInput,
+  SignInUserWithEmailAndPasswordInputType,
+  requestPasswordResetInput,
+  RequestPasswordResetInputType,
+  resetPasswordInput,
+  ResetPasswordInputType,
+} from "./model";
+import { usersTable } from "@repo/database/models/user";
 import { env } from '../env';
 import * as JWT from 'jsonwebtoken';
 
@@ -95,6 +106,63 @@ class UserService {
   public async verifyAndDecodeUserToken(token: string) {
     const { id } = await this.verifyUserToken(token);
     return { id };
+  }
+
+  public async requestPasswordReset(payload: RequestPasswordResetInputType) {
+    const { email } = await requestPasswordResetInput.parseAsync(payload);
+
+    const user = await this.getUserByEmail(email);
+    if (!user) {
+      throw new Error(`No account found with email ${email}`);
+    }
+
+    // Generate a reset token valid for 30 minutes
+    const token = JWT.sign(
+      { id: user.id, email: user.email, purpose: "password_reset" },
+      env.JWT_SECRET,
+      { expiresIn: "30m" }
+    );
+
+    return {
+      success: true,
+      email: user.email,
+      resetToken: token,
+      message: `Password reset link generated for ${email}`,
+    };
+  }
+
+  public async resetPassword(payload: ResetPasswordInputType) {
+    const { token, newPassword } = await resetPasswordInput.parseAsync(payload);
+
+    let decoded: { id: string; email: string; purpose: string };
+    try {
+      decoded = JWT.verify(token, env.JWT_SECRET) as { id: string; email: string; purpose: string };
+    } catch {
+      throw new Error("Reset token is invalid or has expired. Please request a new link.");
+    }
+
+    if (!decoded?.id || decoded.purpose !== "password_reset") {
+      throw new Error("Invalid reset token purpose.");
+    }
+
+    const user = await this.getUserInfoById(decoded.id);
+    if (!user) {
+      throw new Error("User does not exist.");
+    }
+
+    // Generate new salt and password hash
+    const salt = randomBytes(16).toString("hex");
+    const hash = await this.generateHash(salt, newPassword);
+
+    await db
+      .update(usersTable)
+      .set({ password: hash, salt, updatedAt: new Date() })
+      .where(eq(usersTable.id, decoded.id));
+
+    return {
+      success: true,
+      message: "Password has been successfully updated. You can now log in.",
+    };
   }
 }
 

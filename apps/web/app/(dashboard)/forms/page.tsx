@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { PlusIcon, ArchiveIcon, LayoutListIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -15,8 +16,11 @@ import {
   useCloneForm,
   useArchiveForm,
 } from "~/hooks/api/form";
+import { useUser } from "~/hooks/api/auth";
 
 export default function FormsPage() {
+  const router = useRouter();
+  const { user, isLoading: isUserLoading } = useUser();
   const [activeTab, setActiveTab] = useState<"ACTIVE" | "ARCHIVED">("ACTIVE");
   const [createOpen, setCreateOpen] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -25,6 +29,12 @@ export default function FormsPage() {
     url: string;
     slug?: string | null;
   } | null>(null);
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.replace("/login");
+    }
+  }, [user, isUserLoading, router]);
 
   const { createFormAsync, error: createError } = useCreateForm();
   const { forms, isLoading } = useListForms();

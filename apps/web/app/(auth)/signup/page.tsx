@@ -1,8 +1,16 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { GalleryVerticalEnd } from "lucide-react";
 
 import { SignupForm } from "~/components/signup-form";
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("authentication-token")?.value;
+  if (token) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted/40 p-6 md:p-10">
       <div className="flex w-full max-w-md flex-col gap-6">

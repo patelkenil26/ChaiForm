@@ -3,8 +3,21 @@ import { signInUserWithEmailAndPasswordInput } from "@repo/services/user/model";
 import { userService } from "../../services";
 import { authenticatedProcedure, publicProcedure, router } from "../../trpc";
 import { generatePath } from "../../utils/path-generator";
-import { createUserWithEmailAndPasswordInputModel, createUserWithEmailAndPasswordOutputModel, getLoggedInUserInfoInputModel, getLoggedInUserInfoOutputModel, signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel } from "./model";
-import { setAuthenticationCookie } from "../../utils/cookie";
+import {
+  createUserWithEmailAndPasswordInputModel,
+  createUserWithEmailAndPasswordOutputModel,
+  getLoggedInUserInfoInputModel,
+  getLoggedInUserInfoOutputModel,
+  signInUserWithEmailAndPasswordInputModel,
+  signInUserWithEmailAndPasswordOutputModel,
+  signOutInputModel,
+  signOutOutputModel,
+  requestPasswordResetInputModel,
+  requestPasswordResetOutputModel,
+  resetPasswordInputModel,
+  resetPasswordOutputModel,
+} from "./model";
+import { clearAuthenticationCookie, setAuthenticationCookie } from "../../utils/cookie";
 
 const TAGS = ["Authentication"];
 const getPath = generatePath("/authentication");
@@ -55,6 +68,25 @@ export const authRouter = router({
       }
     }),
 
+  signOut: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: getPath('/signOut'),
+        tags: TAGS
+      }
+    })
+    .input(signOutInputModel)
+    .output(signOutOutputModel)
+    .mutation(async ({ ctx }) => {
+      clearAuthenticationCookie(ctx);
+
+      return {
+        success: true,
+        message: "Successfully signed out",
+      };
+    }),
+
   getLoggedInUserInfo: authenticatedProcedure
     .meta({
       openapi: {
@@ -75,6 +107,39 @@ export const authRouter = router({
         fullName,
         profileImageUrl
       }
+    }),
+
+  requestPasswordReset: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: getPath('/requestPasswordReset'),
+        tags: TAGS
+      }
     })
+    .input(requestPasswordResetInputModel)
+    .output(requestPasswordResetOutputModel)
+    .mutation(async ({ input }) => {
+      const result = await userService.requestPasswordReset({ email: input.email });
+      return result;
+    }),
+
+  resetPassword: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: getPath('/resetPassword'),
+        tags: TAGS
+      }
+    })
+    .input(resetPasswordInputModel)
+    .output(resetPasswordOutputModel)
+    .mutation(async ({ input }) => {
+      const result = await userService.resetPassword({
+        token: input.token,
+        newPassword: input.newPassword,
+      });
+      return result;
+    }),
 
 });

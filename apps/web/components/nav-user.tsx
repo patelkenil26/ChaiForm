@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import {
   IconCreditCard,
@@ -7,7 +8,10 @@ import {
   IconLogout,
   IconNotification,
   IconUserCircle,
+  IconLoader2,
+  IconLogin,
 } from "@tabler/icons-react"
+import { toast } from "sonner"
 
 import {
   Avatar,
@@ -29,6 +33,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar"
+import { useSignOut } from "~/hooks/api/auth"
 
 export function NavUser({
   user,
@@ -40,6 +45,10 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const { signOutAsync } = useSignOut()
+
+  const isLoggedIn = Boolean(user.email && user.email !== "user@example.com")
 
   const initials = user.name
     ? user.name
@@ -50,9 +59,57 @@ export function NavUser({
         .toUpperCase()
     : "CF"
 
-  const handleLogout = () => {
-    document.cookie = "authentication-token=; path=/; max-age=0"
-    window.location.href = "/sign-in"
+  const handleLogout = async () => {
+    if (isLoggingOut) return
+    setIsLoggingOut(true)
+    const toastId = toast.loading("Logging out...")
+
+    try {
+      // 1. Call tRPC backend procedure to clear HTTP-only cookie on Express API
+      await signOutAsync()
+
+      // 2. Call Next.js route handler to clear cookie in Next.js server cookie store
+      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
+
+      // 3. Fallback client-side cookie deletion
+      document.cookie =
+        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+
+      toast.success("Logged out successfully!", { id: toastId })
+
+      // 4. Hard redirect to /login to completely reset client memory and re-check session
+      window.location.href = "/login"
+    } catch (error) {
+      console.error("Logout error:", error)
+      // Fallback clean and redirect even if backend was unreachable
+      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
+      document.cookie =
+        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      toast.success("Logged out", { id: toastId })
+      window.location.href = "/login"
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild size="lg" className="hover:bg-primary/10">
+            <Link href="/login" className="flex items-center gap-2.5">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <IconLogin className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold text-primary">Sign In</span>
+                <span className="truncate text-xs text-muted-foreground">Access your workspace</span>
+              </div>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    )
   }
 
   return (
@@ -105,11 +162,25 @@ export function NavUser({
                   My Forms
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard">
+                  <IconCreditCard className="size-4" />
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
-              <IconLogout className="size-4" />
-              Log out
+            <DropdownMenuItem
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-2"
+            >
+              {isLoggingOut ? (
+                <IconLoader2 className="size-4 animate-spin" />
+              ) : (
+                <IconLogout className="size-4" />
+              )}
+              <span>{isLoggingOut ? "Logging out..." : "Log out"}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

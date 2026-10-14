@@ -37,11 +37,20 @@ import { FormAnalyticsView } from "~/components/analytics/form-analytics-view";
 import { useListForms } from "~/hooks/api/form";
 import { useGetFields } from "~/hooks/api/form-field";
 import { useGetFormSubmissions } from "~/hooks/api/form-submission";
+import { useUser } from "~/hooks/api/auth";
 
 function SubmissionsHubContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialFormId = searchParams.get("formId");
+
+  const { user, isLoading: isUserLoading } = useUser();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.replace("/login");
+    }
+  }, [user, isUserLoading, router]);
 
   const { forms, isLoading: formsLoading } = useListForms();
   const [selectedFormId, setSelectedFormId] = useState<string>("");
