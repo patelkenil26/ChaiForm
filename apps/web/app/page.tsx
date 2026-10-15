@@ -9,6 +9,7 @@ import { ComparisonSection } from "~/components/landing/comparison";
 import { TechStackSection } from "~/components/landing/tech-stack";
 import { CtaSection } from "~/components/landing/cta-section";
 import { LandingFooter } from "~/components/landing/footer";
+import { landingTheme } from "~/config/landing-theme";
 
 export const metadata = {
   title: "ChaiForm • Next-Gen Conversational Form Builder",
@@ -24,7 +25,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
+    <div className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}>
       <LandingNavbar />
       <main className="flex-1">
         <HeroSection />

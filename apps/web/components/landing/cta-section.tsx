@@ -4,6 +4,7 @@ import Link from "next/link";
 import { IconArrowRight, IconSparkles } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { useUser } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 export function CtaSection() {
   const { user } = useUser();
@@ -12,13 +13,13 @@ export function CtaSection() {
   return (
     <section className="py-20 md:py-28 relative overflow-hidden border-t border-border/40">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/10 via-card to-card p-8 sm:p-14 text-center overflow-hidden shadow-2xl shadow-primary/10">
+        <div className={`relative rounded-3xl ${landingTheme.ctaBox} p-8 sm:p-14 text-center overflow-hidden`}>
           {/* Ambient Glow */}
-          <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 size-96 rounded-full bg-primary/20 blur-[100px]" />
+          <div className={`pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 size-96 rounded-full ${landingTheme.ctaGlow}`} />
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs font-semibold text-primary mb-4">
+          <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-4 ${landingTheme.ctaBadge}`}>
             <IconSparkles className="size-3.5" />
-            <span>Get Started Today</span>
+            <span>Get Started in Under 60 Seconds</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-2xl mx-auto">
@@ -27,14 +28,14 @@ export function CtaSection() {
 
           <p className="mt-4 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Create your first conversational form in under 60 seconds. Free forever,
-            no credit card required.
+            no credit card required, instant live preview.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button
               asChild
               size="lg"
-              className="w-full sm:w-auto h-12 px-8 text-sm font-semibold gap-2 bg-gradient-to-r from-indigo-600 to-primary text-white shadow-lg shadow-primary/25 hover:opacity-95 hover:scale-[1.01] transition-all"
+              className={`w-full sm:w-auto h-12 px-8 text-sm font-semibold gap-2 ${landingTheme.primaryButton} hover:scale-[1.01] transition-all`}
             >
               <Link href={ctaHref}>
                 <span>{user ? "Go to Your Dashboard" : "Create a Free Form Now"}</span>
@@ -48,7 +49,7 @@ export function CtaSection() {
               size="lg"
               className="w-full sm:w-auto h-12 px-6 text-sm"
             >
-              <Link href="/forms">Explore Demo Forms</Link>
+              <Link href="/templates">Explore Pre-Built Templates</Link>
             </Button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { IconForms, IconArrowRight, IconSparkles } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { useUser } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 export function LandingNavbar() {
   const { user, isLoading } = useUser();
@@ -14,13 +15,13 @@ export function LandingNavbar() {
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex aspect-square size-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-primary to-purple-600 text-white shadow-md shadow-primary/20 transition-transform duration-200 group-hover:scale-105">
+          <div className={`flex aspect-square size-9 items-center justify-center rounded-xl ${landingTheme.logoGradient} transition-transform duration-200 group-hover:scale-105`}>
             <IconForms className="size-5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-base font-bold tracking-tight text-foreground">ChaiForm</span>
-              <Badge variant="outline" className="hidden sm:inline-flex text-[10px] py-0 px-1.5 h-4 border-primary/30 text-primary">
+              <Badge variant="outline" className={`hidden sm:inline-flex text-[10px] py-0 px-1.5 h-4 ${landingTheme.badge}`}>
                 v2.0
               </Badge>
             </div>
@@ -31,41 +32,28 @@ export function LandingNavbar() {
         </Link>
 
         {/* Center Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium text-muted-foreground">
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <Link
-            href="/explore"
-            className="transition-colors hover:text-primary text-xs lg:text-sm font-medium flex items-center gap-1.5"
+            href="/templates"
+            className="transition-colors hover:text-foreground text-sm font-medium flex items-center gap-1.5"
           >
             <span>Templates</span>
-            <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4 border-primary/30 text-primary bg-primary/5 font-normal">
-              Gallery
+            <Badge variant="outline" className={`text-[9px] py-0 px-1.5 h-4 ${landingTheme.badge} font-normal`}>
+              50+ Free
             </Badge>
           </Link>
           <a
             href="/#features"
-            className="transition-colors hover:text-foreground text-xs lg:text-sm"
+            className="transition-colors hover:text-foreground text-sm"
           >
             Features
           </a>
-          <a
-            href="/#live-demo"
-            className="flex items-center gap-1 transition-colors hover:text-foreground text-xs lg:text-sm"
+          <Link
+            href="/pricing"
+            className="transition-colors hover:text-foreground text-sm font-medium"
           >
-            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Live Demo
-          </a>
-          <a
-            href="/#architecture"
-            className="transition-colors hover:text-foreground text-xs lg:text-sm"
-          >
-            Architecture
-          </a>
-          <a
-            href="/#comparison"
-            className="transition-colors hover:text-foreground text-xs lg:text-sm"
-          >
-            Why ChaiForm
-          </a>
+            Pricing
+          </Link>
         </nav>
 
         {/* Right CTA Actions */}
@@ -74,7 +62,7 @@ export function LandingNavbar() {
             <Button
               asChild
               size="sm"
-              className="gap-2 bg-gradient-to-r from-indigo-600 to-primary text-white shadow-md shadow-primary/25 hover:opacity-95"
+              className={`gap-2 ${landingTheme.primaryButton}`}
             >
               <Link href="/dashboard">
                 <span>Go to Dashboard</span>
@@ -89,11 +77,11 @@ export function LandingNavbar() {
               <Button
                 asChild
                 size="sm"
-                className="gap-1.5 text-xs sm:text-sm bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+                className={`gap-1.5 text-xs sm:text-sm ${landingTheme.primaryButton}`}
               >
                 <Link href="/signup">
                   <IconSparkles className="size-3.5" />
-                  <span>Get Started</span>
+                  <span>Get Started Free</span>
                 </Link>
               </Button>
             </>

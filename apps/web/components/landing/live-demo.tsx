@@ -18,6 +18,7 @@ import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
 import { useUser } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 export function LiveDemoSection() {
   const { user } = useUser();
@@ -66,7 +67,7 @@ export function LiveDemoSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto">
-          <Badge variant="outline" className="text-xs px-3 py-1 border-primary/30 text-primary gap-1.5 mb-3">
+          <Badge variant="outline" className={`text-xs px-3 py-1 ${landingTheme.badge} gap-1.5 mb-3`}>
             <IconSparkles className="size-3.5" />
             Live Interactive Playground
           </Badge>
@@ -91,7 +92,7 @@ export function LiveDemoSection() {
 
             {/* Mock URL bar */}
             <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-background/80 border border-border/60 text-xs font-mono text-muted-foreground w-64 sm:w-80 truncate">
-              <IconLock className="size-3 text-emerald-500 shrink-0" />
+              <IconLock className={`size-3 ${landingTheme.iconColor} shrink-0`} />
               <span className="truncate">https://chaiform.app/form/interactive-preview</span>
             </div>
 
@@ -112,7 +113,7 @@ export function LiveDemoSection() {
           {/* Progress Bar */}
           <div className="w-full h-1 bg-muted">
             <div
-              className="h-full bg-gradient-to-r from-indigo-500 to-primary transition-all duration-300"
+              className={`h-full ${landingTheme.progressBar} transition-all duration-300`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -122,7 +123,7 @@ export function LiveDemoSection() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="flex flex-col items-center justify-center my-auto text-center max-w-md mx-auto py-6">
-                <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-5 shadow-inner">
+                <div className={`flex size-14 items-center justify-center rounded-2xl ${landingTheme.iconBg} mb-5 shadow-inner`}>
                   <IconSparkles className="size-7" />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
@@ -135,7 +136,7 @@ export function LiveDemoSection() {
                 <Button
                   onClick={handleNext}
                   size="lg"
-                  className="mt-6 gap-2 bg-primary text-primary-foreground shadow-md hover:scale-[1.02] transition-transform"
+                  className={`mt-6 gap-2 ${landingTheme.primaryButton} shadow-md hover:scale-[1.02] transition-transform`}
                 >
                   <span>Start Answering</span>
                   <IconArrowRight className="size-4" />
@@ -211,7 +212,7 @@ export function LiveDemoSection() {
                         }}
                         className={`flex items-center gap-3 p-3.5 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
                           isSelected
-                            ? "border-primary bg-primary/10 text-primary font-semibold shadow-xs"
+                            ? `${landingTheme.cardHighlightBorder} font-bold shadow-md`
                             : "border-border/80 bg-background/60 hover:bg-muted/80 text-foreground"
                         }`}
                       >
@@ -251,17 +252,17 @@ export function LiveDemoSection() {
                       <IconStarFilled
                         className={`size-8 transition-colors ${
                           star <= rating
-                            ? "text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-                            : "text-muted-foreground/30 hover:text-amber-400/50"
+                            ? landingTheme.ratingStar
+                            : "text-muted-foreground/30 hover:opacity-80"
                         }`}
                       />
                     </button>
                   ))}
                 </div>
-                <div className="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-amber-500">
+                <div className={`mt-3 flex items-center justify-center gap-1.5 text-xs font-medium ${landingTheme.primaryText}`}>
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: rating }).map((_, i) => (
-                      <IconStarFilled key={i} className="size-3.5 text-amber-400" />
+                      <IconStarFilled key={i} className="size-3.5" />
                     ))}
                   </div>
                   <span>{rating === 5 ? "5.0 / 5.0 • Outstanding!" : `${rating}.0 / 5.0 Stars`}</span>
@@ -270,7 +271,7 @@ export function LiveDemoSection() {
                 <Button
                   onClick={handleNext}
                   size="lg"
-                  className="mt-6 gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md hover:opacity-95"
+                  className={`mt-6 gap-2 ${landingTheme.primaryButton}`}
                 >
                   <IconCheck className="size-4 stroke-[3]" />
                   <span>Submit Demo Response</span>
