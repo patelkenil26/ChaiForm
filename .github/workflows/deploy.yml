@@ -49,14 +49,33 @@ jobs:
             NEXT_PUBLIC_API_URL=https://api.kenilpatel.in/trpc
           tags: ${{ vars.DOCKERHUB_USERNAME }}/chaiform-web:latest
 
-      # Step 6: Deploy on Oracle Cloud Server via SSH
+      # Step 6: Deploy on Oracle Cloud Server via Native OpenSSH
       - name: Deploy to Production Server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ vars.SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_IP: ${{ vars.SERVER_IP }}
+        run: |
+          mkdir -p ~/.ssh
+
+          # Handle multiline key or literal \n safely
+          if grep -q "\\n" <<< "$SSH_KEY"; then
+            echo -e "$SSH_KEY" > ~/.ssh/id_rsa
+          else
+            echo "$SSH_KEY" > ~/.ssh/id_rsa
+          fi
+
+          # Ensure trailing newline and strict permissions
+          sed -i -e '$a\' ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "Testing SSH key validity..."
+          ssh-keygen -l -f ~/.ssh/id_rsa
+
+          echo "Connecting to Oracle Cloud VM and deploying containers..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@"$SERVER_IP" << 'EOF'
+            set -e
+            echo "Successfully connected to Oracle Cloud Server!"
+
             # 1. Clone repository if not present, otherwise pull latest configs
             if [ ! -d "/home/ubuntu/ChaiForm" ]; then
               git clone https://github.com/patelkenil26/ChaiForm.git /home/ubuntu/ChaiForm
@@ -72,3 +91,8 @@ jobs:
 
             # 4. Clean old unused docker image layers to save disk space
             docker image prune -f
+
+            echo "Containers deployed successfully! Listing running containers:"
+            docker compose -f docker-compose.prod.yml ps
+          EOF
+
