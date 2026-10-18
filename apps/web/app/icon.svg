@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="87 116 280 280" width="280" height="280" fill="none">
+  <defs>
+    <linearGradient id="cf-gold" x1="105" y1="120" x2="350" y2="392" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="25%" stop-color="#FDE047"/>
+      <stop offset="65%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Golden C Arc (Bold, solid, perfectly weighted) -->
+  <path
+    d="M302.5 156 A118 118 0 1 0 302.5 356"
+    stroke="url(#cf-gold)"
+    stroke-width="36"
+    stroke-linecap="round"
+  />
+
+  <!-- Form Bar 1 (Thin, sleek, high-visibility cream) -->
+  <rect x="172" y="195" width="130" height="14" rx="7" fill="#FEF9C3" fill-opacity="0.88" />
+
+  <!-- Form Bar 2 (Active Golden Bar with Verified Checkmark Badge) -->
+  <rect x="172" y="231" width="178" height="14" rx="7" fill="url(#cf-gold)" />
+  <circle cx="335" cy="238" r="6.5" fill="#121214" />
+  <path
+    d="M331.5 238 L334 240.5 L338.5 235.5"
+    stroke="#FDE047"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Form Bar 3 (Thin, sleek cream) -->
+  <rect x="172" y="267" width="100" height="14" rx="7" fill="#FEF9C3" fill-opacity="0.88" />
+
+  <!-- Form Bar 4 (Thin, sleek cream) -->
+  <rect x="172" y="303" width="70" height="14" rx="7" fill="#FEF9C3" fill-opacity="0.88" />
+</svg>

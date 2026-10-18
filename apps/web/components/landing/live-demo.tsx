@@ -13,6 +13,7 @@ import {
   IconCode,
   IconDeviceLaptop,
   IconBolt,
+  IconCornerDownLeft,
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -93,7 +94,7 @@ export function LiveDemoSection() {
             {/* Mock URL bar */}
             <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-background/80 border border-border/60 text-xs font-mono text-muted-foreground w-64 sm:w-80 truncate">
               <IconLock className={`size-3 ${landingTheme.iconColor} shrink-0`} />
-              <span className="truncate">https://chaiform.app/form/interactive-preview</span>
+              <span className="truncate">https://chaiform.kenilpatel.in/form/interactive-preview</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -141,8 +142,8 @@ export function LiveDemoSection() {
                   <span>Start Answering</span>
                   <IconArrowRight className="size-4" />
                 </Button>
-                <span className="mt-3 text-[11px] text-muted-foreground font-mono">
-                  Press Enter ↵ to begin
+                <span className="mt-3 text-[11px] text-muted-foreground font-mono inline-flex items-center gap-1">
+                  Press Enter <IconCornerDownLeft className="size-3 inline" /> to begin
                 </span>
               </div>
             )}
@@ -170,8 +171,8 @@ export function LiveDemoSection() {
                   className="h-12 text-base px-4 border-primary/40 focus-visible:ring-primary shadow-xs"
                 />
                 <div className="flex items-center justify-between mt-5">
-                  <span className="text-[11px] text-muted-foreground font-mono">
-                    Press <kbd className="px-1.5 py-0.5 rounded bg-muted border text-xs">Enter ↵</kbd>
+                  <span className="text-[11px] text-muted-foreground font-mono inline-flex items-center gap-1">
+                    Press <kbd className="px-1.5 py-0.5 rounded bg-muted border text-xs inline-flex items-center gap-0.5">Enter <IconCornerDownLeft className="size-2.5" /></kbd>
                   </span>
                   <Button onClick={handleNext} size="sm" className="gap-1.5">
                     <span>Continue</span>
@@ -325,7 +326,10 @@ export function LiveDemoSection() {
                     <IconBolt className="size-3.5 text-amber-500" />
                     LIVE TRPC PAYLOAD STATE
                   </span>
-                  <span className="text-emerald-400 font-semibold">● STREAMING</span>
+                  <span className="text-emerald-400 font-semibold inline-flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                    STREAMING
+                  </span>
                 </div>
                 <pre>{JSON.stringify(samplePayload, null, 2)}</pre>
               </div>

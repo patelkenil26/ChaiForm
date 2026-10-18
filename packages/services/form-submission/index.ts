@@ -94,6 +94,55 @@ class FormSubmissionService {
             .orderBy(desc(formSubmissionTable.createdAt))
     }
 
+    public async getUserSubmissionsStats(payload: { userId: string }) {
+        const { userId } = payload
+
+        const [subCountResult] = await db
+            .select({ total: count() })
+            .from(formSubmissionTable)
+            .innerJoin(formsTable, eq(formSubmissionTable.formId, formsTable.id))
+            .where(eq(formsTable.createdBy, userId));
+
+        const recentSubmissions = await db
+            .select({
+                id: formSubmissionTable.id,
+                formId: formSubmissionTable.formId,
+                formTitle: formsTable.title,
+                formSlug: formsTable.slug,
+                values: formSubmissionTable.values,
+                createdAt: formSubmissionTable.createdAt,
+            })
+            .from(formSubmissionTable)
+            .innerJoin(formsTable, eq(formSubmissionTable.formId, formsTable.id))
+            .where(eq(formsTable.createdBy, userId))
+            .orderBy(desc(formSubmissionTable.createdAt))
+            .limit(6);
+
+        const allUserSubmissions = await db
+            .select({
+                id: formSubmissionTable.id,
+                formId: formSubmissionTable.formId,
+                createdAt: formSubmissionTable.createdAt,
+            })
+            .from(formSubmissionTable)
+            .innerJoin(formsTable, eq(formSubmissionTable.formId, formsTable.id))
+            .where(eq(formsTable.createdBy, userId))
+            .orderBy(desc(formSubmissionTable.createdAt));
+
+        return {
+            totalSubmissions: subCountResult ? Number(subCountResult.total) : 0,
+            recentSubmissions: recentSubmissions.map((s) => ({
+                id: s.id,
+                formId: s.formId,
+                formTitle: s.formTitle,
+                formSlug: s.formSlug,
+                answersCount: Array.isArray(s.values) ? s.values.length : 0,
+                createdAt: s.createdAt,
+            })),
+            allSubmissions: allUserSubmissions,
+        };
+    }
+
 }
 
 export default FormSubmissionService

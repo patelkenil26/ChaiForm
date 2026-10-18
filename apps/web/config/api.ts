@@ -1,6 +1,6 @@
 /**
  * =========================================================================
- * 🌐 FRONTEND API URL
+ * FRONTEND API URL
  * =========================================================================
  * Frontend ka backend URL sirf apps/web/.env (NEXT_PUBLIC_API_URL) se load hota hai.
  * Code me kahin bhi localhost hardcoded nahi hai.

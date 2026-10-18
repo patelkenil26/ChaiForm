@@ -26,6 +26,7 @@ import {
 } from "~/components/ui/command";
 import { Badge } from "~/components/ui/badge";
 import { useListForms, useListPublicForms } from "~/hooks/api/form";
+import { landingTheme } from "~/config/landing-theme";
 
 interface GlobalCommandPaletteProps {
   open?: boolean;
@@ -267,15 +268,15 @@ export function CommandSearchTrigger({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative flex h-8 w-full max-w-[170px] sm:max-w-[230px] md:max-w-[270px] items-center justify-between rounded-lg border border-border/60 bg-muted/40 px-2.5 text-xs text-muted-foreground transition-all hover:border-border hover:bg-muted/70 hover:text-foreground cursor-pointer select-none shadow-2xs ${
+      className={`group relative flex h-8 w-full max-w-[170px] sm:max-w-[230px] md:max-w-[270px] items-center justify-between rounded-lg border border-border/60 bg-muted/40 px-2.5 text-xs text-muted-foreground transition-all ${landingTheme.buttonOutlineHover} cursor-pointer select-none shadow-2xs ${
         className ?? ""
       }`}
     >
       <div className="flex items-center gap-1.5 truncate">
-        <IconSearch className="size-3.5 shrink-0 opacity-60 group-hover:opacity-90 transition-opacity" />
+        <IconSearch className={`size-3.5 shrink-0 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`} />
         <span className="truncate">Search forms, templates...</span>
       </div>
-      <kbd className="pointer-events-none hidden sm:inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-border/60 bg-background px-1.5 font-mono text-[9px] font-medium text-muted-foreground opacity-100 shadow-2xs">
+      <kbd className="pointer-events-none hidden sm:inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-border/60 bg-background px-1.5 font-mono text-[9px] font-medium text-muted-foreground opacity-100 shadow-2xs transition-colors">
         <span className="text-[10px]">Ctrl</span> K
       </kbd>
     </button>

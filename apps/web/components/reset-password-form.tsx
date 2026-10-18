@@ -4,15 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Loader2, ArrowLeft, KeyRound, CheckCircle2, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { Loader2, ArrowLeft, KeyRound, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
-import { CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { useResetPassword } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 type ResetPasswordValues = {
   token: string;
@@ -27,6 +26,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
 
   const { resetPasswordAsync } = useResetPassword();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const {
@@ -67,19 +67,22 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
   if (isSuccess) {
     return (
       <div className={cn("flex flex-col gap-6 text-center", className)} {...props}>
-        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
-          <CheckCircle2 className="size-6" />
+        <div className={`mx-auto flex size-12 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
+          <CheckCircle2 className={`size-6 ${landingTheme.iconColor}`} />
         </div>
 
         <div>
-          <h2 className="text-xl font-bold tracking-tight">Password Reset Complete!</h2>
-          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            Your password has been successfully updated. You can now use your new password to sign in.
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Password Reset Complete!</h2>
+          <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            Your password has been successfully updated. You can now use your new credentials to sign in.
           </p>
         </div>
 
         <div className="pt-2">
-          <Button asChild className="w-full gap-2">
+          <Button
+            asChild
+            className={`w-full h-10 ${landingTheme.primaryButton}`}
+          >
             <Link href="/login">
               <span>Proceed to Sign In</span>
             </Link>
@@ -91,51 +94,50 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <CardHeader className="p-0">
-        <div className="flex items-center gap-2 text-primary text-xs font-semibold uppercase tracking-wider mb-1">
+      <div className="flex flex-col gap-1.5 text-center">
+        <div className={`inline-flex items-center justify-center gap-1.5 ${landingTheme.primaryText} text-xs font-semibold uppercase tracking-wider mb-0.5`}>
           <KeyRound className="size-3.5" />
           <span>Security</span>
         </div>
-        <CardTitle className="text-2xl font-bold">Reset your password</CardTitle>
-        <CardDescription>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Reset your password</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Enter your new password below to regain access to your account.
-        </CardDescription>
-      </CardHeader>
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FieldGroup>
-          {/* If token wasn't in URL, let user enter token */}
-          {!tokenFromUrl && (
-            <Field>
-              <FieldLabel htmlFor="token">Reset Token</FieldLabel>
-              <Input
-                id="token"
-                type="text"
-                placeholder="Paste your reset token here"
-                required
-                {...register("token", { required: "Reset token is required" })}
-              />
-            </Field>
-          )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* If token wasn't in URL, let user enter token */}
+        {!tokenFromUrl && (
+          <div className="space-y-1.5">
+            <label htmlFor="token" className="text-sm font-medium text-foreground">
+              Reset Token
+            </label>
+            <Input
+              id="token"
+              type="text"
+              placeholder="Paste your reset token here"
+              required
+              className={`h-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
+              {...register("token", { required: "Reset token is required" })}
+            />
+            {errors.token && (
+              <span className="text-xs text-destructive">{errors.token.message}</span>
+            )}
+          </div>
+        )}
 
-          <Field>
-            <div className="flex items-center justify-between">
-              <FieldLabel htmlFor="newPassword">New Password</FieldLabel>
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              >
-                {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
-                <span>{showPassword ? "Hide" : "Show"}</span>
-              </button>
-            </div>
+        <div className="space-y-1.5">
+          <label htmlFor="newPassword" className="text-sm font-medium text-foreground">
+            New Password
+          </label>
+          <div className="relative">
             <Input
               id="newPassword"
               type={showPassword ? "text" : "password"}
               placeholder="Minimum 6 characters"
               required
               minLength={6}
+              className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
               {...register("newPassword", {
                 required: "New password is required",
                 minLength: {
@@ -144,54 +146,75 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
                 },
               })}
             />
-          </Field>
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded cursor-pointer"
+            >
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+          {errors.newPassword && (
+            <span className="text-xs text-destructive">{errors.newPassword.message}</span>
+          )}
+        </div>
 
-          <Field>
-            <FieldLabel htmlFor="confirmPassword">Confirm New Password</FieldLabel>
+        <div className="space-y-1.5">
+          <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
+            Confirm New Password
+          </label>
+          <div className="relative">
             <Input
               id="confirmPassword"
-              type={showPassword ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="Re-enter your new password"
               required
               minLength={6}
+              className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
               {...register("confirmPassword", {
                 required: "Please confirm your password",
                 validate: (val) => val === newPassword || "Passwords do not match",
               })}
             />
-            {errors.confirmPassword && (
-              <p className="text-xs text-destructive mt-1 font-medium">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </Field>
-
-          <Field className="pt-2">
-            <Button type="submit" disabled={isSubmitting} className="w-full gap-2 font-medium">
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  <span>Updating password...</span>
-                </>
-              ) : (
-                <>
-                  <ShieldCheck className="size-4" />
-                  <span>Reset Password</span>
-                </>
-              )}
-            </Button>
-          </Field>
-
-          <FieldDescription className="text-center pt-2">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded cursor-pointer"
             >
-              <ArrowLeft className="size-3.5" />
-              <span>Back to sign in</span>
-            </Link>
-          </FieldDescription>
-        </FieldGroup>
+              {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+          {errors.confirmPassword && (
+            <span className="text-xs text-destructive">{errors.confirmPassword.message}</span>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full h-10 mt-3 ${landingTheme.primaryButton} disabled:opacity-50`}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-4 animate-spin text-neutral-950" />
+              <span>Resetting password...</span>
+            </>
+          ) : (
+            <span>Update Password</span>
+          )}
+        </Button>
+
+        <p className="text-center pt-1.5">
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="size-3.5" />
+            <span>Back to sign in</span>
+          </Link>
+        </p>
       </form>
     </div>
   );

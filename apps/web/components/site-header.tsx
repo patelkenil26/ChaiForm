@@ -20,6 +20,7 @@ import {
   GlobalCommandPalette,
   CommandSearchTrigger,
 } from "~/components/global-command-palette"
+import { landingTheme } from "~/config/landing-theme"
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -167,18 +168,18 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2 shrink-0">
           <CommandSearchTrigger onClick={() => setSearchOpen(true)} />
           {pathname !== "/explore" && pathname !== "/templates" && (
-            <Button size="sm" asChild variant="ghost" className="hidden md:inline-flex text-xs gap-1.5 text-muted-foreground hover:text-foreground">
+            <Button size="sm" asChild variant="ghost" className={`hidden md:inline-flex text-xs gap-1.5 text-muted-foreground ${landingTheme.buttonGhostHover}`}>
               <Link href="/explore">
-                <IconCompass className="size-3.5" />
+                <IconCompass className={`size-3.5 ${landingTheme.iconColor}`} />
                 <span>Explore</span>
               </Link>
             </Button>
           )}
           <ThemesComingSoonButton />
           {pathname !== "/forms" && pathname !== "/dashboard/forms" && (
-            <Button size="sm" asChild variant="outline" className="hidden lg:inline-flex text-xs">
+            <Button size="sm" asChild variant="outline" className={`hidden lg:inline-flex text-xs border-border/70 ${landingTheme.buttonOutlineHover}`}>
               <Link href="/forms">
-                <IconClipboardPlus className="size-3.5 mr-1.5" />
+                <IconClipboardPlus className={`size-3.5 mr-1.5 ${landingTheme.iconColor}`} />
                 Forms
               </Link>
             </Button>

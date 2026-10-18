@@ -6,6 +6,7 @@ import Link from "next/link"
 import { IconCirclePlusFilled, type Icon } from "@tabler/icons-react"
 
 import { cn } from "~/lib/utils"
+import { landingTheme } from "~/config/landing-theme"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -68,10 +69,10 @@ export function NavMain({
                   isActive={active}
                   tooltip={item.title}
                   className={cn(
-                    "relative transition-all duration-150 rounded-lg px-2.5 py-2 font-medium",
+                    "relative transition-all duration-150 rounded-lg px-2.5 py-2 font-medium cursor-pointer",
                     active
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold border border-primary/50 ring-1 ring-primary/30 shadow-xs dark:bg-sidebar-accent dark:border-primary/50 dark:ring-primary/20"
-                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground border border-transparent"
+                      ? landingTheme.navActive
+                      : landingTheme.navInactive
                   )}
                 >
                   <Link href={item.url} className="flex items-center gap-2.5 w-full">
@@ -79,15 +80,15 @@ export function NavMain({
                       <item.icon
                         className={cn(
                           "size-4 shrink-0 transition-colors",
-                          active ? "text-primary stroke-[2.2]" : "text-muted-foreground"
+                          active ? `${landingTheme.iconColor} stroke-[2.2]` : "text-muted-foreground"
                         )}
                       />
                     )}
-                    <span className={cn("truncate", active && "text-foreground font-semibold")}>
+                    <span className={cn("truncate", active ? `${landingTheme.primaryText} font-semibold` : "")}>
                       {item.title}
                     </span>
                     {active && (
-                      <span className="ml-auto size-1.5 rounded-full bg-primary shrink-0" />
+                      <span className={cn("ml-auto size-1.5 rounded-full shrink-0", landingTheme.activeDot)} />
                     )}
                   </Link>
                 </SidebarMenuButton>

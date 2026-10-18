@@ -28,8 +28,8 @@
     }
 }
 
-# 2. Main Domain & Forms Subdomain (Next.js Frontend with Auto HTTPS)
-kenilpatel.in, chaiform.kenilpatel.in {
+# 2. Forms Subdomain (Next.js Frontend with Auto HTTPS)
+chaiform.kenilpatel.in {
     reverse_proxy web:3000 {
         header_up Host {host}
         header_up X-Real-IP {remote}

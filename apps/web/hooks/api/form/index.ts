@@ -15,6 +15,7 @@ export const useCreateForm = () => {
     } = trpc.form.createForm.useMutation({
         onSuccess: async () => {
             await utils.form.invalidate();
+            await utils.formSubmission.invalidate();
         },
     });
 
@@ -32,7 +33,11 @@ export const useCreateForm = () => {
 
 export const useListForms = () => {
     const { data: forms, error, isFetched, isFetching, isLoading, status } =
-        trpc.form.listForms.useQuery();
+        trpc.form.listForms.useQuery(undefined, {
+            staleTime: 5 * 60 * 1000,
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+        });
 
     return {
         forms,
@@ -146,7 +151,10 @@ export const useRecordFormView = () => {
 
 export const useListPublicForms = (filters?: { category?: string; search?: string }) => {
     const { data: publicForms, error, isFetched, isFetching, isLoading, status, refetch } =
-        trpc.form.listPublicForms.useQuery(filters);
+        trpc.form.listPublicForms.useQuery(filters, {
+            staleTime: 5 * 60 * 1000,
+            refetchOnWindowFocus: false,
+        });
 
     return {
         publicForms,

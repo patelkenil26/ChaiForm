@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   IconDashboard,
   IconSettings,
   IconClipboardText,
-  IconForms,
   IconInbox,
   IconCompass,
 } from "@tabler/icons-react";
@@ -72,8 +72,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg" className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link href="/dashboard" className="flex items-center gap-2.5">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <IconForms className="size-4.5" />
+                <div className="relative size-7 flex items-center justify-center">
+                  <Image
+                    src="/chaiform-logo-transparent-for-dark-bg (3).svg"
+                    alt="ChaiForm"
+                    width={28}
+                    height={28}
+                    className="size-full object-contain"
+                  />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="text-base font-bold tracking-tight">ChaiForm</span>

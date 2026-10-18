@@ -17,6 +17,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useUser } from "~/hooks/api/auth";
 import { useUseTemplate } from "~/hooks/api/form";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface PublicTemplateItem {
   id: string;
@@ -36,7 +37,7 @@ interface TemplateCardProps {
 const DEFAULT_CATEGORY = {
   label: "General Form",
   badgeClass: "bg-muted text-muted-foreground border-border",
-  accentBorder: "group-hover:border-primary/40",
+  accentBorder: landingTheme.cardBorderHover,
 };
 
 const CATEGORY_STYLES: Record<
@@ -100,8 +101,9 @@ export function TemplateCard({ template }: TemplateCardProps) {
 
   return (
     <div
-      className={`group relative flex flex-col justify-between rounded-xl border border-border/70 bg-card p-5 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 ${categoryConfig.accentBorder}`}
+      className={`group relative flex flex-col justify-between rounded-xl border ${landingTheme.cardBg} p-5 transition-all duration-200 overflow-hidden ${landingTheme.cardBorderHover} ${categoryConfig.accentBorder}`}
     >
+      <div className={landingTheme.cardBeam} />
       <div>
         {/* Header: Category Badge + Views */}
         <div className="flex items-center justify-between gap-2 mb-3">
@@ -121,7 +123,7 @@ export function TemplateCard({ template }: TemplateCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+        <h3 className={`text-base font-semibold text-foreground ${landingTheme.linkHover} line-clamp-1`}>
           {template.title}
         </h3>
 
@@ -133,12 +135,12 @@ export function TemplateCard({ template }: TemplateCardProps) {
         {/* Metadata Pill Row */}
         <div className="mt-4 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground border-t border-border/40 pt-3">
           <div className="flex items-center gap-1">
-            <IconHelpCircle className="size-3.5 text-primary" />
+            <IconHelpCircle className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>{template.fieldsCount ?? 0} Questions</span>
           </div>
 
           <div className="flex items-center gap-1">
-            <IconSparkles className="size-3.5 text-amber-500" />
+            <IconSparkles className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>Ready to use</span>
           </div>
         </div>
@@ -149,7 +151,7 @@ export function TemplateCard({ template }: TemplateCardProps) {
         <Button
           variant="outline"
           size="sm"
-          className="flex-1 text-xs gap-1.5 h-8.5"
+          className={`flex-1 text-xs gap-1.5 h-8.5 ${landingTheme.buttonOutlineHover}`}
           asChild
         >
           <Link href={targetUrl} target="_blank" rel="noopener noreferrer">
@@ -159,9 +161,8 @@ export function TemplateCard({ template }: TemplateCardProps) {
         </Button>
 
         <Button
-          variant="default"
           size="sm"
-          className="flex-1 text-xs gap-1.5 h-8.5 bg-primary text-primary-foreground hover:bg-primary/90"
+          className={`flex-1 text-xs gap-1.5 h-8.5 ${landingTheme.primaryButton}`}
           onClick={handleUseTemplate}
           disabled={isCloning}
         >

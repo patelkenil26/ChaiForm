@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { authenticatedProcedure, publicProcedure, router } from "../../trpc";
 import { generatePath } from "../../utils/path-generator";
 import { formSubmissionService } from "../../services";
@@ -6,6 +7,7 @@ import {
     submitFormOutputModel,
     getFormSubmissionsInputModel,
     getFormSubmissionsOutputModel,
+    getUserWorkspaceStatsOutputModel,
 } from "./model";
 
 const TAGS = ["Form Submissions"];
@@ -39,6 +41,21 @@ export const formSubmissionProcedures = {
         .output(getFormSubmissionsOutputModel)
         .query(async ({ input }) => {
             return formSubmissionService.getFormSubmissions({ formId: input.formId });
+        }),
+
+    getUserWorkspaceStats: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "GET",
+                path: getPath("/getUserWorkspaceStats"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(z.undefined())
+        .output(getUserWorkspaceStatsOutputModel)
+        .query(async ({ ctx }) => {
+            return formSubmissionService.getUserSubmissionsStats({ userId: ctx.user.id });
         }),
 };
 

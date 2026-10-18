@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlusIcon, ArchiveIcon, LayoutListIcon, SearchIcon, XIcon } from "lucide-react";
+import { PlusIcon, ArchiveIcon, LayoutListIcon, SearchIcon, XIcon, SparklesIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -18,6 +18,7 @@ import {
   useArchiveForm,
 } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 export default function FormsPage() {
   const router = useRouter();
@@ -154,51 +155,97 @@ export default function FormsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full animate-in fade-in duration-300">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Forms</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Manage, publish, duplicate, and organize all your forms.
+          <div className="flex items-center gap-2 mb-1.5">
+            <Badge
+              variant="outline"
+              className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.dashboardBadge}`}
+            >
+              <SparklesIcon className={`size-3 ${landingTheme.iconColor}`} />
+              <span>Form Directory</span>
+            </Badge>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Your <span className={landingTheme.gradientText}>Forms</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+            Manage, publish, duplicate, inspect analytics, and organize all your forms.
           </p>
         </div>
-        <Button onClick={() => setCreateOpen(true)} className="gap-1.5 self-start sm:self-auto">
+        <Button
+          onClick={() => setCreateOpen(true)}
+          className={`gap-1.5 self-start sm:self-auto h-9 text-xs ${landingTheme.primaryButton}`}
+        >
           <PlusIcon className="size-4" />
-          Create Form
+          <span>Create Form</span>
         </Button>
       </div>
 
       {/* Tabs & Search Row */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b pb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
+        <div className="inline-flex items-center p-0.5 rounded-lg bg-muted/30 border border-border/50 gap-1">
           <Button
             type="button"
-            variant={activeTab === "ACTIVE" ? "secondary" : "ghost"}
+            variant="ghost"
             size="sm"
             onClick={() => setActiveTab("ACTIVE")}
-            className="h-8 text-xs gap-1.5"
+            className={`h-7.5 px-3 text-xs gap-1.5 rounded-md transition-all cursor-pointer ${
+              activeTab === "ACTIVE"
+                ? landingTheme.tabActive
+                : landingTheme.tabInactive
+            }`}
           >
-            <LayoutListIcon className="size-3.5" />
-            Active Forms
-            <Badge variant="outline" className="ml-1 px-1.5 py-0 text-[10px]">
+            <LayoutListIcon
+              className={`size-3.5 ${
+                activeTab === "ACTIVE"
+                  ? landingTheme.iconColor
+                  : "text-muted-foreground"
+              }`}
+            />
+            <span>Active Forms</span>
+            <span
+              className={`ml-1 px-1.5 py-0.2 text-[10px] rounded-full font-medium tabular-nums ${
+                activeTab === "ACTIVE"
+                  ? "bg-muted text-foreground border border-border/70"
+                  : "bg-muted/40 text-muted-foreground border border-border/40"
+              }`}
+            >
               {activeForms.length}
-            </Badge>
+            </span>
           </Button>
 
           <Button
             type="button"
-            variant={activeTab === "ARCHIVED" ? "secondary" : "ghost"}
+            variant="ghost"
             size="sm"
             onClick={() => setActiveTab("ARCHIVED")}
-            className="h-8 text-xs gap-1.5"
+            className={`h-7.5 px-3 text-xs gap-1.5 rounded-md transition-all cursor-pointer ${
+              activeTab === "ARCHIVED"
+                ? landingTheme.tabActive
+                : landingTheme.tabInactive
+            }`}
           >
-            <ArchiveIcon className="size-3.5" />
-            Archived
+            <ArchiveIcon
+              className={`size-3.5 ${
+                activeTab === "ARCHIVED"
+                  ? landingTheme.iconColor
+                  : "text-muted-foreground"
+              }`}
+            />
+            <span>Archived</span>
             {archivedForms.length > 0 && (
-              <Badge variant="outline" className="ml-1 px-1.5 py-0 text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20">
+              <span
+                className={`ml-1 px-1.5 py-0.2 text-[10px] rounded-full font-medium tabular-nums ${
+                  activeTab === "ARCHIVED"
+                    ? "bg-muted text-foreground border border-border/70"
+                    : "bg-muted/40 text-muted-foreground border border-border/40"
+                }`}
+              >
                 {archivedForms.length}
-              </Badge>
+              </span>
             )}
           </Button>
         </div>
@@ -211,7 +258,7 @@ export default function FormsPage() {
             placeholder="Search forms..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-8 pl-8 pr-7 text-xs bg-card"
+            className={`h-8 pl-8 pr-7 text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
           />
           {searchQuery && (
             <button

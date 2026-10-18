@@ -20,3 +20,22 @@ export const useGetFormSubmissions = (formId: string) => {
         status,
     };
 };
+
+export const useUserWorkspaceStats = () => {
+    const { data: stats, error, isFetched, isFetching, isLoading, status, refetch } =
+        trpc.formSubmission.getUserWorkspaceStats.useQuery(undefined, {
+            staleTime: 5 * 60 * 1000,
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+        });
+
+    return {
+        stats,
+        error,
+        isFetched,
+        isFetching,
+        isLoading,
+        status,
+        refetch,
+    };
+};

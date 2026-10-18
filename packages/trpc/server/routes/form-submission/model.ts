@@ -35,3 +35,24 @@ export const getFormSubmissionsOutputModel = z.array(
             .nullable(),
     })
 );
+
+export const getUserWorkspaceStatsOutputModel = z.object({
+    totalSubmissions: z.number(),
+    recentSubmissions: z.array(
+        z.object({
+            id: z.string(),
+            formId: z.string().nullable(),
+            formTitle: z.string().nullable(),
+            formSlug: z.string().nullable(),
+            answersCount: z.number(),
+            createdAt: z.date().nullable(),
+        })
+    ),
+    allSubmissions: z.array(
+        z.object({
+            id: z.string(),
+            formId: z.string().nullable(),
+            createdAt: z.date().nullable(),
+        })
+    ),
+});

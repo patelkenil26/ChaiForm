@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { IconForms } from "@tabler/icons-react";
+import Image from "next/image";
 import { landingTheme } from "~/config/landing-theme";
 
 export function LandingFooter() {
@@ -10,8 +10,14 @@ export function LandingFooter() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Brand */}
         <div className="flex items-center gap-2.5">
-          <div className={`flex size-7 items-center justify-center rounded-lg ${landingTheme.logoGradient} font-bold shadow-xs`}>
-            <IconForms className="size-4" />
+          <div className="relative size-6 flex items-center justify-center">
+            <Image
+              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
+              alt="ChaiForm"
+              width={24}
+              height={24}
+              className="size-full object-contain"
+            />
           </div>
           <span className="font-bold text-foreground text-sm tracking-tight">ChaiForm</span>
           <span>• Modern Conversational Form Engine</span>

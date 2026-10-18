@@ -38,12 +38,16 @@ export function TemplatesSection() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [cloningId, setCloningId] = useState<string | null>(null);
 
-  const { publicForms, isLoading } = useListPublicForms({
-    category: selectedCategory === "ALL" ? undefined : selectedCategory,
-  });
-
+  // Fetch all public templates once with 5m cache (avoids repeated API calls on filter changes)
+  const { publicForms, isLoading } = useListPublicForms({});
   const formsList = publicForms ?? [];
-  const displayedForms = formsList.slice(0, 6);
+
+  // Client-side category filtering: instant response and zero redundant network calls
+  const filteredForms = formsList.filter((form) => {
+    if (selectedCategory === "ALL") return true;
+    return form.category?.toUpperCase() === selectedCategory.toUpperCase();
+  });
+  const displayedForms = filteredForms.slice(0, 6);
 
   const handleUseTemplate = async (templateId: string) => {
     if (!user) {

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { IconForms, IconArrowRight, IconSparkles } from "@tabler/icons-react";
+import Image from "next/image";
+import { IconArrowRight, IconSparkles } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { useUser } from "~/hooks/api/auth";
@@ -15,8 +16,15 @@ export function LandingNavbar() {
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className={`flex aspect-square size-9 items-center justify-center rounded-xl ${landingTheme.logoGradient} transition-transform duration-200 group-hover:scale-105`}>
-            <IconForms className="size-5" />
+          <div className="relative size-8 sm:size-9 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+            <Image
+              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
+              alt="ChaiForm Logo"
+              width={36}
+              height={36}
+              className="size-full object-contain"
+              priority
+            />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">

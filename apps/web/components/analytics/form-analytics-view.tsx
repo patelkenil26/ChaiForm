@@ -405,8 +405,8 @@ export function FormAnalyticsView({
               >
                 <defs>
                   <linearGradient id="submissionsColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} vertical={false} />
@@ -440,7 +440,7 @@ export function FormAnalyticsView({
                 <Area
                   type="monotone"
                   dataKey="submissions"
-                  stroke="#3b82f6"
+                  stroke="#f59e0b"
                   strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#submissionsColor)"

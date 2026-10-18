@@ -13,8 +13,21 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ChaiForm",
-  description: "Media Forwarding",
+  metadataBase: new URL("https://chaiform.kenilpatel.in"),
+  title: "ChaiForm • Next-Gen Conversational Form Builder",
+  description: "Build beautiful, high-converting conversational forms with ease.",
+  openGraph: {
+    title: "ChaiForm • Next-Gen Conversational Form Builder",
+    description: "Build beautiful, high-converting conversational forms with ease.",
+    url: "https://chaiform.kenilpatel.in",
+    siteName: "ChaiForm",
+    type: "website",
+  },
+  icons: {
+    icon: { url: "/chaiform-logo-transparent-for-dark-bg (3).svg", type: "image/svg+xml" },
+    shortcut: "/chaiform-logo-transparent-for-dark-bg (3).svg",
+    apple: "/chaiform-logo-transparent-for-dark-bg (3).svg",
+  },
 };
 
 export default function RootLayout({

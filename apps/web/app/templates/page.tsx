@@ -13,6 +13,7 @@ import {
   IconExternalLink,
   IconX,
   IconCheck,
+  IconBolt,
 } from "@tabler/icons-react";
 import { LandingNavbar } from "~/components/landing/navbar";
 import { LandingFooter } from "~/components/landing/footer";
@@ -45,11 +46,15 @@ export default function PublicTemplatesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cloningId, setCloningId] = useState<string | null>(null);
 
-  const { publicForms, isLoading } = useListPublicForms({
-    category: selectedCategory === "ALL" ? undefined : selectedCategory,
-  });
+  // Fetch all templates once with 5m cache (avoids repeated API calls on filter changes)
+  const { publicForms, isLoading } = useListPublicForms({});
 
   const filteredTemplates = (publicForms ?? []).filter((tpl) => {
+    // Category Filter
+    if (selectedCategory !== "ALL" && tpl.category?.toUpperCase() !== selectedCategory.toUpperCase()) {
+      return false;
+    }
+    // Search Query Filter
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase().trim();
     const matchesTitle = tpl.title.toLowerCase().includes(q);
@@ -263,8 +268,9 @@ export default function PublicTemplatesPage() {
 
           {/* Psychological Marketing Conversion Box */}
           <div className={`mt-16 rounded-2xl ${landingTheme.ctaBox} p-8 sm:p-10 text-center flex flex-col items-center`}>
-            <Badge variant="outline" className={`text-xs px-3 py-1 mb-3 ${landingTheme.ctaBadge}`}>
-              ⚡ Build Bespoke In 2 Minutes
+            <Badge variant="outline" className={`text-xs px-3 py-1 mb-3 gap-1.5 ${landingTheme.ctaBadge}`}>
+              <IconBolt className={`size-3.5 ${landingTheme.iconColor}`} />
+              <span>Build Bespoke In 2 Minutes</span>
             </Badge>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
               Need a custom form tailored for your specific brand?

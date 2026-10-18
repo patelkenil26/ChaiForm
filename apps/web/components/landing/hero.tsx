@@ -10,6 +10,7 @@ import {
   IconShieldLock,
   IconBrandGithub,
   IconBolt,
+  IconStarFilled,
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -31,7 +32,7 @@ export function HeroSection() {
         {/* Release / Announcement Badge */}
         <div className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-medium shadow-xs backdrop-blur-xs transition ${landingTheme.badge}`}>
           <IconSparkles className="size-3.5" />
-          <span>ChaiForm v2.0 Released</span>
+          <span className="font-semibold">ChaiForm v2.0 Released</span>
           <span className="opacity-40">•</span>
           <span className="opacity-90 font-normal">Conversational Flow, 14 Input Types & Instant Embeds</span>
           <IconArrowRight className="size-3" />
@@ -95,7 +96,13 @@ export function HeroSection() {
             </div>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className={`flex text-sm ${landingTheme.iconColor}`}>★★★★★</div>
+            <div className={`flex items-center gap-0.5 ${landingTheme.iconColor}`}>
+              <IconStarFilled className="size-3.5" />
+              <IconStarFilled className="size-3.5" />
+              <IconStarFilled className="size-3.5" />
+              <IconStarFilled className="size-3.5" />
+              <IconStarFilled className="size-3.5" />
+            </div>
             <span className="font-medium text-foreground">Loved by 1,400+ creators & developers</span>
           </div>
         </div>

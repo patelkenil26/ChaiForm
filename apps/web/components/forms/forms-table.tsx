@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Skeleton } from "~/components/ui/skeleton";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface FormListItem {
   id: string;
@@ -76,16 +77,17 @@ export function FormsTable({
   emptyMessage = "No forms yet. Click \"Create Form\" to start building.",
 }: FormsTableProps) {
   return (
-    <div className="rounded-xl border overflow-hidden bg-card shadow-xs">
+    <div className={`relative rounded-xl border ${landingTheme.cardBg} shadow-xs overflow-hidden ${landingTheme.cardBorderHover} transition-all duration-200`}>
+      <div className={landingTheme.cardBeam} />
       <Table>
-        <TableHeader className="bg-muted/60">
+        <TableHeader className="bg-muted/40 border-b border-border/60">
           <TableRow>
-            <TableHead className="font-semibold">Title</TableHead>
-            <TableHead className="w-44 font-semibold">Status</TableHead>
-            <TableHead className="w-36 font-semibold">Visibility</TableHead>
-            <TableHead className="font-semibold">Description</TableHead>
-            <TableHead className="w-28 font-semibold">Created</TableHead>
-            <TableHead className="w-44 text-right font-semibold">Actions</TableHead>
+            <TableHead className="font-semibold text-foreground">Title</TableHead>
+            <TableHead className="w-44 font-semibold text-foreground">Status</TableHead>
+            <TableHead className="w-36 font-semibold text-foreground">Visibility</TableHead>
+            <TableHead className="font-semibold text-foreground">Description</TableHead>
+            <TableHead className="w-28 font-semibold text-foreground">Created</TableHead>
+            <TableHead className="w-44 text-right font-semibold text-foreground">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -132,19 +134,19 @@ export function FormsTable({
               const isExpired = form.closesAt ? new Date() > new Date(form.closesAt) : false;
 
               return (
-                <TableRow key={form.id} className="hover:bg-muted/40 transition-colors">
+                <TableRow key={form.id} className={landingTheme.tableRowHover}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Link
                         href={`/forms/${form.id}`}
-                        className="hover:underline hover:text-primary transition-colors block"
+                        className={`${landingTheme.linkHover} block text-foreground`}
                       >
                         {form.title}
                       </Link>
                       {form.isArchived && (
                         <Badge
                           variant="outline"
-                          className="text-[10px] py-0 px-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 gap-1"
+                          className={`text-[10px] py-0 px-1.5 gap-1 ${landingTheme.draftBadge}`}
                         >
                           <ArchiveIcon className="size-2.5" />
                           Archived
@@ -155,7 +157,7 @@ export function FormsTable({
                     {(form.slug || form.closesAt || form.responseLimit || form.isPasswordProtected) && (
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
                         {form.slug && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
+                          <span className={landingTheme.slugBadge}>
                             /form/{form.slug}
                           </span>
                         )}
@@ -215,7 +217,7 @@ export function FormsTable({
                       ) : (
                         <Badge
                           variant="secondary"
-                          className="bg-amber-500/15 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border-amber-500/20 text-xs font-normal"
+                          className={landingTheme.draftBadge}
                         >
                           Draft
                         </Badge>
@@ -232,7 +234,7 @@ export function FormsTable({
                         onVisibilityChange(form.id, val)
                       }
                     >
-                      <SelectTrigger className="h-7 text-xs w-[110px] gap-1">
+                      <SelectTrigger className={`h-7 text-xs w-[110px] gap-1 border-border/70 ${landingTheme.inputFocus}`}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -263,7 +265,13 @@ export function FormsTable({
                   <TableCell>
                     <div className="flex items-center justify-end gap-1">
                       {/* Edit Builder */}
-                      <Button variant="ghost" size="icon" asChild title="Edit in builder">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        title="Edit in builder"
+                        className={landingTheme.buttonGhostHover}
+                      >
                         <Link href={`/forms/${form.id}`}>
                           <PencilIcon className="size-4" />
                           <span className="sr-only">Edit {form.title}</span>
@@ -271,7 +279,13 @@ export function FormsTable({
                       </Button>
 
                       {/* Submissions */}
-                      <Button variant="ghost" size="icon" asChild title="View Submissions">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        title="View Submissions"
+                        className={landingTheme.buttonGhostHover}
+                      >
                         <Link href={`/forms/${form.id}/submissions`}>
                           <BarChart3Icon className="size-4" />
                           <span className="sr-only">Submissions for {form.title}</span>
@@ -284,8 +298,9 @@ export function FormsTable({
                         size="icon"
                         title="Duplicate / Clone Form"
                         onClick={() => onClone(form.id)}
+                        className={landingTheme.buttonGhostHover}
                       >
-                        <CopyPlusIcon className="size-4 text-muted-foreground hover:text-foreground" />
+                        <CopyPlusIcon className="size-4 text-muted-foreground group-hover:text-foreground" />
                         <span className="sr-only">Clone {form.title}</span>
                       </Button>
 
@@ -295,6 +310,7 @@ export function FormsTable({
                         size="icon"
                         title="Copy Public Link"
                         onClick={() => onCopyLink(target)}
+                        className={landingTheme.buttonGhostHover}
                       >
                         <CopyIcon className="size-4" />
                         <span className="sr-only">Copy Link</span>
@@ -312,6 +328,7 @@ export function FormsTable({
                             slug: form.slug,
                           });
                         }}
+                        className={landingTheme.buttonGhostHover}
                       >
                         <QrCodeIcon className="size-4" />
                         <span className="sr-only">QR Code for {form.title}</span>
@@ -324,8 +341,9 @@ export function FormsTable({
                           size="icon"
                           title="Restore Form"
                           onClick={() => onToggleArchive(form.id, true)}
+                          className="hover:bg-emerald-500/15"
                         >
-                          <ArchiveRestoreIcon className="size-4 text-emerald-500 hover:text-emerald-600" />
+                          <ArchiveRestoreIcon className="size-4 text-emerald-400 hover:text-emerald-300" />
                           <span className="sr-only">Restore {form.title}</span>
                         </Button>
                       ) : (
@@ -334,14 +352,21 @@ export function FormsTable({
                           size="icon"
                           title="Archive Form"
                           onClick={() => onToggleArchive(form.id, false)}
+                          className={landingTheme.buttonGhostHover}
                         >
-                          <ArchiveIcon className="size-4 text-muted-foreground hover:text-amber-500" />
+                          <ArchiveIcon className={`size-4 text-muted-foreground hover:${landingTheme.iconColor}`} />
                           <span className="sr-only">Archive {form.title}</span>
                         </Button>
                       )}
 
                       {/* Open live public form */}
-                      <Button variant="ghost" size="icon" asChild title="Open Public Form">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        title="Open Public Form"
+                        className={landingTheme.buttonGhostHover}
+                      >
                         <Link href={`/form/${target}`} target="_blank">
                           <ExternalLinkIcon className="size-4" />
                           <span className="sr-only">Open {form.title}</span>

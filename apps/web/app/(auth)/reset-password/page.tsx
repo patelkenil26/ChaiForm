@@ -2,10 +2,10 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { IconForms } from "@tabler/icons-react";
-import { Loader2 } from "lucide-react";
-
+import Image from "next/image";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { ResetPasswordForm } from "~/components/reset-password-form";
+import { landingTheme } from "~/config/landing-theme";
 
 export const metadata = {
   title: "Reset Password • ChaiForm",
@@ -20,19 +20,33 @@ export default async function ResetPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted/40 p-6 md:p-10">
+    <div className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}>
+      {/* Background Ambient Glows */}
+      <div className={`pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full ${landingTheme.heroGlow} -z-10`} />
+
       <div className="flex w-full max-w-md flex-col gap-6">
+        {/* Brand Link */}
         <Link href="/" className="flex items-center gap-2.5 self-center group">
-          <div className="flex aspect-square size-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-primary to-purple-600 text-white shadow-md shadow-primary/20 transition-transform duration-200 group-hover:scale-105">
-            <IconForms className="size-5" />
+          <div className="relative size-9 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+            <Image
+              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
+              alt="ChaiForm"
+              width={36}
+              height={36}
+              className="size-full object-contain"
+              priority
+            />
           </div>
-          <span className="text-lg font-bold tracking-tight text-foreground">ChaiForm</span>
+          <span className="text-xl font-bold tracking-tight text-foreground">ChaiForm</span>
         </Link>
-        <div className="rounded-xl border border-border/80 bg-card text-card-foreground shadow-sm p-6 md:p-8">
+
+        {/* Card */}
+        <div className={`rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8 relative overflow-hidden`}>
+          <div className={landingTheme.cardBeam} />
           <Suspense
             fallback={
               <div className="flex flex-col items-center justify-center py-12 gap-3">
-                <Loader2 className="size-6 animate-spin text-primary" />
+                <Loader2 className={`size-6 animate-spin ${landingTheme.iconColor}`} />
                 <span className="text-xs text-muted-foreground">Loading password reset form...</span>
               </div>
             }
@@ -40,6 +54,15 @@ export default async function ResetPasswordPage() {
             <ResetPasswordForm />
           </Suspense>
         </div>
+
+        {/* Back to Home Link */}
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="size-3.5" />
+          <span>Back to ChaiForm</span>
+        </Link>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { ClockIcon, UsersIcon, LockIcon, Loader2Icon } from "lucide-react";
+import { ClockIcon, UsersIcon, LockIcon, Loader2Icon, CornerDownLeft } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -274,8 +274,8 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
                   Ctrl
                 </kbd>
                 <span>+</span>
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-medium rounded border bg-muted shadow-2xs">
-                  Enter ↵
+                <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-medium rounded border bg-muted shadow-2xs inline-flex items-center gap-0.5">
+                  Enter <CornerDownLeft className="size-2.5" />
                 </kbd>
                 <span>to submit from anywhere</span>
               </div>

@@ -295,16 +295,18 @@ export function BuilderPreviewModal({
                     {form?.isPublished ? (
                       <Badge
                         variant="default"
-                        className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px]"
+                        className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] inline-flex items-center gap-1.5"
                       >
-                        ● Published
+                        <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Published
                       </Badge>
                     ) : (
                       <Badge
                         variant="secondary"
-                        className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px]"
+                        className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] inline-flex items-center gap-1.5"
                       >
-                        ● Draft (Unpublished)
+                        <span className="size-1.5 rounded-full bg-amber-500" />
+                        Draft (Unpublished)
                       </Badge>
                     )}
                     {form?.slug && (

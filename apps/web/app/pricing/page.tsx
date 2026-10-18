@@ -11,6 +11,7 @@ import {
   IconBolt,
   IconFlame,
   IconBuildingStore,
+  IconStarFilled,
 } from "@tabler/icons-react";
 import { LandingNavbar } from "~/components/landing/navbar";
 import { LandingFooter } from "~/components/landing/footer";
@@ -147,8 +148,8 @@ export default function PricingPage() {
             {/* 2. Pro Creator (Most Popular) */}
             <div className={`relative rounded-2xl ${landingTheme.cardHighlightBorder} p-6 sm:p-8 flex flex-col justify-between scale-[1.02]`}>
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <Badge className={`${landingTheme.cardHighlightBadge} font-bold text-[10px] tracking-wide uppercase px-3 py-1 shadow-sm border-none`}>
-                  ★ Most Popular
+                <Badge className={`${landingTheme.cardHighlightBadge} font-bold text-[10px] tracking-wide uppercase px-3 py-1 shadow-sm border-none flex items-center gap-1`}>
+                  <IconStarFilled className="size-3 text-neutral-950" /> Most Popular
                 </Badge>
               </div>
 

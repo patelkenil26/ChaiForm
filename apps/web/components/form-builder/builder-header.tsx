@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { ThemesComingSoonButton } from "~/components/themes/themes-modal";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface BuilderFormData {
   id: string;
@@ -76,9 +77,9 @@ export function BuilderHeader({
   return (
     <>
       {/* Top Bar: Navigation, Title, Status Badges & Action Buttons */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-4">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
+          <Button variant="ghost" size="icon" asChild className={landingTheme.buttonGhostHover}>
             <Link href="/forms">
               <ArrowLeftIcon className="size-4" />
               <span className="sr-only">Back to forms</span>
@@ -87,32 +88,32 @@ export function BuilderHeader({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                {form?.title || "Form Builder"}
+                {form?.title ? <span className={landingTheme.gradientText}>{form.title}</span> : "Form Builder"}
               </h1>
               {form && (
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {form.isPublished ? (
                     <Badge
                       variant="default"
-                      className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs gap-1"
+                      className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs gap-1"
                     >
-                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Published
                     </Badge>
                   ) : (
                     <Badge
                       variant="secondary"
-                      className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs gap-1"
+                      className={`${landingTheme.draftBadge} gap-1`}
                     >
-                      <span className="size-1.5 rounded-full bg-amber-500" />
+                      <span className="size-1.5 rounded-full bg-amber-400" />
                       Draft (Closed)
                     </Badge>
                   )}
 
-                  <Badge variant="outline" className="text-xs text-muted-foreground gap-1">
+                  <Badge variant="outline" className="text-xs text-muted-foreground gap-1 border-border/70">
                     {form.visibility === "PUBLIC" ? (
                       <>
-                        <GlobeIcon className="size-3 text-blue-500" />
+                        <GlobeIcon className="size-3 text-blue-400" />
                         Public
                       </>
                     ) : (
@@ -124,7 +125,7 @@ export function BuilderHeader({
                   </Badge>
 
                   {form.slug && (
-                    <Badge variant="outline" className="text-xs font-mono text-muted-foreground gap-1">
+                    <Badge variant="outline" className={`${landingTheme.slugBadge} gap-1`}>
                       <LinkIcon className="size-3" />
                       /form/{form.slug}
                     </Badge>
@@ -136,7 +137,7 @@ export function BuilderHeader({
                       className={`text-xs gap-1 ${
                         form.isExpired
                           ? "border-destructive text-destructive bg-destructive/10"
-                          : "text-muted-foreground"
+                          : "text-muted-foreground border-border/70"
                       }`}
                     >
                       <ClockIcon className="size-3" />
@@ -154,8 +155,8 @@ export function BuilderHeader({
                       variant="outline"
                       className={`text-xs gap-1 ${
                         form.isLimitReached
-                          ? "border-amber-500 text-amber-600 bg-amber-500/10"
-                          : "text-muted-foreground"
+                          ? "border-amber-500 text-amber-500 bg-amber-500/10"
+                          : "text-muted-foreground border-border/70"
                       }`}
                     >
                       <UsersIcon className="size-3" />
@@ -166,7 +167,7 @@ export function BuilderHeader({
                   {form.isPasswordProtected && (
                     <Badge
                       variant="outline"
-                      className="text-xs gap-1 border-primary/20 bg-primary/5 text-primary"
+                      className={`${landingTheme.slugBadge} gap-1`}
                     >
                       <LockIcon className="size-3" />
                       Password Protected
@@ -176,7 +177,7 @@ export function BuilderHeader({
                   {form.isArchived && (
                     <Badge
                       variant="outline"
-                      className="text-xs gap-1 border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      className={`${landingTheme.slugBadge} gap-1`}
                     >
                       <ArchiveIcon className="size-3" />
                       Archived
@@ -193,17 +194,17 @@ export function BuilderHeader({
 
         <div className="flex items-center gap-2 flex-wrap">
           <ThemesComingSoonButton />
-          <Button variant="outline" size="sm" asChild>
+          <Button variant="outline" size="sm" asChild className={landingTheme.buttonOutlineHover}>
             <Link href={`/forms/${formId}/submissions`}>
-              <BarChart3Icon className="size-3.5 mr-1.5" />
+              <BarChart3Icon className={`size-3.5 mr-1.5 ${landingTheme.iconColor}`} />
               Submissions
             </Link>
           </Button>
-          <Button variant="outline" size="sm" onClick={onCopyLink}>
+          <Button variant="outline" size="sm" onClick={onCopyLink} className={landingTheme.buttonOutlineHover}>
             <CopyIcon className="size-3.5 mr-1.5" />
             Share Link
           </Button>
-          <Button variant="outline" size="sm" onClick={onOpenQr}>
+          <Button variant="outline" size="sm" onClick={onOpenQr} className={landingTheme.buttonOutlineHover}>
             <QrCodeIcon className="size-3.5 mr-1.5" />
             QR Code
           </Button>
@@ -211,18 +212,22 @@ export function BuilderHeader({
             variant="outline"
             size="sm"
             onClick={onOpenPreview}
-            className="gap-1.5 border-primary/25 hover:border-primary/50 text-foreground shadow-2xs font-medium"
+            className={`gap-1.5 ${landingTheme.buttonOutlineHover} shadow-2xs font-medium`}
           >
-            <EyeIcon className="size-3.5 text-primary" />
+            <EyeIcon className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>Preview</span>
           </Button>
-          <Button variant="outline" size="sm" asChild>
+          <Button variant="outline" size="sm" asChild className={landingTheme.buttonOutlineHover}>
             <Link href={publicPath} target="_blank">
               <ExternalLinkIcon className="size-3.5 mr-1.5" />
               Live Form
             </Link>
           </Button>
-          <Button size="sm" onClick={onAddField} className="gap-1.5">
+          <Button
+            size="sm"
+            onClick={onAddField}
+            className={`gap-1.5 ${landingTheme.primaryButton}`}
+          >
             <PlusIcon className="size-3.5" />
             Add Field
           </Button>
@@ -230,7 +235,7 @@ export function BuilderHeader({
       </div>
 
       {/* Creator Controls Bar: Publishing Status Switch & Visibility Mode Selector */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border bg-card/60 backdrop-blur-sm p-3.5 px-4 shadow-xs">
+      <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-border/75 ${landingTheme.cardBg} backdrop-blur-sm p-3.5 px-4 shadow-xs`}>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Switch

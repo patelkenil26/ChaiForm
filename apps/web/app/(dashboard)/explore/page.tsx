@@ -23,6 +23,7 @@ import {
   type PublicTemplateItem,
 } from "~/components/explore/template-card";
 import { useListPublicForms } from "~/hooks/api/form";
+import { landingTheme } from "~/config/landing-theme";
 
 interface FolderCategory {
   id: string;
@@ -37,8 +38,8 @@ const FOLDER_CATEGORIES: FolderCategory[] = [
     id: "ALL",
     name: "All Templates",
     description: "Browse all curated community templates",
-    colorClass: "text-primary",
-    iconBg: "bg-primary/10 text-primary border-primary/20",
+    colorClass: landingTheme.primaryText,
+    iconBg: landingTheme.iconBg,
   },
   {
     id: "SURVEYS",
@@ -129,20 +130,29 @@ export default function DashboardExplorePage() {
     FOLDER_CATEGORIES[0];
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full animate-in fade-in duration-300">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
         <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <Badge
+              variant="outline"
+              className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.dashboardBadge}`}
+            >
+              <IconSparkles className={`size-3 ${landingTheme.iconColor}`} />
+              <span>Curated Templates</span>
+            </Badge>
+          </div>
           <div className="flex items-center gap-2.5">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
               <IconCompass className="size-5" />
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                Templates Gallery
+                Templates <span className={landingTheme.gradientText}>Gallery</span>
               </h1>
-              <p className="text-xs md:text-sm text-muted-foreground">
-                Browse pre-built templates by folder or search to clone directly into your forms.
+              <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
+                Browse pre-built templates by folder or search to clone directly into your workspace.
               </p>
             </div>
           </div>
@@ -157,20 +167,20 @@ export default function DashboardExplorePage() {
               placeholder="Search templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-8 h-9 text-xs bg-card"
+              className={`pl-9 pr-8 h-9 text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <IconX className="size-3.5" />
               </button>
             )}
           </div>
 
-          <Button asChild size="sm" className="h-9 gap-1.5 text-xs shrink-0">
+          <Button asChild size="sm" className={`h-9 gap-1.5 text-xs shrink-0 ${landingTheme.primaryButton}`}>
             <Link href="/forms">
               <IconPlus className="size-3.5" />
               <span>Blank Form</span>
@@ -183,7 +193,7 @@ export default function DashboardExplorePage() {
       <div className="flex flex-col gap-3 border-b border-border/60 pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <IconFolderOpen className="size-4 text-primary" />
+            <IconFolderOpen className={`size-4 ${landingTheme.iconColor}`} />
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Categories
             </h2>
@@ -194,7 +204,7 @@ export default function DashboardExplorePage() {
               <button
                 type="button"
                 onClick={() => setSelectedFolder("ALL")}
-                className="text-primary hover:underline cursor-pointer font-medium"
+                className={`${landingTheme.primaryText} hover:underline cursor-pointer font-medium`}
               >
                 Reset to All
               </button>
@@ -222,8 +232,8 @@ export default function DashboardExplorePage() {
                 onClick={() => setSelectedFolder(folder.id)}
                 className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all cursor-pointer select-none ${
                   isSelected
-                    ? "border-primary bg-primary/10 text-foreground ring-1 ring-primary/40 shadow-xs"
-                    : "border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-card hover:border-border"
+                    ? landingTheme.tabActive
+                    : `border-border/70 bg-card/60 text-muted-foreground hover:text-foreground ${landingTheme.tabInactive}`
                 }`}
               >
                 {/* Folder Icon with preserved category color styling */}
@@ -238,7 +248,7 @@ export default function DashboardExplorePage() {
                 </div>
 
                 {/* Folder Name */}
-                <span className={isSelected ? "font-semibold text-foreground" : ""}>
+                <span className={isSelected ? `font-semibold ${landingTheme.primaryText}` : ""}>
                   {folder.name}
                 </span>
 
@@ -246,7 +256,7 @@ export default function DashboardExplorePage() {
                 <span
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono leading-none ${
                     isSelected
-                      ? "bg-primary/20 text-primary font-semibold"
+                      ? landingTheme.draftBadge
                       : "bg-muted text-muted-foreground group-hover:text-foreground"
                   }`}
                 >
