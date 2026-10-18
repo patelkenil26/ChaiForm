@@ -56,7 +56,16 @@ jobs:
           SERVER_IP: ${{ vars.SERVER_IP }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+
+          # Support both Base64-encoded key (bulletproof) and raw PEM key
+          if echo "$SSH_KEY" | grep -q "^LS0t"; then
+            echo "$SSH_KEY" | base64 -d > ~/.ssh/id_rsa
+          else
+            printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          fi
+
+          # Ensure strict permissions and proper ending
+          sed -i -e '$a\' ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
           echo "Connecting to Oracle Cloud VM and deploying containers..."
