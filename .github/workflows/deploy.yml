@@ -56,23 +56,11 @@ jobs:
           SERVER_IP: ${{ vars.SERVER_IP }}
         run: |
           mkdir -p ~/.ssh
-
-          # Handle multiline key or literal \n safely
-          if grep -q "\\n" <<< "$SSH_KEY"; then
-            echo -e "$SSH_KEY" > ~/.ssh/id_rsa
-          else
-            echo "$SSH_KEY" > ~/.ssh/id_rsa
-          fi
-
-          # Ensure trailing newline and strict permissions
-          sed -i -e '$a\' ~/.ssh/id_rsa
+          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          echo "Testing SSH key validity..."
-          ssh-keygen -l -f ~/.ssh/id_rsa
-
           echo "Connecting to Oracle Cloud VM and deploying containers..."
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@"$SERVER_IP" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa ubuntu@"$SERVER_IP" << 'EOF'
             set -e
             echo "Successfully connected to Oracle Cloud Server!"
 
