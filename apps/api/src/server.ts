@@ -19,8 +19,13 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
   baseUrl: env.BASE_URL.concat("/api"),
 });
 
-// Allowed origins for CORS (From apps/api/.env FRONTEND_URL)
-const allowedOrigins = [env.FRONTEND_URL].filter(Boolean);
+// Allowed origins for CORS (From apps/api/.env FRONTEND_URL & production domains)
+const allowedOrigins = [
+  env.FRONTEND_URL,
+  "https://kenilpatel.in",
+  "https://chaiform.kenilpatel.in",
+  "http://localhost:3000",
+].filter(Boolean);
 
 app.use(
   cors({

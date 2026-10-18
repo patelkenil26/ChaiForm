@@ -1,0 +1,37 @@
+# =========================================================================
+# 🐳 Production Dockerfile for Next.js Frontend (web)
+# Multi-stage build with Next.js Standalone Mode
+# =========================================================================
+FROM node:20-alpine AS base
+RUN npm install -g pnpm@9.0.0
+WORKDIR /app
+
+# Stage 1: Build Next.js app
+FROM base AS builder
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+COPY packages ./packages
+COPY apps/web ./apps/web
+
+ARG NEXT_PUBLIC_API_URL=https://api.kenilpatel.in/trpc
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV SKIP_ENV_VALIDATION=1
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter=web build
+
+# Stage 2: Ultra-lean production runner (~100MB)
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Copy standalone output from Next.js build
+COPY --from=builder /app/apps/web/.next/standalone ./
+COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder /app/apps/web/public ./apps/web/public
+
+EXPOSE 3000
+
+CMD ["node", "apps/web/server.js"]
