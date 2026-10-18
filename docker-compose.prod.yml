@@ -1,0 +1,79 @@
+services:
+  # 1. 🐘 Database Service (PostgreSQL with persistent SSD volume)
+  postgresdb:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    container_name: postgresdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chaiform
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # 2. ⚡ Backend Service (tRPC + Express API)
+  api:
+    image: kenil26/chaiform-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    container_name: trpc-api
+    depends_on:
+      - postgresdb
+    environment:
+      # 👉 Notice: Internal Docker hostname 'postgresdb' used (No localhost!)
+      DATABASE_URL: "postgresql://postgres:postgres@postgresdb:5432/chaiform"
+      JWT_SECRET: "chaiform_super_secret_production_key"
+      PORT: 8000
+      BASE_URL: "https://api.kenilpatel.in"
+      FRONTEND_URL: "https://chaiform.kenilpatel.in"
+    networks:
+      - app-network
+
+  # 3. 🌐 Frontend Service (Next.js 16 Web App Standalone)
+  web:
+    image: kenil26/chaiform-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        NEXT_PUBLIC_API_URL: "https://api.kenilpatel.in/trpc"
+    restart: unless-stopped
+    container_name: trpc-web
+    depends_on:
+      - api
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+    networks:
+      - app-network
+
+  # 4. 🛡️ Ingress Reverse Proxy (Caddy with Automatic Let's Encrypt SSL)
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    container_name: caddy-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # Stores SSL certificates permanently
+      - caddy_config:/config
+    depends_on:
+      - web
+      - api
+    networks:
+      - app-network
+
+volumes:
+  pg_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  app-network:
+    driver: bridge
