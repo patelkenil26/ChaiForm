@@ -49,8 +49,8 @@ export function HeroSection() {
 
         {/* Hero Description */}
         <p className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg lg:text-xl leading-relaxed">
-          Stop losing 70% of potential leads to intimidating 20-field static forms.
-          Collect <strong className="text-foreground font-semibold">3.5x more responses</strong> with fluid conversational UX, zero-CSS embed widgets, and real-time analytics.
+          Replace intimidating walls of static inputs with fluid, 1-question-at-a-time conversational forms.
+          Engineered for effortless mobile completion, instant QR code sharing, and real-time response analytics.
         </p>
 
         {/* CTA Button Group */}
@@ -74,36 +74,16 @@ export function HeroSection() {
           >
             <a href="#live-demo">
               <IconPlayerPlayFilled className={`size-3.5 ${landingTheme.iconColor}`} />
-              <span>Try Live Interactive Demo</span>
+              <span>Try Interactive Playground</span>
             </a>
           </Button>
         </div>
 
-        {/* Social Proof Stack & Ratings */}
-        <div className="mt-7 flex flex-col sm:flex-row items-center gap-3 text-xs text-muted-foreground">
-          <div className="flex -space-x-2">
-            <div className={`size-7 rounded-full ${landingTheme.iconBg} border-2 border-background flex items-center justify-center font-bold text-[10px]`}>
-              AK
-            </div>
-            <div className="size-7 rounded-full bg-blue-500/20 border-2 border-background text-blue-500 flex items-center justify-center font-bold text-[10px]">
-              SR
-            </div>
-            <div className="size-7 rounded-full bg-emerald-500/20 border-2 border-background text-emerald-500 flex items-center justify-center font-bold text-[10px]">
-              JD
-            </div>
-            <div className="size-7 rounded-full bg-purple-500/20 border-2 border-background text-purple-500 flex items-center justify-center font-bold text-[10px]">
-              +1k
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className={`flex items-center gap-0.5 ${landingTheme.iconColor}`}>
-              <IconStarFilled className="size-3.5" />
-              <IconStarFilled className="size-3.5" />
-              <IconStarFilled className="size-3.5" />
-              <IconStarFilled className="size-3.5" />
-              <IconStarFilled className="size-3.5" />
-            </div>
-            <span className="font-medium text-foreground">Loved by 1,400+ creators & developers</span>
+        {/* Authentic Creator Badge */}
+        <div className="mt-7 flex items-center justify-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/60 bg-card/60 backdrop-blur-sm text-xs text-muted-foreground shadow-2xs">
+            <IconSparkles className={`size-3.5 ${landingTheme.iconColor}`} />
+            <span>Built for founders, marketers, and event organizers</span>
           </div>
         </div>
 
@@ -113,7 +93,7 @@ export function HeroSection() {
             <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
-            <span>Free forever tier</span>
+            <span>Free tier forever</span>
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -127,37 +107,37 @@ export function HeroSection() {
             <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
-            <span>30-second setup</span>
+            <span>Build & publish in under 60 seconds</span>
           </div>
 
           <div className="flex items-center gap-1.5">
             <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
-            <span>100% Type-Safe tRPC & PostgreSQL</span>
+            <span>Embed anywhere with zero CSS</span>
           </div>
         </div>
 
-        {/* Metric Badges Strip */}
+        {/* Real Product Core Value Strip */}
         <div className="mt-12 w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">3.5x</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">Higher completion rate</p>
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>1-At-A-Time</div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">Conversational pacing</p>
           </div>
 
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">&lt; 30s</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">Time to build & publish</p>
+            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">14 Types</div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">Flexible input fields</p>
           </div>
 
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>100%</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">End-to-end type safety</p>
+            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">1-Click</div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">Instant share & iframe embeds</p>
           </div>
 
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>28,000+</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">Responses collected</p>
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>Live Feed</div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">Instant analytics & CSV export</p>
           </div>
         </div>
       </div>

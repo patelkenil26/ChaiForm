@@ -2,51 +2,164 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { IconSparkles, IconMail } from "@tabler/icons-react";
 import { landingTheme } from "~/config/landing-theme";
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-border/40 bg-background/60 py-12 text-xs text-muted-foreground">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Brand */}
-        <div className="flex items-center gap-2.5">
-          <div className="relative size-6 flex items-center justify-center">
-            <Image
-              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-              alt="ChaiForm"
-              width={24}
-              height={24}
-              className="size-full object-contain"
-            />
+    <footer className="border-t border-border/40 bg-card/30 backdrop-blur-md pt-16 pb-12 text-xs text-muted-foreground">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          {/* Brand Info (Spans 2 cols on md) */}
+          <div className="col-span-2 space-y-4">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="relative size-7 flex items-center justify-center">
+                <Image
+                  src="/chaiform-logo-transparent-for-dark-bg (3).svg"
+                  alt="ChaiForm"
+                  width={28}
+                  height={28}
+                  className="size-full object-contain"
+                />
+              </div>
+              <span className="font-bold text-foreground text-base tracking-tight">ChaiForm</span>
+            </Link>
+            <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
+              Create fluid, conversational forms that people actually enjoy filling. 1-question-at-a-time focus, instant QR codes, and real-time response analytics.
+            </p>
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground pt-1">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>All systems operational • SSL Encrypted</span>
+            </div>
           </div>
-          <span className="font-bold text-foreground text-sm tracking-tight">ChaiForm</span>
-          <span>• Modern Conversational Form Engine</span>
+
+          {/* Column 1: Product */}
+          <div>
+            <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider mb-3">
+              Product
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/#demo" className="hover:text-foreground transition-colors">
+                  Live Interactive Demo
+                </Link>
+              </li>
+              <li>
+                <Link href="/#features" className="hover:text-foreground transition-colors">
+                  14 Field Types
+                </Link>
+              </li>
+              <li>
+                <Link href="/#integrations" className="hover:text-foreground transition-colors">
+                  Integrations
+                </Link>
+              </li>
+              <li>
+                <Link href="/templates" className="hover:text-foreground transition-colors">
+                  Starter Templates
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="hover:text-foreground transition-colors">
+                  Pricing Plans
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 2: Resources & Support */}
+          <div>
+            <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider mb-3">
+              Resources
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/#faq" className="hover:text-foreground transition-colors">
+                  Help & FAQs
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/KenilPatel/chaiform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground transition-colors"
+                >
+                  GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@chaiform.kenilpatel.in"
+                  className="hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                >
+                  <IconMail className="size-3" />
+                  <span>Contact Support</span>
+                </a>
+              </li>
+              <li>
+                <span className="text-muted-foreground/60 cursor-default">
+                  Changelog (v2.4 Active)
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Legal & Trust */}
+          <div>
+            <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider mb-3">
+              Legal & Trust
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/privacy" className="hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-foreground transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/login" className="hover:text-foreground transition-colors">
+                  Sign In
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/signup"
+                  className={`hover:${landingTheme.primaryText} transition-colors font-medium`}
+                >
+                  Create Free Account
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Links */}
-        <div className="flex items-center flex-wrap justify-center gap-6">
-          <Link href="/templates" className="hover:text-foreground transition-colors">
-            Templates
-          </Link>
-          <Link href="/#features" className="hover:text-foreground transition-colors">
-            Features
-          </Link>
-          <Link href="/pricing" className="hover:text-foreground transition-colors">
-            Pricing
-          </Link>
-          <Link href="/login" className="hover:text-foreground transition-colors">
-            Sign In
-          </Link>
-          <Link href="/signup" className={`hover:${landingTheme.primaryText} transition-colors font-medium`}>
-            Get Started Free
-          </Link>
-        </div>
-
-        {/* Copyright */}
-        <div className="flex items-center gap-1">
-          <span>© {new Date().getFullYear()} ChaiForm. Engineered for 3.5x higher responses.</span>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+          <p>© {new Date().getFullYear()} ChaiForm. Beautiful conversational forms that convert.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-foreground transition-colors">
+              Terms
+            </Link>
+            <span>•</span>
+            <a
+              href="mailto:support@chaiform.kenilpatel.in"
+              className="hover:text-foreground transition-colors"
+            >
+              support@chaiform.kenilpatel.in
+            </a>
+          </div>
         </div>
       </div>
     </footer>
   );
 }
+

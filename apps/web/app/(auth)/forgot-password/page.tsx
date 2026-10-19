@@ -1,5 +1,3 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -8,16 +6,14 @@ import { landingTheme } from "~/config/landing-theme";
 
 export const metadata = {
   title: "Forgot Password • ChaiForm",
-  description: "Recover your ChaiForm account password",
+  description: "Recover your ChaiForm account password with an email reset link.",
+  openGraph: {
+    title: "Forgot Password • ChaiForm",
+    description: "Recover your ChaiForm account password with an email reset link.",
+  },
 };
 
-export default async function ForgotPasswordPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("authentication-token")?.value;
-  if (token) {
-    redirect("/dashboard");
-  }
-
+export default function ForgotPasswordPage() {
   return (
     <div className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}>
       {/* Background Ambient Glows */}

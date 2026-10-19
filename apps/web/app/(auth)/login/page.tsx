@@ -1,16 +1,25 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { LoginForm } from "~/components/login-form";
 import { landingTheme } from "~/config/landing-theme";
 
 export const metadata = {
   title: "Sign In • ChaiForm",
-  description: "Sign in to your ChaiForm account",
+  description: "Sign in to your ChaiForm account to create and manage conversational forms.",
+  openGraph: {
+    title: "Sign In • ChaiForm",
+    description: "Sign in to your ChaiForm account to create and manage conversational forms.",
+  },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const params = await searchParams;
+  const redirectUrl = params?.redirect || "/dashboard";
 
   return (
     <div className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}>
@@ -36,16 +45,7 @@ export default function LoginPage() {
         {/* Card */}
         <div className={`rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8 relative overflow-hidden`}>
           <div className={landingTheme.cardBeam} />
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center py-12 gap-2 text-sm text-muted-foreground">
-                <Loader2 className={`size-5 animate-spin ${landingTheme.iconColor}`} />
-                <span>Loading sign in...</span>
-              </div>
-            }
-          >
-            <LoginForm />
-          </Suspense>
+          <LoginForm redirectUrl={redirectUrl} />
         </div>
 
         {/* Back to Home Link */}

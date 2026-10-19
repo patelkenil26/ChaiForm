@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Loader2, ArrowLeft, KeyRound, CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { Loader2, ArrowLeft, KeyRound, CheckCircle2, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useResetPassword } from "~/hooks/api/auth";
+import { parseAuthErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
 
 type ResetPasswordValues = {
@@ -19,15 +20,19 @@ type ResetPasswordValues = {
   confirmPassword: string;
 };
 
-export function ResetPasswordForm({ className, ...props }: React.ComponentProps<"div">) {
+export function ResetPasswordForm({
+  className,
+  initialToken = "",
+  ...props
+}: React.ComponentProps<"div"> & { initialToken?: string }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const tokenFromUrl = searchParams.get("token") || "";
+  const tokenFromUrl = initialToken;
 
   const { resetPasswordAsync } = useResetPassword();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
 
   const {
     register,
@@ -45,8 +50,15 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
   const newPassword = watch("newPassword");
 
   const onSubmit: SubmitHandler<ResetPasswordValues> = async (values) => {
+    setErrorBanner(null);
+
     if (values.newPassword !== values.confirmPassword) {
-      toast.error("Passwords do not match");
+      const err = {
+        title: "Password Mismatch",
+        description: "Your confirm password does not match your entered password.",
+      };
+      setErrorBanner(err);
+      toast.error(err.title, { description: err.description });
       return;
     }
 
@@ -57,10 +69,13 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
       });
 
       setIsSuccess(true);
-      toast.success("Password reset successfully!");
+      toast.success("Password reset successfully! You can now sign in.");
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to reset password";
-      toast.error(msg);
+      const parsed = parseAuthErrorMessage(err);
+      setErrorBanner(parsed);
+      toast.error(parsed.title, {
+        description: parsed.description,
+      });
     }
   };
 
@@ -104,6 +119,16 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
           Enter your new password below to regain access to your account.
         </p>
       </div>
+
+      {errorBanner && (
+        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
+          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
+            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
+          </div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* If token wasn't in URL, let user enter token */}

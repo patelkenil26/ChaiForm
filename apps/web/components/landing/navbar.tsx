@@ -43,12 +43,9 @@ export function LandingNavbar() {
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <Link
             href="/templates"
-            className="transition-colors hover:text-foreground text-sm font-medium flex items-center gap-1.5"
+            className="transition-colors hover:text-foreground text-sm font-medium"
           >
-            <span>Templates</span>
-            <Badge variant="outline" className={`text-[9px] py-0 px-1.5 h-4 ${landingTheme.badge} font-normal`}>
-              50+ Free
-            </Badge>
+            Templates
           </Link>
           <a
             href="/#features"

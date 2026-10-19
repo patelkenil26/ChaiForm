@@ -247,7 +247,7 @@ export function TemplatesSection() {
           >
             <Link href="/templates">
               <IconSparkles className="size-4" />
-              <span>Explore All {formsList.length}+ Templates in Showcase</span>
+              <span>Browse All Starter Templates</span>
               <IconArrowRight className="size-4" />
             </Link>
           </Button>

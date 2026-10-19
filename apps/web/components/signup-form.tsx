@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, AlertCircle, Check, X } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useSignup, useUser } from "~/hooks/api/auth";
-import { useRouter, useSearchParams } from "next/navigation";
+import { parseAuthErrorMessage } from "~/lib/error";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { landingTheme } from "~/config/landing-theme";
 
@@ -18,15 +20,18 @@ type SignupFormValues = {
   confirmPassword: string;
 };
 
-export function SignupForm({ className, ...props }: React.ComponentProps<"form">) {
+export function SignupForm({
+  className,
+  redirectUrl = "/dashboard",
+  ...props
+}: React.ComponentProps<"form"> & { redirectUrl?: string }) {
   const { createUserWithEmailAndPasswordAsync } = useSignup();
   const { user, isLoading: isUserLoading } = useUser();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -38,6 +43,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm<SignupFormValues>({
     defaultValues: {
@@ -48,18 +54,51 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     },
   });
 
+  const passwordValue = watch("password") || "";
+
   const onSubmit: SubmitHandler<SignupFormValues> = async (values) => {
+    setErrorBanner(null);
+
     if (values.password !== values.confirmPassword) {
       setError("confirmPassword", { message: "Passwords do not match" });
+      const err = {
+        title: "Password Mismatch",
+        description: "Your confirm password does not match your entered password.",
+      };
+      setErrorBanner(err);
+      toast.error(err.title, { description: err.description });
       return;
     }
 
-    await createUserWithEmailAndPasswordAsync({
-      email: values.email,
-      fullName: values.name,
-      password: values.password,
-    });
-    router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
+    if (values.password.length < 8) {
+      setError("password", { message: "Password must be at least 8 characters" });
+      const err = {
+        title: "Password Too Short",
+        description: "Password must be at least 8 characters long.",
+      };
+      setErrorBanner(err);
+      toast.error(err.title, { description: err.description });
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPasswordAsync({
+        email: values.email.trim().toLowerCase(),
+        fullName: values.name.trim(),
+        password: values.password,
+      });
+      toast.success("Account created successfully! Welcome to ChaiForm.");
+      router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
+    } catch (err: unknown) {
+      const parsed = parseAuthErrorMessage(err);
+      setErrorBanner(parsed);
+      toast.error(parsed.title, {
+        description: parsed.description,
+      });
+      if (parsed.title === "Account Already Exists") {
+        setError("email", { message: "Email already registered. Please sign in instead." });
+      }
+    }
   };
 
   return (
@@ -75,6 +114,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
         </p>
       </div>
 
+      {errorBanner && (
+        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
+          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
+            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-3.5">
         <div className="space-y-1.5">
           <label htmlFor="name" className="text-sm font-medium text-foreground">
@@ -84,24 +133,39 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
             id="name"
             type="text"
             placeholder="John Doe"
-            required
             className={`h-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-            {...register("name", { required: true })}
+            {...register("name", {
+              required: "Full name is required",
+              minLength: { value: 2, message: "Name must be at least 2 characters" },
+              onChange: () => setErrorBanner(null),
+            })}
           />
+          {errors.name && (
+            <span className="text-xs text-destructive">{errors.name.message}</span>
+          )}
         </div>
 
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-foreground">
-            Email
+            Email Address
           </label>
           <Input
             id="email"
             type="email"
             placeholder="you@domain.com"
-            required
             className={`h-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Email address is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address",
+              },
+              onChange: () => setErrorBanner(null),
+            })}
           />
+          {errors.email && (
+            <span className="text-xs text-destructive">{errors.email.message}</span>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -113,9 +177,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              required
               className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("password", { required: true, minLength: 8 })}
+              {...register("password", {
+                required: "Password is required",
+                minLength: { value: 8, message: "Password must be at least 8 characters" },
+                onChange: () => setErrorBanner(null),
+              })}
             />
             <button
               type="button"
@@ -130,7 +197,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
               )}
             </button>
           </div>
-          <span className="text-[11px] text-muted-foreground">Must be at least 8 characters long</span>
+          {errors.password ? (
+            <span className="text-xs text-destructive">{errors.password.message}</span>
+          ) : (
+            <div className="flex items-center gap-2 pt-0.5 text-[11px] text-muted-foreground">
+              <span className={`inline-flex items-center gap-1 ${passwordValue.length >= 8 ? "text-emerald-400 font-medium" : "text-muted-foreground"}`}>
+                {passwordValue.length >= 8 ? <Check className="size-3 text-emerald-400" /> : <span className="size-1.5 rounded-full bg-muted-foreground/40" />}
+                <span>8+ characters</span>
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -142,9 +218,11 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
               id="confirm-password"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
-              required
               className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("confirmPassword", { required: true })}
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                onChange: () => setErrorBanner(null),
+              })}
             />
             <button
               type="button"
@@ -173,7 +251,18 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
           {isSubmitting ? "Creating account..." : "Get Started Free"}
         </Button>
 
-        <p className="text-center text-xs text-muted-foreground pt-1.5">
+        <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
+          By continuing, you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-foreground">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="underline hover:text-foreground">
+            Privacy Policy
+          </Link>.
+        </p>
+
+        <p className="text-center text-xs text-muted-foreground pt-1">
           Already have an account?{" "}
           <Link
             href="/login"
@@ -186,3 +275,4 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     </form>
   );
 }
+

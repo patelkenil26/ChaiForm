@@ -1,23 +1,25 @@
-import { Suspense } from "react";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { ResetPasswordForm } from "~/components/reset-password-form";
 import { landingTheme } from "~/config/landing-theme";
 
 export const metadata = {
   title: "Reset Password • ChaiForm",
-  description: "Set a new password for your ChaiForm account",
+  description: "Set a new secure password for your ChaiForm account.",
+  openGraph: {
+    title: "Reset Password • ChaiForm",
+    description: "Set a new secure password for your ChaiForm account.",
+  },
 };
 
-export default async function ResetPasswordPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("authentication-token")?.value;
-  if (token) {
-    redirect("/dashboard");
-  }
+export default async function ResetPasswordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
+  const params = await searchParams;
+  const token = params?.token || "";
 
   return (
     <div className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}>
@@ -43,16 +45,7 @@ export default async function ResetPasswordPage() {
         {/* Card */}
         <div className={`rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8 relative overflow-hidden`}>
           <div className={landingTheme.cardBeam} />
-          <Suspense
-            fallback={
-              <div className="flex flex-col items-center justify-center py-12 gap-3">
-                <Loader2 className={`size-6 animate-spin ${landingTheme.iconColor}`} />
-                <span className="text-xs text-muted-foreground">Loading password reset form...</span>
-              </div>
-            }
-          >
-            <ResetPasswordForm />
-          </Suspense>
+          <ResetPasswordForm initialToken={token} />
         </div>
 
         {/* Back to Home Link */}

@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useSignIn, useUser } from "~/hooks/api/auth";
+import { parseAuthErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
 
 type LoginFormValues = {
@@ -16,14 +18,17 @@ type LoginFormValues = {
   password: string;
 };
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function LoginForm({
+  className,
+  redirectUrl = "/dashboard",
+  ...props
+}: React.ComponentProps<"div"> & { redirectUrl?: string }) {
   const { signInUserWithEmailAndPasswordAsync } = useSignIn();
   const { user, isLoading: isUserLoading } = useUser();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   const [showPassword, setShowPassword] = useState(false);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -34,7 +39,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
@@ -43,11 +48,21 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   });
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (values) => {
-    await signInUserWithEmailAndPasswordAsync({
-      email: values.email,
-      password: values.password,
-    });
-    router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
+    setErrorBanner(null);
+    try {
+      await signInUserWithEmailAndPasswordAsync({
+        email: values.email.trim().toLowerCase(),
+        password: values.password,
+      });
+      toast.success("Welcome back! Redirecting to dashboard...");
+      router.replace(redirectUrl.startsWith("/") ? redirectUrl : "/dashboard");
+    } catch (err: unknown) {
+      const parsed = parseAuthErrorMessage(err);
+      setErrorBanner(parsed);
+      toast.error(parsed.title, {
+        description: parsed.description,
+      });
+    }
   };
 
   return (
@@ -59,22 +74,41 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         </p>
       </div>
 
+      {errorBanner && (
+        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
+          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
+            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-foreground">
-            Email
+            Email Address
           </label>
           <Input
             id="email"
             type="email"
             placeholder="you@domain.com"
-            required
             className={`h-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Email address is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address",
+              },
+              onChange: () => setErrorBanner(null),
+            })}
           />
+          {errors.email && (
+            <span className="text-xs text-destructive">{errors.email.message}</span>
+          )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label htmlFor="password" className="text-sm font-medium text-foreground">
               Password
@@ -91,9 +125,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              required
               className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("password", { required: true })}
+              {...register("password", {
+                required: "Password is required",
+                onChange: () => setErrorBanner(null),
+              })}
             />
             <button
               type="button"
@@ -108,6 +144,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               )}
             </button>
           </div>
+          {errors.password && (
+            <span className="text-xs text-destructive">{errors.password.message}</span>
+          )}
         </div>
 
         <Button

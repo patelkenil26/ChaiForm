@@ -13,27 +13,27 @@ export function ComparisonSection() {
     {
       feature: "Keyboard & Mobile Usability",
       traditional: "Clunky mobile zooming, requires manual clicking",
-      chaiform: "Full keyboard shortcuts (Enter, Tab, 1-9) & mobile gestures",
+      chaiform: "Full keyboard navigation (Enter, 1-9 shortcuts) & smooth transitions",
     },
     {
-      feature: "Average Completion Rate",
-      traditional: "~14% to 22% average completion",
-      chaiform: "Up to 58% to 74% completion (3.5x higher)",
+      feature: "Respondent Focus & Fatigue",
+      traditional: "Overwhelming long forms cause respondents to abandon midway",
+      chaiform: "Clean step-by-step presentation keeps respondents focused",
     },
     {
-      feature: "Developer API & Schema Sync",
-      traditional: "Separate REST endpoints prone to payload mismatch",
-      chaiform: "End-to-end type safety with tRPC and Zod schemas",
+      feature: "Pricing & Feature Access",
+      traditional: "Basic features and custom themes locked behind expensive $29-99+/mo tiers",
+      chaiform: "Generous starter tier, transparent plans, and zero hidden lock-in",
     },
     {
       feature: "Real-Time Response Feed",
-      traditional: "Requires manual page refreshes or external plugins",
-      chaiform: "Live response inbox with instant CSV/Excel export",
+      traditional: "Requires manual spreadsheet refreshes or disconnected plugins",
+      chaiform: "Live submission feed with instant CSV and JSON data export",
     },
     {
       feature: "Distribution & QR Sharing",
-      traditional: "Plain links only; 3rd party QR generator needed",
-      chaiform: "1024px print-ready QR codes with custom designer color themes",
+      traditional: "Plain URL links only; requires third-party QR generators",
+      chaiform: "Print-ready QR codes with 5 designer color themes built right in",
     },
   ];
 

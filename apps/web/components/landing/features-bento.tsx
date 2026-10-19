@@ -8,7 +8,7 @@ import {
   IconSparkles,
   IconFileSpreadsheet,
   IconClock,
-  IconCpu,
+  IconCode,
   IconCheck,
   IconStarFilled,
   IconCircleDot,
@@ -21,6 +21,7 @@ import {
   IconPhone,
   IconCalendar,
   IconSwitch,
+  IconLink,
 } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
 
@@ -103,7 +104,7 @@ export function FeaturesBentoSection() {
             </div>
           </div>
 
-          {/* Bento Item 2: End-to-End Type Safety (Cyan/Sky Theme) */}
+          {/* Bento Item 2: Embed Anywhere & Instant Share (Cyan/Sky Theme) */}
           <div className="relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-cyan-950/25 flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300 group">
             {/* Ambient Glow */}
             <div className="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-cyan-500/15 blur-3xl group-hover:bg-cyan-500/25 transition-all duration-500" />
@@ -113,32 +114,30 @@ export function FeaturesBentoSection() {
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-xs shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-                  <IconCpu className="size-5" />
+                  <IconCode className="size-5" />
                 </div>
                 <Badge
                   variant="outline"
                   className="text-xs border-cyan-500/30 bg-cyan-500/10 text-cyan-300 font-medium"
                 >
-                  tRPC + Zod
+                  Embed Anywhere
                 </Badge>
               </div>
 
               <h3 className="text-xl font-bold tracking-tight text-foreground">
-                100%{" "}
+                Embed Anywhere in{" "}
                 <span className="bg-gradient-to-r from-cyan-300 via-sky-200 to-white bg-clip-text text-transparent">
-                  Type-Safe
-                </span>{" "}
-                Architecture
+                  1-Click
+                </span>
               </h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Full-stack type inference from PostgreSQL Drizzle schema directly to React hooks.
-                Zero API drift, zero runtime schema bugs.
+                Drop your forms seamlessly into Next.js, WordPress, Webflow, Shopify, or share via direct custom links.
               </p>
             </div>
 
             <div className="relative z-10 mt-6 rounded-xl border border-cyan-500/25 bg-neutral-950/90 p-3.5 text-xs font-mono text-cyan-300 overflow-hidden shadow-inner">
-              <p className="text-neutral-500 text-[11px]">// Fully inferenced tRPC client</p>
-              <code className="text-cyan-300">trpc.formSubmission.submitForm.useMutation()</code>
+              <p className="text-neutral-500 text-[11px]">// 1-line responsive iframe embed</p>
+              <code className="text-cyan-300 text-[11px]">&lt;iframe src=&quot;/form/feedback&quot; width=&quot;100%&quot; /&gt;</code>
             </div>
           </div>
 
@@ -273,14 +272,14 @@ export function FeaturesBentoSection() {
           </div>
         </div>
 
-        {/* 10+ Question Types Showcase Strip */}
+        {/* 14 Specialized Question Types Showcase Strip */}
         <div className="mt-12 rounded-2xl border border-border/80 bg-gradient-to-b from-card/90 via-card/60 to-background/90 p-6 sm:p-8 text-center backdrop-blur-md relative overflow-hidden shadow-2xl">
           {/* Subtle Dual Accent Glow */}
           <div className="pointer-events-none absolute -top-24 left-1/4 size-64 rounded-full bg-indigo-500/10 blur-3xl -z-10" />
           <div className="pointer-events-none absolute -bottom-24 right-1/4 size-64 rounded-full bg-amber-500/10 blur-3xl -z-10" />
 
-          <h4 className="text-base font-semibold text-foreground">
-            10+ Specialized Question Field Types Out-of-the-Box
+          <h4 className="text-base sm:text-lg font-bold text-foreground">
+            14 Specialized Question Field Types Out-of-the-Box
           </h4>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1 mb-6">
             Mix and match diverse inputs to create the perfect conversational survey or onboarding flow.
@@ -297,6 +296,7 @@ export function FeaturesBentoSection() {
               { label: "Numerical Inputs", icon: IconHash, color: "text-violet-400" },
               { label: "Validated Email", icon: IconMail, color: "text-rose-400" },
               { label: "Phone / WhatsApp", icon: IconPhone, color: "text-emerald-400" },
+              { label: "Website / URL", icon: IconLink, color: "text-sky-400" },
               { label: "Date & Calendar", icon: IconCalendar, color: "text-amber-400" },
               { label: "Time Picker", icon: IconClock, color: "text-blue-400" },
               { label: "Password Protection", icon: IconLock, color: "text-amber-400" },
@@ -316,3 +316,4 @@ export function FeaturesBentoSection() {
     </section>
   );
 }
+

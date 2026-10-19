@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Loader2, ArrowLeft, Mail, CheckCircle2, Copy, ExternalLink, KeyRound } from "lucide-react";
+import { Loader2, ArrowLeft, Mail, CheckCircle2, Copy, ExternalLink, KeyRound, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useRequestPasswordReset } from "~/hooks/api/auth";
+import { parseAuthErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
 
 type ForgotPasswordValues = {
@@ -20,26 +21,31 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
   const { requestPasswordResetAsync } = useRequestPasswordReset();
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
   const [resetToken, setResetToken] = useState<string | null>(null);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<ForgotPasswordValues>({
     defaultValues: { email: "" },
   });
 
   const onSubmit: SubmitHandler<ForgotPasswordValues> = async (values) => {
+    setErrorBanner(null);
     try {
-      const res = await requestPasswordResetAsync({ email: values.email });
-      setSubmittedEmail(values.email);
+      const res = await requestPasswordResetAsync({ email: values.email.trim().toLowerCase() });
+      setSubmittedEmail(values.email.trim().toLowerCase());
       if (res.resetToken) {
         setResetToken(res.resetToken);
       }
       toast.success("Password reset link ready!");
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to request password reset";
-      toast.error(msg);
+      const parsed = parseAuthErrorMessage(err);
+      setErrorBanner(parsed);
+      toast.error(parsed.title, {
+        description: parsed.description,
+      });
     }
   };
 
@@ -124,8 +130,18 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
         </p>
       </div>
 
+      {errorBanner && (
+        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
+          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
+            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-foreground">
             Email Address
           </label>
@@ -133,11 +149,20 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
             id="email"
             type="email"
             placeholder="you@domain.com"
-            required
             autoFocus
             className={`h-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Email address is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address",
+              },
+              onChange: () => setErrorBanner(null),
+            })}
           />
+          {errors.email && (
+            <span className="text-xs text-destructive">{errors.email.message}</span>
+          )}
         </div>
 
         <Button
