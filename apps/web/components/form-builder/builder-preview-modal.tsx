@@ -28,6 +28,7 @@ import {
 } from "~/components/ui/dialog";
 import { FieldGroup } from "~/components/ui/field";
 import { FormFieldRenderer } from "~/components/public-form/form-field-renderer";
+import { landingTheme } from "~/config/landing-theme";
 import type { PublicFormField } from "~/components/public-form/types";
 import type { BuilderFormData } from "./builder-header";
 import type { FieldRow } from "./field-types";
@@ -108,7 +109,7 @@ export function BuilderPreviewModal({
           {/* Left: Branding & Status Badge */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="flex aspect-square size-7 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
+              <div className="flex aspect-square size-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 <IconEye className="size-4" />
               </div>
               <div className="flex flex-col">
@@ -116,7 +117,7 @@ export function BuilderPreviewModal({
                   <span className="text-sm font-semibold tracking-tight">Live Preview</span>
                   <Badge
                     variant="outline"
-                    className="text-[10px] px-2 py-0 h-4.5 bg-primary/10 border-primary/30 text-primary font-medium gap-1"
+                    className="text-[10px] px-2 py-0 h-4.5 bg-amber-500/10 border-amber-500/30 text-amber-400 font-medium gap-1"
                   >
                     <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     Interactive Simulator
@@ -134,10 +135,10 @@ export function BuilderPreviewModal({
             <button
               type="button"
               onClick={() => setViewport("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "desktop"
-                  ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
               <IconDeviceDesktop className="size-3.5" />
@@ -146,10 +147,10 @@ export function BuilderPreviewModal({
             <button
               type="button"
               onClick={() => setViewport("tablet")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "tablet"
-                  ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
               <IconDeviceTablet className="size-3.5" />
@@ -158,10 +159,10 @@ export function BuilderPreviewModal({
             <button
               type="button"
               onClick={() => setViewport("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "mobile"
-                  ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
               <IconDeviceMobile className="size-3.5" />
@@ -351,7 +352,7 @@ export function BuilderPreviewModal({
                     <div className="pt-4 flex flex-col items-center gap-2">
                       <Button
                         type="submit"
-                        className="w-full h-10 text-sm font-medium gap-2 shadow-sm"
+                        className={`w-full h-10 text-sm font-semibold gap-2 shadow-md shadow-amber-500/10 ${landingTheme.primaryButton}`}
                         disabled={isSubmitting}
                       >
                         <IconSparkles className="size-3.5" />

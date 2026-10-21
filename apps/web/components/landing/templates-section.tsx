@@ -20,6 +20,7 @@ import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useListPublicForms, useUseTemplate } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
+import { getSafeErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
 
 const LANDING_CATEGORIES = [
@@ -64,8 +65,7 @@ export function TemplatesSection() {
       toast.success("Template cloned to your forms!");
       router.push(`/forms/${res.id}`);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to use template";
-      toast.error(msg);
+      toast.error(getSafeErrorMessage(err, "Failed to use template"));
     } finally {
       setCloningId(null);
     }

@@ -24,6 +24,7 @@ import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useListPublicForms, useUseTemplate } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
+import { getSafeErrorMessage } from "~/lib/error";
 import { toast } from "sonner";
 import { landingTheme } from "~/config/landing-theme";
 
@@ -91,8 +92,7 @@ export function TemplatesView() {
       toast.success("Template cloned to your forms!");
       router.push(`/forms/${res.id}`);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to clone template";
-      toast.error(msg);
+      toast.error(getSafeErrorMessage(err, "Failed to clone template"));
     } finally {
       setCloningId(null);
     }

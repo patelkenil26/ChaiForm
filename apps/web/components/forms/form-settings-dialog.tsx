@@ -23,6 +23,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { Button } from "~/components/ui/button";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface FormSettingsPayload {
   closesAt: Date | null;
@@ -338,10 +339,19 @@ export function FormSettingsDialog({
           </div>
 
           <DialogFooter className="mt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              className={landingTheme.buttonOutlineHover}
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSaving} className="gap-2">
+            <Button
+              type="submit"
+              disabled={isSaving}
+              className={`gap-2 ${landingTheme.primaryButton}`}
+            >
               {isSaving && <Loader2 className="size-4 animate-spin" />}
               {isSaving ? "Saving..." : "Save Settings"}
             </Button>

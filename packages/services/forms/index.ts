@@ -25,6 +25,13 @@ import {
 import { formsTable } from '@repo/database/models/form'
 import { formFieldsTable } from '@repo/database/models/form-field'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
+import {
+    BadRequestError,
+    ConflictError,
+    UnauthorizedError,
+    NotFoundError,
+    AppError,
+} from "../errors";
 
 const RESERVED_SLUGS = new Set([
     "api",
@@ -62,7 +69,7 @@ class FormService {
         if (slug) {
             normalizedSlug = slug.toLowerCase().trim();
             if (RESERVED_SLUGS.has(normalizedSlug)) {
-                throw new Error(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
+                throw new BadRequestError(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
             }
 
             const existing = await db
@@ -72,7 +79,7 @@ class FormService {
                 .limit(1);
 
             if (existing.length > 0) {
-                throw new Error(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
+                throw new ConflictError(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
             }
         }
 
@@ -99,7 +106,8 @@ class FormService {
             id: formsTable.id,
         })
 
-        if (!result || result.length === 0 || !result[0]?.id) throw new Error(`Something went wrong while creating the form`)
+        if (!result || result.length === 0 || !result[0]?.id)
+            throw new AppError("Something went wrong while creating the form", "INTERNAL_SERVER_ERROR");
 
         return { id: result[0].id }
     }
@@ -199,7 +207,7 @@ class FormService {
             if (password) {
                 const enteredHash = this.generateHash(passwordSalt!, password);
                 if (enteredHash !== passwordHash) {
-                    throw new Error("Invalid form password");
+                    throw new UnauthorizedError("Invalid form password");
                 }
                 isUnlocked = true;
             } else {
@@ -268,7 +276,7 @@ class FormService {
             } else {
                 const normalizedSlug = slug.toLowerCase().trim();
                 if (RESERVED_SLUGS.has(normalizedSlug)) {
-                    throw new Error(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
+                    throw new BadRequestError(`'${normalizedSlug}' is a reserved keyword and cannot be used as a slug.`);
                 }
 
                 // Check uniqueness against other forms
@@ -279,7 +287,7 @@ class FormService {
                     .limit(1);
 
                 if (existing.length > 0) {
-                    throw new Error(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
+                    throw new ConflictError(`The slug '${normalizedSlug}' is already taken. Please choose another one.`);
                 }
                 updateData.slug = normalizedSlug;
             }
@@ -311,7 +319,7 @@ class FormService {
             });
 
         if (!result || result.length === 0 || !result[0]) {
-            throw new Error("Form not found or you do not have permission to update it");
+            throw new NotFoundError("Form not found or you do not have permission to update it");
         }
 
         const updated = result[0];
@@ -407,7 +415,7 @@ class FormService {
             .limit(1);
 
         if (!originalRows || originalRows.length === 0) {
-            throw new Error("Form or template not found or not accessible to clone");
+            throw new NotFoundError("Form or template not found or not accessible to clone");
         }
 
         const original = originalRows[0]!;
@@ -436,7 +444,7 @@ class FormService {
             .returning({ id: formsTable.id });
 
         if (!clonedForm?.id) {
-            throw new Error("Failed to clone form");
+            throw new AppError("Failed to clone form", "INTERNAL_SERVER_ERROR");
         }
 
         // Fetch fields belonging to the original form
@@ -475,7 +483,7 @@ class FormService {
             .returning({ id: formsTable.id, isArchived: formsTable.isArchived });
 
         if (!updated) {
-            throw new Error("Form not found or you don't have permission to update it");
+            throw new NotFoundError("Form not found or you don't have permission to update it");
         }
 
         return updated;

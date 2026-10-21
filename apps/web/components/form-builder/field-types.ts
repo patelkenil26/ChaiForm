@@ -63,3 +63,46 @@ export const DEFAULT_VALUES: FieldFormValues = {
   isRequired: false,
   options: ["Option 1", "Option 2"],
 };
+
+export function toLabelKey(label: string): string {
+  return label
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+}
+
+export function getFieldPlaceholder(type: FieldType): string {
+  switch (type) {
+    case "TEXT":
+      return "e.g. What is your full name?";
+    case "TEXTAREA":
+      return "e.g. Tell us a bit about your project or feedback...";
+    case "EMAIL":
+      return "e.g. What is your work email address?";
+    case "NUMBER":
+      return "e.g. How many team members do you have?";
+    case "PHONE":
+      return "e.g. What is your phone or WhatsApp number?";
+    case "URL":
+      return "e.g. What is your portfolio or website link?";
+    case "CHECKBOX":
+      return "e.g. Select all topics that interest you";
+    case "RADIO":
+      return "e.g. Which pricing plan suits your needs?";
+    case "SELECT":
+      return "e.g. Select your country / region";
+    case "YES_NO":
+      return "e.g. Do you have any prior experience?";
+    case "RATING":
+      return "e.g. How would you rate our customer support?";
+    case "DATE":
+      return "e.g. Pick your preferred appointment date";
+    case "TIME":
+      return "e.g. What time works best for a call?";
+    case "PASSWORD":
+      return "e.g. Create a secure access key";
+    default:
+      return "Enter question title...";
+  }
+}

@@ -15,6 +15,8 @@ import { FormFieldRenderer } from "~/components/public-form/form-field-renderer"
 import { FormClosedScreen } from "~/components/public-form/form-closed-screen";
 import { FormSuccessScreen } from "~/components/public-form/form-success-screen";
 import { FormUnlockCard } from "~/components/forms/form-unlock-card";
+import { getSafeErrorMessage } from "~/lib/error";
+import { landingTheme } from "~/config/landing-theme";
 import type { PublicFormField } from "~/components/public-form/types";
 
 export default function PublicFormPage({ params }: { params: Promise<{ form_id: string }> }) {
@@ -46,7 +48,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
         throw new Error("Invalid password");
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Invalid form password";
+      const msg = getSafeErrorMessage(err, "Invalid form password");
       toast.error(msg);
       throw new Error(msg);
     } finally {
@@ -84,8 +86,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
       });
       setSubmitted(true);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to submit form";
-      toast.error(msg);
+      toast.error(getSafeErrorMessage(err, "Failed to submit form"));
     }
   };
 
@@ -150,10 +151,10 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
             </p>
           </div>
           <div className="flex items-center gap-2 pt-2">
-            <Button asChild size="sm" variant="outline">
+            <Button asChild size="sm" variant="outline" className={landingTheme.buttonOutlineHover}>
               <Link href="/">Back to Home</Link>
             </Button>
-            <Button asChild size="sm">
+            <Button asChild size="sm" className={landingTheme.primaryButton}>
               <Link href="/explore">Explore Templates</Link>
             </Button>
           </div>
@@ -222,7 +223,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
               </span>
             )}
             {form.isPasswordProtected && (
-              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 <LockIcon className="size-3" />
                 Unlocked Access
               </span>
@@ -256,12 +257,12 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
             <div className="mt-8 flex flex-col items-center gap-2">
               <Button
                 type="submit"
-                className="w-full h-11 text-sm font-medium transition-all shadow-sm gap-2"
+                className={`w-full h-11 text-sm font-semibold transition-all shadow-md shadow-amber-500/10 gap-2 ${landingTheme.primaryButton}`}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2Icon className="size-4 animate-spin" />
+                    <Loader2Icon className="size-4 animate-spin text-neutral-950" />
                     <span>Submitting response...</span>
                   </>
                 ) : (

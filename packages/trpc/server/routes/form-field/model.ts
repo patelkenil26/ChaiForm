@@ -72,3 +72,21 @@ export const getFieldsInputModel = z.object({
 });
 
 export const getFieldsOutputModel = z.array(formFieldObject);
+
+export const syncFieldItemModel = z.object({
+    id: z.string().optional().describe("Existing field UUID or temporary draft ID"),
+    label: z.string().min(1, "Field title cannot be empty").max(100),
+    type: fieldTypeEnum,
+    description: z.string().nullable().optional(),
+    placeholder: z.string().nullable().optional(),
+    isRequired: z.boolean().optional().default(false),
+    options: z.array(z.string()).nullable().optional(),
+});
+
+export const syncFormFieldsInputModel = z.object({
+    formId: z.string().uuid().describe("UUID of the form"),
+    fields: z.array(syncFieldItemModel),
+});
+
+export const syncFormFieldsOutputModel = z.array(formFieldObject);
+

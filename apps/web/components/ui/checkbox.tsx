@@ -14,7 +14,7 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary",
+        "peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-[#fcd34d]/40 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-[#f59e0b] data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#f59e0b] data-[state=checked]:to-[#fcd34d] data-[state=checked]:text-neutral-950 dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:border-[#f59e0b] dark:data-[state=checked]:bg-gradient-to-r dark:data-[state=checked]:from-[#f59e0b] dark:data-[state=checked]:to-[#fcd34d] dark:data-[state=checked]:text-neutral-950",
         className
       )}
       {...props}

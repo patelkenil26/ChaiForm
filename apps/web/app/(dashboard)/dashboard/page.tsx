@@ -763,6 +763,7 @@ export default function DashboardPage() {
               <Button
                 type="button"
                 variant="outline"
+                className={landingTheme.buttonOutlineHover}
                 onClick={() => {
                   reset();
                   setOpen(false);

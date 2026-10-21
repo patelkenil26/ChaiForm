@@ -54,3 +54,21 @@ export const deleteFieldInput = z.object({
 })
 
 export type DeleteFieldInputType = z.infer<typeof deleteFieldInput>
+
+export const syncFieldItemInput = z.object({
+    id: z.string().optional().describe('Existing field UUID or temporary draft ID'),
+    label: z.string().min(1, 'Field title is required').max(100),
+    type: fieldTypeEnum,
+    description: z.string().optional().nullable(),
+    placeholder: z.string().optional().nullable(),
+    isRequired: z.boolean().optional().default(false),
+    options: z.array(z.string()).optional().nullable(),
+})
+
+export const syncFormFieldsInput = z.object({
+    formId: z.string().uuid(),
+    fields: z.array(syncFieldItemInput),
+})
+
+export type SyncFormFieldsInputType = z.infer<typeof syncFormFieldsInput>
+

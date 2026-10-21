@@ -22,6 +22,7 @@ import {
   FIELD_TYPE_LABELS,
   type FieldFormValues,
 } from "./field-types";
+import { landingTheme } from "~/config/landing-theme";
 
 interface FieldFormProps {
   onSubmit: SubmitHandler<FieldFormValues>;
@@ -196,10 +197,19 @@ export function FieldForm({
       </FieldGroup>
 
       <DialogFooter className="mt-6">
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button
+          type="button"
+          variant="outline"
+          className={landingTheme.buttonOutlineHover}
+          onClick={onCancel}
+        >
           Cancel
         </Button>
-        <Button type="submit" disabled={isSubmitting} className="gap-2">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={`gap-2 ${landingTheme.primaryButton}`}
+        >
           {isSubmitting && <Loader2 className="size-4 animate-spin" />}
           {isSubmitting ? "Saving..." : submitLabel}
         </Button>

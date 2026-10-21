@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface CreateFormValues {
   title: string;
@@ -151,6 +152,7 @@ export function CreateFormDialog({
             <Button
               type="button"
               variant="outline"
+              className={landingTheme.buttonOutlineHover}
               onClick={() => {
                 reset();
                 onOpenChange(false);
@@ -158,7 +160,11 @@ export function CreateFormDialog({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="gap-2">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={`gap-2 ${landingTheme.primaryButton}`}
+            >
               {isSubmitting && <Loader2 className="size-4 animate-spin" />}
               {isSubmitting ? "Creating..." : "Create Form"}
             </Button>

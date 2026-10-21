@@ -27,18 +27,30 @@ const allowedOrigins = [
   "http://localhost:3000",
 ].filter(Boolean);
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
-    },
-    credentials: true,
-  }),
-);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "x-trpc-source",
+    "trpc-accept",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+  ],
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(cookieParser());
 
@@ -76,4 +88,19 @@ app.use(
   }),
 );
 
+// Global Express Error Handler (Never leak stack traces, internal paths, or SQL to clients)
+app.use((err: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  logger.error("Unhandled server exception:", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  return res.status(500).json({
+    error: {
+      message: "An unexpected server error occurred. Please try again later.",
+      code: "INTERNAL_SERVER_ERROR",
+    },
+  });
+});
+
 export default app;
+

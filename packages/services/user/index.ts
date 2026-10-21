@@ -15,13 +15,26 @@ import {
 import { usersTable } from "@repo/database/models/user";
 import { env } from '../env';
 import * as JWT from 'jsonwebtoken';
+import {
+  BadRequestError,
+  UnauthorizedError,
+  NotFoundError,
+  ConflictError,
+  DatabaseConnectionError,
+  AppError,
+} from "../errors";
 
 class UserService {
 
   private async getUserByEmail(email: string) {
-    const result = await db.select().from(usersTable).where(eq(usersTable.email, email))
-    if (!result || result.length === 0) return null;
-    return result[0];
+    try {
+      const result = await db.select().from(usersTable).where(eq(usersTable.email, email));
+      if (!result || result.length === 0) return null;
+      return result[0];
+    } catch (err: unknown) {
+      console.error("[UserService] Database query error in getUserByEmail:", err);
+      throw new DatabaseConnectionError();
+    }
   }
 
   private async generateHash(salt: string, password: string) {
@@ -39,19 +52,25 @@ class UserService {
       const verificationResult = JWT.verify(token, env.JWT_SECRET) as GenerateUserTokenPayloadType;
       return verificationResult;
     } catch (error) {
-      throw new Error(`Invalid Token`)
+      throw new UnauthorizedError("Invalid or expired session token");
     }
   }
 
   public async getUserInfoById(id: string) {
-    const user = await db.select({
-      id: usersTable.id,
-      email: usersTable.email,
-      fullName: usersTable.fullName,
-      profileImageUrl: usersTable.profileImageUrl,
-    }).from(usersTable).where(eq(usersTable.id, id))
+    let user;
+    try {
+      user = await db.select({
+        id: usersTable.id,
+        email: usersTable.email,
+        fullName: usersTable.fullName,
+        profileImageUrl: usersTable.profileImageUrl,
+      }).from(usersTable).where(eq(usersTable.id, id))
+    } catch (err: unknown) {
+      console.error("[UserService] Database query error in getUserInfoById:", err);
+      throw new DatabaseConnectionError();
+    }
 
-    if (!user || user.length === 0) throw new Error(`User with ID ${id} does not exists`)
+    if (!user || user.length === 0) throw new NotFoundError(`User with ID ${id} does not exist`);
 
     return user[0]!
   }
@@ -61,18 +80,25 @@ class UserService {
 
     // check if user is already existing or not 
     const existingUserWithEmail = await this.getUserByEmail(email);
-    if (existingUserWithEmail) throw new Error(`user with email ${email} already exists`);
+    if (existingUserWithEmail) throw new ConflictError(`User with email ${email} already exists`);
 
     // calculate salt and hash the password
     const salt = randomBytes(16).toString('hex')
     const hash = await this.generateHash(salt, password);
 
     // Create user in DB
-    const userInsertResult = await db.insert(usersTable).values({ email, fullName, password: hash, salt }).returning({
-      id: usersTable.id
-    })
+    let userInsertResult;
+    try {
+      userInsertResult = await db.insert(usersTable).values({ email, fullName, password: hash, salt }).returning({
+        id: usersTable.id
+      });
+    } catch (err: unknown) {
+      console.error("[UserService] Database query error in createUserWithEmailAndPassword:", err);
+      throw new DatabaseConnectionError();
+    }
 
-    if (!userInsertResult || userInsertResult.length === 0 || !userInsertResult[0]?.id) throw new Error(`something went wrong while creating a user`)
+    if (!userInsertResult || userInsertResult.length === 0 || !userInsertResult[0]?.id)
+      throw new AppError("Something went wrong while creating a user", "INTERNAL_SERVER_ERROR");
 
     const userId = userInsertResult[0].id
     const { token } = await this.generateUserToken({ id: userId })
@@ -87,13 +113,13 @@ class UserService {
     const { email, password } = await signInUserWithEmailAndPasswordInput.parseAsync(payload);
 
     const existingUser = await this.getUserByEmail(email);
-    if (!existingUser) throw new Error(`User with email ${email} does not exists`)
+    if (!existingUser) throw new NotFoundError(`No account found with email ${email}`);
 
-    if (!existingUser.password || !existingUser.salt) throw new Error(`Invalid authentication method`)
+    if (!existingUser.password || !existingUser.salt) throw new BadRequestError("Invalid authentication method");
 
     const hash = await this.generateHash(existingUser.salt, password);
 
-    if (hash !== existingUser.password) throw new Error(`Invalid email address or password`)
+    if (hash !== existingUser.password) throw new UnauthorizedError("Invalid email address or password");
 
     const { token } = await this.generateUserToken({ id: existingUser.id })
 
@@ -113,7 +139,7 @@ class UserService {
 
     const user = await this.getUserByEmail(email);
     if (!user) {
-      throw new Error(`No account found with email ${email}`);
+      throw new NotFoundError(`No account found with email ${email}`);
     }
 
     // Generate a reset token valid for 30 minutes
@@ -138,26 +164,31 @@ class UserService {
     try {
       decoded = JWT.verify(token, env.JWT_SECRET) as { id: string; email: string; purpose: string };
     } catch {
-      throw new Error("Reset token is invalid or has expired. Please request a new link.");
+      throw new BadRequestError("Reset token is invalid or has expired. Please request a new link.");
     }
 
     if (!decoded?.id || decoded.purpose !== "password_reset") {
-      throw new Error("Invalid reset token purpose.");
+      throw new BadRequestError("Invalid reset token purpose.");
     }
 
     const user = await this.getUserInfoById(decoded.id);
     if (!user) {
-      throw new Error("User does not exist.");
+      throw new NotFoundError("User does not exist.");
     }
 
     // Generate new salt and password hash
     const salt = randomBytes(16).toString("hex");
     const hash = await this.generateHash(salt, newPassword);
 
-    await db
-      .update(usersTable)
-      .set({ password: hash, salt, updatedAt: new Date() })
-      .where(eq(usersTable.id, decoded.id));
+    try {
+      await db
+        .update(usersTable)
+        .set({ password: hash, salt, updatedAt: new Date() })
+        .where(eq(usersTable.id, decoded.id));
+    } catch (err: unknown) {
+      console.error("[UserService] Database query error in resetPassword:", err);
+      throw new DatabaseConnectionError();
+    }
 
     return {
       success: true,

@@ -298,7 +298,7 @@ export function LiveDemoSection() {
                   <Button
                     asChild
                     size="sm"
-                    className="gap-2 bg-primary text-primary-foreground shadow-sm"
+                    className={`gap-2 ${landingTheme.primaryButton}`}
                   >
                     <Link href={user ? "/dashboard" : "/signup"}>
                       <span>{user ? "Build in Dashboard" : "Create Your First Form"}</span>

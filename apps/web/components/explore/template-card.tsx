@@ -18,6 +18,7 @@ import { Button } from "~/components/ui/button";
 import { useUser } from "~/hooks/api/auth";
 import { useUseTemplate } from "~/hooks/api/form";
 import { landingTheme } from "~/config/landing-theme";
+import { getSafeErrorMessage } from "~/lib/error";
 
 export interface PublicTemplateItem {
   id: string;
@@ -94,8 +95,7 @@ export function TemplateCard({ template }: TemplateCardProps) {
       toast.success("Template cloned to your forms!");
       router.push(`/forms/${res.id}`);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to use template";
-      toast.error(msg);
+      toast.error(getSafeErrorMessage(err, "Failed to use template"));
     }
   };
 

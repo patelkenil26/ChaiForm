@@ -10,6 +10,8 @@ import {
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
+import { getSafeErrorMessage } from "~/lib/error";
+import { landingTheme } from "~/config/landing-theme";
 
 export default function GlobalError({
   error,
@@ -46,16 +48,17 @@ export default function GlobalError({
             An unexpected error occurred
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {error?.message && error.message.length < 120
-              ? error.message
-              : "We encountered an issue while loading this page. You can try refreshing or returning to safety."}
+            {getSafeErrorMessage(
+              error,
+              "We encountered an issue while loading this page. You can try refreshing or returning to safety."
+            )}
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-2">
           <Button
             onClick={() => reset()}
-            className="w-full sm:w-auto gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+            className={`w-full sm:w-auto gap-2 ${landingTheme.primaryButton}`}
           >
             <IconRefresh className="size-4" />
             <span>Try Again</span>

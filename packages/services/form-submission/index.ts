@@ -3,6 +3,12 @@ import db, { eq, desc, count, or } from '@repo/database'
 import { formSubmissionTable } from '@repo/database/models/form-submission'
 import { formsTable } from '@repo/database/models/form'
 import { type SubmitFormInputType, submitFormInput, type GetFormSubmissionsInputType, getFormSubmissionsInput } from './model'
+import {
+    BadRequestError,
+    UnauthorizedError,
+    NotFoundError,
+    AppError,
+} from "../errors";
 
 class FormSubmissionService {
 
@@ -29,32 +35,32 @@ class FormSubmissionService {
             .limit(1)
 
         if (!form || form.length === 0) {
-            throw new Error('Form not found')
+            throw new NotFoundError('Form not found')
         }
 
         const formData = form[0]!
         const resolvedFormId = formData.id
 
         if (formData.isArchived) {
-            throw new Error('This form has been archived and is no longer accepting responses')
+            throw new BadRequestError('This form has been archived and is no longer accepting responses')
         }
 
         if (!formData.isPublished) {
-            throw new Error('This form is currently closed and not accepting responses')
+            throw new BadRequestError('This form is currently closed and not accepting responses')
         }
 
         if (formData.passwordHash) {
             if (!password) {
-                throw new Error('This form is password protected. Password is required to submit.')
+                throw new UnauthorizedError('This form is password protected. Password is required to submit.')
             }
             const hash = createHmac('sha256', formData.passwordSalt!).update(password).digest('hex')
             if (hash !== formData.passwordHash) {
-                throw new Error('Invalid form password. Submission rejected.')
+                throw new UnauthorizedError('Invalid form password. Submission rejected.')
             }
         }
 
         if (formData.closesAt && new Date() > new Date(formData.closesAt)) {
-            throw new Error('This form has expired and is no longer accepting responses')
+            throw new BadRequestError('This form has expired and is no longer accepting responses')
         }
 
         if (formData.responseLimit) {
@@ -65,7 +71,7 @@ class FormSubmissionService {
 
             const currentCount = subCountResult ? Number(subCountResult.count) : 0;
             if (currentCount >= formData.responseLimit) {
-                throw new Error('This form has reached its maximum response limit and is no longer accepting responses');
+                throw new BadRequestError('This form has reached its maximum response limit and is no longer accepting responses');
             }
         }
 
@@ -75,7 +81,7 @@ class FormSubmissionService {
             .returning({ id: formSubmissionTable.id })
 
         if (!result || result.length === 0 || !result[0]?.id)
-            throw new Error('Something went wrong while saving your submission')
+            throw new AppError('Something went wrong while saving your submission', 'INTERNAL_SERVER_ERROR')
 
         return { id: result[0].id }
     }

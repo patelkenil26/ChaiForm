@@ -22,6 +22,7 @@ import {
 } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
+import { landingTheme } from "~/config/landing-theme";
 
 const COLOR_PRESETS = [
   { name: "Classic Black", hex: "#000000" },
@@ -300,11 +301,10 @@ export function QrCodeDialog({
                     <span>{copiedImage ? "Copied!" : "Copy Image"}</span>
                   </Button>
                   <Button
-                    variant="default"
                     size="sm"
                     onClick={handlePrintFlyer}
                     disabled={!dataUrl}
-                    className="h-8.5 gap-1.5 text-xs font-medium shadow-xs"
+                    className={`h-8.5 gap-1.5 text-xs font-medium shadow-xs ${landingTheme.primaryButton}`}
                   >
                     <PrinterIcon className="size-3.5" />
                     <span>Print Flyer</span>

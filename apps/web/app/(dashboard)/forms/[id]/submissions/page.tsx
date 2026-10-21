@@ -55,15 +55,8 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      <Tabs defaultValue="analytics" className="w-full">
+      <Tabs defaultValue="responses" className="w-full">
         <TabsList className="mb-2 inline-flex h-9 items-center p-1 rounded-lg bg-muted/30 border border-border/50 gap-1">
-          <TabsTrigger
-            value="analytics"
-            className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:bg-secondary/80 data-[state=active]:border-border/80 data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground hover:text-foreground hover:bg-muted/40"
-          >
-            <BarChart3Icon className="size-3.5 text-muted-foreground group-data-[state=active]:text-[#fcd34d] transition-colors" />
-            <span>Analytics &amp; Charts</span>
-          </TabsTrigger>
           <TabsTrigger
             value="responses"
             className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:bg-secondary/80 data-[state=active]:border-border/80 data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground hover:text-foreground hover:bg-muted/40"
@@ -73,6 +66,13 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
             <span className="ml-1 px-1.5 py-0.2 text-[10px] rounded-full font-medium tabular-nums bg-muted/60 text-muted-foreground group-data-[state=active]:bg-muted group-data-[state=active]:text-foreground border border-border/40">
               {submissions?.length ?? 0}
             </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="analytics"
+            className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:bg-secondary/80 data-[state=active]:border-border/80 data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground hover:text-foreground hover:bg-muted/40"
+          >
+            <BarChart3Icon className="size-3.5 text-muted-foreground group-data-[state=active]:text-[#fcd34d] transition-colors" />
+            <span>Analytics &amp; Charts</span>
           </TabsTrigger>
         </TabsList>
 

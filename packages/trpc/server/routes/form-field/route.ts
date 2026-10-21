@@ -10,6 +10,8 @@ import {
     deleteFieldOutputModel,
     getFieldsInputModel,
     getFieldsOutputModel,
+    syncFormFieldsInputModel,
+    syncFormFieldsOutputModel,
 } from "./model";
 
 const TAGS = ["Form Fields"];
@@ -95,6 +97,22 @@ export const formFieldProcedures = {
         .mutation(async ({ input }) => {
             const { fieldId } = input;
             const result = await formFieldService.deleteField({ fieldId });
+            return result;
+        }),
+
+    syncFormFields: authenticatedProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/syncFormFields"),
+                tags: TAGS,
+                protect: true,
+            },
+        })
+        .input(syncFormFieldsInputModel)
+        .output(syncFormFieldsOutputModel)
+        .mutation(async ({ input }) => {
+            const result = await formFieldService.syncFormFields(input);
             return result;
         }),
 };

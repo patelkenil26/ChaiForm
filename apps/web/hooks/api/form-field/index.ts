@@ -70,3 +70,22 @@ export const useDeleteField = (formId: string) => {
 
     return { deleteFieldAsync, deleteField, error, isError, isLoading };
 };
+
+export const useSyncFormFields = (formId: string) => {
+    const utils = trpc.useUtils();
+
+    const {
+        mutateAsync: syncFormFieldsAsync,
+        mutate: syncFormFields,
+        error,
+        isError,
+        isPending: isLoading,
+    } = trpc.formField.syncFormFields.useMutation({
+        onSuccess: async () => {
+            await utils.formField.getFields.invalidate({ formId });
+            await utils.form.getForm.invalidate({ formId });
+        },
+    });
+
+    return { syncFormFieldsAsync, syncFormFields, error, isError, isLoading };
+};

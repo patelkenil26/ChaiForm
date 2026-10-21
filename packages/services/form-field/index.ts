@@ -1,11 +1,17 @@
-import db, { eq, max, asc } from '@repo/database'
+import db, { eq, max, asc, inArray } from '@repo/database'
 import { formFieldsTable } from '@repo/database/models/form-field'
 import {
     type CreateFieldInputType, createFieldInput,
     type UpdateFieldInputType, updateFieldInput,
     type DeleteFieldInputType, deleteFieldInput,
     type GetFieldsInputType, getFieldsInput,
+    type SyncFormFieldsInputType, syncFormFieldsInput,
 } from './model'
+import {
+    BadRequestError,
+    NotFoundError,
+    AppError,
+} from "../errors";
 
 function toLabelKey(label: string): string {
     return label
@@ -41,7 +47,7 @@ class FormFieldService {
             .returning({ id: formFieldsTable.id })
 
         if (!result || result.length === 0 || !result[0]?.id)
-            throw new Error(`Something went wrong while creating the field`)
+            throw new AppError(`Something went wrong while creating the field`, 'INTERNAL_SERVER_ERROR')
 
         return { id: result[0].id, labelKey, index }
     }
@@ -57,7 +63,7 @@ class FormFieldService {
         if (updates.isRequired !== undefined) patch.isRequired = updates.isRequired
         if ('options' in updates) patch.options = updates.options ?? null
 
-        if (Object.keys(patch).length === 0) throw new Error(`No fields provided to update`)
+        if (Object.keys(patch).length === 0) throw new BadRequestError(`No fields provided to update`)
 
         const result = await db
             .update(formFieldsTable)
@@ -65,7 +71,7 @@ class FormFieldService {
             .where(eq(formFieldsTable.id, fieldId))
             .returning({ id: formFieldsTable.id })
 
-        if (!result || result.length === 0) throw new Error(`Field with ID ${fieldId} does not exist`)
+        if (!result || result.length === 0) throw new NotFoundError(`Field with ID ${fieldId} does not exist`)
 
         return { id: result[0]!.id }
     }
@@ -98,9 +104,71 @@ class FormFieldService {
             .where(eq(formFieldsTable.id, fieldId))
             .returning({ id: formFieldsTable.id })
 
-        if (!result || result.length === 0) throw new Error(`Field with ID ${fieldId} does not exist`)
+        if (!result || result.length === 0) throw new NotFoundError(`Field with ID ${fieldId} does not exist`)
 
         return { id: result[0]!.id }
+    }
+
+    public async syncFormFields(payload: SyncFormFieldsInputType) {
+        const { formId, fields } = await syncFormFieldsInput.parseAsync(payload);
+
+        // Fetch existing fields for this form
+        const existing = await db
+            .select({ id: formFieldsTable.id })
+            .from(formFieldsTable)
+            .where(eq(formFieldsTable.formId, formId));
+
+        const existingIds = new Set(existing.map(f => f.id));
+        const incomingIds = new Set(fields.filter(f => f.id && existingIds.has(f.id)).map(f => f.id!));
+
+        // Delete any fields that were removed by the user in this sync
+        const toDelete = existing.filter(f => !incomingIds.has(f.id));
+        if (toDelete.length > 0) {
+            await db
+                .delete(formFieldsTable)
+                .where(inArray(formFieldsTable.id, toDelete.map(f => f.id)));
+        }
+
+        // Process fields in order
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i]!;
+            const labelKey = toLabelKey(field.label);
+            const index = (i + 1).toFixed(2);
+
+            if (field.id && existingIds.has(field.id)) {
+                // Update existing field
+                await db
+                    .update(formFieldsTable)
+                    .set({
+                        label: field.label,
+                        labelKey,
+                        type: field.type,
+                        description: field.description ?? null,
+                        placeholder: field.placeholder ?? null,
+                        isRequired: field.isRequired ?? false,
+                        options: field.options ?? null,
+                        index,
+                    })
+                    .where(eq(formFieldsTable.id, field.id));
+            } else {
+                // Insert new field
+                await db
+                    .insert(formFieldsTable)
+                    .values({
+                        formId,
+                        label: field.label,
+                        labelKey,
+                        type: field.type,
+                        description: field.description ?? null,
+                        placeholder: field.placeholder ?? null,
+                        isRequired: field.isRequired ?? false,
+                        options: field.options ?? null,
+                        index,
+                    });
+            }
+        }
+
+        return this.getFields({ formId });
     }
 
 }

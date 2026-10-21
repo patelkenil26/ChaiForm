@@ -1,6 +1,6 @@
 /**
- * Safely extracts and formats user-friendly error messages from TRPC,
- * Zod validation errors, or standard Error objects.
+ * Safely extracts user-friendly error messages from tRPC,
+ * Zod validation errors, or standard Error objects for Authentication flows.
  */
 export function parseAuthErrorMessage(err: unknown): { title: string; description: string } {
   if (!err) {
@@ -34,7 +34,23 @@ export function parseAuthErrorMessage(err: unknown): { title: string; descriptio
 
   const lower = rawMessage.toLowerCase();
 
-  // Root cause mapping for User Login
+  // 1. Connection-level or database offline messages
+  if (lower.includes("unable to connect to the database") || lower.includes("service temporarily unavailable")) {
+    return {
+      title: "Service Temporarily Unavailable",
+      description: "Unable to connect to the database server. Please ensure the database service is running and try again.",
+    };
+  }
+
+  // 2. Network / Fetch failures
+  if (lower.includes("failed to fetch") || lower.includes("networkerror") || lower.includes("network error")) {
+    return {
+      title: "Network Error",
+      description: "Unable to reach the server. Please check your internet connection and try again.",
+    };
+  }
+
+  // 3. User Login root causes
   if (lower.includes("does not exist") || lower.includes("not found")) {
     return {
       title: "Account Not Found",
@@ -74,16 +90,42 @@ export function parseAuthErrorMessage(err: unknown): { title: string; descriptio
     };
   }
 
-  // Fallback to raw message if present
+  // 4. Return the clean server message
   if (rawMessage.trim()) {
     return {
-      title: "Authentication Error",
+      title: "Authentication Failed",
       description: rawMessage,
     };
   }
 
   return {
     title: "Authentication Failed",
-    description: "Please check your credentials and try again.",
+    description: "Please verify your credentials and try again.",
   };
+}
+
+/**
+ * Generic safe error extractor for general toasts and UI components.
+ */
+export function getSafeErrorMessage(
+  err: unknown,
+  fallback = "An unexpected error occurred. Please try again.",
+): string {
+  if (!err) return fallback;
+
+  let rawMessage = "";
+  if (typeof err === "string") {
+    rawMessage = err;
+  } else if (typeof err === "object" && err !== null && "message" in err) {
+    rawMessage = String((err as { message: unknown }).message);
+  }
+
+  if (!rawMessage.trim()) return fallback;
+
+  const lower = rawMessage.toLowerCase();
+  if (lower.includes("failed to fetch") || lower.includes("network error")) {
+    return "Network error. Please check your internet connection.";
+  }
+
+  return rawMessage;
 }
