@@ -6,7 +6,8 @@
     "start": "node dist/index.js",
     "dev": "dotenv -- tsx watch ./src/index.ts",
     "build": "tsup",
-    "lint": "eslint src/*"
+    "lint": "eslint src/*",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

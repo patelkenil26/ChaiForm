@@ -1,0 +1,5 @@
+echo "🔍 [pre-push] Verifying TypeScript across all monorepo packages..."
+pnpm run check-types
+
+echo "📦 [pre-push] Verifying production build..."
+pnpm run build

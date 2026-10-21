@@ -5,7 +5,8 @@
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:generate": "dotenv -- drizzle-kit generate",
     "seed": "dotenv -- tsx seed-rich-forms.ts",
-    "dev": "dotenv -- drizzle-kit studio"
+    "dev": "dotenv -- drizzle-kit studio",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

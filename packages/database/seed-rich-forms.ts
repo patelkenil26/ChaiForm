@@ -31,7 +31,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Customer Satisfaction Survey (CSAT)",
     category: "SURVEYS",
-    description: "Measure customer happiness, product feedback, and Net Promoter Score with clean rating scales.",
+    description:
+      "Measure customer happiness, product feedback, and Net Promoter Score with clean rating scales.",
     fields: [
       {
         label: "How would you rate your overall experience with our service?",
@@ -69,7 +70,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Net Promoter Score (NPS) Survey",
     category: "SURVEYS",
-    description: "Track customer loyalty, benchmark likelihood to recommend, and identify risk of churn.",
+    description:
+      "Track customer loyalty, benchmark likelihood to recommend, and identify risk of churn.",
     fields: [
       {
         label: "How likely are you to recommend us to a colleague?",
@@ -86,7 +88,13 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "If you were to stop using our service, what would be the primary reason?",
         type: "SELECT",
-        options: ["Too expensive", "Missing key features", "Hard to configure", "Found an alternative", "No longer needed"],
+        options: [
+          "Too expensive",
+          "Missing key features",
+          "Hard to configure",
+          "Found an alternative",
+          "No longer needed",
+        ],
         isRequired: true,
       },
       {
@@ -106,7 +114,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Employee Pulse & Culture Survey",
     category: "SURVEYS",
-    description: "Gather anonymous employee sentiment on workload, team collaboration, and management support.",
+    description:
+      "Gather anonymous employee sentiment on workload, team collaboration, and management support.",
     fields: [
       {
         label: "How satisfied are you with your current work-life balance?",
@@ -122,7 +131,12 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Which area of our company culture has the most room for improvement?",
         type: "SELECT",
-        options: ["Transparent Communication", "Career Growth & Mentorship", "Tooling & Hardware Support", "Flexible Working Hours"],
+        options: [
+          "Transparent Communication",
+          "Career Growth & Mentorship",
+          "Tooling & Hardware Support",
+          "Flexible Working Hours",
+        ],
         isRequired: true,
       },
       {
@@ -142,7 +156,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Market Research & Consumer Habits",
     category: "SURVEYS",
-    description: "Understand consumer purchasing behaviors, budgets, and competitor software usage.",
+    description:
+      "Understand consumer purchasing behaviors, budgets, and competitor software usage.",
     fields: [
       {
         label: "How often do you purchase SaaS software online?",
@@ -153,7 +168,12 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "What factor influences your purchase decision most?",
         type: "SELECT",
-        options: ["Price & Affordability", "Feature Completeness", "Customer Reviews", "Ease of Use"],
+        options: [
+          "Price & Affordability",
+          "Feature Completeness",
+          "Customer Reviews",
+          "Ease of Use",
+        ],
         isRequired: true,
       },
       {
@@ -178,7 +198,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Brand Awareness & Perception Survey",
     category: "SURVEYS",
-    description: "Discover how target users perceive your brand personality, trustworthiness, and positioning.",
+    description:
+      "Discover how target users perceive your brand personality, trustworthiness, and positioning.",
     fields: [
       {
         label: "When you think of modern form builders, which brand comes to mind first?",
@@ -195,7 +216,13 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Where did you first hear about ChaiForm?",
         type: "SELECT",
-        options: ["Google Search", "YouTube Video", "Twitter / X Post", "Colleague Recommendation", "GitHub Repo"],
+        options: [
+          "Google Search",
+          "YouTube Video",
+          "Twitter / X Post",
+          "Colleague Recommendation",
+          "GitHub Repo",
+        ],
         isRequired: true,
       },
       {
@@ -215,7 +242,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Website Usability & Navigation Survey",
     category: "SURVEYS",
-    description: "Identify UX pain points, navigation roadblocks, and mobile responsive friction on your site.",
+    description:
+      "Identify UX pain points, navigation roadblocks, and mobile responsive friction on your site.",
     fields: [
       {
         label: "Did you easily find what you were looking for on our website today?",
@@ -231,7 +259,13 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Which section of the site was the most confusing or difficult to navigate?",
         type: "SELECT",
-        options: ["Pricing Page", "Documentation / API Docs", "Template Gallery", "Dashboard Navigation", "Checkout / Billing"],
+        options: [
+          "Pricing Page",
+          "Documentation / API Docs",
+          "Template Gallery",
+          "Dashboard Navigation",
+          "Checkout / Billing",
+        ],
         isRequired: true,
       },
       {
@@ -253,7 +287,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Product Feedback & Features",
     category: "FEEDBACK",
-    description: "Gather actionable feature requests, bug reports, and user satisfaction ratings from active users.",
+    description:
+      "Gather actionable feature requests, bug reports, and user satisfaction ratings from active users.",
     fields: [
       {
         label: "How often do you interact with our platform?",
@@ -270,7 +305,12 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Which capabilities do you find most valuable?",
         type: "CHECKBOX",
-        options: ["One-click templates", "Conversational UX", "Live QR Distribution", "Export to CSV/Excel"],
+        options: [
+          "One-click templates",
+          "Conversational UX",
+          "Live QR Distribution",
+          "Export to CSV/Excel",
+        ],
         isRequired: true,
       },
       {
@@ -289,12 +329,18 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "AI Assistant & Copilot Feedback",
     category: "FEEDBACK",
-    description: "Measure AI response quality, accuracy of code generation, and developer productivity gains.",
+    description:
+      "Measure AI response quality, accuracy of code generation, and developer productivity gains.",
     fields: [
       {
         label: "How frequently do you rely on AI suggestions during your workflow?",
         type: "SELECT",
-        options: ["Every single task", "Multiple times daily", "Occasionally for debugging", "Almost never"],
+        options: [
+          "Every single task",
+          "Multiple times daily",
+          "Occasionally for debugging",
+          "Almost never",
+        ],
         isRequired: true,
       },
       {
@@ -325,7 +371,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Customer Support Experience Feedback",
     category: "FEEDBACK",
-    description: "Collect immediate feedback on customer service interactions, agent helpfulness, and resolution speed.",
+    description:
+      "Collect immediate feedback on customer service interactions, agent helpfulness, and resolution speed.",
     fields: [
       {
         label: "Which support channel did you use to contact our team?",
@@ -361,12 +408,17 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Mobile App Experience Feedback",
     category: "FEEDBACK",
-    description: "Capture mobile gestures, offline support, touch targets, and mobile form submission feedback.",
+    description:
+      "Capture mobile gestures, offline support, touch targets, and mobile form submission feedback.",
     fields: [
       {
         label: "Which mobile device and operating system are you using?",
         type: "RADIO",
-        options: ["iOS (iPhone / iPad)", "Android (Samsung / Pixel / OnePlus)", "Mobile Web Browser"],
+        options: [
+          "iOS (iPhone / iPad)",
+          "Android (Samsung / Pixel / OnePlus)",
+          "Mobile Web Browser",
+        ],
         isRequired: true,
       },
       {
@@ -396,7 +448,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Onboarding & First-Time UX Feedback",
     category: "FEEDBACK",
-    description: "Assess new user signup friction, tutorial clarity, and time-to-first-value onboarding.",
+    description:
+      "Assess new user signup friction, tutorial clarity, and time-to-first-value onboarding.",
     fields: [
       {
         label: "How easy was it to get started and create your first form?",
@@ -432,12 +485,18 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Feature Beta & Early Access Feedback",
     category: "FEEDBACK",
-    description: "Collect testing feedback from beta participants before general production release.",
+    description:
+      "Collect testing feedback from beta participants before general production release.",
     fields: [
       {
         label: "Which experimental beta feature are you testing?",
         type: "SELECT",
-        options: ["Multi-step Logic branching", "Custom Domain CNAME", "AI Auto-Fill Prompts", "Theme Presets"],
+        options: [
+          "Multi-step Logic branching",
+          "Custom Domain CNAME",
+          "AI Auto-Fill Prompts",
+          "Theme Presets",
+        ],
         isRequired: true,
       },
       {
@@ -470,7 +529,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Tech Conference Registration",
     category: "EVENTS",
-    description: "Register attendees, collect company info, dietary preferences, and ticket tiers for events.",
+    description:
+      "Register attendees, collect company info, dietary preferences, and ticket tiers for events.",
     fields: [
       {
         label: "Attendee Full Name",
@@ -528,7 +588,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Full Stack Cohort Enrollment",
     category: "EVENTS",
-    description: "Streamlined student onboarding with preferred batch times, coding background, and goals.",
+    description:
+      "Streamlined student onboarding with preferred batch times, coding background, and goals.",
     fields: [
       {
         label: "Student Full Name",
@@ -590,7 +651,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Webinar RSVP & Live Q&A",
     category: "EVENTS",
-    description: "Collect registrations for live webinars, workshops, and pre-submit audience questions.",
+    description:
+      "Collect registrations for live webinars, workshops, and pre-submit audience questions.",
     fields: [
       {
         label: "Your Full Name",
@@ -607,7 +669,13 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Current Role",
         type: "SELECT",
-        options: ["Founder / Executive", "Software Engineer", "Product Manager", "Designer", "Student / Learning"],
+        options: [
+          "Founder / Executive",
+          "Software Engineer",
+          "Product Manager",
+          "Designer",
+          "Student / Learning",
+        ],
         isRequired: true,
       },
       {
@@ -626,7 +694,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Hackathon Team Registration",
     category: "EVENTS",
-    description: "Register software teams, solo hackers, challenge tracks, and project repositories for hackathons.",
+    description:
+      "Register software teams, solo hackers, challenge tracks, and project repositories for hackathons.",
     fields: [
       {
         label: "Team Name",
@@ -679,7 +748,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "VIP Executive Dinner RSVP",
     category: "EVENTS",
-    description: "Exclusive RSVP form for founders, CTOs, and investors with entree choices and attendee bios.",
+    description:
+      "Exclusive RSVP form for founders, CTOs, and investors with entree choices and attendee bios.",
     fields: [
       {
         label: "Guest Full Name",
@@ -702,7 +772,11 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Will you be attending the executive dinner in person?",
         type: "RADIO",
-        options: ["Yes, I will attend in person", "Regretfully declining", "Sending an executive proxy"],
+        options: [
+          "Yes, I will attend in person",
+          "Regretfully declining",
+          "Sending an executive proxy",
+        ],
         isRequired: true,
       },
       {
@@ -727,7 +801,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Community Meetup & Workshop RSVP",
     category: "EVENTS",
-    description: "RSVP for local developer meetups, city chapters, and lightning talk speaker submissions.",
+    description:
+      "RSVP for local developer meetups, city chapters, and lightning talk speaker submissions.",
     fields: [
       {
         label: "Your Full Name",
@@ -744,7 +819,14 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "City / Chapter Location",
         type: "SELECT",
-        options: ["San Francisco / Bay Area", "New York City", "Bengaluru", "London", "Berlin", "Remote / Online"],
+        options: [
+          "San Francisco / Bay Area",
+          "New York City",
+          "Bengaluru",
+          "London",
+          "Berlin",
+          "Remote / Online",
+        ],
         isRequired: true,
       },
       {
@@ -771,7 +853,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Software Engineer Application",
     category: "APPLICATIONS",
-    description: "Collect candidate profiles, portfolio links, experience details, and tech stack proficiencies.",
+    description:
+      "Collect candidate profiles, portfolio links, experience details, and tech stack proficiencies.",
     fields: [
       {
         label: "Full Legal Name",
@@ -830,7 +913,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Product Designer Application",
     category: "APPLICATIONS",
-    description: "Screen product designers with portfolio links, design systems, and UX case studies.",
+    description:
+      "Screen product designers with portfolio links, design systems, and UX case studies.",
     fields: [
       {
         label: "Full Name",
@@ -859,7 +943,11 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Experience with Design Systems",
         type: "SELECT",
-        options: ["Built design systems from scratch", "Maintained existing design systems", "Familiar with UI kits only"],
+        options: [
+          "Built design systems from scratch",
+          "Maintained existing design systems",
+          "Familiar with UI kits only",
+        ],
         isRequired: true,
       },
       {
@@ -879,7 +967,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Creator Partnership Request",
     category: "APPLICATIONS",
-    description: "Onboard influencers, content creators, and community ambassadors for sponsorship deals.",
+    description:
+      "Onboard influencers, content creators, and community ambassadors for sponsorship deals.",
     fields: [
       {
         label: "Creator / Brand Name",
@@ -914,7 +1003,12 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Preferred Collaboration Model",
         type: "CHECKBOX",
-        options: ["Sponsored Video / Post", "Affiliate Commission", "Speaking Engagement", "Long-term Ambassadorship"],
+        options: [
+          "Sponsored Video / Post",
+          "Affiliate Commission",
+          "Speaking Engagement",
+          "Long-term Ambassadorship",
+        ],
         isRequired: true,
       },
       {
@@ -928,7 +1022,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Product Manager (PM) Application",
     category: "APPLICATIONS",
-    description: "Screen technical product managers on product roadmaps, metrics impact, and engineering alignment.",
+    description:
+      "Screen technical product managers on product roadmaps, metrics impact, and engineering alignment.",
     fields: [
       {
         label: "Full Legal Name",
@@ -951,7 +1046,12 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Years of Product Management Experience",
         type: "SELECT",
-        options: ["1-2 years (Associate PM)", "3-5 years (PM)", "6-9 years (Senior PM)", "10+ years (Lead / Director)"],
+        options: [
+          "1-2 years (Associate PM)",
+          "3-5 years (PM)",
+          "6-9 years (Senior PM)",
+          "10+ years (Lead / Director)",
+        ],
         isRequired: true,
       },
       {
@@ -977,7 +1077,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Startup Grant & Fellowship Program",
     category: "APPLICATIONS",
-    description: "Apply for non-dilutive founder grants, cloud credits, and accelerator interview rounds.",
+    description:
+      "Apply for non-dilutive founder grants, cloud credits, and accelerator interview rounds.",
     fields: [
       {
         label: "Founder Full Name & Co-Founders",
@@ -1026,7 +1127,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Open Source Contributor Application",
     category: "APPLICATIONS",
-    description: "Join core maintainer squads, request issue bounties, and join contributor Discord channels.",
+    description:
+      "Join core maintainer squads, request issue bounties, and join contributor Discord channels.",
     fields: [
       {
         label: "GitHub Username",
@@ -1076,10 +1178,12 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Full Stack Developer Quiz",
     category: "QUIZZES",
-    description: "Interactive developer skill test covering TypeScript, tRPC, React 19, and full-stack architecture.",
+    description:
+      "Interactive developer skill test covering TypeScript, tRPC, React 19, and full-stack architecture.",
     fields: [
       {
-        label: "Which TypeScript keyword is used to create a property that cannot be modified after declaration?",
+        label:
+          "Which TypeScript keyword is used to create a property that cannot be modified after declaration?",
         type: "RADIO",
         options: ["readonly", "const", "immutable", "frozen"],
         isRequired: true,
@@ -1096,7 +1200,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "In modern React, which hook is used to consume asynchronous promises or context directly?",
+        label:
+          "In modern React, which hook is used to consume asynchronous promises or context directly?",
         type: "RADIO",
         options: ["use()", "useFetch()", "usePromise()", "useResource()"],
         isRequired: true,
@@ -1129,7 +1234,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "JavaScript & Web Core Quiz",
     category: "QUIZZES",
-    description: "Quick 5-minute quiz testing Core JavaScript, ESNext features, event loop, and web security.",
+    description:
+      "Quick 5-minute quiz testing Core JavaScript, ESNext features, event loop, and web security.",
     fields: [
       {
         label: "What is the output of `typeof null` in standard JavaScript?",
@@ -1138,7 +1244,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "Which storage mechanism is automatically sent with every matching HTTP request header?",
+        label:
+          "Which storage mechanism is automatically sent with every matching HTTP request header?",
         type: "RADIO",
         options: ["Cookies", "localStorage", "sessionStorage", "IndexedDB"],
         isRequired: true,
@@ -1171,7 +1278,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "React 19 & Next.js Architecture Quiz",
     category: "QUIZZES",
-    description: "Test your knowledge on React 19 Actions, Server Components, Suspense, and hydration mechanics.",
+    description:
+      "Test your knowledge on React 19 Actions, Server Components, Suspense, and hydration mechanics.",
     fields: [
       {
         label: "What is the primary benefit of React Server Components in Next.js?",
@@ -1223,7 +1331,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "System Design & Cloud Architecture Quiz",
     category: "QUIZZES",
-    description: "Evaluate your skills in distributed systems, CAP theorem, caching strategies, and message brokers.",
+    description:
+      "Evaluate your skills in distributed systems, CAP theorem, caching strategies, and message brokers.",
     fields: [
       {
         label: "Which HTTP header serves stale cached content while asynchronously revalidating?",
@@ -1232,7 +1341,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "According to the CAP Theorem, what can a distributed system guarantee during a network partition?",
+        label:
+          "According to the CAP Theorem, what can a distributed system guarantee during a network partition?",
         type: "RADIO",
         options: [
           "Either Consistency or Availability, but not both",
@@ -1254,7 +1364,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "Which message broker is best suited for durable high-throughput append-only event streaming?",
+        label:
+          "Which message broker is best suited for durable high-throughput append-only event streaming?",
         type: "RADIO",
         options: ["Apache Kafka", "Redis Pub/Sub", "RabbitMQ", "SQLite In-Memory"],
         isRequired: true,
@@ -1270,7 +1381,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "AI & Prompt Engineering Quiz",
     category: "QUIZZES",
-    description: "Assess your foundation in LLM tokenization, RAG pipelines, vector databases, and agent loops.",
+    description:
+      "Assess your foundation in LLM tokenization, RAG pipelines, vector databases, and agent loops.",
     fields: [
       {
         label: "In Large Language Models, what does 'Few-Shot Prompting' mean?",
@@ -1295,7 +1407,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "Which vector distance metric is most commonly used to measure semantic embedding similarity?",
+        label:
+          "Which vector distance metric is most commonly used to measure semantic embedding similarity?",
         type: "RADIO",
         options: ["Cosine Similarity", "Manhattan Distance", "Hamming Distance", "Jaccard Index"],
         isRequired: true,
@@ -1312,7 +1425,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "Rate your experience in building production autonomous agents with tool-calling capabilities",
+        label:
+          "Rate your experience in building production autonomous agents with tool-calling capabilities",
         type: "RATING",
         description: "1 = Never built, 5 = Deployed in production",
         isRequired: true,
@@ -1322,10 +1436,12 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "SQL & PostgreSQL Performance Quiz",
     category: "QUIZZES",
-    description: "Challenge your database indexing, EXPLAIN ANALYZE interpretation, and transaction isolation skills.",
+    description:
+      "Challenge your database indexing, EXPLAIN ANALYZE interpretation, and transaction isolation skills.",
     fields: [
       {
-        label: "Which PostgreSQL index type is most effective for array containment and full-text search?",
+        label:
+          "Which PostgreSQL index type is most effective for array containment and full-text search?",
         type: "RADIO",
         options: ["GIN (Generalized Inverted Index)", "B-Tree Index", "Hash Index", "BRIN Index"],
         isRequired: true,
@@ -1353,7 +1469,8 @@ const TEMPLATES: TemplateDefinition[] = [
         isRequired: true,
       },
       {
-        label: "Which SQL transaction isolation level prevents Dirty Reads, Non-repeatable Reads, and Phantom Reads?",
+        label:
+          "Which SQL transaction isolation level prevents Dirty Reads, Non-repeatable Reads, and Phantom Reads?",
         type: "RADIO",
         options: ["SERIALIZABLE", "READ COMMITTED", "READ UNCOMMITTED", "REPEATABLE READ"],
         isRequired: true,
@@ -1371,7 +1488,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Contact Us & Sales Inquiry",
     category: "GENERAL",
-    description: "Clean business inquiry and support contact form for fast lead generation and customer support.",
+    description:
+      "Clean business inquiry and support contact form for fast lead generation and customer support.",
     fields: [
       {
         label: "Your Full Name",
@@ -1441,7 +1559,13 @@ const TEMPLATES: TemplateDefinition[] = [
       {
         label: "Company Employee Size",
         type: "SELECT",
-        options: ["1-10 Employees", "11-50 Employees", "51-200 Employees", "201-1000 Employees", "1000+ Employees"],
+        options: [
+          "1-10 Employees",
+          "11-50 Employees",
+          "51-200 Employees",
+          "201-1000 Employees",
+          "1000+ Employees",
+        ],
         isRequired: true,
       },
       {
@@ -1466,7 +1590,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Bug Report & Diagnostics Form",
     category: "GENERAL",
-    description: "Capture structured bug reports with steps to reproduce, environment info, and severity.",
+    description:
+      "Capture structured bug reports with steps to reproduce, environment info, and severity.",
     fields: [
       {
         label: "Reporter Name & Email",
@@ -1521,7 +1646,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "General RSVP & Party Invitation",
     category: "GENERAL",
-    description: "Fun, conversational RSVP form for parties, birthdays, anniversaries, and social celebrations.",
+    description:
+      "Fun, conversational RSVP form for parties, birthdays, anniversaries, and social celebrations.",
     fields: [
       {
         label: "Guest Full Name",
@@ -1564,7 +1690,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Volunteer & Community Sign-Up",
     category: "GENERAL",
-    description: "Organize non-profit volunteers, committee preferences, availability schedules, and contact info.",
+    description:
+      "Organize non-profit volunteers, committee preferences, availability schedules, and contact info.",
     fields: [
       {
         label: "Volunteer Full Name",
@@ -1619,7 +1746,8 @@ const TEMPLATES: TemplateDefinition[] = [
   {
     title: "Vendor & Supplier Onboarding Form",
     category: "GENERAL",
-    description: "Collect procurement details, GST/Tax IDs, payment terms, and banking wire information from vendors.",
+    description:
+      "Collect procurement details, GST/Tax IDs, payment terms, and banking wire information from vendors.",
     fields: [
       {
         label: "Vendor Legal Business Name",
@@ -1701,9 +1829,7 @@ async function seed() {
 
   // Iterate over all 36 modern template definitions
   for (const tpl of TEMPLATES) {
-    let formRecord = existingForms.find(
-      (f) => f.title.toLowerCase() === tpl.title.toLowerCase()
-    );
+    let formRecord = existingForms.find((f) => f.title.toLowerCase() === tpl.title.toLowerCase());
 
     if (!formRecord) {
       console.log(`Creating template: "${tpl.title}" [${tpl.category}]...`);
@@ -1751,7 +1877,7 @@ async function seed() {
           formId: formRecord.id,
           label: f.label,
           labelKey,
-          type: f.type,
+          type: f.type as any,
           description: f.description ?? null,
           placeholder: f.placeholder ?? null,
           isRequired: f.isRequired,

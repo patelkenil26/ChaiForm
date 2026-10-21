@@ -8,9 +8,12 @@
     "db:migrate": "dotenv -- turbo db:migrate",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.7.4",
     "turbo": "^2.7.2",
     "typescript": "5.9.2"
@@ -22,5 +25,10 @@
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
     "dotenv-cli": "^11.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md}": [
+      "prettier --write"
+    ]
   }
 }

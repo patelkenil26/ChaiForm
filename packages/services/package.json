@@ -2,6 +2,9 @@
   "name": "@repo/services",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
