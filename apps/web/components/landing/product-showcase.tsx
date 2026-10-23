@@ -47,7 +47,8 @@ export function ProductShowcaseSection() {
             See how ChaiForm works.
           </h2>
           <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            From blank canvas to live responses in 3 intuitive steps. No coding, complex logic trees, or setup required.
+            From blank canvas to live responses in 3 intuitive steps. No coding, complex logic
+            trees, or setup required.
           </p>
         </div>
 
@@ -58,16 +59,21 @@ export function ProductShowcaseSection() {
             <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#f59e0b]/50 to-transparent" />
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-xs font-bold ${landingTheme.primaryText} tracking-wider uppercase`}>
+                <span
+                  className={`text-xs font-bold ${landingTheme.primaryText} tracking-wider uppercase`}
+                >
                   Step 01
                 </span>
-                <div className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}>
+                <div
+                  className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}
+                >
                   <IconForms className="size-4" />
                 </div>
               </div>
               <h3 className="font-bold text-base text-foreground">Build with 14 Field Types</h3>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                Add ratings, single & multiple choices, text, passwords, and dates. Reorder questions effortlessly and preview live.
+                Add ratings, single & multiple choices, text, passwords, and dates. Reorder
+                questions effortlessly and preview live.
               </p>
             </div>
           </div>
@@ -86,7 +92,8 @@ export function ProductShowcaseSection() {
               </div>
               <h3 className="font-bold text-base text-foreground">Share via Link, QR or Embed</h3>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                Send your clean custom URL, download high-resolution themed QR codes, or paste a 1-line iframe into Next.js or Webflow.
+                Send your clean custom URL, download high-resolution themed QR codes, or paste a
+                1-line iframe into Next.js or Webflow.
               </p>
             </div>
           </div>
@@ -105,7 +112,8 @@ export function ProductShowcaseSection() {
               </div>
               <h3 className="font-bold text-base text-foreground">Track Live Responses & Export</h3>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                Watch verified answers stream directly into your submissions hub. Search, filter by dates, and export to CSV in 1 click.
+                Watch verified answers stream directly into your submissions hub. Search, filter by
+                dates, and export to CSV in 1 click.
               </p>
             </div>
           </div>
@@ -125,11 +133,11 @@ export function ProductShowcaseSection() {
             </div>
 
             {/* View Switcher Tabs */}
-            <div className="flex items-center p-0.5 rounded-lg bg-muted/60 border border-border/50 text-xs">
+            <div className="flex items-center p-0.5 rounded-lg bg-muted/60 border border-border/50 text-xs overflow-x-auto no-scrollbar max-w-full">
               <button
                 type="button"
                 onClick={() => setActiveTab("builder")}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === "builder"
                     ? "bg-foreground text-background font-semibold shadow-xs"
                     : "text-muted-foreground hover:text-foreground"
@@ -140,7 +148,7 @@ export function ProductShowcaseSection() {
               <button
                 type="button"
                 onClick={() => setActiveTab("preview")}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === "preview"
                     ? "bg-foreground text-background font-semibold shadow-xs"
                     : "text-muted-foreground hover:text-foreground"
@@ -151,13 +159,13 @@ export function ProductShowcaseSection() {
               <button
                 type="button"
                 onClick={() => setActiveTab("analytics")}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === "analytics"
                     ? "bg-foreground text-background font-semibold shadow-xs"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Submissions & Stats
+                Submissions &amp; Stats
               </button>
             </div>
           </div>
@@ -173,7 +181,9 @@ export function ProductShowcaseSection() {
                       <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
                         Form Questions (4)
                       </span>
-                      <Badge variant="secondary" className="text-[10px]">Auto-saved</Badge>
+                      <Badge variant="secondary" className="text-[10px]">
+                        Auto-saved
+                      </Badge>
                     </div>
                     <span className="text-xs text-muted-foreground">Drag to reorder</span>
                   </div>
@@ -181,7 +191,9 @@ export function ProductShowcaseSection() {
                   {/* Question Card 1 */}
                   <div className="rounded-xl border border-border/80 bg-card p-3.5 flex items-center justify-between gap-3 shadow-2xs">
                     <div className="flex items-center gap-3">
-                      <span className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}>
+                      <span
+                        className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}
+                      >
                         1
                       </span>
                       <div>
@@ -202,7 +214,9 @@ export function ProductShowcaseSection() {
                   {/* Question Card 2 */}
                   <div className="rounded-xl border border-border/80 bg-card p-3.5 flex items-center justify-between gap-3 shadow-2xs">
                     <div className="flex items-center gap-3">
-                      <span className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}>
+                      <span
+                        className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}
+                      >
                         2
                       </span>
                       <div>
@@ -221,7 +235,9 @@ export function ProductShowcaseSection() {
                   {/* Question Card 3 */}
                   <div className="rounded-xl border border-border/80 bg-card p-3.5 flex items-center justify-between gap-3 shadow-2xs">
                     <div className="flex items-center gap-3">
-                      <span className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}>
+                      <span
+                        className={`size-6 rounded-md ${landingTheme.iconBg} flex items-center justify-center text-xs font-bold`}
+                      >
                         3
                       </span>
                       <div>
@@ -264,15 +280,21 @@ export function ProductShowcaseSection() {
                     <div className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                       <div>
                         <div className="font-medium text-foreground">Custom URL Slug</div>
-                        <div className="text-[11px] font-mono text-[#fef08a]">/form/early-feedback</div>
+                        <div className="text-[11px] font-mono text-[#fef08a]">
+                          /form/early-feedback
+                        </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 text-[10px]">Edit</Button>
+                      <Button variant="ghost" size="sm" className="h-6 text-[10px]">
+                        Edit
+                      </Button>
                     </div>
 
                     <div className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                       <div>
                         <div className="font-medium text-foreground">Password Protection</div>
-                        <div className="text-[11px] text-muted-foreground">Enabled for private survey</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Enabled for private survey
+                        </div>
                       </div>
                       <IconLock className="size-3.5 text-amber-400" />
                     </div>
@@ -298,7 +320,9 @@ export function ProductShowcaseSection() {
           {/* View Tab 2: Live Runner View */}
           {activeTab === "preview" && (
             <div className="p-8 sm:p-12 md:p-16 flex flex-col items-center justify-center text-center bg-background/90 min-h-[340px]">
-              <span className={`text-[11px] font-bold ${landingTheme.primaryText} tracking-wider uppercase mb-2`}>
+              <span
+                className={`text-[11px] font-bold ${landingTheme.primaryText} tracking-wider uppercase mb-2`}
+              >
                 1-Question-At-A-Time Runner
               </span>
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground max-w-lg">
@@ -319,7 +343,13 @@ export function ProductShowcaseSection() {
                 ))}
               </div>
               <div className="mt-8 text-[11px] text-muted-foreground flex items-center gap-2">
-                <span>Press <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px] font-mono">Enter ↵</kbd> to proceed</span>
+                <span>
+                  Press{" "}
+                  <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px] font-mono">
+                    Enter ↵
+                  </kbd>{" "}
+                  to proceed
+                </span>
               </div>
             </div>
           )}
@@ -342,29 +372,43 @@ export function ProductShowcaseSection() {
                 </div>
                 <div className="p-3 rounded-xl border border-border/60 bg-card">
                   <div className="text-[11px] text-muted-foreground">Export Formats</div>
-                  <div className="text-xs font-semibold text-emerald-400 mt-1">CSV & JSON Ready</div>
+                  <div className="text-xs font-semibold text-emerald-400 mt-1">
+                    CSV & JSON Ready
+                  </div>
                 </div>
               </div>
 
               {/* Sample Submissions Table */}
-              <div className="rounded-xl border border-border/70 overflow-hidden text-xs">
-                <div className="grid grid-cols-12 bg-muted/60 p-2.5 font-semibold text-muted-foreground border-b border-border/60 text-[11px]">
-                  <div className="col-span-4">Feedback Answer</div>
-                  <div className="col-span-3">Rating</div>
-                  <div className="col-span-3">Email</div>
-                  <div className="col-span-2 text-right">Time</div>
-                </div>
-                <div className="grid grid-cols-12 p-2.5 border-b border-border/40 text-foreground items-center">
-                  <div className="col-span-4 truncate">&quot;Much cleaner than Google Forms&quot;</div>
-                  <div className="col-span-3 text-amber-400 flex items-center gap-1">★ ★ ★ ★ ★</div>
-                  <div className="col-span-3 text-muted-foreground truncate">alex@startup.io</div>
-                  <div className="col-span-2 text-right text-muted-foreground">2m ago</div>
-                </div>
-                <div className="grid grid-cols-12 p-2.5 text-foreground items-center bg-muted/15">
-                  <div className="col-span-4 truncate">&quot;Mobile keyboard flow is super smooth&quot;</div>
-                  <div className="col-span-3 text-amber-400 flex items-center gap-1">★ ★ ★ ★ ★</div>
-                  <div className="col-span-3 text-muted-foreground truncate">sara@creative.co</div>
-                  <div className="col-span-2 text-right text-muted-foreground">14m ago</div>
+              <div className="overflow-x-auto rounded-xl border border-border/70">
+                <div className="min-w-[460px] text-xs">
+                  <div className="grid grid-cols-12 bg-muted/60 p-2.5 font-semibold text-muted-foreground border-b border-border/60 text-[11px]">
+                    <div className="col-span-4">Feedback Answer</div>
+                    <div className="col-span-3">Rating</div>
+                    <div className="col-span-3">Email</div>
+                    <div className="col-span-2 text-right">Time</div>
+                  </div>
+                  <div className="grid grid-cols-12 p-2.5 border-b border-border/40 text-foreground items-center">
+                    <div className="col-span-4 truncate">
+                      &quot;Much cleaner than Google Forms&quot;
+                    </div>
+                    <div className="col-span-3 text-amber-400 flex items-center gap-1">
+                      ★ ★ ★ ★ ★
+                    </div>
+                    <div className="col-span-3 text-muted-foreground truncate">alex@startup.io</div>
+                    <div className="col-span-2 text-right text-muted-foreground">2m ago</div>
+                  </div>
+                  <div className="grid grid-cols-12 p-2.5 text-foreground items-center bg-muted/15">
+                    <div className="col-span-4 truncate">
+                      &quot;Mobile keyboard flow is super smooth&quot;
+                    </div>
+                    <div className="col-span-3 text-amber-400 flex items-center gap-1">
+                      ★ ★ ★ ★ ★
+                    </div>
+                    <div className="col-span-3 text-muted-foreground truncate">
+                      sara@creative.co
+                    </div>
+                    <div className="col-span-2 text-right text-muted-foreground">14m ago</div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -87,7 +87,7 @@ export function GlobalCommandPalette({
       open={open}
       onOpenChange={handleOpenChange}
       title="Global Workspace Search"
-      description="Quickly jump to forms, explore templates, or run actions..."
+      description="Quickly jump to forms, templates, or run actions..."
       className="max-w-[92vw] sm:max-w-2xl rounded-2xl shadow-2xl border border-border/70 overflow-hidden"
     >
       <CommandInput placeholder="Search your forms, templates, or quick navigation (Ctrl+K)..." />
@@ -116,11 +116,17 @@ export function GlobalCommandPalette({
                         {form.title}
                       </span>
                       {form.isPublished ? (
-                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10">
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] py-0 px-1 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
+                        >
                           Live
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10">
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] py-0 px-1 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10"
+                        >
                           Draft
                         </Badge>
                       )}
@@ -175,7 +181,7 @@ export function GlobalCommandPalette({
                   </div>
                 </div>
                 <CommandShortcut className="text-[11px] text-muted-foreground flex items-center gap-1">
-                  Explore <IconArrowRight className="size-3" />
+                  Use <IconArrowRight className="size-3" />
                 </CommandShortcut>
               </CommandItem>
             ))}
@@ -268,13 +274,16 @@ export function CommandSearchTrigger({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative flex h-8 w-full max-w-[170px] sm:max-w-[230px] md:max-w-[270px] items-center justify-between rounded-lg border border-border/60 bg-muted/40 px-2.5 text-xs text-muted-foreground transition-all ${landingTheme.buttonOutlineHover} cursor-pointer select-none shadow-2xs ${
+      title="Search forms & templates (Ctrl + K)"
+      className={`group relative flex h-8 w-8 sm:w-auto sm:max-w-[230px] md:max-w-[270px] items-center justify-center sm:justify-between rounded-lg border border-border/60 bg-muted/40 px-0 sm:px-2.5 text-xs text-muted-foreground transition-all ${landingTheme.buttonOutlineHover} cursor-pointer select-none shadow-2xs shrink-0 ${
         className ?? ""
       }`}
     >
       <div className="flex items-center gap-1.5 truncate">
-        <IconSearch className={`size-3.5 shrink-0 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`} />
-        <span className="truncate">Search forms, templates...</span>
+        <IconSearch
+          className={`size-3.5 shrink-0 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`}
+        />
+        <span className="hidden sm:inline truncate">Search forms, templates...</span>
       </div>
       <kbd className="pointer-events-none hidden sm:inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-border/60 bg-background px-1.5 font-mono text-[9px] font-medium text-muted-foreground opacity-100 shadow-2xs transition-colors">
         <span className="text-[10px]">Ctrl</span> K

@@ -37,10 +37,7 @@ export function SubmissionsToolbar({
   onExportCsv,
 }: SubmissionsToolbarProps) {
   const isFiltered =
-    searchQuery.trim() !== "" ||
-    datePreset !== "ALL" ||
-    startDate !== "" ||
-    endDate !== "";
+    searchQuery.trim() !== "" || datePreset !== "ALL" || startDate !== "" || endDate !== "";
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border bg-card/60 backdrop-blur-sm p-4 shadow-2xs">
@@ -68,41 +65,46 @@ export function SubmissionsToolbar({
         </div>
 
         {/* Right Actions: Counts & Export Button */}
-        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+        <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto flex-wrap">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Badge variant="outline" className="font-mono text-[11px] gap-1">
               {totalCount} Total
             </Badge>
             {isFiltered && (
-              <Badge variant="secondary" className="font-mono text-[11px] gap-1 bg-primary/10 text-primary border-primary/20">
+              <Badge
+                variant="secondary"
+                className="font-mono text-[11px] gap-1 bg-primary/10 text-primary border-primary/20"
+              >
                 {filteredCount} Matching
               </Badge>
             )}
           </div>
 
-          {isFiltered && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onResetFilters}
-              className="h-8 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
-            >
-              <RotateCcwIcon className="size-3" />
-              Reset
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {isFiltered && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onResetFilters}
+                className="h-8 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+              >
+                <RotateCcwIcon className="size-3" />
+                Reset
+              </Button>
+            )}
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onExportCsv}
-            disabled={filteredCount === 0}
-            className="h-8 text-xs gap-1.5"
-            title="Download CSV file of responses"
-          >
-            <DownloadIcon className="size-3.5" />
-            Export CSV
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onExportCsv}
+              disabled={filteredCount === 0}
+              className="h-8 text-xs gap-1.5"
+              title="Download CSV file of responses"
+            >
+              <DownloadIcon className="size-3.5" />
+              <span>Export CSV</span>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -120,7 +122,7 @@ export function SubmissionsToolbar({
             variant={datePreset === "ALL" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => onSelectPreset("ALL")}
-            className="h-7 px-2.5 text-xs rounded-md"
+            className="h-7 px-2 text-xs rounded-md"
           >
             All Time
           </Button>
@@ -130,7 +132,7 @@ export function SubmissionsToolbar({
             variant={datePreset === "TODAY" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => onSelectPreset("TODAY")}
-            className="h-7 px-2.5 text-xs rounded-md"
+            className="h-7 px-2 text-xs rounded-md"
           >
             Today
           </Button>
@@ -140,9 +142,9 @@ export function SubmissionsToolbar({
             variant={datePreset === "7D" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => onSelectPreset("7D")}
-            className="h-7 px-2.5 text-xs rounded-md"
+            className="h-7 px-2 text-xs rounded-md"
           >
-            Last 7 Days
+            7D
           </Button>
 
           <Button
@@ -150,9 +152,9 @@ export function SubmissionsToolbar({
             variant={datePreset === "30D" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => onSelectPreset("30D")}
-            className="h-7 px-2.5 text-xs rounded-md"
+            className="h-7 px-2 text-xs rounded-md"
           >
-            Last 30 Days
+            30D
           </Button>
 
           <Button
@@ -160,31 +162,31 @@ export function SubmissionsToolbar({
             variant={datePreset === "CUSTOM" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => onSelectPreset("CUSTOM")}
-            className="h-7 px-2.5 text-xs rounded-md"
+            className="h-7 px-2 text-xs rounded-md"
           >
-            Custom Range
+            Custom
           </Button>
         </div>
 
         {/* Custom Start & End Date Inputs (Shown when CUSTOM is selected) */}
         {datePreset === "CUSTOM" && (
-          <div className="flex items-center gap-2 flex-wrap self-end md:self-auto bg-muted/40 p-1.5 rounded-lg border">
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2 flex-wrap w-full md:w-auto bg-muted/40 p-1.5 rounded-lg border">
+            <div className="flex items-center gap-1.5 flex-1 min-w-[120px]">
               <span className="text-[11px] text-muted-foreground">From:</span>
               <Input
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="h-7 text-xs w-32 px-2"
+                className="h-7 text-xs w-full px-2"
               />
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-1 min-w-[120px]">
               <span className="text-[11px] text-muted-foreground">To:</span>
               <Input
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="h-7 text-xs w-32 px-2"
+                className="h-7 text-xs w-full px-2"
               />
             </div>
           </div>

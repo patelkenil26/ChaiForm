@@ -90,8 +90,8 @@ export function UseCasesSection() {
             Built for how you collect data.
           </h2>
           <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Whether you are capturing leads, running live event registrations, or surveying customers,
-            ChaiForm adapts to your workflow.
+            Whether you are capturing leads, running live event registrations, or surveying
+            customers, ChaiForm adapts to your workflow.
           </p>
         </div>
 
@@ -116,7 +116,10 @@ export function UseCasesSection() {
                     </div>
                   </div>
 
-                  <Badge variant="outline" className={`text-[10px] font-semibold mb-3 ${uc.badgeColor}`}>
+                  <Badge
+                    variant="outline"
+                    className={`text-[10px] font-semibold mb-3 ${uc.badgeColor}`}
+                  >
                     {uc.tag}
                   </Badge>
 
@@ -130,7 +133,10 @@ export function UseCasesSection() {
 
                   <div className="space-y-2 border-t border-border/40 pt-4">
                     {uc.features.map((feat) => (
-                      <div key={feat} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <div
+                        key={feat}
+                        className="flex items-start gap-2 text-xs text-muted-foreground"
+                      >
                         <IconCheck className="size-3.5 text-emerald-500 shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
@@ -146,7 +152,7 @@ export function UseCasesSection() {
                     className="w-full justify-between text-xs font-semibold h-8.5 px-2 hover:bg-muted/60 group-hover:text-foreground"
                   >
                     <Link href="/templates">
-                      <span>Explore Templates</span>
+                      <span>Templates</span>
                       <IconArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>

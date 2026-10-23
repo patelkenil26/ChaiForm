@@ -64,11 +64,17 @@ export function LiveDemoSection() {
   };
 
   return (
-    <section id="live-demo" className="relative py-16 md:py-24 bg-muted/20 border-y border-border/40">
+    <section
+      id="live-demo"
+      className="relative py-16 md:py-24 bg-muted/20 border-y border-border/40"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto">
-          <Badge variant="outline" className={`text-xs px-3 py-1 ${landingTheme.badge} gap-1.5 mb-3`}>
+          <Badge
+            variant="outline"
+            className={`text-xs px-3 py-1 ${landingTheme.badge} gap-1.5 mb-3`}
+          >
             <IconSparkles className="size-3.5" />
             Live Interactive Playground
           </Badge>
@@ -76,8 +82,8 @@ export function LiveDemoSection() {
             Try it yourself. Zero friction.
           </h2>
           <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-            Experience the smooth, keyboard-first conversational runner right here.
-            No sign-up required to test.
+            Experience the smooth, keyboard-first conversational runner right here. No sign-up
+            required to test.
           </p>
         </div>
 
@@ -92,9 +98,11 @@ export function LiveDemoSection() {
             </div>
 
             {/* Mock URL bar */}
-            <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-background/80 border border-border/60 text-xs font-mono text-muted-foreground w-64 sm:w-80 truncate">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-background/80 border border-border/60 text-xs font-mono text-muted-foreground flex-1 max-w-[170px] sm:max-w-80 mx-2 truncate">
               <IconLock className={`size-3 ${landingTheme.iconColor} shrink-0`} />
-              <span className="truncate">https://chaiform.kenilpatel.in/form/interactive-preview</span>
+              <span className="truncate">
+                https://chaiform.kenilpatel.in/form/interactive-preview
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -106,7 +114,9 @@ export function LiveDemoSection() {
                 title="Toggle Live tRPC JSON Payload"
               >
                 <IconCode className="size-3.5" />
-                <span className="hidden sm:inline">{showJson ? "Hide Payload" : "Inspect Payload"}</span>
+                <span className="hidden sm:inline">
+                  {showJson ? "Hide Payload" : "Inspect Payload"}
+                </span>
               </Button>
             </div>
           </div>
@@ -124,7 +134,9 @@ export function LiveDemoSection() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="flex flex-col items-center justify-center my-auto text-center max-w-md mx-auto py-6">
-                <div className={`flex size-14 items-center justify-center rounded-2xl ${landingTheme.iconBg} mb-5 shadow-inner`}>
+                <div
+                  className={`flex size-14 items-center justify-center rounded-2xl ${landingTheme.iconBg} mb-5 shadow-inner`}
+                >
                   <IconSparkles className="size-7" />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
@@ -172,7 +184,10 @@ export function LiveDemoSection() {
                 />
                 <div className="flex items-center justify-between mt-5">
                   <span className="text-[11px] text-muted-foreground font-mono inline-flex items-center gap-1">
-                    Press <kbd className="px-1.5 py-0.5 rounded bg-muted border text-xs inline-flex items-center gap-0.5">Enter <IconCornerDownLeft className="size-2.5" /></kbd>
+                    Press{" "}
+                    <kbd className="px-1.5 py-0.5 rounded bg-muted border text-xs inline-flex items-center gap-0.5">
+                      Enter <IconCornerDownLeft className="size-2.5" />
+                    </kbd>
                   </span>
                   <Button onClick={handleNext} size="sm" className="gap-1.5">
                     <span>Continue</span>
@@ -260,13 +275,17 @@ export function LiveDemoSection() {
                     </button>
                   ))}
                 </div>
-                <div className={`mt-3 flex items-center justify-center gap-1.5 text-xs font-medium ${landingTheme.primaryText}`}>
+                <div
+                  className={`mt-3 flex items-center justify-center gap-1.5 text-xs font-medium ${landingTheme.primaryText}`}
+                >
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: rating }).map((_, i) => (
                       <IconStarFilled key={i} className="size-3.5" />
                     ))}
                   </div>
-                  <span>{rating === 5 ? "5.0 / 5.0 • Outstanding!" : `${rating}.0 / 5.0 Stars`}</span>
+                  <span>
+                    {rating === 5 ? "5.0 / 5.0 • Outstanding!" : `${rating}.0 / 5.0 Stars`}
+                  </span>
                 </div>
 
                 <Button
@@ -290,27 +309,18 @@ export function LiveDemoSection() {
                   Submission Captured!
                 </h3>
                 <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Notice how fast and smooth that felt? Zero page reloads, zero form fatigue.
-                  Your respondents complete forms 3.5x faster.
+                  Notice how fast and smooth that felt? Zero page reloads, zero form fatigue. Your
+                  respondents complete forms 3.5x faster.
                 </p>
 
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                  <Button
-                    asChild
-                    size="sm"
-                    className={`gap-2 ${landingTheme.primaryButton}`}
-                  >
+                  <Button asChild size="sm" className={`gap-2 ${landingTheme.primaryButton}`}>
                     <Link href={user ? "/dashboard" : "/signup"}>
                       <span>{user ? "Build in Dashboard" : "Create Your First Form"}</span>
                       <IconArrowRight className="size-4" />
                     </Link>
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleReset}
-                    className="gap-1.5"
-                  >
+                  <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5">
                     <IconRefresh className="size-3.5" />
                     <span>Test Again</span>
                   </Button>

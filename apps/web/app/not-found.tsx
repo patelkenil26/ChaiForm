@@ -53,10 +53,7 @@ export default function NotFound() {
 
         {/* Navigation Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-2">
-          <Button
-            asChild
-            className={`w-full sm:w-auto gap-2 ${landingTheme.primaryButton}`}
-          >
+          <Button asChild className={`w-full sm:w-auto gap-2 ${landingTheme.primaryButton}`}>
             <Link href="/dashboard">
               <IconLayoutDashboard className="size-4" />
               <span>Go to Dashboard</span>
@@ -64,14 +61,10 @@ export default function NotFound() {
             </Link>
           </Button>
 
-          <Button
-            asChild
-            variant="outline"
-            className="w-full sm:w-auto gap-2"
-          >
+          <Button asChild variant="outline" className="w-full sm:w-auto gap-2">
             <Link href="/explore">
               <IconCompass className="size-4" />
-              <span>Explore Templates</span>
+              <span>Templates</span>
             </Link>
           </Button>
         </div>
@@ -87,7 +80,10 @@ export default function NotFound() {
             <span>Go back to previous page</span>
           </button>
           <span>•</span>
-          <Link href="/" className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+          >
             <IconHome className="size-3.5" />
             <span>ChaiForm Home</span>
           </Link>

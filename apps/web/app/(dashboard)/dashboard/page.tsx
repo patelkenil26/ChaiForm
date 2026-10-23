@@ -97,17 +97,11 @@ export default function DashboardPage() {
 
   // Aggregate Metrics
   const totalForms = forms?.length ?? 0;
-  const publishedCount = useMemo(
-    () => forms?.filter((f) => f.isPublished).length ?? 0,
-    [forms]
-  );
-  const draftCount = useMemo(
-    () => forms?.filter((f) => !f.isPublished).length ?? 0,
-    [forms]
-  );
+  const publishedCount = useMemo(() => forms?.filter((f) => f.isPublished).length ?? 0, [forms]);
+  const draftCount = useMemo(() => forms?.filter((f) => !f.isPublished).length ?? 0, [forms]);
   const totalViews = useMemo(
     () => forms?.reduce((acc, f) => acc + (f.views ?? 0), 0) ?? 0,
-    [forms]
+    [forms],
   );
   const totalSubmissions = stats?.totalSubmissions ?? 0;
   const completionRate = useMemo(() => {
@@ -226,7 +220,7 @@ export default function DashboardPage() {
           >
             <Link href="/explore">
               <IconCompass className={`size-3.5 ${landingTheme.iconColor}`} />
-              <span>Explore Templates</span>
+              <span>Templates</span>
             </Link>
           </Button>
 
@@ -244,18 +238,24 @@ export default function DashboardPage() {
       {/* 2. 4 Executive Live KPI Cards with Luxury Champagne Glow */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Forms */}
-        <Card className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}>
+        <Card
+          className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+        >
           <div className={landingTheme.cardBeam} />
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Total Forms
             </span>
-            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconClipboardText className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.primaryText}`}>
+            <div
+              className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.primaryText}`}
+            >
               {isDataLoading ? <Skeleton className="h-8 w-14" /> : totalForms}
             </div>
             <p className="mt-1 text-xs text-muted-foreground flex items-center gap-2">
@@ -264,9 +264,7 @@ export default function DashboardPage() {
                 {publishedCount} live
               </span>
               <span>•</span>
-              <span className="text-amber-400 font-medium">
-                {draftCount} drafts
-              </span>
+              <span className="text-amber-400 font-medium">{draftCount} drafts</span>
             </p>
           </div>
         </Card>
@@ -287,7 +285,9 @@ export default function DashboardPage() {
               {isDataLoading ? <Skeleton className="h-8 w-16" /> : totalSubmissions}
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              {totalSubmissions === 1 ? "1 submission collected" : `${totalSubmissions} submissions recorded`}
+              {totalSubmissions === 1
+                ? "1 submission collected"
+                : `${totalSubmissions} submissions recorded`}
             </p>
           </div>
         </Card>
@@ -307,36 +307,40 @@ export default function DashboardPage() {
             <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-blue-400">
               {isDataLoading ? <Skeleton className="h-8 w-16" /> : totalViews}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Across all conversational forms
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Across all conversational forms</p>
           </div>
         </Card>
 
         {/* Overall Conversion Rate */}
-        <Card className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}>
+        <Card
+          className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+        >
           <div className={landingTheme.cardBeam} />
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Completion Rate
             </span>
-            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconTrendingUp className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.gradientText}`}>
+            <div
+              className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.gradientText}`}
+            >
               {isDataLoading ? <Skeleton className="h-8 w-14" /> : `${completionRate}%`}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Average responses per impression
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Average responses per impression</p>
           </div>
         </Card>
       </div>
 
       {/* 3. Submissions Velocity Chart (Interactive Workspace Activity) */}
-      <Card className={`p-5 sm:p-6 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all relative overflow-hidden`}>
+      <Card
+        className={`p-5 sm:p-6 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all relative overflow-hidden`}
+      >
         <div className={landingTheme.cardBeam} />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
@@ -370,10 +374,7 @@ export default function DashboardPage() {
             <Skeleton className="h-full w-full rounded-xl" />
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={timelineData}
-                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-              >
+              <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="dashboardSubmissionsGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor={landingTheme.paletteHex[0]} stopOpacity={0.38} />
@@ -462,12 +463,15 @@ export default function DashboardPage() {
           </div>
         ) : recentForms.length === 0 ? (
           <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed">
-            <div className={`flex size-14 items-center justify-center rounded-full ${landingTheme.iconBg} mb-4`}>
+            <div
+              className={`flex size-14 items-center justify-center rounded-full ${landingTheme.iconBg} mb-4`}
+            >
               <IconClipboardText className="size-7" />
             </div>
             <h3 className="text-lg font-semibold">No forms created yet</h3>
             <p className="mt-1.5 max-w-sm text-xs sm:text-sm text-muted-foreground">
-              Create your first interactive conversational form to start collecting responses and analyzing feedback.
+              Create your first interactive conversational form to start collecting responses and
+              analyzing feedback.
             </p>
             <Button
               onClick={() => setOpen(true)}
@@ -489,7 +493,9 @@ export default function DashboardPage() {
                   <div className={landingTheme.cardBeam} />
                   <CardHeader className="p-0 pb-3">
                     <div className="flex items-start justify-between gap-2">
-                      <CardTitle className={`line-clamp-1 text-base font-semibold group-hover:opacity-90 ${landingTheme.linkHover}`}>
+                      <CardTitle
+                        className={`line-clamp-1 text-base font-semibold group-hover:opacity-90 ${landingTheme.linkHover}`}
+                      >
                         {form.title}
                       </CardTitle>
                       <div className="flex items-center gap-1.5 shrink-0">
@@ -501,10 +507,7 @@ export default function DashboardPage() {
                             Live
                           </Badge>
                         ) : (
-                          <Badge
-                            variant="secondary"
-                            className={landingTheme.draftBadge}
-                          >
+                          <Badge variant="secondary" className={landingTheme.draftBadge}>
                             Draft
                           </Badge>
                         )}
@@ -517,7 +520,9 @@ export default function DashboardPage() {
 
                   <CardContent className="p-0 pb-3 text-xs text-muted-foreground flex items-center justify-between border-t border-border/40 pt-2.5">
                     <div className="flex items-center gap-1.5" title="Impressions">
-                      <IconEye className={`size-3.5 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`} />
+                      <IconEye
+                        className={`size-3.5 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`}
+                      />
                       <span>{form.views ?? 0} views</span>
                     </div>
 
@@ -527,7 +532,7 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
 
-                  <CardFooter className="p-0 flex items-center justify-between gap-2 border-t border-border/40 pt-3">
+                  <CardFooter className="p-0 flex items-center justify-between gap-2 border-t border-border/40 pt-3 flex-wrap sm:flex-nowrap">
                     <div className="flex items-center gap-1.5">
                       <Button
                         variant="outline"
@@ -595,7 +600,9 @@ export default function DashboardPage() {
           <div>
             <div className="flex items-center gap-2">
               <IconInbox className="size-4 text-emerald-400" />
-              <h2 className="text-base sm:text-lg font-bold tracking-tight">Recent Submissions Feed</h2>
+              <h2 className="text-base sm:text-lg font-bold tracking-tight">
+                Recent Submissions Feed
+              </h2>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               Live respondents answering your conversational forms across the workspace.
@@ -625,16 +632,21 @@ export default function DashboardPage() {
           </Card>
         ) : !stats?.recentSubmissions || stats.recentSubmissions.length === 0 ? (
           <Card className="flex flex-col items-center justify-center p-8 text-center border-dashed">
-            <div className={`flex size-10 items-center justify-center rounded-full ${landingTheme.iconBg} mb-2`}>
+            <div
+              className={`flex size-10 items-center justify-center rounded-full ${landingTheme.iconBg} mb-2`}
+            >
               <IconInbox className="size-5" />
             </div>
             <h4 className="text-sm font-semibold">No recent submissions yet</h4>
             <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-              As soon as users complete any of your live forms, incoming responses will stream into this feed.
+              As soon as users complete any of your live forms, incoming responses will stream into
+              this feed.
             </p>
           </Card>
         ) : (
-          <div className={`rounded-2xl border ${landingTheme.cardBg} overflow-hidden ${landingTheme.cardBorderHover} transition-all`}>
+          <div
+            className={`rounded-2xl border ${landingTheme.cardBg} overflow-hidden ${landingTheme.cardBorderHover} transition-all`}
+          >
             <div className="divide-y divide-border/50">
               {stats.recentSubmissions.map((sub) => (
                 <div
@@ -690,34 +702,39 @@ export default function DashboardPage() {
           className={`p-6 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all cursor-pointer group relative overflow-hidden`}
         >
           <div className={landingTheme.cardBeam} />
-          <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg} font-bold text-sm mb-3 group-hover:scale-105 transition-transform`}>
+          <div
+            className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg} font-bold text-sm mb-3 group-hover:scale-105 transition-transform`}
+          >
             <IconPlus className="size-4.5" />
           </div>
-          <h4 className={`font-semibold text-sm ${landingTheme.linkHover}`}>
-            Create Form
-          </h4>
+          <h4 className={`font-semibold text-sm ${landingTheme.linkHover}`}>Create Form</h4>
           <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
             Start a fresh conversational form with text, ratings, choices, and password protection.
           </p>
         </Card>
 
         <Link href="/explore" className="block">
-          <Card className={`h-full p-6 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all cursor-pointer group relative overflow-hidden`}>
+          <Card
+            className={`h-full p-6 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all cursor-pointer group relative overflow-hidden`}
+          >
             <div className={landingTheme.cardBeam} />
-            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg} font-bold text-sm mb-3 group-hover:scale-105 transition-transform`}>
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg} font-bold text-sm mb-3 group-hover:scale-105 transition-transform`}
+            >
               <IconCompass className="size-4.5" />
             </div>
-            <h4 className={`font-semibold text-sm ${landingTheme.linkHover}`}>
-              Explore Templates
-            </h4>
+            <h4 className={`font-semibold text-sm ${landingTheme.linkHover}`}>Templates</h4>
             <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-              Clone pre-built community templates for surveys, feedback, quizzes, and job applications.
+              Clone pre-built community templates for surveys, feedback, quizzes, and job
+              applications.
             </p>
           </Card>
         </Link>
 
         <Link href="/submissions" className="block">
-          <Card className={`h-full p-6 rounded-2xl border border-border/75 bg-gradient-to-b from-emerald-500/[0.04] via-card to-card ${landingTheme.cardBorderHover} transition-all cursor-pointer group relative overflow-hidden`}>
+          <Card
+            className={`h-full p-6 rounded-2xl border border-border/75 bg-gradient-to-b from-emerald-500/[0.04] via-card to-card ${landingTheme.cardBorderHover} transition-all cursor-pointer group relative overflow-hidden`}
+          >
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent group-hover:via-emerald-400 transition-all" />
             <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold text-sm mb-3 group-hover:scale-105 transition-transform">
               <IconChartBar className="size-4.5" />
@@ -726,7 +743,8 @@ export default function DashboardPage() {
               Submissions & CSV Export
             </h4>
             <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-              Download formatted spreadsheet reports and JSON payloads for all respondent submissions.
+              Download formatted spreadsheet reports and JSON payloads for all respondent
+              submissions.
             </p>
           </Card>
         </Link>

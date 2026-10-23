@@ -4,18 +4,15 @@ import { LandingFooter } from "~/components/landing/footer";
 import { Badge } from "~/components/ui/badge";
 import { landingTheme } from "~/config/landing-theme";
 
-export const metadata = {
-  title: "Terms of Service • ChaiForm",
-  description: "Read the Terms of Service governing your use of ChaiForm's conversational form builder.",
-  openGraph: {
-    title: "Terms of Service • ChaiForm",
-    description: "Read the Terms of Service governing your use of ChaiForm's conversational form builder.",
-  },
-};
+import { termsMetadata } from "~/seo";
+
+export const metadata = termsMetadata;
 
 export default function TermsPage() {
   return (
-    <div className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}>
+    <div
+      className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}
+    >
       <LandingNavbar />
 
       <main className="flex-1 py-16 md:py-24">
@@ -32,35 +29,49 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-foreground">1. Acceptance of Terms</h2>
               <p>
-                By accessing or using ChaiForm (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not access or use the Service.
+                By accessing or using ChaiForm (&quot;the Service&quot;), you agree to be bound by
+                these Terms of Service. If you do not agree to these terms, you may not access or
+                use the Service.
               </p>
             </section>
 
             <section className="space-y-3">
-              <h2 className="text-lg font-bold text-foreground">2. Account Registration & Security</h2>
+              <h2 className="text-lg font-bold text-foreground">
+                2. Account Registration & Security
+              </h2>
               <p>
-                You must provide accurate and complete information when registering. You are responsible for safeguarding your password and account credentials, and for any activities or actions under your account.
+                You must provide accurate and complete information when registering. You are
+                responsible for safeguarding your password and account credentials, and for any
+                activities or actions under your account.
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-foreground">3. Acceptable Use Policy</h2>
               <p>
-                You agree not to use ChaiForm to collect sensitive personal information without authorization, engage in phishing or deceptive practices, distribute malware, or violate any applicable local or international laws. We reserve the right to suspend or terminate accounts that violate this policy.
+                You agree not to use ChaiForm to collect sensitive personal information without
+                authorization, engage in phishing or deceptive practices, distribute malware, or
+                violate any applicable local or international laws. We reserve the right to suspend
+                or terminate accounts that violate this policy.
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-foreground">4. Free & Paid Subscriptions</h2>
               <p>
-                ChaiForm offers both a free tier and paid tiers. Free accounts are subject to monthly response and active form limits as displayed on our Pricing page. Paid plans are billed according to your selected billing interval (monthly or annual). You may cancel your subscription at any time.
+                ChaiForm offers both a free tier and paid tiers. Free accounts are subject to
+                monthly response and active form limits as displayed on our Pricing page. Paid plans
+                are billed according to your selected billing interval (monthly or annual). You may
+                cancel your subscription at any time.
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-foreground">5. Limitation of Liability</h2>
               <p>
-                The Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. ChaiForm makes no warranties that the service will meet your specific requirements or be uninterrupted, secure, or error-free.
+                The Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis.
+                ChaiForm makes no warranties that the service will meet your specific requirements
+                or be uninterrupted, secure, or error-free.
               </p>
             </section>
 
@@ -68,9 +79,13 @@ export default function TermsPage() {
               <h2 className="text-lg font-bold text-foreground">6. Contact Information</h2>
               <p>
                 For questions regarding these Terms, please email us at{" "}
-                <a href="mailto:support@chaiform.kenilpatel.in" className="text-foreground underline">
+                <a
+                  href="mailto:support@chaiform.kenilpatel.in"
+                  className="text-foreground underline"
+                >
                   support@chaiform.kenilpatel.in
-                </a>.
+                </a>
+                .
               </p>
             </section>
           </div>

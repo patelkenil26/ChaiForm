@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Loader2, Eye, EyeOff, AlertCircle, Check, X } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { AuthErrorBanner } from "~/components/auth/auth-error-banner";
+import { PasswordInput } from "~/components/auth/password-input";
 import { useSignup, useUser } from "~/hooks/api/auth";
 import { parseAuthErrorMessage } from "~/lib/error";
 import { useRouter } from "next/navigation";
@@ -29,9 +31,9 @@ export function SignupForm({
   const { user, isLoading: isUserLoading } = useUser();
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -115,13 +117,7 @@ export function SignupForm({
       </div>
 
       {errorBanner && (
-        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
-          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
-            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
-          </div>
-        </div>
+        <AuthErrorBanner title={errorBanner.title} description={errorBanner.description} />
       )}
 
       <div className="space-y-3.5">
@@ -140,9 +136,7 @@ export function SignupForm({
               onChange: () => setErrorBanner(null),
             })}
           />
-          {errors.name && (
-            <span className="text-xs text-destructive">{errors.name.message}</span>
-          )}
+          {errors.name && <span className="text-xs text-destructive">{errors.name.message}</span>}
         </div>
 
         <div className="space-y-1.5">
@@ -163,46 +157,34 @@ export function SignupForm({
               onChange: () => setErrorBanner(null),
             })}
           />
-          {errors.email && (
-            <span className="text-xs text-destructive">{errors.email.message}</span>
-          )}
+          {errors.email && <span className="text-xs text-destructive">{errors.email.message}</span>}
         </div>
 
         <div className="space-y-1.5">
           <label htmlFor="password" className="text-sm font-medium text-foreground">
             Password
           </label>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("password", {
-                required: "Password is required",
-                minLength: { value: 8, message: "Password must be at least 8 characters" },
-                onChange: () => setErrorBanner(null),
-              })}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded cursor-pointer"
-            >
-              {showPassword ? (
-                <EyeOff className="size-4" />
-              ) : (
-                <Eye className="size-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            placeholder="••••••••"
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 8, message: "Password must be at least 8 characters" },
+              onChange: () => setErrorBanner(null),
+            })}
+          />
           {errors.password ? (
             <span className="text-xs text-destructive">{errors.password.message}</span>
           ) : (
             <div className="flex items-center gap-2 pt-0.5 text-[11px] text-muted-foreground">
-              <span className={`inline-flex items-center gap-1 ${passwordValue.length >= 8 ? "text-emerald-400 font-medium" : "text-muted-foreground"}`}>
-                {passwordValue.length >= 8 ? <Check className="size-3 text-emerald-400" /> : <span className="size-1.5 rounded-full bg-muted-foreground/40" />}
+              <span
+                className={`inline-flex items-center gap-1 ${passwordValue.length >= 8 ? "text-emerald-400 font-medium" : "text-muted-foreground"}`}
+              >
+                {passwordValue.length >= 8 ? (
+                  <Check className="size-3 text-emerald-400" />
+                ) : (
+                  <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                )}
                 <span>8+ characters</span>
               </span>
             </div>
@@ -213,30 +195,14 @@ export function SignupForm({
           <label htmlFor="confirm-password" className="text-sm font-medium text-foreground">
             Confirm Password
           </label>
-          <div className="relative">
-            <Input
-              id="confirm-password"
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                onChange: () => setErrorBanner(null),
-              })}
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword((prev) => !prev)}
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded cursor-pointer"
-            >
-              {showConfirmPassword ? (
-                <EyeOff className="size-4" />
-              ) : (
-                <Eye className="size-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="confirm-password"
+            placeholder="••••••••"
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              onChange: () => setErrorBanner(null),
+            })}
+          />
           {errors.confirmPassword && (
             <span className="text-xs text-destructive">{errors.confirmPassword.message}</span>
           )}
@@ -259,7 +225,8 @@ export function SignupForm({
           and{" "}
           <Link href="/privacy" className="underline hover:text-foreground">
             Privacy Policy
-          </Link>.
+          </Link>
+          .
         </p>
 
         <p className="text-center text-xs text-muted-foreground pt-1">
@@ -275,4 +242,3 @@ export function SignupForm({
     </form>
   );
 }
-

@@ -27,7 +27,11 @@ export function PricingView() {
 
   const getPrice = (plan: "starter" | "pro" | "team") => {
     if (plan === "starter") {
-      return { display: currency === "USD" ? "$0" : "₹0", period: "/ month", subtext: "Free forever • No credit card needed" };
+      return {
+        display: currency === "USD" ? "$0" : "₹0",
+        period: "/ month",
+        subtext: "Free forever • No credit card needed",
+      };
     }
     if (plan === "pro") {
       if (currency === "USD") {
@@ -36,7 +40,11 @@ export function PricingView() {
           : { display: "$19", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
       } else {
         return isYearly
-          ? { display: "₹1,199", period: "/ month", subtext: "Billed annually (₹14,388/yr) • Save ₹3,600" }
+          ? {
+              display: "₹1,199",
+              period: "/ month",
+              subtext: "Billed annually (₹14,388/yr) • Save ₹3,600",
+            }
           : { display: "₹1,499", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
       }
     }
@@ -47,7 +55,11 @@ export function PricingView() {
         : { display: "$49", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
     } else {
       return isYearly
-        ? { display: "₹3,199", period: "/ month", subtext: "Billed annually (₹38,388/yr) • Save ₹9,600" }
+        ? {
+            display: "₹3,199",
+            period: "/ month",
+            subtext: "Billed annually (₹38,388/yr) • Save ₹9,600",
+          }
         : { display: "₹3,999", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
     }
   };
@@ -79,7 +91,8 @@ export function PricingView() {
           </h1>
 
           <p className="mt-4 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Start completely free, collect verified responses, and upgrade as your audience grows. No surprise fees or lock-in.
+            Start completely free, collect verified responses, and upgrade as your audience grows.
+            No surprise fees or lock-in.
           </p>
 
           {/* Controls: Currency + Billing Frequency */}
@@ -134,7 +147,10 @@ export function PricingView() {
                 }`}
               >
                 <span>Yearly</span>
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4.5 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-bold">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] py-0 px-1.5 h-4.5 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-bold"
+                >
                   SAVE 20%
                 </Badge>
               </button>
@@ -156,7 +172,9 @@ export function PricingView() {
                   </div>
                   <h3 className="font-bold text-lg">Starter</h3>
                 </div>
-                <Badge variant="secondary" className="text-[10px] font-medium">Free Forever</Badge>
+                <Badge variant="secondary" className="text-[10px] font-medium">
+                  Free Forever
+                </Badge>
               </div>
 
               <p className="text-xs text-muted-foreground min-h-[36px]">
@@ -165,10 +183,14 @@ export function PricingView() {
 
               <div className="mt-6 mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold tracking-tight">{starterPrice.display}</span>
+                  <span className="text-4xl font-extrabold tracking-tight">
+                    {starterPrice.display}
+                  </span>
                   <span className="text-xs text-muted-foreground">{starterPrice.period}</span>
                 </div>
-                <span className="text-[11px] text-muted-foreground block mt-1">{starterPrice.subtext}</span>
+                <span className="text-[11px] text-muted-foreground block mt-1">
+                  {starterPrice.subtext}
+                </span>
               </div>
 
               <div className="border-t border-border/40 pt-5 space-y-3 text-xs text-muted-foreground">
@@ -207,9 +229,13 @@ export function PricingView() {
           </div>
 
           {/* 2. Pro Creator (Most Popular) */}
-          <div className={`relative rounded-2xl ${landingTheme.cardHighlightBorder} p-6 sm:p-8 flex flex-col justify-between scale-[1.02]`}>
+          <div
+            className={`relative rounded-2xl ${landingTheme.cardHighlightBorder} p-6 sm:p-8 flex flex-col justify-between md:scale-[1.02]`}
+          >
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-              <Badge className={`${landingTheme.cardHighlightBadge} font-bold text-[10px] tracking-wide uppercase px-3 py-1 shadow-sm border-none flex items-center gap-1`}>
+              <Badge
+                className={`${landingTheme.cardHighlightBadge} font-bold text-[10px] tracking-wide uppercase px-3 py-1 shadow-sm border-none flex items-center gap-1`}
+              >
                 <IconStarFilled className="size-3 text-neutral-950" /> Most Popular
               </Badge>
             </div>
@@ -217,12 +243,19 @@ export function PricingView() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <div className={`flex size-8 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+                  <div
+                    className={`flex size-8 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+                  >
                     <IconFlame className="size-4" />
                   </div>
                   <h3 className="font-bold text-lg text-foreground">Pro Creator</h3>
                 </div>
-                <Badge variant="outline" className={`text-[10px] ${landingTheme.badge} font-medium`}>Growth</Badge>
+                <Badge
+                  variant="outline"
+                  className={`text-[10px] ${landingTheme.badge} font-medium`}
+                >
+                  Growth
+                </Badge>
               </div>
 
               <p className="text-xs text-muted-foreground min-h-[36px]">
@@ -293,7 +326,9 @@ export function PricingView() {
                   </div>
                   <h3 className="font-bold text-lg">Team & Agency</h3>
                 </div>
-                <Badge variant="secondary" className="text-[10px] font-medium">Scale</Badge>
+                <Badge variant="secondary" className="text-[10px] font-medium">
+                  Scale
+                </Badge>
               </div>
 
               <p className="text-xs text-muted-foreground min-h-[36px]">
@@ -355,9 +390,12 @@ export function PricingView() {
               <IconMail className="size-5" />
             </div>
             <div>
-              <h4 className="font-bold text-sm text-foreground">Need a custom plan or higher volume?</h4>
+              <h4 className="font-bold text-sm text-foreground">
+                Need a custom plan or higher volume?
+              </h4>
               <p className="text-xs text-muted-foreground">
-                Custom submission limits, dedicated invoicing, and tailored support for high-volume teams.
+                Custom submission limits, dedicated invoicing, and tailored support for high-volume
+                teams.
               </p>
             </div>
           </div>
@@ -392,7 +430,10 @@ export function PricingView() {
         {/* Full Feature Comparison Matrix */}
         <div className="mt-20">
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <Badge variant="outline" className={`mb-3 gap-1.5 px-3 py-1 text-xs font-medium ${landingTheme.badge}`}>
+            <Badge
+              variant="outline"
+              className={`mb-3 gap-1.5 px-3 py-1 text-xs font-medium ${landingTheme.badge}`}
+            >
               <IconSparkles className="size-3.5" />
               <span>Side-by-Side</span>
             </Badge>
@@ -406,7 +447,7 @@ export function PricingView() {
 
           <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs">
+              <table className="w-full min-w-[560px] text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-muted/60 border-b border-border/60">
                     <th className="p-4 sm:p-5 font-semibold text-muted-foreground uppercase tracking-wider w-2/5">
@@ -415,7 +456,9 @@ export function PricingView() {
                     <th className="p-4 sm:p-5 font-semibold text-foreground text-center w-1/5">
                       Starter
                     </th>
-                    <th className={`p-4 sm:p-5 font-bold ${landingTheme.primaryText} text-center w-1/5 bg-primary/5`}>
+                    <th
+                      className={`p-4 sm:p-5 font-bold ${landingTheme.primaryText} text-center w-1/5 bg-primary/5`}
+                    >
                       Pro Creator
                     </th>
                     <th className="p-4 sm:p-5 font-semibold text-foreground text-center w-1/5">
@@ -426,133 +469,260 @@ export function PricingView() {
                 <tbody className="divide-y divide-border/50">
                   {/* Category: Volume & Limits */}
                   <tr className="bg-muted/30">
-                    <td colSpan={4} className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider">
+                    <td
+                      colSpan={4}
+                      className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
+                    >
                       Volume & Limits
                     </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-medium text-foreground">Active Forms</td>
                     <td className="p-4 sm:p-5 text-center text-muted-foreground">3 Forms</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">Unlimited</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">Unlimited</td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">
+                      Unlimited
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">
+                      Unlimited
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-medium text-foreground">Monthly Submissions</td>
                     <td className="p-4 sm:p-5 text-center text-muted-foreground">250 / mo</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">10,000 / mo</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">100,000 / mo</td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">
+                      10,000 / mo
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">
+                      100,000 / mo
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-medium text-foreground">Over-Limit Behavior</td>
-                    <td className="p-4 sm:p-5 text-center text-muted-foreground">Resets next month</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500 bg-primary/5">Email alert + grace period</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500">Auto-scale available</td>
+                    <td className="p-4 sm:p-5 text-center text-muted-foreground">
+                      Resets next month
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500 bg-primary/5">
+                      Email alert + grace period
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500">
+                      Auto-scale available
+                    </td>
                   </tr>
 
                   {/* Category: Question Types & Design */}
                   <tr className="bg-muted/30">
-                    <td colSpan={4} className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider">
+                    <td
+                      colSpan={4}
+                      className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
+                    >
                       Form Builder & Question Types
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">14 Specialized Field Types</td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      14 Specialized Field Types
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Conversational 1-At-A-Time Flow</td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Conversational 1-At-A-Time Flow
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Custom URL Slugs (/form/my-brand)</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Custom URL Slugs (/form/my-brand)
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Remove ChaiForm Branding</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Remove ChaiForm Branding
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
 
                   {/* Category: Security & Control */}
                   <tr className="bg-muted/30">
-                    <td colSpan={4} className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider">
+                    <td
+                      colSpan={4}
+                      className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
+                    >
                       Security & Form Access Controls
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Password Protected Forms</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Password Protected Forms
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Automatic Submission Cap (Max Responses)</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Automatic Submission Cap (Max Responses)
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Auto-Close Expiry Date & Time</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Auto-Close Expiry Date & Time
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
 
                   {/* Category: Distribution & QR */}
                   <tr className="bg-muted/30">
-                    <td colSpan={4} className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider">
+                    <td
+                      colSpan={4}
+                      className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
+                    >
                       Sharing, QR & Embeds
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Responsive iframe Embed Code</td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Responsive iframe Embed Code
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">1024px High-Res QR Code PNG</td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      1024px High-Res QR Code PNG
+                    </td>
                     <td className="p-4 sm:p-5 text-center text-muted-foreground">Standard Black</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">High-Res PNG</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">PNG & Vector SVG</td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">
+                      High-Res PNG
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">
+                      PNG & Vector SVG
+                    </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Designer QR Color Palettes</td>
-                    <td className="p-4 sm:p-5 text-center"><IconX className="size-4 text-muted-foreground/40 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center text-muted-foreground bg-primary/5">3 Palettes</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">5 Palettes + Vector</td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Designer QR Color Palettes
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconX className="size-4 text-muted-foreground/40 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center text-muted-foreground bg-primary/5">
+                      3 Palettes
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">
+                      5 Palettes + Vector
+                    </td>
                   </tr>
 
                   {/* Category: Data & Support */}
                   <tr className="bg-muted/30">
-                    <td colSpan={4} className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider">
+                    <td
+                      colSpan={4}
+                      className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
+                    >
                       Analytics, Data Export & Support
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-medium text-foreground">Live Submissions Inbox</td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Live Submissions Inbox
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-medium text-foreground">CSV & JSON Export</td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center bg-primary/5"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
-                    <td className="p-4 sm:p-5 text-center"><IconCheck className="size-4 text-emerald-500 mx-auto" /></td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center bg-primary/5">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
+                    <td className="p-4 sm:p-5 text-center">
+                      <IconCheck className="size-4 text-emerald-500 mx-auto" />
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-medium text-foreground">Support Tier</td>
-                    <td className="p-4 sm:p-5 text-center text-muted-foreground">Community & Help Center</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">Priority Email</td>
-                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">Founder & Dedicated Email</td>
+                    <td className="p-4 sm:p-5 text-center text-muted-foreground">
+                      Community & Help Center
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground bg-primary/5">
+                      Priority Email
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-foreground">
+                      Founder & Dedicated Email
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -562,35 +732,45 @@ export function PricingView() {
 
         {/* Frequently Asked Questions */}
         <div className="mt-20 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold tracking-tight text-center mb-8">
-            Pricing FAQs
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight text-center mb-8">Pricing FAQs</h2>
           <div className="space-y-4">
             <div className="rounded-xl border border-border/60 bg-card p-5">
-              <h4 className="font-semibold text-sm">Do my respondents need a ChaiForm account to submit?</h4>
+              <h4 className="font-semibold text-sm">
+                Do my respondents need a ChaiForm account to submit?
+              </h4>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                No! Respondents can fill out and submit your forms anonymously on desktop or mobile without any login, account creation, or friction.
+                No! Respondents can fill out and submit your forms anonymously on desktop or mobile
+                without any login, account creation, or friction.
               </p>
             </div>
 
             <div className="rounded-xl border border-border/60 bg-card p-5">
-              <h4 className="font-semibold text-sm">Can I upgrade or downgrade my plan at any time?</h4>
+              <h4 className="font-semibold text-sm">
+                Can I upgrade or downgrade my plan at any time?
+              </h4>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                Yes, you can upgrade, downgrade, or cancel your subscription whenever you wish from your account settings. Upgrades take effect immediately with prorated billing.
+                Yes, you can upgrade, downgrade, or cancel your subscription whenever you wish from
+                your account settings. Upgrades take effect immediately with prorated billing.
               </p>
             </div>
 
             <div className="rounded-xl border border-border/60 bg-card p-5">
-              <h4 className="font-semibold text-sm">What happens if I reach my monthly response limit on Starter?</h4>
+              <h4 className="font-semibold text-sm">
+                What happens if I reach my monthly response limit on Starter?
+              </h4>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                Your responses are never deleted. When you hit 250 responses, your form simply rests until your next 30-day reset cycle, or you can upgrade to Pro at any time for 10,000 responses.
+                Your responses are never deleted. When you hit 250 responses, your form simply rests
+                until your next 30-day reset cycle, or you can upgrade to Pro at any time for 10,000
+                responses.
               </p>
             </div>
 
             <div className="rounded-xl border border-border/60 bg-card p-5">
               <h4 className="font-semibold text-sm">Which payment methods are accepted?</h4>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                We accept all major credit and debit cards globally (Visa, Mastercard, American Express). For Indian creators choosing INR, we support UPI (Google Pay, PhonePe, Paytm), Netbanking, and domestic cards.
+                We accept all major credit and debit cards globally (Visa, Mastercard, American
+                Express). For Indian creators choosing INR, we support UPI (Google Pay, PhonePe,
+                Paytm), Netbanking, and domestic cards.
               </p>
             </div>
           </div>

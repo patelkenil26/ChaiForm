@@ -18,10 +18,7 @@ import { Input } from "~/components/ui/input";
 import { Badge } from "~/components/ui/badge";
 import { Card } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
-import {
-  TemplateCard,
-  type PublicTemplateItem,
-} from "~/components/explore/template-card";
+import { TemplateCard, type PublicTemplateItem } from "~/components/explore/template-card";
 import { useListPublicForms } from "~/hooks/api/form";
 import { landingTheme } from "~/config/landing-theme";
 
@@ -90,8 +87,7 @@ export default function DashboardExplorePage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Fetch all public templates once to calculate counts per folder
-  const { publicForms: allPublicForms, isLoading: isAllLoading } =
-    useListPublicForms();
+  const { publicForms: allPublicForms, isLoading: isAllLoading } = useListPublicForms();
 
   const allForms = (allPublicForms as PublicTemplateItem[] | undefined) ?? [];
 
@@ -109,9 +105,7 @@ export default function DashboardExplorePage() {
   const filteredForms = useMemo(() => {
     let list = allForms;
     if (selectedFolder !== "ALL") {
-      list = list.filter(
-        (f) => (f.category?.toUpperCase() || "GENERAL") === selectedFolder
-      );
+      list = list.filter((f) => (f.category?.toUpperCase() || "GENERAL") === selectedFolder);
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -119,15 +113,14 @@ export default function DashboardExplorePage() {
         (f) =>
           f.title?.toLowerCase().includes(q) ||
           f.description?.toLowerCase().includes(q) ||
-          f.category?.toLowerCase().includes(q)
+          f.category?.toLowerCase().includes(q),
       );
     }
     return list;
   }, [allForms, selectedFolder, searchQuery]);
 
   const activeCategoryMeta =
-    FOLDER_CATEGORIES.find((c) => c.id === selectedFolder) ||
-    FOLDER_CATEGORIES[0];
+    FOLDER_CATEGORIES.find((c) => c.id === selectedFolder) || FOLDER_CATEGORIES[0];
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full animate-in fade-in duration-300">
@@ -144,7 +137,9 @@ export default function DashboardExplorePage() {
             </Badge>
           </div>
           <div className="flex items-center gap-2.5">
-            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconCompass className="size-5" />
             </div>
             <div>
@@ -152,15 +147,16 @@ export default function DashboardExplorePage() {
                 Templates <span className={landingTheme.gradientText}>Gallery</span>
               </h1>
               <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
-                Browse pre-built templates by folder or search to clone directly into your workspace.
+                Browse pre-built templates by folder or search to clone directly into your
+                workspace.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
           {/* Search bar */}
-          <div className="relative w-full sm:w-64 md:w-72">
+          <div className="relative flex-1 sm:w-64 md:w-72 sm:flex-initial">
             <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               type="text"
@@ -180,7 +176,11 @@ export default function DashboardExplorePage() {
             )}
           </div>
 
-          <Button asChild size="sm" className={`h-9 gap-1.5 text-xs shrink-0 ${landingTheme.primaryButton}`}>
+          <Button
+            asChild
+            size="sm"
+            className={`h-9 gap-1.5 text-xs shrink-0 ${landingTheme.primaryButton}`}
+          >
             <Link href="/forms">
               <IconPlus className="size-3.5" />
               <span>Blank Form</span>
@@ -210,11 +210,9 @@ export default function DashboardExplorePage() {
               </button>
             )}
             <span className="text-muted-foreground">
-              {isAllLoading ? (
-                "Loading..."
-              ) : (
-                `Showing ${filteredForms.length} template${filteredForms.length === 1 ? "" : "s"}`
-              )}
+              {isAllLoading
+                ? "Loading..."
+                : `Showing ${filteredForms.length} template${filteredForms.length === 1 ? "" : "s"}`}
             </span>
           </div>
         </div>
@@ -289,10 +287,7 @@ export default function DashboardExplorePage() {
       {isAllLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-xl border border-border/60 bg-card p-5 space-y-4"
-            >
+            <div key={i} className="rounded-xl border border-border/60 bg-card p-5 space-y-4">
               <div className="flex justify-between">
                 <Skeleton className="h-5 w-20 rounded-md" />
                 <Skeleton className="h-4 w-12 rounded-md" />

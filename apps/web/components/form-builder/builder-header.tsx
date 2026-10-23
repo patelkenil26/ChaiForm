@@ -88,7 +88,11 @@ export function BuilderHeader({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                {form?.title ? <span className={landingTheme.gradientText}>{form.title}</span> : "Form Builder"}
+                {form?.title ? (
+                  <span className={landingTheme.gradientText}>{form.title}</span>
+                ) : (
+                  "Form Builder"
+                )}
               </h1>
               {form && (
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -101,16 +105,16 @@ export function BuilderHeader({
                       Published
                     </Badge>
                   ) : (
-                    <Badge
-                      variant="secondary"
-                      className={`${landingTheme.draftBadge} gap-1`}
-                    >
+                    <Badge variant="secondary" className={`${landingTheme.draftBadge} gap-1`}>
                       <span className="size-1.5 rounded-full bg-amber-400" />
                       Draft (Closed)
                     </Badge>
                   )}
 
-                  <Badge variant="outline" className="text-xs text-muted-foreground gap-1 border-border/70">
+                  <Badge
+                    variant="outline"
+                    className="text-xs text-muted-foreground gap-1 border-border/70"
+                  >
                     {form.visibility === "PUBLIC" ? (
                       <>
                         <GlobeIcon className="size-3 text-blue-400" />
@@ -165,20 +169,14 @@ export function BuilderHeader({
                   )}
 
                   {form.isPasswordProtected && (
-                    <Badge
-                      variant="outline"
-                      className={`${landingTheme.slugBadge} gap-1`}
-                    >
+                    <Badge variant="outline" className={`${landingTheme.slugBadge} gap-1`}>
                       <LockIcon className="size-3" />
                       Password Protected
                     </Badge>
                   )}
 
                   {form.isArchived && (
-                    <Badge
-                      variant="outline"
-                      className={`${landingTheme.slugBadge} gap-1`}
-                    >
+                    <Badge variant="outline" className={`${landingTheme.slugBadge} gap-1`}>
                       <ArchiveIcon className="size-3" />
                       Archived
                     </Badge>
@@ -192,51 +190,78 @@ export function BuilderHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
           <ThemesComingSoonButton />
-          <Button variant="outline" size="sm" asChild className={landingTheme.buttonOutlineHover}>
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 ${landingTheme.buttonOutlineHover}`}
+            title="Submissions"
+          >
             <Link href={`/forms/${formId}/submissions`}>
-              <BarChart3Icon className={`size-3.5 mr-1.5 ${landingTheme.iconColor}`} />
-              Submissions
+              <BarChart3Icon className={`size-3.5 sm:mr-1.5 ${landingTheme.iconColor}`} />
+              <span className="hidden sm:inline">Submissions</span>
             </Link>
           </Button>
-          <Button variant="outline" size="sm" onClick={onCopyLink} className={landingTheme.buttonOutlineHover}>
-            <CopyIcon className="size-3.5 mr-1.5" />
-            Share Link
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCopyLink}
+            className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 ${landingTheme.buttonOutlineHover}`}
+            title="Share Link"
+          >
+            <CopyIcon className="size-3.5 sm:mr-1.5" />
+            <span className="hidden sm:inline">Share Link</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={onOpenQr} className={landingTheme.buttonOutlineHover}>
-            <QrCodeIcon className="size-3.5 mr-1.5" />
-            QR Code
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onOpenQr}
+            className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 ${landingTheme.buttonOutlineHover}`}
+            title="QR Code"
+          >
+            <QrCodeIcon className="size-3.5 sm:mr-1.5" />
+            <span className="hidden sm:inline">QR Code</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={onOpenPreview}
-            className={`gap-1.5 ${landingTheme.buttonOutlineHover} shadow-2xs font-medium`}
+            title="Preview Form"
+            className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 gap-1.5 ${landingTheme.buttonOutlineHover} shadow-2xs font-medium`}
           >
             <EyeIcon className={`size-3.5 ${landingTheme.iconColor}`} />
-            <span>Preview</span>
+            <span className="hidden sm:inline">Preview</span>
           </Button>
-          <Button variant="outline" size="sm" asChild className={landingTheme.buttonOutlineHover}>
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 ${landingTheme.buttonOutlineHover}`}
+            title="Live Form"
+          >
             <Link href={publicPath} target="_blank">
-              <ExternalLinkIcon className="size-3.5 mr-1.5" />
-              Live Form
+              <ExternalLinkIcon className="size-3.5 sm:mr-1.5" />
+              <span className="hidden sm:inline">Live Form</span>
             </Link>
           </Button>
           <Button
             size="sm"
             onClick={onAddField}
-            className={`gap-1.5 ${landingTheme.primaryButton}`}
+            className={`h-8 sm:h-9 text-xs gap-1.5 ${landingTheme.primaryButton}`}
           >
             <PlusIcon className="size-3.5" />
-            Add Field
+            <span>Add Field</span>
           </Button>
         </div>
       </div>
 
       {/* Creator Controls Bar: Publishing Status Switch & Visibility Mode Selector */}
-      <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-border/75 ${landingTheme.cardBg} backdrop-blur-sm p-3.5 px-4 shadow-xs`}>
-        <div className="flex items-center gap-3">
+      <div
+        className={`flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 rounded-xl border border-border/75 ${landingTheme.cardBg} backdrop-blur-sm p-3.5 px-4 shadow-xs`}
+      >
+        <div className="flex items-center justify-between sm:justify-start gap-3">
           <div className="flex items-center gap-2">
             <Switch
               id="form-publish-switch"
@@ -246,19 +271,19 @@ export function BuilderHeader({
             />
             <Label
               htmlFor="form-publish-switch"
-              className="text-sm font-medium cursor-pointer select-none"
+              className="text-xs sm:text-sm font-medium cursor-pointer select-none"
             >
               {form?.isPublished ? "Accepting Responses" : "Responses Paused"}
             </Label>
           </div>
-          <span className="text-xs text-muted-foreground hidden md:inline">
+          <span className="text-xs text-muted-foreground hidden lg:inline">
             {form?.isPublished
               ? "(Form is published and accepting submissions)"
               : "(Form is closed; visitors will see a closed message)"}
           </span>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+        <div className="flex items-center justify-between sm:justify-end gap-2 flex-wrap pt-2 sm:pt-0 border-t sm:border-t-0 border-border/40">
           <Button
             variant="outline"
             size="sm"
@@ -266,33 +291,37 @@ export function BuilderHeader({
             className="h-8 text-xs gap-1.5"
           >
             <SlidersHorizontalIcon className="size-3.5 text-muted-foreground" />
-            Limits & Expiry
+            <span>Limits & Expiry</span>
           </Button>
 
-          <Label className="text-xs text-muted-foreground font-normal">Visibility:</Label>
-          <Select
-            value={form?.visibility ?? "UNLISTED"}
-            disabled={isUpdatingVisibility || !form}
-            onValueChange={onSelectVisibility}
-          >
-            <SelectTrigger className="h-8 text-xs w-[130px] gap-1.5">
-              <SelectValue placeholder="Visibility" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="UNLISTED" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <LinkIcon className="size-3 text-muted-foreground" />
-                  Unlisted
-                </span>
-              </SelectItem>
-              <SelectItem value="PUBLIC" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <GlobeIcon className="size-3 text-blue-500" />
-                  Public
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-1.5">
+            <Label className="text-xs text-muted-foreground font-normal hidden xs:inline">
+              Visibility:
+            </Label>
+            <Select
+              value={form?.visibility ?? "UNLISTED"}
+              disabled={isUpdatingVisibility || !form}
+              onValueChange={onSelectVisibility}
+            >
+              <SelectTrigger className="h-8 text-xs w-[115px] sm:w-[130px] gap-1.5">
+                <SelectValue placeholder="Visibility" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="UNLISTED" className="text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <LinkIcon className="size-3 text-muted-foreground" />
+                    Unlisted
+                  </span>
+                </SelectItem>
+                <SelectItem value="PUBLIC" className="text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <GlobeIcon className="size-3 text-blue-500" />
+                    Public
+                  </span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
     </>

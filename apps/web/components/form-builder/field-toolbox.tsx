@@ -150,7 +150,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
   const filteredFields = TOOLBOX_FIELDS.filter(
     (f) =>
       f.label.toLowerCase().includes(search.toLowerCase()) ||
-      f.description.toLowerCase().includes(search.toLowerCase())
+      f.description.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -163,13 +163,17 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
             Field Toolbox
           </span>
         </div>
-        <Badge variant="outline" className="text-[10px] font-mono border-amber-500/20 text-muted-foreground">
+        <Badge
+          variant="outline"
+          className="text-[10px] font-mono border-amber-500/20 text-muted-foreground"
+        >
           Drag & Drop
         </Badge>
       </div>
 
       <p className="text-[11px] text-muted-foreground leading-snug">
-        Drag any field into the form canvas, or click <PlusIcon className="inline size-3 text-amber-400" /> to add directly.
+        Drag any field into the form canvas, or click{" "}
+        <PlusIcon className="inline size-3 text-amber-400" /> to add directly.
       </p>
 
       {/* Search Filter */}
@@ -184,7 +188,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
       </div>
 
       {/* Field Items List */}
-      <div className="space-y-1.5 max-h-[calc(100vh-320px)] overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-1.5 max-h-[380px] xl:max-h-[calc(100vh-320px)] overflow-y-auto pr-0.5 custom-scrollbar">
         {filteredFields.map((item) => {
           const Icon = item.icon;
           return (
@@ -194,7 +198,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
               onDragStart={(e) => {
                 e.dataTransfer.setData(
                   "application/json",
-                  JSON.stringify({ type: item.type, defaultTitle: item.defaultTitle })
+                  JSON.stringify({ type: item.type, defaultTitle: item.defaultTitle }),
                 );
                 e.dataTransfer.effectAllowed = "copy";
               }}

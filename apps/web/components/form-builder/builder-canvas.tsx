@@ -23,6 +23,7 @@ interface BuilderCanvasProps {
   onDragOverRow: (e: React.DragEvent, index: number) => void;
   onDropRow: (e: React.DragEvent, index: number) => void;
   onDragEndRow: () => void;
+  onMoveField?: (index: number, direction: "up" | "down") => void;
   onAddFirstQuestion: () => void;
 }
 
@@ -44,6 +45,7 @@ export function BuilderCanvas({
   onDragOverRow,
   onDropRow,
   onDragEndRow,
+  onMoveField,
   onAddFirstQuestion,
 }: BuilderCanvasProps) {
   return (
@@ -97,11 +99,13 @@ export function BuilderCanvas({
                 <BuilderFieldCard
                   field={field}
                   index={idx}
+                  totalFields={fields.length}
                   isEditMode={isCardEditing}
                   canDrag={canDrag}
                   onUpdate={(updated) => onUpdateField(idx, updated)}
                   onToggleSingleEdit={onToggleSingleEdit}
                   onDelete={onDeleteField}
+                  onMoveField={onMoveField}
                   onDragStartRow={onDragStartRow}
                   onDragOverRow={onDragOverRow}
                   onDropRow={onDropRow}
@@ -109,9 +113,7 @@ export function BuilderCanvas({
                 />
 
                 {/* Drop line after card idx if target is idx + 1 */}
-                {isDraggingOverCanvas && dropTargetIndex === idx + 1 && (
-                  <DropInsertionLine />
-                )}
+                {isDraggingOverCanvas && dropTargetIndex === idx + 1 && <DropInsertionLine />}
               </div>
             );
           })}

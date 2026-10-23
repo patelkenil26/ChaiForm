@@ -30,27 +30,29 @@ export function HeroSection() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Release / Announcement Badge */}
-        <div className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-medium shadow-xs backdrop-blur-xs transition ${landingTheme.badge}`}>
-          <IconSparkles className="size-3.5" />
-          <span className="font-semibold">ChaiForm v2.0 Released</span>
-          <span className="opacity-40">•</span>
-          <span className="opacity-90 font-normal">Conversational Flow, 14 Input Types & Instant Embeds</span>
-          <IconArrowRight className="size-3" />
+        <div
+          className={`inline-flex items-center gap-2 rounded-full border px-3 sm:px-3.5 py-1 text-xs font-medium shadow-xs backdrop-blur-xs transition max-w-full ${landingTheme.badge}`}
+        >
+          <IconSparkles className="size-3.5 shrink-0" />
+          <span className="font-semibold shrink-0">ChaiForm v2.0</span>
+          <span className="opacity-40 hidden sm:inline">•</span>
+          <span className="opacity-90 font-normal hidden sm:inline">
+            Conversational Flow, 14 Input Types &amp; Instant Embeds
+          </span>
+          <IconArrowRight className="size-3 shrink-0 ml-auto sm:ml-0" />
         </div>
 
         {/* Hero Title */}
         <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-          Forms that feel like{" "}
-          <span className={landingTheme.gradientText}>
-            conversations
-          </span>
-          , not interrogations.
+          Forms that feel like <span className={landingTheme.gradientText}>conversations</span>, not
+          interrogations.
         </h1>
 
         {/* Hero Description */}
         <p className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg lg:text-xl leading-relaxed">
-          Replace intimidating walls of static inputs with fluid, 1-question-at-a-time conversational forms.
-          Engineered for effortless mobile completion, instant QR code sharing, and real-time response analytics.
+          Replace intimidating walls of static inputs with fluid, 1-question-at-a-time
+          conversational forms. Engineered for effortless mobile completion, instant QR code
+          sharing, and real-time response analytics.
         </p>
 
         {/* CTA Button Group */}
@@ -90,28 +92,36 @@ export function HeroSection() {
         {/* Trust & Highlights Pills */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-muted-foreground border-t border-border/40 pt-6">
           <div className="flex items-center gap-1.5">
-            <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}
+            >
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
             <span>Free tier forever</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}
+            >
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
             <span>No credit card required</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}
+            >
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
             <span>Build & publish in under 60 seconds</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <div className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${landingTheme.iconBg}`}
+            >
               <IconCheck className="size-2.5 stroke-[3]" />
             </div>
             <span>Embed anywhere with zero CSS</span>
@@ -121,7 +131,9 @@ export function HeroSection() {
         {/* Real Product Core Value Strip */}
         <div className="mt-12 w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>1-At-A-Time</div>
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
+              1-At-A-Time
+            </div>
             <p className="mt-1 text-xs text-muted-foreground font-medium">Conversational pacing</p>
           </div>
 
@@ -132,12 +144,18 @@ export function HeroSection() {
 
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
             <div className="text-2xl sm:text-3xl font-extrabold text-foreground">1-Click</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">Instant share & iframe embeds</p>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">
+              Instant share & iframe embeds
+            </p>
           </div>
 
           <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>Live Feed</div>
-            <p className="mt-1 text-xs text-muted-foreground font-medium">Instant analytics & CSV export</p>
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
+              Live Feed
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground font-medium">
+              Instant analytics & CSV export
+            </p>
           </div>
         </div>
       </div>

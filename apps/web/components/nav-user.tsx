@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState } from "react";
+import Link from "next/link";
 import {
   IconCreditCard,
   IconDotsVertical,
@@ -10,14 +10,10 @@ import {
   IconUserCircle,
   IconLoader2,
   IconLogin,
-} from "@tabler/icons-react"
-import { toast } from "sonner"
+} from "@tabler/icons-react";
+import { toast } from "sonner";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,30 +22,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
+} from "~/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "~/components/ui/sidebar"
-import { useSignOut } from "~/hooks/api/auth"
-import { landingTheme } from "~/config/landing-theme"
+} from "~/components/ui/sidebar";
+import { useSignOut } from "~/hooks/api/auth";
+import { landingTheme } from "~/config/landing-theme";
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string
-    email: string
-    avatar: string
-  }
+    name: string;
+    email: string;
+    avatar: string;
+  };
 }) {
-  const { isMobile } = useSidebar()
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
-  const { signOutAsync } = useSignOut()
+  const { isMobile, setOpenMobile } = useSidebar();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { signOutAsync } = useSignOut();
 
-  const isLoggedIn = Boolean(user.email && user.email !== "user@example.com")
+  const isLoggedIn = Boolean(user.email && user.email !== "user@example.com");
 
   const initials = user.name
     ? user.name
@@ -58,40 +54,40 @@ export function NavUser({
         .join("")
         .slice(0, 2)
         .toUpperCase()
-    : "CF"
+    : "CF";
 
   const handleLogout = async () => {
-    if (isLoggingOut) return
-    setIsLoggingOut(true)
-    const toastId = toast.loading("Logging out...")
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    const toastId = toast.loading("Logging out...");
 
     try {
       // 1. Call tRPC backend procedure to clear HTTP-only cookie on Express API
-      await signOutAsync()
+      await signOutAsync();
 
       // 2. Call Next.js route handler to clear cookie in Next.js server cookie store
-      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
+      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
 
       // 3. Fallback client-side cookie deletion
       document.cookie =
-        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
-      toast.success("Logged out successfully!", { id: toastId })
+      toast.success("Logged out successfully!", { id: toastId });
 
       // 4. Hard redirect to /login to completely reset client memory and re-check session
-      window.location.href = "/login"
+      window.location.href = "/login";
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error("Logout error:", error);
       // Fallback clean and redirect even if backend was unreachable
-      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
+      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
       document.cookie =
-        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-      toast.success("Logged out", { id: toastId })
-      window.location.href = "/login"
+        "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      toast.success("Logged out", { id: toastId });
+      window.location.href = "/login";
     } finally {
-      setIsLoggingOut(false)
+      setIsLoggingOut(false);
     }
-  }
+  };
 
   if (!isLoggedIn) {
     return (
@@ -99,18 +95,24 @@ export function NavUser({
         <SidebarMenuItem>
           <SidebarMenuButton asChild size="lg" className={landingTheme.buttonGhostHover}>
             <Link href="/login" className="flex items-center gap-2.5">
-              <div className={`flex aspect-square size-8 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+              <div
+                className={`flex aspect-square size-8 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+              >
                 <IconLogin className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className={`truncate font-semibold ${landingTheme.primaryText}`}>Sign In</span>
-                <span className="truncate text-xs text-muted-foreground">Access your workspace</span>
+                <span className={`truncate font-semibold ${landingTheme.primaryText}`}>
+                  Sign In
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  Access your workspace
+                </span>
               </div>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
-    )
+    );
   }
 
   return (
@@ -122,15 +124,15 @@ export function NavUser({
               size="lg"
               className={`transition-colors ${landingTheme.buttonGhostHover}`}
             >
-              <Avatar className={`h-8 w-8 rounded-lg border ${landingTheme.avatarBorder} shadow-xs`}>
+              <Avatar
+                className={`h-8 w-8 rounded-lg border ${landingTheme.avatarBorder} shadow-xs`}
+              >
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className={landingTheme.avatarFallback}>{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {user.email}
-                </span>
+                <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -145,26 +147,42 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className={`h-8 w-8 rounded-lg border ${landingTheme.avatarBorder}`}>
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className={landingTheme.avatarFallback}>{initials}</AvatarFallback>
+                  <AvatarFallback className={landingTheme.avatarFallback}>
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
-                  </span>
+                  <span className="truncate text-xs text-muted-foreground">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild className={`${landingTheme.buttonGhostHover} cursor-pointer`}>
-                <Link href="/forms">
+              <DropdownMenuItem
+                asChild
+                className={`${landingTheme.buttonGhostHover} cursor-pointer`}
+              >
+                <Link
+                  href="/forms"
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
                   <IconUserCircle className="size-4" />
                   My Forms
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className={`${landingTheme.buttonGhostHover} cursor-pointer`}>
-                <Link href="/dashboard">
+              <DropdownMenuItem
+                asChild
+                className={`${landingTheme.buttonGhostHover} cursor-pointer`}
+              >
+                <Link
+                  href="/dashboard"
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
                   <IconCreditCard className="size-4" />
                   Dashboard
                 </Link>
@@ -187,5 +205,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

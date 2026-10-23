@@ -23,6 +23,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "~/components/ui/sidebar";
 
 const navMain = [
@@ -42,7 +43,7 @@ const navMain = [
     icon: IconInbox,
   },
   {
-    title: "Explore Templates",
+    title: "Templates",
     url: "/explore",
     icon: IconCompass,
   },
@@ -58,6 +59,7 @@ const navMain = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser();
+  const { isMobile, setOpenMobile } = useSidebar();
 
   const currentUser = {
     name: user?.fullName || "User",
@@ -71,7 +73,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg" className="data-[slot=sidebar-menu-button]:p-1.5!">
-              <Link href="/dashboard" className="flex items-center gap-2.5">
+              <Link
+                href="/dashboard"
+                onClick={() => {
+                  if (isMobile) setOpenMobile(false);
+                }}
+                className="flex items-center gap-2.5"
+              >
                 <div className="relative size-7 flex items-center justify-center">
                   <Image
                     src="/chaiform-logo-transparent-for-dark-bg (3).svg"

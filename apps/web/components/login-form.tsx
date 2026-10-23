@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { AuthErrorBanner } from "~/components/auth/auth-error-banner";
+import { PasswordInput } from "~/components/auth/password-input";
 import { useSignIn, useUser } from "~/hooks/api/auth";
 import { parseAuthErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
@@ -27,8 +29,9 @@ export function LoginForm({
   const { user, isLoading: isUserLoading } = useUser();
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(null);
+  const [errorBanner, setErrorBanner] = useState<{ title: string; description: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -75,13 +78,7 @@ export function LoginForm({
       </div>
 
       {errorBanner && (
-        <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-3.5 text-xs text-rose-300 flex items-start gap-2.5 animate-in fade-in duration-200">
-          <AlertCircle className="size-4 text-rose-400 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <p className="font-semibold text-rose-200 text-xs">{errorBanner.title}</p>
-            <p className="text-[11px] text-rose-300/90 leading-relaxed">{errorBanner.description}</p>
-          </div>
-        </div>
+        <AuthErrorBanner title={errorBanner.title} description={errorBanner.description} />
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -103,9 +100,7 @@ export function LoginForm({
               onChange: () => setErrorBanner(null),
             })}
           />
-          {errors.email && (
-            <span className="text-xs text-destructive">{errors.email.message}</span>
-          )}
+          {errors.email && <span className="text-xs text-destructive">{errors.email.message}</span>}
         </div>
 
         <div className="space-y-1.5">
@@ -120,30 +115,14 @@ export function LoginForm({
               Forgot password?
             </Link>
           </div>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className={`h-10 pr-10 border-input/60 bg-background/50 ${landingTheme.inputFocus} transition-all`}
-              {...register("password", {
-                required: "Password is required",
-                onChange: () => setErrorBanner(null),
-              })}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded cursor-pointer"
-            >
-              {showPassword ? (
-                <EyeOff className="size-4" />
-              ) : (
-                <Eye className="size-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            placeholder="••••••••"
+            {...register("password", {
+              required: "Password is required",
+              onChange: () => setErrorBanner(null),
+            })}
+          />
           {errors.password && (
             <span className="text-xs text-destructive">{errors.password.message}</span>
           )}

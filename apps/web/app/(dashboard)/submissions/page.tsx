@@ -76,11 +76,13 @@ function SubmissionsHubContent() {
 
   const currentForm = useMemo(
     () => forms?.find((f) => f.id === selectedFormId),
-    [forms, selectedFormId]
+    [forms, selectedFormId],
   );
 
   const { fields, isLoading: fieldsLoading } = useGetFields(selectedFormId || "");
-  const { submissions, isLoading: submissionsLoading } = useGetFormSubmissions(selectedFormId || "");
+  const { submissions, isLoading: submissionsLoading } = useGetFormSubmissions(
+    selectedFormId || "",
+  );
 
   const isDataLoading = fieldsLoading || submissionsLoading;
 
@@ -121,13 +123,18 @@ function SubmissionsHubContent() {
           </p>
         </div>
 
-        <Card className={`flex flex-col items-center justify-center p-12 text-center border-dashed rounded-2xl ${landingTheme.cardBorderHover}`}>
-          <div className={`flex size-14 items-center justify-center rounded-full mb-4 ${landingTheme.iconBg}`}>
+        <Card
+          className={`flex flex-col items-center justify-center p-12 text-center border-dashed rounded-2xl ${landingTheme.cardBorderHover}`}
+        >
+          <div
+            className={`flex size-14 items-center justify-center rounded-full mb-4 ${landingTheme.iconBg}`}
+          >
             <IconInbox className="size-7" />
           </div>
           <h3 className="text-lg font-semibold">No forms created yet</h3>
           <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
-            Once you create forms and collect responses, all submissions will appear here for filtering and export.
+            Once you create forms and collect responses, all submissions will appear here for
+            filtering and export.
           </p>
           <Button asChild className={`mt-6 gap-2 text-xs h-9 ${landingTheme.primaryButton}`}>
             <Link href="/forms">
@@ -150,7 +157,9 @@ function SubmissionsHubContent() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}>
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconInbox className="size-5" />
             </div>
             <div>
@@ -171,7 +180,9 @@ function SubmissionsHubContent() {
               Form:
             </span>
             <Select value={selectedFormId} onValueChange={handleFormChange}>
-              <SelectTrigger className={`w-[220px] md:w-[280px] h-9 text-xs border-border/70 ${landingTheme.inputFocus}`}>
+              <SelectTrigger
+                className={`w-full max-w-[220px] sm:w-[220px] md:w-[280px] h-9 text-xs border-border/70 ${landingTheme.inputFocus}`}
+              >
                 <SelectValue placeholder="Select a form..." />
               </SelectTrigger>
               <SelectContent>
@@ -180,9 +191,15 @@ function SubmissionsHubContent() {
                     <span className="flex items-center gap-2">
                       <span className="truncate max-w-[170px] font-medium">{f.title}</span>
                       {f.isPublished ? (
-                        <span className="size-1.5 rounded-full bg-emerald-500 shrink-0" title="Published" />
+                        <span
+                          className="size-1.5 rounded-full bg-emerald-500 shrink-0"
+                          title="Published"
+                        />
                       ) : (
-                        <span className="size-1.5 rounded-full bg-amber-500 shrink-0" title="Draft" />
+                        <span
+                          className="size-1.5 rounded-full bg-amber-500 shrink-0"
+                          title="Draft"
+                        />
                       )}
                     </span>
                   </SelectItem>
@@ -241,9 +258,13 @@ function SubmissionsHubContent() {
       {currentForm && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {/* Card 1: Total Responses (Amber/Gold) */}
-          <Card className={`relative p-4 rounded-xl border ${landingTheme.cardBg} hover:border-amber-400/50 transition-all duration-200 overflow-hidden group`}>
+          <Card
+            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} hover:border-amber-400/50 transition-all duration-200 overflow-hidden group`}
+          >
             <div className={landingTheme.cardBeam} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Responses</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Responses
+            </span>
             <div className="mt-1.5 flex items-baseline gap-2">
               <span className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
                 {submissionsLoading ? <Skeleton className="h-7 w-12" /> : submissionsCount}
@@ -255,7 +276,9 @@ function SubmissionsHubContent() {
           {/* Card 2: Form Questions (Blue) */}
           <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-blue-500/[0.04] via-card to-card hover:border-blue-500/50 transition-all duration-200 overflow-hidden group">
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-400/50 to-transparent group-hover:via-blue-400 transition-all" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Form Questions</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Form Questions
+            </span>
             <div className="mt-1.5 flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-extrabold text-blue-400">
                 {fieldsLoading ? <Skeleton className="h-7 w-12" /> : fieldsCount}
@@ -267,7 +290,9 @@ function SubmissionsHubContent() {
           {/* Card 3: Status (Emerald) */}
           <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-emerald-500/[0.04] via-card to-card hover:border-emerald-500/50 transition-all duration-200 overflow-hidden group">
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent group-hover:via-emerald-400 transition-all" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Status
+            </span>
             <div className="mt-2 flex items-center gap-1.5">
               {currentForm.isPublished ? (
                 <Badge
@@ -277,10 +302,7 @@ function SubmissionsHubContent() {
                   Published
                 </Badge>
               ) : (
-                <Badge
-                  variant="secondary"
-                  className={landingTheme.draftBadge}
-                >
+                <Badge variant="secondary" className={landingTheme.draftBadge}>
                   Draft
                 </Badge>
               )}
@@ -290,9 +312,14 @@ function SubmissionsHubContent() {
           {/* Card 4: Visibility (Purple) */}
           <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-purple-500/[0.04] via-card to-card hover:border-purple-500/50 transition-all duration-200 overflow-hidden group">
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-purple-400/50 to-transparent group-hover:via-purple-400 transition-all" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Visibility</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Visibility
+            </span>
             <div className="mt-2 flex items-center gap-1.5">
-              <Badge variant="outline" className="text-xs font-normal text-muted-foreground border-border/70">
+              <Badge
+                variant="outline"
+                className="text-xs font-normal text-muted-foreground border-border/70"
+              >
                 {currentForm.visibility === "PUBLIC" ? "Public" : "Unlisted"}
               </Badge>
               {currentForm.isPasswordProtected && (
@@ -306,15 +333,8 @@ function SubmissionsHubContent() {
       )}
 
       {/* Main Content Tabs: Analytics vs Responses Table */}
-      <Tabs defaultValue="analytics" className="w-full">
+      <Tabs defaultValue="responses" className="w-full">
         <TabsList className="mb-2 inline-flex h-9 items-center p-0.5 rounded-lg bg-muted/30 border border-border/50 gap-1">
-          <TabsTrigger
-            value="analytics"
-            className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:!bg-secondary/80 data-[state=active]:!border-border/80 data-[state=active]:!text-foreground data-[state=active]:!shadow-2xs text-muted-foreground hover:text-foreground hover:!bg-muted/50"
-          >
-            <IconChartBar className="size-3.5 text-muted-foreground group-data-[state=active]:text-[#fcd34d] transition-colors" />
-            <span>Analytics &amp; Charts</span>
-          </TabsTrigger>
           <TabsTrigger
             value="responses"
             className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:!bg-secondary/80 data-[state=active]:!border-border/80 data-[state=active]:!text-foreground data-[state=active]:!shadow-2xs text-muted-foreground hover:text-foreground hover:!bg-muted/50"
@@ -324,6 +344,13 @@ function SubmissionsHubContent() {
             <span className="ml-1 px-1.5 py-0.2 text-[10px] rounded-full font-medium tabular-nums bg-muted/40 text-muted-foreground border border-border/40 group-data-[state=active]:bg-muted group-data-[state=active]:text-foreground group-data-[state=active]:border-border/70 transition-colors">
               {submissionsCount}
             </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="analytics"
+            className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border border-transparent data-[state=active]:!bg-secondary/80 data-[state=active]:!border-border/80 data-[state=active]:!text-foreground data-[state=active]:!shadow-2xs text-muted-foreground hover:text-foreground hover:!bg-muted/50"
+          >
+            <IconChartBar className="size-3.5 text-muted-foreground group-data-[state=active]:text-[#fcd34d] transition-colors" />
+            <span>Analytics &amp; Charts</span>
           </TabsTrigger>
         </TabsList>
 

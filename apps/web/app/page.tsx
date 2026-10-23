@@ -14,25 +14,9 @@ import { CtaSection } from "~/components/landing/cta-section";
 import { LandingFooter } from "~/components/landing/footer";
 import { landingTheme } from "~/config/landing-theme";
 
-export const metadata = {
-  title: "ChaiForm • Beautiful Conversational Forms & Surveys",
-  description:
-    "Build fluid conversational forms, surveys, and quizzes with 1-question-at-a-time focus. 14 field types, instant QR codes, and real-time response analytics.",
-  openGraph: {
-    title: "ChaiForm • Beautiful Conversational Forms & Surveys",
-    description:
-      "Build fluid conversational forms with 1-question-at-a-time focus. 14 field types, instant QR codes, and real-time response analytics.",
-    url: "https://chaiform.kenilpatel.in",
-    siteName: "ChaiForm",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "ChaiForm • Beautiful Conversational Forms & Surveys",
-    description:
-      "Build fluid conversational forms with 1-question-at-a-time focus. 14 field types, instant QR codes, and real-time response analytics.",
-  },
-};
+import { homeMetadata, SoftwareAppJsonLd, LandingFaqJsonLd } from "~/seo";
+
+export const metadata = homeMetadata;
 
 export default async function HomePage() {
   const cookieStore = await cookies();
@@ -42,7 +26,11 @@ export default async function HomePage() {
   }
 
   return (
-    <div className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}>
+    <div
+      className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}
+    >
+      <SoftwareAppJsonLd />
+      <LandingFaqJsonLd />
       <LandingNavbar />
       <main className="flex-1">
         <HeroSection />
@@ -60,4 +48,3 @@ export default async function HomePage() {
     </div>
   );
 }
-

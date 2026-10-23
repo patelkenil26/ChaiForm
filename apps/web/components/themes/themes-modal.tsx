@@ -86,14 +86,15 @@ export function ThemesComingSoonButton({
         <Button
           variant={variant}
           size={size}
-          className={`gap-1.5 text-xs font-medium cursor-pointer ${className}`}
+          title="Creative Themes System (Coming Soon)"
+          className={`gap-1.5 text-xs font-medium cursor-pointer shrink-0 px-2 sm:px-3 ${className}`}
         >
           <IconPalette className="size-3.5 text-primary" />
-          <span>Themes</span>
+          <span className="hidden sm:inline">Themes</span>
           {showBadge && (
             <Badge
               variant="secondary"
-              className="px-1.5 py-0 h-4 text-[9px] font-normal uppercase tracking-wider bg-primary/10 text-primary border-primary/20"
+              className="hidden sm:inline-flex px-1.5 py-0 h-4 text-[9px] font-normal uppercase tracking-wider bg-primary/10 text-primary border-primary/20"
             >
               Soon
             </Badge>
@@ -107,9 +108,7 @@ export function ThemesComingSoonButton({
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <IconPalette className="size-4" />
             </div>
-            <DialogTitle className="text-lg font-bold">
-              Creative Themes System
-            </DialogTitle>
+            <DialogTitle className="text-lg font-bold">Creative Themes System</DialogTitle>
             <Badge
               variant="outline"
               className="text-[10px] font-medium bg-amber-500/10 text-amber-500 border-amber-500/20"
@@ -118,7 +117,8 @@ export function ThemesComingSoonButton({
             </Badge>
           </div>
           <DialogDescription className="text-xs text-muted-foreground">
-            Soon you will be able to customize visual presets, background wallpapers, Google font families, and button accents for each form.
+            Soon you will be able to customize visual presets, background wallpapers, Google font
+            families, and button accents for each form.
           </DialogDescription>
         </DialogHeader>
 
@@ -144,9 +144,7 @@ export function ThemesComingSoonButton({
                     {theme.tag}
                   </Badge>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-relaxed">
-                  {theme.desc}
-                </p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">{theme.desc}</p>
               </div>
             );
           })}

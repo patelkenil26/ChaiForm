@@ -5,6 +5,13 @@ on:
     branches:
       - main
       - feat/dashboard-fixes
+  workflow_dispatch:
+    inputs:
+      force_all:
+        description: "Force rebuild and deploy all containers regardless of changes"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   validate:
@@ -23,6 +30,20 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9.0.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -46,31 +67,56 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Login to Docker Hub
+      # Step 2: Detect changed paths across Monorepo
+      - name: Detect Changes
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            api:
+              - 'apps/api/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'Dockerfile.api'
+              - '.github/workflows/deploy.yml'
+            web:
+              - 'apps/web/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'Dockerfile.web'
+              - '.github/workflows/deploy.yml'
+
+      # Step 3: Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 3: Setup Docker Build Environment
+      # Step 4: Setup Docker Build Environment
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      # Step 4: Build and Push Backend API Container
+      # Step 5: Build and Push Backend API Container (Selective Build + GHA Layer Cache)
       - name: Build & Push API Image
+        if: ${{ inputs.force_all == true || steps.changes.outputs.api == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile.api
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/chaiform-api:latest
+          cache-from: type=gha,scope=chaiform-api
+          cache-to: type=gha,mode=max,scope=chaiform-api
 
-      # Step 5: Build and Push Frontend Web Container
+      # Step 6: Build and Push Frontend Web Container (Selective Build + GHA Layer Cache)
       - name: Build & Push Web Image
+        if: ${{ inputs.force_all == true || steps.changes.outputs.web == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -79,8 +125,10 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=https://api.kenilpatel.in/trpc
           tags: ${{ vars.DOCKERHUB_USERNAME }}/chaiform-web:latest
+          cache-from: type=gha,scope=chaiform-web
+          cache-to: type=gha,mode=max,scope=chaiform-web
 
-      # Step 6: Deploy on Oracle Cloud Server via Native OpenSSH
+      # Step 7: Deploy on Oracle Cloud Server via Native OpenSSH
       - name: Deploy to Production Server
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

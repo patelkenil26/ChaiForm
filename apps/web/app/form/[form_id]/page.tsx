@@ -155,7 +155,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
               <Link href="/">Back to Home</Link>
             </Button>
             <Button asChild size="sm" className={landingTheme.primaryButton}>
-              <Link href="/explore">Explore Templates</Link>
+              <Link href="/explore">Templates</Link>
             </Button>
           </div>
         </div>
@@ -163,7 +163,8 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     );
   }
 
-  const isFormClosed = !form.isOpen || !form.isPublished || form.isExpired || form.isLimitReached || form.isArchived;
+  const isFormClosed =
+    !form.isOpen || !form.isPublished || form.isExpired || form.isLimitReached || form.isArchived;
 
   if (isFormClosed) {
     return (
@@ -202,7 +203,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
   }
 
   const sortedFields = [...(form.fields ?? [])].sort(
-    (a, b) => parseFloat(a.index) - parseFloat(b.index)
+    (a, b) => parseFloat(a.index) - parseFloat(b.index),
   );
 
   return (
@@ -213,7 +214,11 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
             {form.closesAt && (
               <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
                 <ClockIcon className="size-3 text-amber-500" />
-                Closes {new Date(form.closesAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}
+                Closes{" "}
+                {new Date(form.closesAt).toLocaleString([], {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                })}
               </span>
             )}
             {form.responseLimit && (

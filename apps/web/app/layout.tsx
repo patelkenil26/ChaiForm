@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { GlobalProviders } from "~/providers/global";
+import { rootMetadata, OrganizationJsonLd, PersonAuthorJsonLd, WebSiteJsonLd } from "~/seo";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -12,23 +13,7 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://chaiform.kenilpatel.in"),
-  title: "ChaiForm • Next-Gen Conversational Form Builder",
-  description: "Build beautiful, high-converting conversational forms with ease.",
-  openGraph: {
-    title: "ChaiForm • Next-Gen Conversational Form Builder",
-    description: "Build beautiful, high-converting conversational forms with ease.",
-    url: "https://chaiform.kenilpatel.in",
-    siteName: "ChaiForm",
-    type: "website",
-  },
-  icons: {
-    icon: { url: "/chaiform-logo-transparent-for-dark-bg (3).svg", type: "image/svg+xml" },
-    shortcut: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-    apple: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-  },
-};
+export const metadata: Metadata = rootMetadata;
 
 export default function RootLayout({
   children,
@@ -37,6 +22,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <meta
+          name="google-site-verification"
+          content="nK49TVdG5f6Pt7-HortuxiuJZS3FSCk9MUnfLBzjE9I"
+        />
+        <OrganizationJsonLd />
+        <PersonAuthorJsonLd />
+        <WebSiteJsonLd />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
         <GlobalProviders>{children}</GlobalProviders>
       </body>
