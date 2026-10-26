@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { SignupForm } from "~/components/signup-form";
 import { landingTheme } from "~/config/landing-theme";
 
-import { signupMetadata } from "~/seo";
+import { signupMetadata, BreadcrumbJsonLd } from "~/seo";
 
 export const metadata = signupMetadata;
 
@@ -20,6 +20,12 @@ export default async function SignupPage({
     <div
       className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}
     >
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "" },
+          { name: "Sign Up", path: "/signup" },
+        ]}
+      />
       {/* Background Ambient Glows */}
       <div
         className={`pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full ${landingTheme.heroGlow} -z-10`}

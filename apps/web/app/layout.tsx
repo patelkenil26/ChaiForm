@@ -27,6 +27,13 @@ export default function RootLayout({
           name="google-site-verification"
           content="nK49TVdG5f6Pt7-HortuxiuJZS3FSCk9MUnfLBzjE9I"
         />
+        <link
+          rel="search"
+          type="application/opensearchdescription+xml"
+          title="ChaiForm"
+          href="/opensearch.xml"
+        />
+        <link rel="author" href="https://kenilpatel.in" />
         <OrganizationJsonLd />
         <PersonAuthorJsonLd />
         <WebSiteJsonLd />

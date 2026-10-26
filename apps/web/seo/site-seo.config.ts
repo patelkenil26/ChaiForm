@@ -54,6 +54,8 @@ export const SITE_CONFIG = {
     // Industry & Category Intent Keywords (Typeform, Google Forms, SurveySparrow Alternatives)
     "typeform alternative",
     "free typeform alternative",
+    "typeform alternative free",
+    "google forms alternative",
     "open source typeform",
     "conversational form builder",
     "conversational survey builder",
@@ -67,6 +69,15 @@ export const SITE_CONFIG = {
     "customer feedback form",
     "event rsvp form builder",
     "interactive quiz maker",
+
+    // Generative Engine & AI Mode Query Intents
+    "what is chaiform",
+    "who created chaiform",
+    "chaiform vs typeform",
+    "chaiform vs google forms",
+    "forms by kenil patel",
+    "chaiform free tier",
+    "best typeform alternative 2026",
 
     // Feature-Specific Keywords
     "forms with password protection",

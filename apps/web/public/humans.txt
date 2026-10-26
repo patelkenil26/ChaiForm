@@ -1,0 +1,17 @@
+/* TEAM */
+Creator & Lead Engineer: Kenil Patel
+Website: https://kenilpatel.in
+GitHub: https://github.com/kenilpatel
+X / Twitter: https://x.com/kenilpatel
+LinkedIn: https://linkedin.com/in/kenilpatel
+Location: India
+
+/* THANKS */
+To everyone building open, accessible web tools and conversational experiences.
+
+/* SITE */
+Standards: HTML5, CSS3, ESNext, TypeScript, Schema.org, Next.js 16 App Router
+Architecture: Full Stack Monorepo, React 19, tRPC, PostgreSQL, TailwindCSS
+Software: ChaiForm (https://chaiform.kenilpatel.in)
+Language: English
+Doctype: HTML5

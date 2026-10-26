@@ -1,0 +1,6 @@
+Contact: mailto:support@chaiform.kenilpatel.in
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://chaiform.kenilpatel.in/.well-known/security.txt
+Policy: https://chaiform.kenilpatel.in/privacy
+Acknowledgments: https://kenilpatel.in

@@ -4,7 +4,7 @@ import { LandingFooter } from "~/components/landing/footer";
 import { Badge } from "~/components/ui/badge";
 import { landingTheme } from "~/config/landing-theme";
 
-import { privacyMetadata } from "~/seo";
+import { privacyMetadata, BreadcrumbJsonLd } from "~/seo";
 
 export const metadata = privacyMetadata;
 
@@ -13,6 +13,12 @@ export default function PrivacyPage() {
     <div
       className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}
     >
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "" },
+          { name: "Privacy Policy", path: "/privacy" },
+        ]}
+      />
       <LandingNavbar />
 
       <main className="flex-1 py-16 md:py-24">

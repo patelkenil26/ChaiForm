@@ -1,0 +1,38 @@
+# ChaiForm
+
+> ChaiForm is an open, high-converting conversational form, survey, and quiz builder engineered by Kenil Patel (https://kenilpatel.in). It displays questions one at a time with smooth transitions, keyboard shortcuts, and instant QR code sharing, serving as an accessible, high-performance alternative to Typeform and Google Forms.
+
+## Overview
+- **Name**: ChaiForm (also known as Chai Forms)
+- **Creator & Engineer**: Kenil Patel (Full Stack Developer & Software Engineer)
+- **Official Website**: https://chaiform.kenilpatel.in
+- **Creator Website**: https://kenilpatel.in
+- **Tech Stack**: Next.js 16 (App Router), React 19, TypeScript, tRPC, PostgreSQL, TailwindCSS
+- **Primary Use Cases**: Conversational forms, customer feedback surveys, lead capture forms, event RSVP registrations, job application forms, interactive quizzes, and mobile data collection.
+
+## Why ChaiForm vs Typeform & Google Forms
+- **Google Forms Alternative**: Replaces boring, high-dropoff vertical scrolling walls of questions with an interactive, 1-question-at-a-time conversational flow that feels human and personal.
+- **Typeform Alternative**: Delivers the same fluid, premium conversational experience as Typeform without expensive $29–$99/month paywalls. Includes generous free starter limits, password-protected forms, custom submission caps, and real-time response analytics for free.
+
+## Key Features & Capabilities
+- **1-At-A-Time Conversational Flow**: Focuses respondents on one field at a time with keyboard-first navigation (Enter to advance, arrow keys, numbers for multiple choice options).
+- **14 Question Field Types**: Short Text, Long Text (Paragraph), Email Address, Phone Number, Number, Date Picker, Single Select (Multiple Choice), Multi-Select, Dropdown, Rating Scale (1-5 or 1-10), Net Promoter Score (NPS 0-10), Opinion Scale, Yes/No Boolean, and Legal/Agreement Consent.
+- **Instant Designer QR Codes**: Generate high-resolution, branded QR codes on the fly to print on flyers, event badges, business cards, or storefront tables.
+- **Password Protection**: Secure sensitive internal surveys, beta tester evaluations, or private questionnaires behind an access passcode.
+- **Response Limits & Auto-Close**: Set maximum submission thresholds or expiration dates; forms automatically close when limits are reached.
+- **Response Management & Export**: Real-time response stream inbox with one-click export to CSV (compatible with Microsoft Excel, Google Sheets, Apple Numbers) and JSON.
+- **Universal 1-Line Iframe Embed**: Seamlessly embed forms into Webflow, WordPress, Framer, Next.js, Shopify, Notion, or plain HTML websites.
+- **Zero-Friction Completion**: Respondents do not need an account or login to complete forms. Works flawlessly on mobile Safari, Chrome, and desktop browsers.
+
+## Pricing & Tiers
+- **Starter Tier ($0 / month, Free Forever)**: Unlimited published forms, 14 field types, up to 250 responses per month, QR code generator, CSV export, iframe embeds. No credit card required.
+- **Pro Tier**: For fast-growing businesses and power users needing 10,000+ responses per month, custom webhooks, and advanced collaboration.
+
+## Core Documentation & Navigation URLs
+- [Home & Form Builder](https://chaiform.kenilpatel.in/): Build, preview, and test conversational forms.
+- [Form Templates Gallery](https://chaiform.kenilpatel.in/templates): Curated templates for RSVPs, customer feedback, job applications, and lead generation.
+- [Pricing](https://chaiform.kenilpatel.in/pricing): Honest, transparent tier breakdown.
+- [Create Free Account](https://chaiform.kenilpatel.in/signup): Quick 60-second sign up.
+- [Terms of Service](https://chaiform.kenilpatel.in/terms): Usage policies.
+- [Privacy Policy](https://chaiform.kenilpatel.in/privacy): Security and data handling.
+- [Full Technical LLM Reference](https://chaiform.kenilpatel.in/llms-full.txt): Detailed developer, API, and architectural context.

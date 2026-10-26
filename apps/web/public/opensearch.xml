@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>ChaiForm</ShortName>
+  <Description>Search conversational form templates and surveys on ChaiForm</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/svg+xml">https://chaiform.kenilpatel.in/chaiform-logo-transparent-for-dark-bg%20(3).svg</Image>
+  <Url type="text/html" template="https://chaiform.kenilpatel.in/templates?search={searchTerms}"/>
+</OpenSearchDescription>

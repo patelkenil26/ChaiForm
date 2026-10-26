@@ -81,11 +81,22 @@ export function HeroSection() {
           </Button>
         </div>
 
-        {/* Authentic Creator Badge */}
+        {/* Authentic Creator & Authority Badge */}
         <div className="mt-7 flex items-center justify-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/60 bg-card/60 backdrop-blur-sm text-xs text-muted-foreground shadow-2xs">
             <IconSparkles className={`size-3.5 ${landingTheme.iconColor}`} />
-            <span>Built for founders, marketers, and event organizers</span>
+            <span>
+              Engineered by{" "}
+              <a
+                href="https://kenilpatel.in"
+                target="_blank"
+                rel="author external noopener noreferrer"
+                className="font-medium text-foreground hover:underline"
+              >
+                Kenil Patel
+              </a>{" "}
+              • The Free Conversational Alternative to Typeform
+            </span>
           </div>
         </div>
 

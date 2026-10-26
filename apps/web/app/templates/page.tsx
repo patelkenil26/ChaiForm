@@ -3,7 +3,7 @@ import { LandingFooter } from "~/components/landing/footer";
 import { TemplatesView } from "~/components/templates/templates-view";
 import { landingTheme } from "~/config/landing-theme";
 
-import { templatesMetadata } from "~/seo";
+import { templatesMetadata, BreadcrumbJsonLd, TemplatesCollectionJsonLd } from "~/seo";
 
 export const metadata = templatesMetadata;
 
@@ -12,6 +12,13 @@ export default function PublicTemplatesPage() {
     <div
       className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}
     >
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "" },
+          { name: "Templates", path: "/templates" },
+        ]}
+      />
+      <TemplatesCollectionJsonLd />
       <LandingNavbar />
       <main className="flex-1">
         <TemplatesView />

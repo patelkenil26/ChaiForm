@@ -98,8 +98,8 @@ export function createSeoMetadata({
 export const rootMetadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: "ChaiForm • Next-Gen Conversational Form Builder",
-    template: "%s • ChaiForm",
+    default: "Conversational Form Builder | ChaiForm by Kenil Patel",
+    template: "%s | ChaiForm",
   },
   description: SITE_CONFIG.description,
   keywords: [...SITE_CONFIG.keywords],
@@ -118,9 +118,9 @@ export const rootMetadata: Metadata = {
 
 /** Homepage (Landing Page) Metadata */
 export const homeMetadata: Metadata = createSeoMetadata({
-  title: "ChaiForm • Beautiful Conversational Forms & Surveys | by Kenil Patel",
+  title: "Conversational Form Builder | ChaiForm by Kenil Patel",
   description:
-    "Build fluid conversational forms, surveys, and quizzes with 1-question-at-a-time focus. 14 input field types, instant QR codes, and real-time response analytics. Designed by Kenil Patel.",
+    "Build fluid conversational forms, surveys, and quizzes with 1-question-at-a-time focus. 14 input field types, instant QR codes, and live analytics. Try free.",
   path: "",
   keywords: [
     "chaiform kenil patel",
@@ -132,9 +132,9 @@ export const homeMetadata: Metadata = createSeoMetadata({
 
 /** Templates Gallery Page Metadata */
 export const templatesMetadata: Metadata = createSeoMetadata({
-  title: "Conversational Form Templates • ChaiForm",
+  title: "Free Conversational Form & Survey Templates | ChaiForm",
   description:
-    "Explore curated conversational form templates for customer surveys, event RSVPs, feedback collection, job applications, and quizzes. Clone into your account in 1 click.",
+    "Free conversational form templates for customer feedback, event RSVPs, job applications, and quizzes. Preview and clone to your account in 1 click.",
   path: "/templates",
   keywords: [
     "free form templates",
@@ -147,7 +147,7 @@ export const templatesMetadata: Metadata = createSeoMetadata({
 
 /** Pricing Page Metadata */
 export const pricingMetadata: Metadata = createSeoMetadata({
-  title: "Honest & Transparent Pricing Plans • ChaiForm",
+  title: "ChaiForm Pricing: Free Starter & Pro Plans | ChaiForm",
   description:
     "Transparent pricing for creators, marketers, and fast-growing teams. Start free with 250 responses, or unlock unlimited forms and 10,000 responses with Pro.",
   path: "/pricing",
@@ -161,7 +161,7 @@ export const pricingMetadata: Metadata = createSeoMetadata({
 
 /** Sign In Page Metadata (NoIndex to avoid duplicate query noise) */
 export const loginMetadata: Metadata = createSeoMetadata({
-  title: "Sign In • ChaiForm",
+  title: "Sign In | ChaiForm",
   description:
     "Sign in to your ChaiForm account to create, publish, and manage conversational forms.",
   path: "/login",
@@ -170,7 +170,7 @@ export const loginMetadata: Metadata = createSeoMetadata({
 
 /** Sign Up Page Metadata */
 export const signupMetadata: Metadata = createSeoMetadata({
-  title: "Create a Free Account • ChaiForm",
+  title: "Sign Up Free: Build Conversational Forms | ChaiForm",
   description:
     "Create your free ChaiForm account in under 60 seconds. Build conversational forms with zero credit card required.",
   path: "/signup",
@@ -178,7 +178,7 @@ export const signupMetadata: Metadata = createSeoMetadata({
 
 /** Terms of Service Page Metadata */
 export const termsMetadata: Metadata = createSeoMetadata({
-  title: "Terms of Service • ChaiForm",
+  title: "Terms of Service | ChaiForm",
   description:
     "Read the Terms of Service governing your use of ChaiForm's conversational form builder.",
   path: "/terms",
@@ -186,7 +186,7 @@ export const termsMetadata: Metadata = createSeoMetadata({
 
 /** Privacy Policy Page Metadata */
 export const privacyMetadata: Metadata = createSeoMetadata({
-  title: "Privacy Policy • ChaiForm",
+  title: "Privacy Policy | ChaiForm",
   description:
     "Read ChaiForm's Privacy Policy regarding data protection, response storage, and privacy rights.",
   path: "/privacy",

@@ -4,7 +4,7 @@ import { LandingFooter } from "~/components/landing/footer";
 import { Badge } from "~/components/ui/badge";
 import { landingTheme } from "~/config/landing-theme";
 
-import { termsMetadata } from "~/seo";
+import { termsMetadata, BreadcrumbJsonLd } from "~/seo";
 
 export const metadata = termsMetadata;
 
@@ -13,6 +13,12 @@ export default function TermsPage() {
     <div
       className={`min-h-screen bg-background text-foreground flex flex-col ${landingTheme.selection}`}
     >
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "" },
+          { name: "Terms of Service", path: "/terms" },
+        ]}
+      />
       <LandingNavbar />
 
       <main className="flex-1 py-16 md:py-24">
