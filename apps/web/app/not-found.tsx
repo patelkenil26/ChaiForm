@@ -21,13 +21,15 @@ export default function NotFound() {
     <div className="relative flex min-h-screen flex-col items-center justify-center p-6 text-center overflow-hidden bg-background">
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-        <div className="h-[360px] w-[560px] rounded-full bg-gradient-to-tr from-amber-500/10 via-amber-500/15 to-transparent blur-[120px]" />
+        <div className={`h-[360px] w-[560px] rounded-full ${landingTheme.heroGlow}`} />
       </div>
 
       <div className="flex max-w-md flex-col items-center gap-6">
         {/* App Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-neutral-950 shadow-md shadow-amber-500/20 transition-transform duration-200 group-hover:scale-105">
+          <div
+            className={`flex aspect-square size-10 items-center justify-center rounded-xl ${landingTheme.logoGradient} transition-transform duration-200 group-hover:scale-105`}
+          >
             <IconForms className="size-5" />
           </div>
           <span className="text-lg font-bold tracking-tight text-foreground">ChaiForm</span>
@@ -36,7 +38,7 @@ export default function NotFound() {
         {/* 404 Badge */}
         <Badge
           variant="outline"
-          className="border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs px-3 py-1 font-mono uppercase tracking-wider"
+          className={`text-xs px-3 py-1 font-mono uppercase tracking-wider ${landingTheme.badge}`}
         >
           Error 404 • Page Not Found
         </Badge>

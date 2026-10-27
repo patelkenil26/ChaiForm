@@ -20,12 +20,7 @@ import {
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/components/ui/dialog";
 import { FieldGroup } from "~/components/ui/field";
 import { FormFieldRenderer } from "~/components/public-form/form-field-renderer";
 import { landingTheme } from "~/config/landing-theme";
@@ -77,7 +72,7 @@ export function BuilderPreviewModal({
         particleCount: 80,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ["#6366f1", "#8b5cf6", "#ec4899", "#10b981", "#f59e0b"],
+        colors: landingTheme.confettiColors,
       });
     } catch {
       // ignore
@@ -89,9 +84,7 @@ export function BuilderPreviewModal({
     setIsTestSubmitted(false);
   };
 
-  const sortedFields = [...fields].sort(
-    (a, b) => parseFloat(a.index) - parseFloat(b.index)
-  );
+  const sortedFields = [...fields].sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,7 +102,9 @@ export function BuilderPreviewModal({
           {/* Left: Branding & Status Badge */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="flex aspect-square size-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <div
+                className={`flex aspect-square size-7 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+              >
                 <IconEye className="size-4" />
               </div>
               <div className="flex flex-col">
@@ -117,14 +112,15 @@ export function BuilderPreviewModal({
                   <span className="text-sm font-semibold tracking-tight">Live Preview</span>
                   <Badge
                     variant="outline"
-                    className="text-[10px] px-2 py-0 h-4.5 bg-amber-500/10 border-amber-500/30 text-amber-400 font-medium gap-1"
+                    className={`text-[10px] px-2 py-0 h-4.5 ${landingTheme.iconBg} font-medium gap-1`}
                   >
                     <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     Interactive Simulator
                   </Badge>
                 </div>
                 <span className="text-[11px] text-muted-foreground truncate max-w-[200px] sm:max-w-xs">
-                  {form?.title || "Untitled Form"} • {fields.length} {fields.length === 1 ? "question" : "questions"}
+                  {form?.title || "Untitled Form"} • {fields.length}{" "}
+                  {fields.length === 1 ? "question" : "questions"}
                 </span>
               </div>
             </div>
@@ -137,7 +133,7 @@ export function BuilderPreviewModal({
               onClick={() => setViewport("desktop")}
               className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "desktop"
-                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  ? landingTheme.cardHighlightBadge
                   : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
@@ -149,7 +145,7 @@ export function BuilderPreviewModal({
               onClick={() => setViewport("tablet")}
               className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "tablet"
-                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  ? landingTheme.cardHighlightBadge
                   : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
@@ -161,7 +157,7 @@ export function BuilderPreviewModal({
               onClick={() => setViewport("mobile")}
               className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                 viewport === "mobile"
-                  ? "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-semibold shadow-xs"
+                  ? landingTheme.cardHighlightBadge
                   : "text-muted-foreground hover:text-foreground hover:bg-muted font-medium"
               }`}
             >
@@ -210,17 +206,20 @@ export function BuilderPreviewModal({
         </div>
 
         {/* Notice Ribbon */}
-        <div className="bg-amber-500/10 dark:bg-amber-950/30 border-b border-amber-500/20 px-4 py-1.5 flex items-center justify-between text-xs text-amber-700 dark:text-amber-300">
+        <div
+          className={`border-b ${landingTheme.callout.border} ${landingTheme.callout.bg} px-4 py-1.5 flex items-center justify-between text-xs ${landingTheme.callout.text}`}
+        >
           <div className="flex items-center gap-1.5">
             <IconAlertCircle className="size-3.5 shrink-0" />
             <span>
-              Preview Mode: Test answers entered here are sandbox-only and <strong>will not be saved</strong> to your database.
+              Preview Mode: Test answers entered here are sandbox-only and{" "}
+              <strong>will not be saved</strong> to your database.
             </span>
           </div>
           <div className="hidden lg:flex items-center gap-3 text-[11px] text-muted-foreground">
             {form?.closesAt && (
               <span className="flex items-center gap-1">
-                <IconClock className="size-3 text-amber-500" />
+                <IconClock className={`size-3 ${landingTheme.iconColor}`} />
                 Closes: {new Date(form.closesAt).toLocaleDateString()}
               </span>
             )}
@@ -246,8 +245,8 @@ export function BuilderPreviewModal({
               viewport === "mobile"
                 ? "max-w-[400px] my-2 bg-card rounded-[2.5rem] border-8 border-border shadow-2xl p-6 relative"
                 : viewport === "tablet"
-                ? "max-w-[640px] my-2 bg-card rounded-2xl border border-border/80 shadow-xl p-8"
-                : "max-w-[760px] my-2 bg-card rounded-2xl border border-border/80 shadow-lg p-8 md:p-10"
+                  ? "max-w-[640px] my-2 bg-card rounded-2xl border border-border/80 shadow-xl p-8"
+                  : "max-w-[760px] my-2 bg-card rounded-2xl border border-border/80 shadow-lg p-8 md:p-10"
             }`}
           >
             {/* Mobile Notch Mockup */}
@@ -278,11 +277,7 @@ export function BuilderPreviewModal({
                     <IconRefresh className="size-3.5" />
                     <span>Test Again</span>
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => onOpenChange(false)}
-                  >
+                  <Button size="sm" variant="outline" onClick={() => onOpenChange(false)}>
                     Done Testing
                   </Button>
                 </div>
@@ -304,14 +299,17 @@ export function BuilderPreviewModal({
                     ) : (
                       <Badge
                         variant="secondary"
-                        className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] inline-flex items-center gap-1.5"
+                        className={`text-[10px] inline-flex items-center gap-1.5 ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border}`}
                       >
-                        <span className="size-1.5 rounded-full bg-amber-500" />
+                        <span className={`size-1.5 rounded-full ${landingTheme.activeDot}`} />
                         Draft (Unpublished)
                       </Badge>
                     )}
                     {form?.slug && (
-                      <Badge variant="outline" className="text-[10px] font-mono text-muted-foreground">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] font-mono text-muted-foreground"
+                      >
                         /form/{form.slug}
                       </Badge>
                     )}
@@ -331,7 +329,8 @@ export function BuilderPreviewModal({
                     <IconSparkles className="size-8 text-muted-foreground/60 mb-2" />
                     <h4 className="text-sm font-semibold">No questions added yet</h4>
                     <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-                      Click &quot;Add Field&quot; in the builder to start adding inputs. They will appear here instantly!
+                      Click &quot;Add Field&quot; in the builder to start adding inputs. They will
+                      appear here instantly!
                     </p>
                   </div>
                 ) : (

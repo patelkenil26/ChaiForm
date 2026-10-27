@@ -49,7 +49,7 @@ export function IntegrationsSection() {
     },
     {
       name: "High-Resolution QR Codes",
-      desc: "Generate custom vector SVG & PNG QR codes for flyers, business cards, and slide decks.",
+      desc: "Generate custom vector SVG & PNG QR codes with branded colors for print flyers and pitch decks.",
       icon: IconSparkles,
       color: "text-purple-400 bg-purple-500/10 border-purple-500/25",
     },
@@ -81,7 +81,9 @@ export function IntegrationsSection() {
               className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl border border-border/70 bg-card/50 hover:border-border hover:bg-card/80 transition-all group shadow-2xs"
             >
               <div>
-                <div className={`flex size-11 items-center justify-center rounded-xl border ${item.color} mb-3.5 group-hover:scale-105 transition-transform`}>
+                <div
+                  className={`flex size-11 items-center justify-center rounded-xl border ${item.color} mb-3.5 group-hover:scale-105 transition-transform`}
+                >
                   <item.icon className="size-5" />
                 </div>
                 <h3 className="text-base font-bold text-foreground">{item.name}</h3>
@@ -95,7 +97,8 @@ export function IntegrationsSection() {
         <div className="mt-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
           <IconCode className="size-3.5" />
           <span>
-            Developers: ChaiForm is also 100% type-safe, powered by modern Next.js 16, tRPC & PostgreSQL.
+            Developers: ChaiForm is also 100% type-safe, powered by modern Next.js 16, tRPC &
+            PostgreSQL.
           </span>
         </div>
       </div>

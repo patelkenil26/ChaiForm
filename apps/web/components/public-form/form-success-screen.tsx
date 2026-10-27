@@ -5,6 +5,7 @@ import confetti from "canvas-confetti";
 import { CheckCircle2Icon, RotateCcwIcon, SparklesIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { landingTheme } from "~/config/landing-theme";
 
 interface FormSuccessScreenProps {
   onReset?: () => void;
@@ -21,7 +22,7 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
         particleCount: 90,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#10b981", "#3b82f6", "#f59e0b", "#ec4899", "#8b5cf6"],
+        colors: [...landingTheme.confettiColors],
       });
 
       // Side bursts
@@ -70,7 +71,8 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
         </div>
 
         {/* Animated Checkmark Icon with soft ring */}
-        <div className="relative mx-auto size-20 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shadow-inner group cursor-pointer transition-transform hover:scale-105 active:scale-95"
+        <div
+          className="relative mx-auto size-20 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shadow-inner group cursor-pointer transition-transform hover:scale-105 active:scale-95"
           onClick={fireConfetti}
           title="Click to celebrate again!"
         >
@@ -107,7 +109,7 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
             onClick={fireConfetti}
             className="w-full sm:w-auto gap-2 rounded-xl text-xs text-muted-foreground hover:text-foreground"
           >
-            <SparklesIcon className="size-3.5 text-amber-500" />
+            <SparklesIcon className={`size-3.5 ${landingTheme.iconColor}`} />
             Celebrate again
           </Button>
         </div>
@@ -127,4 +129,3 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
     </div>
   );
 }
-

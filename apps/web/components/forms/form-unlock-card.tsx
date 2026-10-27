@@ -44,7 +44,9 @@ export function FormUnlockCard({
     <div className="min-h-[80vh] flex items-center justify-center p-4">
       <div className="w-full max-w-md rounded-3xl border bg-card/90 backdrop-blur-md p-8 shadow-xl text-center space-y-6 animate-in fade-in zoom-in-95 duration-300">
         {/* Lock Icon with soft ring */}
-        <div className="relative mx-auto size-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shadow-inner">
+        <div
+          className={`relative mx-auto size-16 rounded-2xl ${landingTheme.iconBg} flex items-center justify-center shadow-inner`}
+        >
           <LockIcon className="size-8 animate-pulse" />
           <div className="absolute -top-1 -right-1 size-4 bg-emerald-500 rounded-full border-2 border-background flex items-center justify-center">
             <ShieldCheckIcon className="size-2.5 text-white" />
@@ -53,13 +55,17 @@ export function FormUnlockCard({
 
         {/* Title & Badge */}
         <div className="space-y-2">
-          <Badge variant="outline" className="text-xs uppercase tracking-wider font-mono gap-1 text-muted-foreground border-amber-500/20">
-            <LockIcon className="size-3 text-amber-400" />
+          <Badge
+            variant="outline"
+            className={`text-xs uppercase tracking-wider font-mono gap-1 text-muted-foreground ${landingTheme.callout.border}`}
+          >
+            <LockIcon className={`size-3 ${landingTheme.iconColor}`} />
             Protected Form
           </Badge>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
           <p className="text-sm text-muted-foreground">
-            {description || "This form requires an access password to view questions and record responses."}
+            {description ||
+              "This form requires an access password to view questions and record responses."}
           </p>
         </div>
 
@@ -88,11 +94,7 @@ export function FormUnlockCard({
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? (
-                  <EyeOffIcon className="size-4" />
-                ) : (
-                  <EyeIcon className="size-4" />
-                )}
+                {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
                 <span className="sr-only">Toggle password visibility</span>
               </Button>
             </div>

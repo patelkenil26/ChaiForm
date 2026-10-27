@@ -54,9 +54,8 @@ export function ProductShowcaseSection() {
 
         {/* 3-Step Walkthrough Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-12">
-          {/* Step 1 */}
           <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#f59e0b]/50 to-transparent" />
+            <div className={landingTheme.cardBeam} />
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span
@@ -280,7 +279,7 @@ export function ProductShowcaseSection() {
                     <div className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                       <div>
                         <div className="font-medium text-foreground">Custom URL Slug</div>
-                        <div className="text-[11px] font-mono text-[#fef08a]">
+                        <div className={`text-[11px] font-mono ${landingTheme.primaryText}`}>
                           /form/early-feedback
                         </div>
                       </div>
@@ -296,7 +295,7 @@ export function ProductShowcaseSection() {
                           Enabled for private survey
                         </div>
                       </div>
-                      <IconLock className="size-3.5 text-amber-400" />
+                      <IconLock className={`size-3.5 ${landingTheme.iconColor}`} />
                     </div>
 
                     <div className="pt-2">

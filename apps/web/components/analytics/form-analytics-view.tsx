@@ -30,6 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "~/com
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Skeleton } from "~/components/ui/skeleton";
+import { landingTheme } from "~/config/landing-theme";
 import type { SubmissionField, SubmissionItem } from "~/components/submissions/submissions-table";
 
 interface FormAnalyticsViewProps {
@@ -53,9 +54,7 @@ export function FormAnalyticsView({
   const totalCompletions = submissions.length;
   // Estimated starts: views where user started answering or views ratio
   const estimatedStarts = Math.round(
-    totalViews > 0
-      ? totalCompletions + Math.round((totalViews - totalCompletions) * 0.4)
-      : 0
+    totalViews > 0 ? totalCompletions + Math.round((totalViews - totalCompletions) * 0.4) : 0,
   );
   const completionRate =
     totalViews > 0 ? Math.min(100, Math.round((totalCompletions / totalViews) * 100)) : 0;
@@ -82,7 +81,7 @@ export function FormAnalyticsView({
 
     // Sort submissions by createdAt asc
     const sorted = [...submissions].sort(
-      (a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+      (a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime(),
     );
 
     // If 14D, initialize last 14 days with 0
@@ -165,7 +164,7 @@ export function FormAnalyticsView({
       link.setAttribute("href", encodedUri);
       link.setAttribute(
         "download",
-        `${formTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-analytics-submissions.csv`
+        `${formTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-analytics-submissions.csv`,
       );
       document.body.appendChild(link);
       link.click();
@@ -211,7 +210,7 @@ export function FormAnalyticsView({
       link.setAttribute("href", url);
       link.setAttribute(
         "download",
-        `${formTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-analytics.json`
+        `${formTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-analytics.json`,
       );
       document.body.appendChild(link);
       link.click();
@@ -229,13 +228,14 @@ export function FormAnalyticsView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl border bg-card/60 backdrop-blur-xs">
         <div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs px-2.5 py-0.5 border-primary/30 text-primary gap-1">
+            <Badge
+              variant="outline"
+              className="text-xs px-2.5 py-0.5 border-primary/30 text-primary gap-1"
+            >
               <IconSparkles className="size-3" />
               Real-time Metrics
             </Badge>
-            <span className="text-xs text-muted-foreground font-mono">
-              {formTitle}
-            </span>
+            <span className="text-xs text-muted-foreground font-mono">{formTitle}</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight mt-1 text-foreground">
             Form Performance & Insights
@@ -399,14 +399,11 @@ export function FormAnalyticsView({
             <Skeleton className="h-full w-full rounded-xl" />
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={timelineData}
-                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-              >
+              <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="submissionsColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor={landingTheme.chart.stopColor} stopOpacity={0.35} />
+                    <stop offset="95%" stopColor={landingTheme.chart.stopColor} stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} vertical={false} />
@@ -440,7 +437,7 @@ export function FormAnalyticsView({
                 <Area
                   type="monotone"
                   dataKey="submissions"
-                  stroke="#f59e0b"
+                  stroke={landingTheme.chart.stroke}
                   strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#submissionsColor)"
@@ -485,7 +482,9 @@ export function FormAnalyticsView({
                       return (
                         <div className="rounded-lg border bg-popover px-2.5 py-1.5 text-xs shadow-md">
                           <span className="font-semibold">{label}: </span>
-                          <span className="text-amber-500 font-bold">{payload[0]?.value} ratings</span>
+                          <span className="text-amber-500 font-bold">
+                            {payload[0]?.value} ratings
+                          </span>
                         </div>
                       );
                     }
@@ -497,13 +496,8 @@ export function FormAnalyticsView({
                     <Cell
                       key={`cell-${index}`}
                       fill={
-                        index === 0
-                          ? "#10b981"
-                          : index === 1
-                          ? "#3b82f6"
-                          : index === 2
-                          ? "#f59e0b"
-                          : "#f43f5e"
+                        landingTheme.paletteHex[index % landingTheme.paletteHex.length] ??
+                        landingTheme.primaryHex
                       }
                     />
                   ))}

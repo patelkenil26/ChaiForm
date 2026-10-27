@@ -125,7 +125,7 @@ export function GlobalCommandPalette({
                       ) : (
                         <Badge
                           variant="outline"
-                          className="text-[9px] py-0 px-1 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10"
+                          className={`text-[9px] py-0 px-1 ${landingTheme.callout.border} ${landingTheme.callout.text} ${landingTheme.callout.bg}`}
                         >
                           Draft
                         </Badge>

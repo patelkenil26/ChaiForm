@@ -15,13 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import {
-  Field,
-  FieldLabel,
-  FieldDescription,
-  FieldError,
-} from "~/components/ui/field";
+import { Field, FieldLabel, FieldDescription, FieldError } from "~/components/ui/field";
 import { cn } from "~/lib/utils";
+import { landingTheme } from "~/config/landing-theme";
 import type { PublicFormField } from "./types";
 
 export interface FormFieldRendererProps {
@@ -150,7 +146,10 @@ export function FormFieldRenderer({
           {(field.options || []).map((opt, i) => (
             <div key={i} className="flex items-center gap-2.5">
               <RadioGroupItem value={opt} id={`${field.labelKey}_${i}`} />
-              <Label htmlFor={`${field.labelKey}_${i}`} className="cursor-pointer font-normal text-sm">
+              <Label
+                htmlFor={`${field.labelKey}_${i}`}
+                className="cursor-pointer font-normal text-sm"
+              >
                 {opt}
               </Label>
             </div>
@@ -228,15 +227,15 @@ export function FormFieldRenderer({
                   className={cn(
                     "size-8 transition-colors",
                     isFilled
-                      ? "fill-amber-400 text-amber-400 drop-shadow-xs"
-                      : "text-muted-foreground/30 hover:text-amber-400/60"
+                      ? `fill-current ${landingTheme.ratingStar}`
+                      : "text-muted-foreground/30 hover:text-primary/60",
                   )}
                 />
               </button>
             );
           })}
           {currentRating > 0 && (
-            <span className="text-sm font-semibold text-amber-500 ml-2">
+            <span className={`text-sm font-semibold ${landingTheme.primaryText} ml-2`}>
               {currentRating} / 5
             </span>
           )}

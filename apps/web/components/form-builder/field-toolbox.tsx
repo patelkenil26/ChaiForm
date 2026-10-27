@@ -23,6 +23,7 @@ import {
 import { type FieldType } from "./field-types";
 import { Input } from "~/components/ui/input";
 import { Badge } from "~/components/ui/badge";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface ToolboxFieldDef {
   type: FieldType;
@@ -158,22 +159,19 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
       {/* Header */}
       <div className="flex items-center justify-between pb-1 border-b border-border/40">
         <div className="flex items-center gap-1.5">
-          <SparklesIcon className="size-3.5 text-amber-400" />
+          <SparklesIcon className={`size-3.5 ${landingTheme.iconColor}`} />
           <span className="text-xs font-semibold tracking-tight text-foreground uppercase">
             Field Toolbox
           </span>
         </div>
-        <Badge
-          variant="outline"
-          className="text-[10px] font-mono border-amber-500/20 text-muted-foreground"
-        >
+        <Badge variant="outline" className={`text-[10px] font-mono ${landingTheme.dashboardBadge}`}>
           Drag & Drop
         </Badge>
       </div>
 
       <p className="text-[11px] text-muted-foreground leading-snug">
         Drag any field into the form canvas, or click{" "}
-        <PlusIcon className="inline size-3 text-amber-400" /> to add directly.
+        <PlusIcon className={`inline size-3 ${landingTheme.iconColor}`} /> to add directly.
       </p>
 
       {/* Search Filter */}
@@ -183,7 +181,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
           placeholder="Filter field types..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-8 pl-8 text-xs rounded-xl bg-background/50 border-border/60 focus-visible:ring-amber-500/30"
+          className={`h-8 pl-8 text-xs rounded-xl bg-background/50 border-border/60 ${landingTheme.inputFocus}`}
         />
       </div>
 
@@ -203,15 +201,19 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
                 e.dataTransfer.effectAllowed = "copy";
               }}
               onClick={() => onAddField(item.type, item.defaultTitle)}
-              className="group flex items-center justify-between p-2 rounded-xl border border-border/50 bg-background/50 hover:bg-card hover:border-amber-500/40 hover:shadow-xs transition-all cursor-grab active:cursor-grabbing select-none"
+              className={`group flex items-center justify-between p-2 rounded-xl border border-border/50 bg-background/50 hover:bg-card ${landingTheme.cardBorderHover} hover:shadow-xs transition-all cursor-grab active:cursor-grabbing select-none`}
               title={`Drag into form or click to add ${item.label}`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="size-7 rounded-lg bg-muted/60 group-hover:bg-amber-500/10 text-muted-foreground group-hover:text-amber-400 border border-transparent group-hover:border-amber-500/20 flex items-center justify-center shrink-0 transition-colors">
+                <div
+                  className={`size-7 rounded-lg bg-muted/60 ${landingTheme.iconBg} flex items-center justify-center shrink-0 transition-colors`}
+                >
                   <Icon className="size-3.5" />
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-medium text-foreground group-hover:text-amber-300 transition-colors truncate">
+                  <span
+                    className={`text-xs font-medium text-foreground group-hover:${landingTheme.primaryText} transition-colors truncate`}
+                  >
                     {item.label}
                   </span>
                   <span className="text-[10px] text-muted-foreground/80 truncate">
@@ -221,7 +223,9 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
               </div>
 
               <div className="flex items-center gap-1 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
-                <GripVerticalIcon className="size-3.5 text-muted-foreground group-hover:text-amber-400" />
+                <GripVerticalIcon
+                  className={`size-3.5 text-muted-foreground group-hover:${landingTheme.primaryText}`}
+                />
               </div>
             </div>
           );

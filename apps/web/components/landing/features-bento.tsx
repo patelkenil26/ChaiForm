@@ -24,6 +24,8 @@ import {
   IconLink,
 } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
+import { landingTheme } from "~/config/landing-theme";
+import { cn } from "~/lib/utils";
 
 export function FeaturesBentoSection() {
   return (
@@ -33,9 +35,9 @@ export function FeaturesBentoSection() {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <Badge
             variant="outline"
-            className="text-xs px-3 py-1 border-[#fcd34d]/35 bg-[#fcd34d]/10 text-[#fef08a] gap-1.5 mb-3 backdrop-blur-sm"
+            className={cn("text-xs px-3 py-1 gap-1.5 mb-3 backdrop-blur-sm", landingTheme.badge)}
           >
-            <IconSparkles className="size-3.5 text-[#f59e0b]" />
+            <IconSparkles className={cn("size-3.5", landingTheme.iconColor)} />
             <span>Built for Modern Teams</span>
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
@@ -76,8 +78,9 @@ export function FeaturesBentoSection() {
                 </span>
               </h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-xl">
-                Instead of presenting respondents with a daunting 20-field wall of text, ChaiForm guides
-                them through focused, 1-question-at-a-time steps with smooth keyboard navigation.
+                Instead of presenting respondents with a daunting 20-field wall of text, ChaiForm
+                guides them through focused, 1-question-at-a-time steps with smooth keyboard
+                navigation.
               </p>
             </div>
 
@@ -131,13 +134,16 @@ export function FeaturesBentoSection() {
                 </span>
               </h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Drop your forms seamlessly into Next.js, WordPress, Webflow, Shopify, or share via direct custom links.
+                Drop your forms seamlessly into Next.js, WordPress, Webflow, Shopify, or share via
+                direct custom links.
               </p>
             </div>
 
             <div className="relative z-10 mt-6 rounded-xl border border-cyan-500/25 bg-neutral-950/90 p-3.5 text-xs font-mono text-cyan-300 overflow-hidden shadow-inner">
               <p className="text-neutral-500 text-[11px]">// 1-line responsive iframe embed</p>
-              <code className="text-cyan-300 text-[11px]">&lt;iframe src=&quot;/form/feedback&quot; width=&quot;100%&quot; /&gt;</code>
+              <code className="text-cyan-300 text-[11px]">
+                &lt;iframe src=&quot;/form/feedback&quot; width=&quot;100%&quot; /&gt;
+              </code>
             </div>
           </div>
 
@@ -168,8 +174,8 @@ export function FeaturesBentoSection() {
                 </span>
               </h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Live submission feed, search answers, filter by date presets (7d, 30d, custom),
-                and 1-click export to CSV / Excel for instant analysis.
+                Live submission feed, search answers, filter by date presets (7d, 30d, custom), and
+                1-click export to CSV / Excel for instant analysis.
               </p>
             </div>
 
@@ -282,7 +288,8 @@ export function FeaturesBentoSection() {
             14 Specialized Question Field Types Out-of-the-Box
           </h4>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1 mb-6">
-            Mix and match diverse inputs to create the perfect conversational survey or onboarding flow.
+            Mix and match diverse inputs to create the perfect conversational survey or onboarding
+            flow.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2">
@@ -316,4 +323,3 @@ export function FeaturesBentoSection() {
     </section>
   );
 }
-

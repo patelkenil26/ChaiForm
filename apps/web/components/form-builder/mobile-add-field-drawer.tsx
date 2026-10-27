@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/drawer";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
+import { landingTheme } from "~/config/landing-theme";
 import { type FieldType } from "./field-types";
 import { TOOLBOX_FIELDS, type ToolboxFieldDef } from "./field-toolbox";
 
@@ -65,7 +66,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Add question to form"
-          className="group flex items-center gap-2 h-11 px-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-300 text-neutral-950 font-semibold text-xs sm:text-sm shadow-xl shadow-amber-500/25 border border-white/20 hover:shadow-amber-500/40 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+          className={`group flex items-center gap-2 h-11 px-4 rounded-full ${landingTheme.primaryButton} text-xs sm:text-sm shadow-xl border border-white/20 active:scale-95 transition-all cursor-pointer whitespace-nowrap`}
         >
           <div className="size-5 rounded-full bg-neutral-950/15 flex items-center justify-center shrink-0">
             <PlusIcon className="size-3.5 stroke-[2.5]" />
@@ -83,7 +84,9 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
           <DrawerHeader className="px-4 pt-3 pb-2 border-b border-border/40 text-left">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="size-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+                <div
+                  className={`size-7 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}
+                >
                   <SparklesIcon className="size-3.5" />
                 </div>
                 <div>
@@ -113,7 +116,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                 placeholder="Search question types (e.g. Email, Star, Dropdown)..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-9 pl-9 pr-8 text-xs rounded-xl bg-background/70 border-border/60 focus-visible:ring-amber-500/30"
+                className={`h-9 pl-9 pr-8 text-xs rounded-xl bg-background/70 border-border/60 ${landingTheme.inputFocus}`}
               />
               {search && (
                 <button
@@ -138,7 +141,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                     className={cn(
                       "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer",
                       isActive
-                        ? "bg-amber-400/15 text-amber-300 border border-amber-400/35 shadow-xs"
+                        ? `${landingTheme.iconBg} font-semibold shadow-xs`
                         : "text-muted-foreground hover:text-foreground bg-muted/40 hover:bg-muted/70 border border-transparent",
                     )}
                   >
@@ -159,18 +162,25 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                     key={field.type}
                     type="button"
                     onClick={() => handleSelectField(field)}
-                    className="group flex flex-col items-start p-3 rounded-xl border border-border/60 bg-card/60 hover:bg-card hover:border-amber-500/40 active:border-amber-500 active:scale-[0.98] transition-all text-left cursor-pointer"
+                    className={`group flex flex-col items-start p-3 rounded-xl border border-border/60 bg-card/60 hover:bg-card ${landingTheme.cardBorderHover} active:scale-[0.98] transition-all text-left cursor-pointer`}
                   >
                     <div className="flex items-center justify-between w-full mb-2">
-                      <div className="size-8 rounded-lg bg-muted/60 group-hover:bg-amber-500/10 text-muted-foreground group-hover:text-amber-400 border border-transparent group-hover:border-amber-500/20 flex items-center justify-center transition-colors">
+                      <div
+                        className={`size-8 rounded-lg bg-muted/60 ${landingTheme.iconBg} flex items-center justify-center transition-colors`}
+                      >
                         <Icon className="size-4" />
                       </div>
-                      <span className="size-5 rounded-full flex items-center justify-center text-muted-foreground/60 group-hover:text-amber-400 transition-colors">
+                      <span
+                        className={`size-5 rounded-full flex items-center justify-center text-muted-foreground/60 group-hover:${landingTheme.primaryText} transition-colors`}
+                      >
                         <PlusIcon className="size-3.5" />
                       </span>
                     </div>
 
-                    <span className="text-xs font-semibold text-foreground group-hover:text-amber-300 transition-colors line-clamp-1">
+                    <span
+                      className={`text-xs font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}
+                    >
+                      {field.label}
                       {field.label}
                     </span>
                     <span className="text-[11px] text-muted-foreground leading-tight mt-0.5 line-clamp-2">

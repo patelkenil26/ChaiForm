@@ -16,6 +16,7 @@ import {
   SlidersHorizontalIcon,
   ArchiveIcon,
   EyeIcon,
+  CodeIcon,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -159,7 +160,7 @@ export function BuilderHeader({
                       variant="outline"
                       className={`text-xs gap-1 ${
                         form.isLimitReached
-                          ? "border-amber-500 text-amber-500 bg-amber-500/10"
+                          ? `${landingTheme.callout.border} ${landingTheme.callout.accent} ${landingTheme.callout.bg}`
                           : "text-muted-foreground border-border/70"
                       }`}
                     >
@@ -219,10 +220,10 @@ export function BuilderHeader({
             size="sm"
             onClick={onOpenQr}
             className={`h-8 sm:h-9 text-xs px-2.5 sm:px-3 ${landingTheme.buttonOutlineHover}`}
-            title="QR Code"
+            title="Website Embed & QR Code"
           >
-            <QrCodeIcon className="size-3.5 sm:mr-1.5" />
-            <span className="hidden sm:inline">QR Code</span>
+            <CodeIcon className="size-3.5 sm:mr-1.5" />
+            <span className="hidden sm:inline">Embed & QR</span>
           </Button>
           <Button
             variant="outline"

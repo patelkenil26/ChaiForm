@@ -29,6 +29,7 @@ import {
   type FieldRow,
   type FieldType,
 } from "./field-types";
+import { landingTheme } from "~/config/landing-theme";
 
 export type ExtendedFieldRow = FieldRow & {
   isDraft?: boolean;
@@ -139,7 +140,7 @@ export function BuilderFieldCard({
           {canDrag && isEditMode && (
             <div className="flex items-center gap-1 shrink-0">
               <div
-                className="hidden sm:flex cursor-grab active:cursor-grabbing text-muted-foreground/50 hover:text-amber-400/80 transition-colors p-0.5"
+                className="hidden sm:flex cursor-grab active:cursor-grabbing text-muted-foreground/50 hover:text-foreground transition-colors p-0.5"
                 title="Drag to reorder question"
               >
                 <GripVerticalIcon className="size-4" />
@@ -153,7 +154,7 @@ export function BuilderFieldCard({
                       e.stopPropagation();
                       onMoveField(index, "up");
                     }}
-                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-amber-400 hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
                     title="Move question up"
                     aria-label="Move question up"
                   >
@@ -166,7 +167,7 @@ export function BuilderFieldCard({
                       e.stopPropagation();
                       onMoveField(index, "down");
                     }}
-                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-amber-400 hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
                     title="Move question down"
                     aria-label="Move question down"
                   >
@@ -241,7 +242,7 @@ export function BuilderFieldCard({
                   }
                   className={`h-7 px-2.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer select-none inline-flex items-center gap-1 ${
                     field.isRequired
-                      ? "bg-amber-500/15 border-amber-500/30 text-amber-300"
+                      ? `${landingTheme.callout.bg} ${landingTheme.callout.border} ${landingTheme.callout.accent}`
                       : "bg-muted/40 border-border/50 text-muted-foreground hover:text-foreground"
                   }`}
                   title="Click to toggle required"
@@ -293,11 +294,11 @@ export function BuilderFieldCard({
               type="button"
               variant="outline"
               size="sm"
-              className="h-7 px-2.5 rounded-lg text-xs font-medium border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:text-amber-200 transition-all gap-1 shadow-2xs cursor-pointer"
+              className={`h-7 px-2.5 rounded-lg text-xs font-medium border ${landingTheme.callout.border} ${landingTheme.callout.bg} ${landingTheme.callout.accent} hover:opacity-90 transition-all gap-1 shadow-2xs cursor-pointer`}
               onClick={() => onToggleSingleEdit(field.id)}
               title="Done editing question"
             >
-              <CheckIcon className="size-3.5 text-amber-400" />
+              <CheckIcon className={`size-3.5 ${landingTheme.iconColor}`} />
               <span>Save</span>
             </Button>
           ) : (

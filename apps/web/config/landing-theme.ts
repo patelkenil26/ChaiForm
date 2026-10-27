@@ -1,26 +1,36 @@
 /**
  * ============================================================================
- * CHAI FORM - GLOBAL LANDING & PUBLIC THEME SYSTEM
+ * CHAI FORM - GLOBAL UNIFIED THEME SYSTEM (SINGLE SOURCE OF TRUTH)
  * ============================================================================
- * Centralized theme tokens for all public-facing pages:
- *  - Landing Page (/) & all sections (Hero, LiveDemo, Templates, Bento, CTA, Footer)
- *  - Templates Showcase (/templates)
- *  - Pricing Page (/pricing)
+ * Centralized design tokens and color system for the entire application:
+ *  - Landing & Public Pages (/, /explore, /pricing, /templates, etc.)
+ *  - Dashboard & Form Builder (/forms, /forms/[id], /submissions)
+ *  - Form Runner & Embed Views (/form/[form_id])
+ *  - UI Primitives (Switch, Checkbox, Tabs, Dialogs, Cards, Badges, Charts)
  *
- * HOW TO SWITCH THEMES:
- * Change `ACTIVE_THEME_ID` at the bottom of this file to any preset key:
+ * HOW TO SWITCH THEMES GLOBALLY:
+ * Simply change `ACTIVE_THEME_ID` below to any preset key:
  *   - "frosty_mint"           : [1] Frosty Mint (#17C662 -> #F5FF6C)
- *   - "desert_champagne_gold" : [2] Luminous Champagne Gold (#F59E0B -> #FEF9C3 - Light & Bright)
+ *   - "desert_champagne_gold" : [2] Luminous Champagne Gold (#F59E0B -> #FEF9C3) [DEFAULT]
  *   - "sexy_blue"             : [3] Sexy Blue (#007BFF -> #B0E0E6)
+ *
+ * Changing ACTIVE_THEME_ID will instantly re-skin the entire application!
  * ============================================================================
  */
+
+export interface QrCodePreset {
+  name: string;
+  hex: string;
+}
 
 export interface LandingThemeConfig {
   id: string;
   name: string;
   description: string;
   paletteHex: string[];
-  // Brand Logo
+  primaryHex: string;
+  primaryLightHex: string;
+  // Brand Logo & Core Visuals
   logoGradient: string;
   // Hero & Header
   badge: string;
@@ -28,10 +38,15 @@ export interface LandingThemeConfig {
   primaryText: string;
   gradientText: string;
   heroGlow: string;
-  // Primary CTA Buttons (shadcn-style hover, subtle shadow)
+  // Buttons & Interactive
   primaryButton: string;
   buttonOutlineHover: string;
   buttonGhostHover: string;
+  // Controls (Switch & Checkbox)
+  switchChecked: string;
+  switchFocus: string;
+  checkboxChecked: string;
+  checkboxFocus: string;
   // Card & Border Styling
   cardBg: string;
   cardBeam: string;
@@ -42,6 +57,7 @@ export interface LandingThemeConfig {
   activePill: string;
   tabActive: string;
   tabInactive: string;
+  tabActiveIcon: string;
   // Interactive Elements & Icons
   iconColor: string;
   iconBg: string;
@@ -69,34 +85,69 @@ export interface LandingThemeConfig {
   ctaBadge: string;
   // Selection
   selection: string;
+  // Callout & Notices
+  callout: {
+    border: string;
+    bg: string;
+    text: string;
+    accent: string;
+  };
+  // Analytics Charts
+  chart: {
+    stroke: string;
+    stopColor: string;
+    fill: string;
+  };
+  // Confetti celebration colors
+  confettiColors: string[];
+  // QR Code Presets
+  qrCodePresets: QrCodePreset[];
 }
 
 export const THEME_PRESETS = {
   // --------------------------------------------------------------------------
-  // [1] Frosty Mint (Designali #17C662 -> #F5FF6C)
+  // [1] Frosty Mint (Electric Mint -> Bright Lemon-Lime)
   // --------------------------------------------------------------------------
   frosty_mint: {
     id: "frosty_mint",
     name: "1. Frosty Mint",
-    description: "Vibrant electric mint green (#17C662) smoothly blending into bright citrus lemon-lime (#F5FF6C).",
+    description:
+      "Vibrant electric mint green (#17C662) smoothly blending into bright citrus lemon-lime (#F5FF6C).",
     paletteHex: ["#17C662", "#47DE79", "#75E96E", "#B1F46A", "#F5FF6C"],
-    logoGradient: "bg-gradient-to-br from-[#17c662] via-[#52e88f] to-[#f5ff6c] text-neutral-950 shadow-md shadow-[#17c662]/30",
-    badge: "border-[#17c662]/40 bg-[#17c662]/10 text-[#17c662] dark:text-[#52e88f] backdrop-blur-md hover:border-[#17c662]/60 hover:bg-[#17c662]/15 transition-all shadow-xs",
+    primaryHex: "#17C662",
+    primaryLightHex: "#F5FF6C",
+    logoGradient:
+      "bg-gradient-to-br from-[#17c662] via-[#52e88f] to-[#f5ff6c] text-neutral-950 shadow-md shadow-[#17c662]/30",
+    badge:
+      "border-[#17c662]/40 bg-[#17c662]/10 text-[#17c662] dark:text-[#52e88f] backdrop-blur-md hover:border-[#17c662]/60 hover:bg-[#17c662]/15 transition-all shadow-xs",
     dashboardBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     primaryText: "text-[#17c662] dark:text-[#52e88f]",
-    gradientText: "bg-gradient-to-r from-[#17c662] via-[#6aed61] to-[#f5ff6c] bg-clip-text text-transparent",
+    gradientText:
+      "bg-gradient-to-r from-[#17c662] via-[#6aed61] to-[#f5ff6c] bg-clip-text text-transparent",
     heroGlow: "bg-gradient-to-tr from-[#17c662]/20 via-[#f5ff6c]/10 to-transparent blur-[140px]",
-    primaryButton: "bg-gradient-to-r from-[#17c662] via-[#75e96e] to-[#b1f46a] hover:opacity-90 active:opacity-95 text-neutral-950 font-semibold shadow-xs transition-opacity cursor-pointer",
-    buttonOutlineHover: "hover:border-[#17c662]/40 hover:bg-[#17c662]/10 hover:text-[#52e88f] transition-colors",
+    primaryButton:
+      "bg-gradient-to-r from-[#17c662] via-[#75e96e] to-[#b1f46a] hover:opacity-90 active:opacity-95 text-neutral-950 font-semibold shadow-xs transition-opacity cursor-pointer",
+    buttonOutlineHover:
+      "hover:border-[#17c662]/40 hover:bg-[#17c662]/10 hover:text-[#52e88f] transition-colors",
     buttonGhostHover: "hover:bg-[#17c662]/10 hover:text-[#52e88f] transition-colors",
+    switchChecked:
+      "data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#17c662] data-[state=checked]:via-[#52e88f] data-[state=checked]:to-[#f5ff6c] data-[state=checked]:border-[#17c662]/60 data-[state=checked]:shadow-[0_0_12px_rgba(23,198,98,0.25)]",
+    switchFocus: "focus-visible:ring-[#17c662]/40",
+    checkboxChecked:
+      "data-[state=checked]:border-[#17c662] data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#17c662] data-[state=checked]:to-[#75e96e] data-[state=checked]:text-neutral-950 dark:data-[state=checked]:border-[#17c662] dark:data-[state=checked]:bg-gradient-to-r dark:data-[state=checked]:from-[#17c662] dark:data-[state=checked]:to-[#75e96e] dark:data-[state=checked]:text-neutral-950",
+    checkboxFocus: "focus-visible:ring-[#17c662]/40",
     cardBg: "bg-gradient-to-b from-[#17c662]/[0.035] via-card to-card border-border/75",
-    cardBeam: "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#17c662]/50 to-transparent group-hover:via-[#17c662] transition-all",
+    cardBeam:
+      "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#17c662]/50 to-transparent group-hover:via-[#17c662] transition-all",
     cardBorderHover: "hover:border-[#17c662]/45 transition-colors duration-150",
-    cardHighlightBorder: "border-2 border-[#17c662]/70 bg-gradient-to-b from-[#17c662]/15 via-card to-card shadow-2xl shadow-[#17c662]/15",
+    cardHighlightBorder:
+      "border-2 border-[#17c662]/70 bg-gradient-to-b from-[#17c662]/15 via-card to-card shadow-2xl shadow-[#17c662]/15",
     cardHighlightBadge: "bg-gradient-to-r from-[#17c662] to-[#b1f46a] text-neutral-950 font-bold",
     activePill: "bg-foreground text-background font-medium shadow-xs transition-all",
     tabActive: "border border-border/80 bg-secondary/80 text-foreground shadow-2xs font-medium",
-    tabInactive: "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabInactive:
+      "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabActiveIcon: "group-data-[state=active]:text-[#17c662]",
     iconColor: "text-[#17c662]",
     iconBg: "bg-[#17c662]/15 text-[#17c662] dark:text-[#52e88f]",
     checkColor: "text-[#17c662]",
@@ -105,92 +156,178 @@ export const THEME_PRESETS = {
     activeDot: "bg-[#17c662] shadow-[0_0_8px_rgba(23,198,98,0.8)]",
     draftBadge: "bg-secondary text-muted-foreground border border-border/60 text-xs font-normal",
     publishedBadge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-normal",
-    slugBadge: "inline-flex items-center gap-1 text-[11px] font-mono text-[#52e88f] bg-[#17c662]/10 border border-[#17c662]/25 px-1.5 py-0.5 rounded",
+    slugBadge:
+      "inline-flex items-center gap-1 text-[11px] font-mono text-[#52e88f] bg-[#17c662]/10 border border-[#17c662]/25 px-1.5 py-0.5 rounded",
     tableRowHover: "hover:bg-[#17c662]/[0.05] border-border/50 transition-colors group",
     linkHover: "hover:underline hover:text-[#52e88f] transition-colors",
     inputFocus: "focus-visible:ring-[#17c662]/40 focus-visible:border-[#17c662]/50",
-    navActive: "bg-gradient-to-r from-[#17c662]/15 to-[#75e96e]/10 text-[#52e88f] font-semibold border border-[#17c662]/40 ring-1 ring-[#17c662]/25 shadow-xs",
-    navInactive: "text-muted-foreground hover:bg-[#17c662]/[0.08] hover:text-[#52e88f] hover:border-[#17c662]/20 border border-transparent",
+    navActive:
+      "bg-gradient-to-r from-[#17c662]/15 to-[#75e96e]/10 text-[#52e88f] font-semibold border border-[#17c662]/40 ring-1 ring-[#17c662]/25 shadow-xs",
+    navInactive:
+      "text-muted-foreground hover:bg-[#17c662]/[0.08] hover:text-[#52e88f] hover:border-[#17c662]/20 border border-transparent",
     avatarBorder: "border-[#17c662]/40",
     avatarFallback: "rounded-lg bg-[#17c662]/15 text-[#52e88f] font-bold text-xs",
-    ctaBox: "border border-[#17c662]/35 bg-gradient-to-b from-[#17c662]/15 via-card to-card shadow-2xl shadow-[#17c662]/15",
+    ctaBox:
+      "border border-[#17c662]/35 bg-gradient-to-b from-[#17c662]/15 via-card to-card shadow-2xl shadow-[#17c662]/15",
     ctaGlow: "bg-[#17c662]/25 blur-[100px]",
     ctaBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     selection: "selection:bg-[#17c662]/25 selection:text-[#17c662]",
+    callout: {
+      border: "border-[#17c662]/25",
+      bg: "bg-[#17c662]/10",
+      text: "text-[#52e88f]",
+      accent: "text-[#17c662]",
+    },
+    chart: {
+      stroke: "#17c662",
+      stopColor: "#17c662",
+      fill: "rgba(23, 198, 98, 0.2)",
+    },
+    confettiColors: ["#17c662", "#52e88f", "#75e96e", "#b1f46a", "#f5ff6c"],
+    qrCodePresets: [
+      { name: "Frosty Mint (Brand)", hex: "#17c662" },
+      { name: "Classic Black", hex: "#000000" },
+      { name: "Chai Indigo", hex: "#4f46e5" },
+      { name: "Emerald Green", hex: "#059669" },
+      { name: "Crimson Rose", hex: "#e11d48" },
+      { name: "Amber Ochre", hex: "#d97706" },
+    ],
   },
 
   // --------------------------------------------------------------------------
-  // [2] Luminous Champagne Gold (Polished Luxury Edition)
+  // [2] Luminous Champagne Gold (Polished Luxury Edition) [DEFAULT]
   // --------------------------------------------------------------------------
   desert_champagne_gold: {
     id: "desert_champagne_gold",
     name: "2. Luminous Champagne Gold (Polished Luxury)",
-    description: "Bright golden sunlight (#F59E0B) into shimmering champagne cream (#FEF9C3). Clean, radiant luxury.",
+    description:
+      "Bright golden sunlight (#F59E0B) into shimmering champagne cream (#FEF9C3). Clean, radiant luxury.",
     paletteHex: ["#F59E0B", "#FCD34D", "#FEF08A", "#FEF9C3"],
-    logoGradient: "bg-gradient-to-br from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] text-neutral-950 shadow-md shadow-[#f59e0b]/30 ring-1 ring-white/20",
-    badge: "border-[#fcd34d]/35 bg-[#fcd34d]/10 text-[#fef08a] backdrop-blur-md hover:border-[#fcd34d]/60 hover:bg-[#fcd34d]/15 transition-all shadow-xs",
+    primaryHex: "#F59E0B",
+    primaryLightHex: "#FEF08A",
+    logoGradient:
+      "bg-gradient-to-br from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] text-neutral-950 shadow-md shadow-[#f59e0b]/30 ring-1 ring-white/20",
+    badge:
+      "border-[#fcd34d]/35 bg-[#fcd34d]/10 text-[#fef08a] backdrop-blur-md hover:border-[#fcd34d]/60 hover:bg-[#fcd34d]/15 transition-all shadow-xs",
     dashboardBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     primaryText: "text-[#fef08a]",
-    gradientText: "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(245,158,11,0.2)]",
+    gradientText:
+      "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(245,158,11,0.2)]",
     heroGlow: "bg-gradient-to-tr from-[#f59e0b]/22 via-[#fcd34d]/12 to-transparent blur-[140px]",
-    primaryButton: "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef08a] hover:opacity-90 active:opacity-95 text-neutral-950 font-semibold shadow-xs transition-opacity cursor-pointer",
-    buttonOutlineHover: "hover:border-[#fcd34d]/40 hover:bg-[#fcd34d]/10 hover:text-[#fef08a] transition-colors",
+    primaryButton:
+      "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef08a] hover:opacity-90 active:opacity-95 text-neutral-950 font-semibold shadow-xs transition-opacity cursor-pointer",
+    buttonOutlineHover:
+      "hover:border-[#fcd34d]/40 hover:bg-[#fcd34d]/10 hover:text-[#fef08a] transition-colors",
     buttonGhostHover: "hover:bg-[#fcd34d]/10 hover:text-[#fef08a] transition-colors",
+    switchChecked:
+      "data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#f59e0b] data-[state=checked]:via-[#fcd34d] data-[state=checked]:to-[#fef08a] data-[state=checked]:border-[#f59e0b]/60 data-[state=checked]:shadow-[0_0_12px_rgba(245,158,11,0.25)]",
+    switchFocus: "focus-visible:ring-[#fcd34d]/40",
+    checkboxChecked:
+      "data-[state=checked]:border-[#f59e0b] data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#f59e0b] data-[state=checked]:to-[#fcd34d] data-[state=checked]:text-neutral-950 dark:data-[state=checked]:border-[#f59e0b] dark:data-[state=checked]:bg-gradient-to-r dark:data-[state=checked]:from-[#f59e0b] dark:data-[state=checked]:to-[#fcd34d] dark:data-[state=checked]:text-neutral-950",
+    checkboxFocus: "focus-visible:ring-[#fcd34d]/40",
     cardBg: "bg-gradient-to-b from-[#f59e0b]/[0.035] via-card to-card border-border/75",
-    cardBeam: "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#fcd34d]/50 to-transparent group-hover:via-[#fcd34d] transition-all",
+    cardBeam:
+      "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#fcd34d]/50 to-transparent group-hover:via-[#fcd34d] transition-all",
     cardBorderHover: "hover:border-[#fcd34d]/45 transition-colors duration-150",
-    cardHighlightBorder: "border-2 border-[#fcd34d]/65 bg-gradient-to-b from-[#f59e0b]/12 via-card to-card shadow-2xl shadow-[#f59e0b]/15 hover:border-[#fcd34d]/85 transition-all",
-    cardHighlightBadge: "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-bold shadow-xs",
+    cardHighlightBorder:
+      "border-2 border-[#fcd34d]/65 bg-gradient-to-b from-[#f59e0b]/12 via-card to-card shadow-2xl shadow-[#f59e0b]/15 hover:border-[#fcd34d]/85 transition-all",
+    cardHighlightBadge:
+      "bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] text-neutral-950 font-bold shadow-xs",
     activePill: "bg-foreground text-background font-medium shadow-xs transition-all",
     tabActive: "border border-border/80 bg-secondary/80 text-foreground shadow-2xs font-medium",
-    tabInactive: "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabInactive:
+      "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabActiveIcon: "group-data-[state=active]:text-[#fcd34d]",
     iconColor: "text-[#fcd34d]",
     iconBg: "bg-[#fcd34d]/15 text-[#fef08a] border border-[#fcd34d]/25",
     checkColor: "text-[#fcd34d]",
-    progressBar: "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] shadow-xs shadow-[#f59e0b]/40",
+    progressBar:
+      "bg-gradient-to-r from-[#f59e0b] via-[#fcd34d] to-[#fef9c3] shadow-xs shadow-[#f59e0b]/40",
     ratingStar: "text-[#fcd34d] drop-shadow-[0_0_10px_rgba(252,211,77,0.7)]",
     activeDot: "bg-[#fcd34d] shadow-[0_0_8px_rgba(252,211,77,0.8)]",
     draftBadge: "bg-secondary text-muted-foreground border border-border/60 text-xs font-normal",
     publishedBadge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-normal",
-    slugBadge: "inline-flex items-center gap-1 text-[11px] font-mono text-[#fef08a] bg-[#fcd34d]/10 border border-[#fcd34d]/25 px-1.5 py-0.5 rounded",
+    slugBadge:
+      "inline-flex items-center gap-1 text-[11px] font-mono text-[#fef08a] bg-[#fcd34d]/10 border border-[#fcd34d]/25 px-1.5 py-0.5 rounded",
     tableRowHover: "hover:bg-[#fcd34d]/[0.05] border-border/50 transition-colors group",
     linkHover: "hover:underline hover:text-[#fef08a] transition-colors",
     inputFocus: "focus-visible:ring-[#fcd34d]/40 focus-visible:border-[#fcd34d]/50",
-    navActive: "bg-gradient-to-r from-[#f59e0b]/15 to-[#fcd34d]/10 text-[#fef08a] font-semibold border border-[#fcd34d]/40 ring-1 ring-[#fcd34d]/25 shadow-xs",
-    navInactive: "text-muted-foreground hover:bg-[#fcd34d]/[0.08] hover:text-[#fef08a] hover:border-[#fcd34d]/20 border border-transparent",
+    navActive:
+      "bg-gradient-to-r from-[#f59e0b]/15 to-[#fcd34d]/10 text-[#fef08a] font-semibold border border-[#fcd34d]/40 ring-1 ring-[#fcd34d]/25 shadow-xs",
+    navInactive:
+      "text-muted-foreground hover:bg-[#fcd34d]/[0.08] hover:text-[#fef08a] hover:border-[#fcd34d]/20 border border-transparent",
     avatarBorder: "border-[#fcd34d]/40",
     avatarFallback: "rounded-lg bg-[#fcd34d]/15 text-[#fef08a] font-bold text-xs",
-    ctaBox: "border border-[#fcd34d]/30 bg-gradient-to-b from-[#f59e0b]/12 via-card to-card shadow-2xl shadow-[#f59e0b]/15 backdrop-blur-xl",
+    ctaBox:
+      "border border-[#fcd34d]/30 bg-gradient-to-b from-[#f59e0b]/12 via-card to-card shadow-2xl shadow-[#f59e0b]/15 backdrop-blur-xl",
     ctaGlow: "bg-[#f59e0b]/20 blur-[110px]",
     ctaBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     selection: "selection:bg-[#f59e0b]/25 selection:text-[#fef08a]",
+    callout: {
+      border: "border-amber-500/25",
+      bg: "bg-amber-500/10",
+      text: "text-amber-200",
+      accent: "text-amber-400",
+    },
+    chart: {
+      stroke: "#f59e0b",
+      stopColor: "#f59e0b",
+      fill: "rgba(245, 158, 11, 0.2)",
+    },
+    confettiColors: ["#f59e0b", "#fcd34d", "#fef08a", "#10b981", "#6366f1"],
+    qrCodePresets: [
+      { name: "Luminous Gold (Brand)", hex: "#f59e0b" },
+      { name: "Classic Black", hex: "#000000" },
+      { name: "Chai Indigo", hex: "#4f46e5" },
+      { name: "Emerald Green", hex: "#059669" },
+      { name: "Crimson Rose", hex: "#e11d48" },
+      { name: "Amber Ochre", hex: "#d97706" },
+    ],
   },
 
   // --------------------------------------------------------------------------
-  // [3] Sexy Blue (Designali #007BFF -> #B0E0E6)
+  // [3] Sexy Blue (Bold Electric Blue -> Ice Powder Blue)
   // --------------------------------------------------------------------------
   sexy_blue: {
     id: "sexy_blue",
     name: "3. Sexy Blue",
-    description: "Bold & vibrant shades of electric blue (#007BFF) fading to ice powder blue (#B0E0E6), evoking confidence.",
+    description:
+      "Bold & vibrant shades of electric blue (#007BFF) fading to ice powder blue (#B0E0E6), evoking confidence.",
     paletteHex: ["#007BFF", "#1A8CFF", "#38A3FF", "#68C2E8", "#B0E0E6"],
-    logoGradient: "bg-gradient-to-br from-[#007bff] via-[#2d9bf0] to-[#b0e0e6] text-white shadow-md shadow-[#007bff]/30",
-    badge: "border-[#007bff]/40 bg-[#007bff]/10 text-[#007bff] dark:text-[#5ab4ff] backdrop-blur-md hover:border-[#007bff]/60 hover:bg-[#007bff]/15 transition-all shadow-xs",
+    primaryHex: "#007BFF",
+    primaryLightHex: "#B0E0E6",
+    logoGradient:
+      "bg-gradient-to-br from-[#007bff] via-[#2d9bf0] to-[#b0e0e6] text-white shadow-md shadow-[#007bff]/30",
+    badge:
+      "border-[#007bff]/40 bg-[#007bff]/10 text-[#007bff] dark:text-[#5ab4ff] backdrop-blur-md hover:border-[#007bff]/60 hover:bg-[#007bff]/15 transition-all shadow-xs",
     dashboardBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     primaryText: "text-[#007bff] dark:text-[#5ab4ff]",
-    gradientText: "bg-gradient-to-r from-[#007bff] via-[#38a3ff] to-[#b0e0e6] bg-clip-text text-transparent",
+    gradientText:
+      "bg-gradient-to-r from-[#007bff] via-[#38a3ff] to-[#b0e0e6] bg-clip-text text-transparent",
     heroGlow: "bg-gradient-to-tr from-[#007bff]/25 via-[#b0e0e6]/15 to-transparent blur-[140px]",
-    primaryButton: "bg-gradient-to-r from-[#007bff] via-[#2d9bf0] to-[#68c2e8] hover:opacity-90 active:opacity-95 text-white font-semibold shadow-xs transition-opacity cursor-pointer",
-    buttonOutlineHover: "hover:border-[#007bff]/40 hover:bg-[#007bff]/10 hover:text-[#5ab4ff] transition-colors",
+    primaryButton:
+      "bg-gradient-to-r from-[#007bff] via-[#2d9bf0] to-[#68c2e8] hover:opacity-90 active:opacity-95 text-white font-semibold shadow-xs transition-opacity cursor-pointer",
+    buttonOutlineHover:
+      "hover:border-[#007bff]/40 hover:bg-[#007bff]/10 hover:text-[#5ab4ff] transition-colors",
     buttonGhostHover: "hover:bg-[#007bff]/10 hover:text-[#5ab4ff] transition-colors",
+    switchChecked:
+      "data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#007bff] data-[state=checked]:via-[#2d9bf0] data-[state=checked]:to-[#68c2e8] data-[state=checked]:border-[#007bff]/60 data-[state=checked]:shadow-[0_0_12px_rgba(0,123,255,0.25)]",
+    switchFocus: "focus-visible:ring-[#007bff]/40",
+    checkboxChecked:
+      "data-[state=checked]:border-[#007bff] data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#007bff] data-[state=checked]:to-[#38a3ff] data-[state=checked]:text-white dark:data-[state=checked]:border-[#007bff] dark:data-[state=checked]:bg-gradient-to-r dark:data-[state=checked]:from-[#007bff] dark:data-[state=checked]:to-[#38a3ff] dark:data-[state=checked]:text-white",
+    checkboxFocus: "focus-visible:ring-[#007bff]/40",
     cardBg: "bg-gradient-to-b from-[#007bff]/[0.035] via-card to-card border-border/75",
-    cardBeam: "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#007bff]/50 to-transparent group-hover:via-[#007bff] transition-all",
+    cardBeam:
+      "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#007bff]/50 to-transparent group-hover:via-[#007bff] transition-all",
     cardBorderHover: "hover:border-[#007bff]/45 transition-colors duration-150",
-    cardHighlightBorder: "border-2 border-[#007bff]/70 bg-gradient-to-b from-[#007bff]/15 via-card to-card shadow-2xl shadow-[#007bff]/15",
+    cardHighlightBorder:
+      "border-2 border-[#007bff]/70 bg-gradient-to-b from-[#007bff]/15 via-card to-card shadow-2xl shadow-[#007bff]/15",
     cardHighlightBadge: "bg-gradient-to-r from-[#007bff] to-[#68c2e8] text-white font-bold",
     activePill: "bg-foreground text-background font-medium shadow-xs transition-all",
     tabActive: "border border-border/80 bg-secondary/80 text-foreground shadow-2xs font-medium",
-    tabInactive: "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabInactive:
+      "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabActiveIcon: "group-data-[state=active]:text-[#5ab4ff]",
     iconColor: "text-[#007bff] dark:text-[#5ab4ff]",
     iconBg: "bg-[#007bff]/15 text-[#007bff] dark:text-[#5ab4ff]",
     checkColor: "text-[#007bff] dark:text-[#5ab4ff]",
@@ -199,18 +336,42 @@ export const THEME_PRESETS = {
     activeDot: "bg-[#007bff] shadow-[0_0_8px_rgba(0,123,255,0.8)]",
     draftBadge: "bg-secondary text-muted-foreground border border-border/60 text-xs font-normal",
     publishedBadge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-normal",
-    slugBadge: "inline-flex items-center gap-1 text-[11px] font-mono text-[#5ab4ff] bg-[#007bff]/10 border border-[#007bff]/25 px-1.5 py-0.5 rounded",
+    slugBadge:
+      "inline-flex items-center gap-1 text-[11px] font-mono text-[#5ab4ff] bg-[#007bff]/10 border border-[#007bff]/25 px-1.5 py-0.5 rounded",
     tableRowHover: "hover:bg-[#007bff]/[0.05] border-border/50 transition-colors group",
     linkHover: "hover:underline hover:text-[#5ab4ff] transition-colors",
     inputFocus: "focus-visible:ring-[#007bff]/40 focus-visible:border-[#007bff]/50",
-    navActive: "bg-gradient-to-r from-[#007bff]/15 to-[#38a3ff]/10 text-[#5ab4ff] font-semibold border border-[#007bff]/40 ring-1 ring-[#007bff]/25 shadow-xs",
-    navInactive: "text-muted-foreground hover:bg-[#007bff]/[0.08] hover:text-[#5ab4ff] hover:border-[#007bff]/20 border border-transparent",
+    navActive:
+      "bg-gradient-to-r from-[#007bff]/15 to-[#38a3ff]/10 text-[#5ab4ff] font-semibold border border-[#007bff]/40 ring-1 ring-[#007bff]/25 shadow-xs",
+    navInactive:
+      "text-muted-foreground hover:bg-[#007bff]/[0.08] hover:text-[#5ab4ff] hover:border-[#007bff]/20 border border-transparent",
     avatarBorder: "border-[#007bff]/40",
     avatarFallback: "rounded-lg bg-[#007bff]/15 text-[#5ab4ff] font-bold text-xs",
-    ctaBox: "border border-[#007bff]/35 bg-gradient-to-b from-[#007bff]/15 via-card to-card shadow-2xl shadow-[#007bff]/15",
+    ctaBox:
+      "border border-[#007bff]/35 bg-gradient-to-b from-[#007bff]/15 via-card to-card shadow-2xl shadow-[#007bff]/15",
     ctaGlow: "bg-[#007bff]/25 blur-[100px]",
     ctaBadge: "border border-border/70 bg-card/60 text-muted-foreground",
     selection: "selection:bg-[#007bff]/25 selection:text-[#5ab4ff]",
+    callout: {
+      border: "border-blue-500/25",
+      bg: "bg-blue-500/10",
+      text: "text-blue-200",
+      accent: "text-blue-400",
+    },
+    chart: {
+      stroke: "#007bff",
+      stopColor: "#007bff",
+      fill: "rgba(0, 123, 255, 0.2)",
+    },
+    confettiColors: ["#007bff", "#38a3ff", "#68c2e8", "#10b981", "#a855f7"],
+    qrCodePresets: [
+      { name: "Electric Blue (Brand)", hex: "#007bff" },
+      { name: "Classic Black", hex: "#000000" },
+      { name: "Chai Indigo", hex: "#4f46e5" },
+      { name: "Emerald Green", hex: "#059669" },
+      { name: "Crimson Rose", hex: "#e11d48" },
+      { name: "Amber Ochre", hex: "#d97706" },
+    ],
   },
 } as const satisfies Record<string, LandingThemeConfig>;
 
@@ -218,33 +379,23 @@ export type ThemePresetKey = keyof typeof THEME_PRESETS;
 
 /**
  * ============================================================================
- * CURRENT ACTIVE THEME SWITCHER
+ * CURRENT ACTIVE GLOBAL THEME SWITCHER
  * ============================================================================
- * Change this value to any of the 3 top finalist keys:
- * 
- *   "frosty_mint"           -> [1] Frosty Mint (#17C662 -> #F5FF6C)
- *   "desert_champagne_gold" -> [2] Luminous Champagne Gold (#F59E0B -> #FEF9C3 - Light & Bright)
- *   "sexy_blue"             -> [3] Sexy Blue (#007BFF -> #B0E0E6)
+ * Change this single constant to instantly reskin the entire app:
+ *   - "frosty_mint"
+ *   - "desert_champagne_gold"
+ *   - "sexy_blue"
  * ============================================================================
  */
-
-// Active theme ID (change this to test):
 export const ACTIVE_THEME_ID: ThemePresetKey = "desert_champagne_gold";
 
-// Export active theme across all landing & public pages:
+// Export active theme tokens
 export const landingTheme: LandingThemeConfig = THEME_PRESETS[ACTIVE_THEME_ID];
+export const appTheme: LandingThemeConfig = landingTheme;
+export const theme: LandingThemeConfig = landingTheme;
 
 /**
- * ============================================================================
- * TOAST NOTIFICATION THEME TOKENS (Single Source of Truth for Toast Styling)
- * ============================================================================
- * Centralized color tokens and styling for all toast events across the app:
- *  - Success: Vibrant Emerald Green
- *  - Error: Crisp Rose / Red
- *  - Warning: Warm Amber / Gold
- *  - Info: Electric Blue
- *  - Loading: Brand Champagne Accent Spinner
- * ============================================================================
+ * Toast theme configuration for Sonner notifications
  */
 export interface ToastThemeConfig {
   cssVars: Record<string, string>;
@@ -273,35 +424,24 @@ export interface ToastThemeConfig {
 }
 
 export const toastTheme: ToastThemeConfig = {
-  // CSS variables injected into the Toaster container
   cssVars: {
     "--normal-bg": "rgba(24, 24, 27, 0.95)",
     "--normal-border": "rgba(255, 255, 255, 0.12)",
     "--normal-text": "#f4f4f5",
     "--border-radius": "10px",
-
-    // Success (Emerald Green)
     "--success-bg": "rgba(6, 78, 59, 0.92)",
     "--success-border": "rgba(16, 185, 129, 0.45)",
     "--success-text": "#ecfdf5",
-
-    // Error (Vibrant Rose Red)
     "--error-bg": "rgba(76, 5, 25, 0.92)",
     "--error-border": "rgba(244, 63, 94, 0.45)",
     "--error-text": "#fff1f2",
-
-    // Warning (Warm Amber)
     "--warning-bg": "rgba(69, 26, 3, 0.92)",
     "--warning-border": "rgba(245, 158, 11, 0.45)",
     "--warning-text": "#fefce8",
-
-    // Info (Electric Blue)
     "--info-bg": "rgba(23, 37, 84, 0.92)",
     "--info-border": "rgba(59, 130, 246, 0.45)",
     "--info-text": "#eff6ff",
   },
-
-  // Tailwind classNames applied to toasts based on event type
   classNames: {
     toast:
       "group font-sans backdrop-blur-md shadow-2xl border text-sm font-medium transition-all duration-200",
@@ -313,28 +453,19 @@ export const toastTheme: ToastThemeConfig = {
       "font-medium text-xs rounded-md px-3 py-1.5 transition-all hover:opacity-90 shadow-xs cursor-pointer",
     closeButton:
       "!border !border-white/10 !bg-white/10 !text-white/80 hover:!bg-white/20 hover:!text-white transition-all",
-    default:
-      "!bg-zinc-900/95 !border-zinc-800 !text-zinc-100 shadow-zinc-950/40",
-    success:
-      "!bg-emerald-950/92 !border-emerald-500/40 !text-emerald-50 shadow-emerald-950/40",
-    error:
-      "!bg-rose-950/92 !border-rose-500/40 !text-rose-50 shadow-rose-950/40",
-    warning:
-      "!bg-amber-950/92 !border-amber-500/40 !text-amber-50 shadow-amber-950/40",
-    info:
-      "!bg-blue-950/92 !border-blue-500/40 !text-blue-50 shadow-blue-950/40",
-    loading:
-      "!bg-neutral-900/95 !border-amber-500/35 !text-neutral-100 shadow-amber-950/20",
+    default: "!bg-zinc-900/95 !border-zinc-800 !text-zinc-100 shadow-zinc-950/40",
+    success: "!bg-emerald-950/92 !border-emerald-500/40 !text-emerald-50 shadow-emerald-950/40",
+    error: "!bg-rose-950/92 !border-rose-500/40 !text-rose-50 shadow-rose-950/40",
+    warning: "!bg-amber-950/92 !border-amber-500/40 !text-amber-50 shadow-amber-950/40",
+    info: "!bg-blue-950/92 !border-blue-500/40 !text-blue-50 shadow-blue-950/40",
+    loading: "!bg-neutral-900/95 !border-amber-500/35 !text-neutral-100 shadow-amber-950/20",
   },
-
-  // Event-specific icon styling (distinct colors for each status)
   icons: {
     success: "size-4 text-emerald-400 shrink-0",
     error: "size-4 text-rose-400 shrink-0",
     warning: "size-4 text-amber-400 shrink-0",
     info: "size-4 text-blue-400 shrink-0",
-    loading: "size-4 text-[#fcd34d] shrink-0 animate-spin",
+    loading: `size-4 ${landingTheme.iconColor} shrink-0 animate-spin`,
     close: "size-3.5",
   },
 };
-

@@ -34,7 +34,7 @@ export function BuilderControlBar({
       {/* Left: Info & Status */}
       <div className="flex items-center gap-2.5 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <LayersIcon className="size-4 text-amber-400" />
+          <LayersIcon className={`size-4 ${landingTheme.iconColor}`} />
           <span className="text-sm font-semibold text-foreground tracking-tight">
             Form Questions
           </span>
@@ -49,25 +49,25 @@ export function BuilderControlBar({
         {isRestoredFromDraft ? (
           <Badge
             variant="secondary"
-            className="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 gap-1"
+            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
           >
-            <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className={`size-1.5 rounded-full ${landingTheme.activeDot} animate-pulse`} />
             Unsaved Draft (Restored from session)
           </Badge>
         ) : hasDrafts ? (
           <Badge
             variant="secondary"
-            className="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 gap-1"
+            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
           >
-            <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className={`size-1.5 rounded-full ${landingTheme.activeDot} animate-pulse`} />
             Unsaved Changes
           </Badge>
         ) : editingFieldId ? (
           <Badge
             variant="secondary"
-            className="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 gap-1"
+            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
           >
-            <span className="size-1.5 rounded-full bg-amber-400" />
+            <span className={`size-1.5 rounded-full ${landingTheme.activeDot}`} />
             Editing 1 Question
           </Badge>
         ) : (

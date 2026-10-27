@@ -53,7 +53,7 @@ export function CtaSection() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto h-12 px-6 text-sm"
+              className="w-full sm:w-auto h-12 px-6 text-sm border-border/80 bg-background/50 hover:bg-muted/80 backdrop-blur-xs"
             >
               <Link href="/templates">Templates</Link>
             </Button>

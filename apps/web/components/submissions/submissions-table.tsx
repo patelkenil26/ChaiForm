@@ -13,11 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  SubmissionsToolbar,
-  type DatePreset,
-} from "./submissions-toolbar";
+import { SubmissionsToolbar, type DatePreset } from "./submissions-toolbar";
 import { SubmissionsPagination } from "./submissions-pagination";
+import { landingTheme } from "~/config/landing-theme";
 
 export interface SubmissionField {
   id: string;
@@ -60,9 +58,7 @@ export function SubmissionsTable({
   const [currentPage, setCurrentPage] = useState(1);
 
   const sortedFields = useMemo(() => {
-    return [...(fields ?? [])].sort(
-      (a, b) => parseFloat(a.index) - parseFloat(b.index)
-    );
+    return [...(fields ?? [])].sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
   }, [fields]);
 
   // Handle Search Input Change
@@ -142,7 +138,7 @@ export function SubmissionsTable({
         const matchesDate = dateString.includes(query);
         const matchesId = sub.id.toLowerCase().includes(query);
         const matchesAnswers = (sub.values ?? []).some((v) =>
-          v.value.toLowerCase().includes(query)
+          v.value.toLowerCase().includes(query),
         );
 
         if (!matchesDate && !matchesId && !matchesAnswers) {
@@ -177,9 +173,7 @@ export function SubmissionsTable({
 
       const rows = filteredSubmissions.map((sub) => {
         const valMap = new Map((sub.values ?? []).map((v) => [v.formFieldId, v.value]));
-        const dateStr = sub.createdAt
-          ? new Date(sub.createdAt).toISOString()
-          : "";
+        const dateStr = sub.createdAt ? new Date(sub.createdAt).toISOString() : "";
 
         const colVals = sortedFields.map((f) => {
           const val = valMap.get(f.id) ?? "";
@@ -189,8 +183,7 @@ export function SubmissionsTable({
         return [`"${sub.id}"`, `"${dateStr}"`, ...colVals].join(",");
       });
 
-      const csvContent =
-        "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
@@ -245,9 +238,7 @@ export function SubmissionsTable({
                 : sortedFields.map((field) => (
                     <TableHead key={field.id} className="font-semibold">
                       {field.label}
-                      {field.isRequired && (
-                        <span className="text-destructive ml-0.5">*</span>
-                      )}
+                      {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
                     </TableHead>
                   ))}
             </TableRow>
@@ -307,12 +298,15 @@ export function SubmissionsTable({
             ) : (
               paginatedSubmissions.map((submission) => {
                 const valueMap = new Map(
-                  (submission.values ?? []).map((v) => [v.formFieldId, v.value])
+                  (submission.values ?? []).map((v) => [v.formFieldId, v.value]),
                 );
 
                 return (
                   <TableRow key={submission.id} className="hover:bg-muted/40 transition-colors">
-                    <TableCell className="text-muted-foreground text-sm whitespace-nowrap font-mono text-xs" suppressHydrationWarning>
+                    <TableCell
+                      className="text-muted-foreground text-sm whitespace-nowrap font-mono text-xs"
+                      suppressHydrationWarning
+                    >
                       {submission.createdAt
                         ? new Date(submission.createdAt).toLocaleString([], {
                             dateStyle: "medium",
@@ -326,8 +320,12 @@ export function SubmissionsTable({
                         <TableCell key={field.id} className="text-sm">
                           {val !== undefined && val !== "" ? (
                             field.type === "RATING" ? (
-                              <span className="inline-flex items-center gap-1 font-medium text-amber-500">
-                                <StarIcon className="size-3.5 fill-amber-400 text-amber-500" />
+                              <span
+                                className={`inline-flex items-center gap-1 font-medium ${landingTheme.iconColor}`}
+                              >
+                                <StarIcon
+                                  className={`size-3.5 fill-current ${landingTheme.iconColor}`}
+                                />
                                 <span>{val} / 5</span>
                               </span>
                             ) : (

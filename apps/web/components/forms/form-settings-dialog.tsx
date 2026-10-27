@@ -120,7 +120,7 @@ export function FormSettingsDialog({
         passwordPayload = passwordValue.trim();
       } else if (form.isPasswordProtected) {
         // preserve existing password by sending undefined or leaving unchanged
-        passwordPayload = (undefined as unknown as string);
+        passwordPayload = undefined as unknown as string;
       }
     } else {
       passwordPayload = null;
@@ -164,15 +164,9 @@ export function FormSettingsDialog({
                     Password Protection
                   </Label>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Lock form behind an access password
-                </p>
+                <p className="text-xs text-muted-foreground">Lock form behind an access password</p>
               </div>
-              <Switch
-                id="toggle-password"
-                checked={hasPassword}
-                onCheckedChange={setHasPassword}
-              />
+              <Switch id="toggle-password" checked={hasPassword} onCheckedChange={setHasPassword} />
             </div>
 
             {hasPassword && (
@@ -184,7 +178,11 @@ export function FormSettingsDialog({
                   <Input
                     id="form-password"
                     type={showPassword ? "text" : "password"}
-                    placeholder={form.isPasswordProtected ? "•••••••• (Leave blank to keep unchanged)" : "Enter access password"}
+                    placeholder={
+                      form.isPasswordProtected
+                        ? "•••••••• (Leave blank to keep unchanged)"
+                        : "Enter access password"
+                    }
                     value={passwordValue}
                     onChange={(e) => setPasswordValue(e.target.value)}
                     className="text-sm pr-10"
@@ -227,11 +225,7 @@ export function FormSettingsDialog({
                   Personalize the public link with a short slug
                 </p>
               </div>
-              <Switch
-                id="toggle-slug"
-                checked={hasSlug}
-                onCheckedChange={setHasSlug}
-              />
+              <Switch id="toggle-slug" checked={hasSlug} onCheckedChange={setHasSlug} />
             </div>
 
             {hasSlug && (
@@ -269,7 +263,7 @@ export function FormSettingsDialog({
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <ClockIcon className="size-3.5 text-amber-500" />
+                  <ClockIcon className={`size-3.5 ${landingTheme.iconColor}`} />
                   <Label htmlFor="toggle-expiry" className="text-sm font-medium cursor-pointer">
                     Schedule Expiration
                   </Label>
@@ -278,11 +272,7 @@ export function FormSettingsDialog({
                   Automatically close form after specific date & time
                 </p>
               </div>
-              <Switch
-                id="toggle-expiry"
-                checked={hasExpiry}
-                onCheckedChange={setHasExpiry}
-              />
+              <Switch id="toggle-expiry" checked={hasExpiry} onCheckedChange={setHasExpiry} />
             </div>
 
             {hasExpiry && (
@@ -314,11 +304,7 @@ export function FormSettingsDialog({
                   Limit maximum number of accepted submissions
                 </p>
               </div>
-              <Switch
-                id="toggle-limit"
-                checked={hasLimit}
-                onCheckedChange={setHasLimit}
-              />
+              <Switch id="toggle-limit" checked={hasLimit} onCheckedChange={setHasLimit} />
             </div>
 
             {hasLimit && (

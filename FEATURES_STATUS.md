@@ -7,12 +7,14 @@
 Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
 
 ### 1.1 Authentication & Session Fixes (High Priority)
+
 - [x] **Logout Flow Fix** (Completed):
   - HTTP-only auth cookies clear karna, tRPC/React Query cache purge, Next.js server cookie store clear, aur smooth redirect to `/login` with toast notification.
 - [x] **Forgot Password & Password Reset Flow** (Completed):
   - Forgot password request UI (`/forgot-password`), backend JWT reset token generation, direct reset link preview, validation, aur secure new password update page (`/reset-password`).
 
 ### 1.2 Routing & Navigation Cleanup (Completed)
+
 - [x] **Inconsistent Routing & Redirects Fix**:
   - **Dynamic Interactive Breadcrumbs**: `SiteHeader` ab route ke hisab se interactive Radix breadcrumbs render karta hai (`Dashboard`, `Forms`, `Builder`, `Submissions`, `Templates Gallery`).
   - **Active Route Highlighting**: `NavMain` dashboard sidebar me active route, sub-routes (`/explore`, `/templates`, `/forms/*`, `/submissions`) ko automatically detect karke active highlight styling apply karta hai.
@@ -21,8 +23,8 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
   - **Custom Branded 404 & Error Boundaries**: Dedicated `app/not-found.tsx` aur `app/error.tsx` add kiye gaye hain with retry and direct dashboard/explore navigation links.
   - **Public Explorer & Form Fill Polish**: Public forms me 404/not found state par safe home/explore actions, aur landing navbar me direct Templates Gallery link provide kiya gaya.
 
-
 ### 1.3 Landing Page UI Overhaul & Design Consistency (Completed)
+
 - [x] **Cohesive Warm Chai Amber Visual Theme**:
   - Outdated purple-white-blue gradients ko replace karke premium SaaS warm amber/cinnamon and deep zinc theme implement kiya gaya (`from-amber-500 via-orange-500 to-amber-600`).
   - Hero, Interactive Demo, Templates Showcase, Features Bento, Comparison Table, aur Footer me harmonious tokens.
@@ -34,6 +36,7 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
   - Cleaned top navbar: Only high-level SaaS links (`Templates`, `Features`, `Pricing`, `Sign In`, `Get Started Free`).
 
 ### 1.4 Creator Dashboard UI & Feature Enhancements (High Priority)
+
 - [ ] **Global Analytics & Performance Metric Cards**:
   - Stat cards ko real dynamic platform metrics se link karna (Total Live Responses, Total Views across all forms, Global Completion Rate %).
   - Visual trend badges (+12% this week, completion percentage) aur modern dark card aesthetic.
@@ -50,21 +53,24 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
   - Modern empty state illustration with animated create form trigger, keyboard shortcut hints (`Ctrl+K` or `N` to create form).
 
 ### 1.5 Creative Themes System (Coming Soon)
+
 - [ ] **Coming Soon Trigger Added**: Top navigation header aur Form Builder me "Themes (Soon)" button add kiya gaya hai jisme upcoming presets preview dialog khulta hai.
 - [ ] **Theme Presets (Planned)**: Form ke liye visual themes choose karne ka option:
-  - *Movies & Cinema*
-  - *Anime Aesthetic*
-  - *Cyberpunk / Terminal Tech*
-  - *Minimal SaaS Dark / Light*
-  - *Nature / Calm*
+  - _Movies & Cinema_
+  - _Anime Aesthetic_
+  - _Cyberpunk / Terminal Tech_
+  - _Minimal SaaS Dark / Light_
+  - _Nature / Calm_
 - [ ] Custom font families, background wallpapers/gradients aur custom button accents.
 
 ### 1.6 Email Notification Flow
+
 - [ ] Email provider integration (Resend ya Nodemailer).
 - [ ] **Creator Notification**: Jab koi user form bhare toh creator ko new submission ki email alert.
 - [ ] **Respondent Confirmation**: Agar form me email field ho toh respondent ko "Thank you for submitting" email bhejna.
 
 ### 1.7 SaaS Public Pricing Page (Completed)
+
 - [x] **Pricing Page** (`/pricing`):
   - Dedicated public pricing page with `LandingNavbar` and `LandingFooter` (no dashboard shell).
   - Interactive Monthly / Yearly billing toggle (Save 20% on Annual).
@@ -72,6 +78,7 @@ Yaha wo features aur fixes hain jo aage develop aur polish karne baki hain:
   - Feature comparison checklist, trust guarantees (30-day money-back, cancel anytime), aur interactive FAQ section.
 
 ### 1.8 Security & Anti-Spam
+
 - [ ] Public `/form/submitForm` endpoint par rate-limiting (e.g. max 10 submissions per minute per IP).
 - [ ] Honeypot hidden input field spam bots ko block karne ke liye.
 
@@ -104,6 +111,7 @@ Yaha wo advanced bonus features hain jo product ke next phase me implement karne
 Yaha wo saare core aur advanced bonus features hain jo successfully implement ho chuke hain aur currently fully working hain:
 
 ### 2.1 Monorepo Architecture (Turborepo)
+
 - [x] `apps/web`: Next.js 16 (App Router) modern frontend application.
 - [x] `apps/api`: Express + tRPC + OpenAPI backend server.
 - [x] `packages/database`: Drizzle ORM schema, PostgreSQL migrations & relations.
@@ -111,6 +119,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] `packages/services`: Decoupled business logic services layer (`user`, `forms`, `form-field`, `form-submission`).
 
 ### 2.2 User Authentication & Session
+
 - [x] User Sign Up with full name, email and hashed password (`createUserWithEmailAndPassword`).
 - [x] User Sign In with email and password (`signInUserWithEmailAndPassword`).
 - [x] Secure HTTP-only cookie session management (`authentication-token`).
@@ -118,6 +127,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Functional User Logout (clears session and redirects).
 
 ### 2.3 Creator Dashboard
+
 - [x] Custom ChaiForm layout & clean sidebar navigation (Dashboard, Forms, Create Form).
 - [x] Live metrics cards: Total Forms counter, Response collector status, Question types counter, Submissions engine.
 - [x] "Your Forms" interactive cards with instant shortcuts (Builder, Submissions, Copy link, Live preview).
@@ -125,12 +135,14 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Logged-in user dynamic profile card in sidebar (Name, Email, Fallback initials avatar).
 
 ### 2.4 Form Builder & Field Customization
+
 - [x] Form creation modal (Title & Description input with Zod validation).
 - [x] Dynamic field creation (`createField`), modification (`updateField`), aur deletion (`deleteField`).
 - [x] Field level settings: Custom question label, placeholder, helper description, Required vs Optional toggle.
 - [x] Form Builder header with direct actions: Submissions link, Share link with toast feedback, Live preview button.
 
 ### 2.5 Public Form Responder (No Login Required)
+
 - [x] Dedicated respondent route at `/form/[form_id]` accessible publicly to anyone.
 - [x] Fields dynamic auto-ordering based on builder index.
 - [x] Client-side validation powered by React Hook Form & Zod.
@@ -138,6 +150,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Direct database insertion via public tRPC procedure `submitForm`.
 
 ### 2.6 Submissions & Response Management
+
 - [x] Form submissions dashboard at `/forms/[id]/submissions` & `/submissions`.
 - [x] Real-time tabular view showing submitted answers mapped to field columns.
 - [x] Submission date & time timestamps for each response.
@@ -145,17 +158,20 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Empty state jab form me abhi koi submission na aayi ho.
 
 ### 2.7 Interactive API Documentation (Scalar)
+
 - [x] `@scalar/express-api-reference` integrated in `apps/api`.
 - [x] OpenAPI 3.0 specification auto-generated via `trpc-to-openapi`.
 - [x] Live interactive docs accessible at `http://localhost:8000/docs`.
 
 ### 2.8 Design System & UX Polishing
+
 - [x] Modern dark mode aesthetic using Shadcn UI & Tailwind CSS tokens.
 - [x] Instant clipboard copy with toast notifications via Sonner.
 - [x] Vector SVG icons (Tabler & Lucide icons) — zero raw emojis in code.
 - [x] Zero TypeScript errors (`next build` / `tsc` exit code 0).
 
 ### 2.9 Modular Production-Grade Frontend Architecture
+
 - [x] **Domain-Driven Modular Structure**:
   - `components/form-builder/`: `BuilderHeader`, `BuilderFieldCard`, `FieldForm`, `field-types.ts`.
   - `components/forms/`: `CreateFormDialog`, `FormsTable`, `FormSettingsDialog`, `FormUnlockCard`, `ShareQrDialog`.
@@ -166,6 +182,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Clean page controllers for `/forms`, `/forms/[id]`, `/submissions`, `/forms/[id]/submissions`, `/form/[form_id]`.
 
 ### 2.10 Form Visibility Modes & Access Enforcement
+
 - [x] **Database & Backend APIs**: `forms` table me `visibility` (`PUBLIC`, `UNLISTED`) aur `is_published` (boolean) columns, Drizzle migration, services, aur tRPC procedures (`updateFormVisibility`, `listPublicForms`).
 - [x] **Access Enforcement**:
   - Unpublished forms reject submissions on backend aur respondent ko "Form is Closed" screen show karte hain.
@@ -173,6 +190,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] **Creator UI Controls**: Form Builder / Forms list me Publish/Unpublish toggle aur Visibility dropdown UI.
 
 ### 2.11 Advanced Polymorphic Form Field Types (14 Field Types)
+
 - [x] **Dropdown / Select**: Single select from customizable options list.
 - [x] **Multi-select Checkbox**: Multiple choices select karne ke liye.
 - [x] **Single Choice (Radio)**: Mutually exclusive option list selection.
@@ -182,6 +200,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] Custom options manager in Form Builder (add, remove, update options dynamically).
 
 ### 2.12 Analytics & Performance Insights
+
 - [x] **Form Level Stats Cards**:
   - Total Form Views (Impressions)
   - Total Starts (Interactions)
@@ -199,6 +218,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
   - Switch smoothly between "Analytics & Charts" and "Responses Table" on both form-level and global submissions hubs.
 
 ### 2.13 Form Access Security & Limits
+
 - [x] **Password Protection**:
   - Creator can enable password protection on any confidential form.
   - Live form requires respondent password entry via `FormUnlockCard` before showing questions.
@@ -208,6 +228,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
   - Public responder automatically enforces limits and displays friendly closed notice.
 
 ### 2.14 Custom Form Slugs & Instant QR Code Sharing
+
 - [x] **Custom Slugs**:
   - Forms can have custom clean URL slugs (e.g. `/form/hackathon-2026`).
   - Public route `/form/[form_id]` auto-resolves both UUIDs and slugs.
@@ -217,22 +238,26 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
   - Copy Form Link with instant toast feedback.
 
 ### 2.15 Form Lifecycle Management (Clone, Archive & Delete)
+
 - [x] **Duplicate / Clone**: 1-click cloning of any existing form including all its fields and configurations.
 - [x] **Soft Archive & Unarchive**: Archive inactive forms safely without losing submissions data.
 - [x] **Delete Confirmation**: Protected deletion with safe modal confirmation.
 
 ### 2.16 Submissions Search, Filter & Pagination
+
 - [x] **Full-Text Search**: Filter responses across all answer values instantly.
 - [x] **Date Range Filtering**: Filter submissions between From Date and To Date.
 - [x] **Configurable Pagination**: Page navigation with 10, 25, or 50 responses per page selector.
 
 ### 2.17 SaaS Public Landing Page (`/`)
+
 - [x] **Hero Section**: High-converting title, value proposition, dynamic CTA buttons, floating status pills.
 - [x] **Feature Highlights Grid**: Conversational forms, Type-safe APIs, Real-time analytics, Production performance cards.
 - [x] **Live Interactive Form Sandbox**: Instant multi-step demo preview with keyboard controls right on the home page.
 - [x] **Sticky Glassmorphic Navbar**: Smooth blur navigation with dynamic auth buttons (Dashboard when logged in, Sign in / Get Started when logged out).
 
 ### 2.18 Polished UX, Micro-Interactions & Hotkeys
+
 - [x] **Button Mutation Loaders**: Loading spinners and disabled states on all form submissions and dialog actions.
 - [x] **Skeleton Loading Placeholders**: Elegant loading skeletons across forms, submissions, tables, and analytics.
 - [x] **Canvas Confetti Animation**: Festive celebration particle burst on successful form submission.
@@ -240,12 +265,14 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 - [x] **Modern Vector Icons**: Professional Tabler & Lucide icons used consistently across the entire UI.
 
 ### 2.19 Demo-Ready Seed Data Engine
+
 - [x] `pnpm --filter @repo/database seed` script:
   - 6 realistic production forms (Course Enrollment, Job Application, Customer Survey, Event Registration, Product Feedback, Contact Us).
   - Diverse polymorphic input fields populated.
   - Pre-seeded responses for instant testing of tables, search, analytics charts, and CSV/JSON export.
 
 ### 2.20 Public Explore & Template Gallery (`/explore` & `/templates`)
+
 - [x] **Explore & Template Showcase Page**: Modern responsive grid showcasing all `PUBLIC` forms with category badges, questions counter, and views metric.
 - [x] **Category Filter Pills**: Interactive pills (`All`, `Surveys`, `Feedback`, `Events`, `Job Applications`, `Quizzes`) with real-time text search.
 - [x] **"Fill Form" & "Use this template" Flow**:
@@ -261,6 +288,7 @@ Yaha wo saare core aur advanced bonus features hain jo successfully implement ho
 Yeh wo 5 unique features hain jo ChaiForm ko generic Google Forms ya Typeform clone se alag karke ek **Developer-First & Business-Ready Innovation Platform** banate hain:
 
 ### 3.1 🎨 Chameleon Theme (Host Website Auto-Match Embed)
+
 - [ ] **Zero-CSS Native Look**:
   - Embed form host website ke background, border-radius, aur typography ko auto-inherit kare.
   - Ugly third-party white-box iframe issue eliminate karna — client ki dark/light website me seamlessly blend ho jaye.
@@ -269,6 +297,7 @@ Yeh wo 5 unique features hain jo ChaiForm ko generic Google Forms ya Typeform cl
   - Floating Popup / Feedback button widget code (slide-over drawer on button click).
 
 ### 3.2 ⚡ Instant WhatsApp & Telegram Lead Alerts (Zero-Zapier Dependency)
+
 - [ ] **Instant Mobile Notifications**:
   - Form submission aate hi creator/client ke WhatsApp (`+91...`) ya Telegram bot par instant lead alert bhejna.
   - Freelancers ke clients ke liye game-changer feature — bina email ya dashboard khole instantly lead dekhna aur call karna.
@@ -276,23 +305,39 @@ Yeh wo 5 unique features hain jo ChaiForm ko generic Google Forms ya Typeform cl
   - Form settings me WhatsApp Number aur Telegram Chat ID configure karne ka clean toggle.
 
 ### 3.3 🎙️ Voice-to-Form / Conversational AI Fill (Mobile Lead Booster)
+
 - [ ] **Mobile Voice Input**:
   - Form me chhota mic icon (`Speak your answers`).
-  - Respondent mobile par bol kar answer de sake (e.g., *"Mera naam Rahul hai, mujhe real estate website banwani hai, budget 50k hai"*).
+  - Respondent mobile par bol kar answer de sake (e.g., _"Mera naam Rahul hai, mujhe real estate website banwani hai, budget 50k hai"_).
 - [ ] **Smart AI Field Extraction**:
   - LLM/Speech-to-text integration jo voice audio/transcript se automatically form ke fields (Name, Budget, Details) extract karke auto-populate kare.
   - Mobile drop-off rate 70% kam karne ke liye killer feature.
 
 ### 3.4 🌟 Feedback Form to "Wall of Love" (Testimonials Carousel Generator)
+
 - [ ] **2-in-1 Form + Testimonials Platform**:
   - Rating & Feedback form se aane wale responses me se creator dashboard me 5-star reviews ko "Approve for Wall of Love" mark kar sake.
 - [ ] **Embeddable Reviews Carousel / Grid Widget**:
   - Approved reviews ka ek sundar animated review carousel / masonry grid widget ban jaye jise client apni landing page par embed kar sake (saving $29/mo Senja.io cost).
 
 ### 3.5 🛠️ Headless Developer SDK (`@repo/sdk` / React Hook)
+
 - [ ] **`useChaiForm` React Hook**:
   - Next.js / React developers ke liye lightweight headless hook:
     `const { fields, submit, isLoading } = useChaiForm('form_id');`
   - Developer chahe toh apni custom UI build kare, jabki validation, submissions handling, aur backend ChaiForm sambhale.
 - [ ] **Public Form JSON Schema Endpoint**:
   - `/api/forms/[id]/schema` endpoint jo dynamic JSON schema expose kare kisi bhi frontend stack (Vue, Svelte, Mobile App) ke liye.
+
+### 3.6 🎯 Agency & Marketing Website Innovations
+
+- [ ] **Custom Post-Submission Redirect (Calendly / Custom Thank-You Page)**:
+  - Form submit hote hi respondent ko custom URL (jaise client ka Calendly booking link ya `/thank-you` page) par auto-redirect karne ka setting.
+- [ ] **Hidden Fields & UTM / Source Attribution**:
+  - URL parameters (`?utm_source=instagram`, `?utm_campaign=summer`, `?ref=linkedin`) ko bina user se puche automatically capture karna taaki client ko dashboard me pata chale lead kahan se aayi.
+- [ ] **Custom CTA Submit Button Text**:
+  - Form settings me submit button text customize karna (_"Get Instant Quote"_, _"Claim Free Pass"_, _"Request Callback"_ instead of default _"Submit"_).
+- [ ] **Embed Auto-Resize Script (`embed.js`)**:
+  - Lightweight script jo host website par iframe ki height ko dynamic adjust kare via `postMessage`, completely eliminating ugly double scrollbars.
+- [ ] **Appearance & Theme Customizer (Chameleon Mode)**:
+  - Form Builder me naya Appearance tab: Transparent background toggle (host website me blend hone ke liye), Custom Brand Accent Color picker, and Border Radius styling.

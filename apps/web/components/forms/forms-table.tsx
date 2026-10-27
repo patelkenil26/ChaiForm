@@ -159,7 +159,7 @@ export function FormsTable({
                     {form.slug && <span className={landingTheme.slugBadge}>/form/{form.slug}</span>}
                     {form.closesAt && (
                       <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <ClockIcon className="size-3 text-amber-500" />
+                        <ClockIcon className={`size-3 ${landingTheme.iconColor}`} />
                         {isExpired
                           ? "Expired"
                           : `Closes ${new Date(form.closesAt).toLocaleDateString()}`}
@@ -273,7 +273,7 @@ export function FormsTable({
                     <Button
                       variant="ghost"
                       size="icon"
-                      title="QR Code"
+                      title="Website Embed & QR Code"
                       onClick={() => {
                         onOpenQr({
                           title: form.title,
@@ -420,7 +420,7 @@ export function FormsTable({
                               className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"
                               suppressHydrationWarning
                             >
-                              <ClockIcon className="size-3 text-amber-500" />
+                              <ClockIcon className={`size-3 ${landingTheme.iconColor}`} />
                               {isExpired
                                 ? "Expired"
                                 : `Closes ${new Date(form.closesAt).toLocaleDateString()}`}
@@ -572,11 +572,11 @@ export function FormsTable({
                           <span className="sr-only">Copy Link</span>
                         </Button>
 
-                        {/* QR Code */}
+                        {/* Embed & QR Code */}
                         <Button
                           variant="ghost"
                           size="icon"
-                          title="QR Code"
+                          title="Website Embed & QR Code"
                           onClick={() => {
                             onOpenQr({
                               title: form.title,
@@ -587,7 +587,7 @@ export function FormsTable({
                           className={landingTheme.buttonGhostHover}
                         >
                           <QrCodeIcon className="size-4" />
-                          <span className="sr-only">QR Code for {form.title}</span>
+                          <span className="sr-only">Embed & QR Code for {form.title}</span>
                         </Button>
 
                         {/* Archive / Unarchive */}

@@ -19,8 +19,21 @@ import { getSafeErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
 import type { PublicFormField } from "~/components/public-form/types";
 
-export default function PublicFormPage({ params }: { params: Promise<{ form_id: string }> }) {
+export default function PublicFormPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ form_id: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { form_id: formId } = use(params);
+  const resolvedSearch = searchParams ? use(searchParams) : undefined;
+  const isEmbed = resolvedSearch?.embed === "true" || resolvedSearch?.embed === "1";
+  const themeMode = (
+    typeof resolvedSearch?.theme === "string" ? resolvedSearch.theme : "default"
+  ).toLowerCase();
+  const hideTitle = resolvedSearch?.hide_title === "true" || resolvedSearch?.hide_title === "1";
+
   const [enteredPassword, setEnteredPassword] = useState<string | undefined>(undefined);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const { form, isLoading } = useGetForm(formId, enteredPassword);
@@ -29,6 +42,38 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
   const { submitFormAsync } = useSubmitForm();
   const [submitted, setSubmitted] = useState(false);
   const utils = trpc.useUtils();
+
+  // Cross-window postMessage auto-resizing and background styling for iframe embeds
+  useEffect(() => {
+    if (!isEmbed) return;
+
+    if (themeMode === "transparent") {
+      document.documentElement.style.backgroundColor = "transparent";
+      document.body.style.backgroundColor = "transparent";
+    } else if (themeMode === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.style.backgroundColor = "#ffffff";
+      document.body.style.backgroundColor = "#ffffff";
+    } else if (themeMode === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+
+    const sendHeight = () => {
+      const scrollH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      window.parent.postMessage({ type: "chaiform:resize", height: scrollH }, "*");
+    };
+
+    sendHeight();
+    const ro = new ResizeObserver(() => sendHeight());
+    ro.observe(document.body);
+
+    return () => {
+      ro.disconnect();
+      document.documentElement.style.backgroundColor = "";
+      document.body.style.backgroundColor = "";
+      document.documentElement.classList.add("dark");
+    };
+  }, [isEmbed, themeMode, form, submitted]);
 
   useEffect(() => {
     if (form?.id && !viewRecorded) {
@@ -206,39 +251,55 @@ export default function PublicFormPage({ params }: { params: Promise<{ form_id: 
     (a, b) => parseFloat(a.index) - parseFloat(b.index),
   );
 
+  const containerClasses = isEmbed
+    ? `w-full flex items-start justify-center py-3 px-2 sm:px-4 transition-colors ${
+        themeMode === "light"
+          ? "bg-white text-neutral-900"
+          : themeMode === "dark"
+            ? "bg-neutral-950 text-neutral-100"
+            : "bg-transparent text-foreground"
+      }`
+    : "min-h-screen bg-background flex items-start justify-center py-16 px-4";
+
   return (
-    <div className="min-h-screen bg-background flex items-start justify-center py-16 px-4">
+    <div className={containerClasses}>
       <div className="w-full max-w-lg">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 flex-wrap mb-2">
-            {form.closesAt && (
-              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
-                <ClockIcon className="size-3 text-amber-500" />
-                Closes{" "}
-                {new Date(form.closesAt).toLocaleString([], {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
-              </span>
-            )}
-            {form.responseLimit && (
-              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
-                <UsersIcon className="size-3 text-blue-500" />
-                {form.submissionCount} / {form.responseLimit} responses
-              </span>
-            )}
-            {form.isPasswordProtected && (
-              <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                <LockIcon className="size-3" />
-                Unlocked Access
-              </span>
+        {(!hideTitle || form.closesAt || form.responseLimit || form.isPasswordProtected) && (
+          <div className="mb-6">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              {form.closesAt && (
+                <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
+                  <ClockIcon className="size-3 text-amber-500" />
+                  Closes{" "}
+                  {new Date(form.closesAt).toLocaleString([], {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </span>
+              )}
+              {form.responseLimit && (
+                <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground border">
+                  <UsersIcon className="size-3 text-blue-500" />
+                  {form.submissionCount} / {form.responseLimit} responses
+                </span>
+              )}
+              {form.isPasswordProtected && (
+                <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <LockIcon className="size-3" />
+                  Unlocked Access
+                </span>
+              )}
+            </div>
+            {!hideTitle && (
+              <>
+                <h1 className="text-2xl font-bold tracking-tight">{form.title}</h1>
+                {form.description && (
+                  <p className="mt-2 text-sm text-muted-foreground">{form.description}</p>
+                )}
+              </>
             )}
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">{form.title}</h1>
-          {form.description && (
-            <p className="mt-2 text-sm text-muted-foreground">{form.description}</p>
-          )}
-        </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit as Parameters<typeof handleSubmit>[0])}>
           <FieldGroup>
