@@ -132,7 +132,9 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+                <span className="truncate text-xs text-muted-foreground" title={user.email}>
+                  {user.email}
+                </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -153,7 +155,9 @@ export function NavUser({
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+                  <span className="truncate text-xs text-muted-foreground" title={user.email}>
+                    {user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -192,14 +196,14 @@ export function NavUser({
             <DropdownMenuItem
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-2"
+              className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-2 font-medium"
             >
               {isLoggingOut ? (
                 <IconLoader2 className="size-4 animate-spin" />
               ) : (
-                <IconLogout className="size-4" />
+                <IconLogout className="size-4 text-destructive" />
               )}
-              <span>{isLoggingOut ? "Logging out..." : "Log out"}</span>
+              <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

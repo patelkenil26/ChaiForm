@@ -10,6 +10,19 @@ import {
   XIcon,
   ChevronUpIcon,
   ChevronDownIcon,
+  TypeIcon,
+  AlignLeftIcon,
+  MailIcon,
+  HashIcon,
+  PhoneIcon,
+  GlobeIcon,
+  CheckSquareIcon,
+  RadioIcon,
+  ChevronDownSquareIcon,
+  ToggleLeftIcon,
+  StarIcon,
+  CalendarIcon,
+  ClockIcon,
 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -30,6 +43,39 @@ import {
   type FieldType,
 } from "./field-types";
 import { landingTheme } from "~/config/landing-theme";
+
+function getFieldIcon(type: FieldType) {
+  switch (type) {
+    case "TEXT":
+      return TypeIcon;
+    case "TEXTAREA":
+      return AlignLeftIcon;
+    case "EMAIL":
+      return MailIcon;
+    case "NUMBER":
+      return HashIcon;
+    case "PHONE":
+      return PhoneIcon;
+    case "URL":
+      return GlobeIcon;
+    case "CHECKBOX":
+      return CheckSquareIcon;
+    case "RADIO":
+      return RadioIcon;
+    case "SELECT":
+      return ChevronDownSquareIcon;
+    case "YES_NO":
+      return ToggleLeftIcon;
+    case "RATING":
+      return StarIcon;
+    case "DATE":
+      return CalendarIcon;
+    case "TIME":
+      return ClockIcon;
+    default:
+      return TypeIcon;
+  }
+}
 
 export type ExtendedFieldRow = FieldRow & {
   isDraft?: boolean;
@@ -260,28 +306,82 @@ export function BuilderFieldCard({
             </div>
           ) : (
             /* View Mode */
-            <div className="flex flex-col min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                {field.label ? (
-                  <span className="font-semibold text-sm text-foreground tracking-tight">
-                    {field.label}
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              {/* Type Icon Box */}
+              <div
+                className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center shrink-0 border border-amber-400/20`}
+              >
+                {(() => {
+                  const Icon = getFieldIcon(field.type as FieldType);
+                  return <Icon className="size-4" />;
+                })()}
+              </div>
+
+              <div className="flex flex-col min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] font-mono text-muted-foreground/70">
+                    Q{index + 1}
                   </span>
-                ) : (
-                  <span className="font-medium text-sm text-muted-foreground/70 italic tracking-tight">
-                    {field.placeholder || "Untitled Question (Click to edit)"}
-                  </span>
-                )}
-                <Badge variant="outline" className="text-xs font-normal border-border/80">
-                  {FIELD_TYPE_LABELS[field.type as FieldType] ?? field.type}
-                </Badge>
-                {field.isRequired && (
+                  {field.label ? (
+                    <span className="font-semibold text-sm text-foreground tracking-tight">
+                      {field.label}
+                    </span>
+                  ) : (
+                    <span className="font-medium text-sm text-muted-foreground/70 italic tracking-tight">
+                      {field.placeholder || "Untitled Question (Click to edit)"}
+                    </span>
+                  )}
                   <Badge
-                    variant="secondary"
-                    className="text-xs bg-muted text-muted-foreground font-normal"
+                    variant="outline"
+                    className="text-[10px] font-normal border-border/70 py-0 px-1.5"
                   >
-                    Required
+                    {FIELD_TYPE_LABELS[field.type as FieldType] ?? field.type}
                   </Badge>
-                )}
+                  {field.isRequired ? (
+                    <Badge
+                      variant="secondary"
+                      className="text-[10px] bg-amber-400/10 text-amber-300 border border-amber-400/20 font-medium py-0 px-1.5"
+                    >
+                      Required
+                    </Badge>
+                  ) : (
+                    <span className="text-[10px] text-muted-foreground/60">Optional</span>
+                  )}
+                </div>
+
+                {/* Compact Field Meta Preview */}
+                <div className="flex items-center gap-2 mt-0.5 text-[11px] text-muted-foreground">
+                  {field.type === "TEXT" && <span>Single-line text (Max 250 chars)</span>}
+                  {field.type === "TEXTAREA" && <span>Paragraph response (Max 2,000 chars)</span>}
+                  {field.type === "EMAIL" && <span>Email validation enabled</span>}
+                  {field.type === "NUMBER" && <span>Numeric input only</span>}
+                  {field.type === "PHONE" && <span>Phone number input</span>}
+                  {field.type === "URL" && <span>Website URL (https://)</span>}
+                  {field.type === "RATING" && <span>1 to 5 Star Rating</span>}
+                  {field.type === "YES_NO" && <span>Yes / No choice toggle</span>}
+                  {field.type === "DATE" && <span>Date picker</span>}
+                  {field.type === "TIME" && <span>Time selector</span>}
+                  {isChoice && field.options && field.options.length > 0 && (
+                    <div className="flex items-center gap-1 flex-wrap">
+                      <span className="text-muted-foreground/70">
+                        {field.options.length} options:
+                      </span>
+                      {field.options.slice(0, 3).map((opt, i) => (
+                        <span
+                          key={i}
+                          className="px-1.5 py-0.2 rounded bg-muted/50 border border-border/40 text-[10px]"
+                        >
+                          {opt}
+                        </span>
+                      ))}
+                      {field.options.length > 3 && (
+                        <span className="text-[10px] text-muted-foreground">
+                          +{field.options.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

@@ -15,6 +15,7 @@ import {
   CopyPlusIcon,
   ArchiveIcon,
   ArchiveRestoreIcon,
+  MoreHorizontalIcon,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -27,6 +28,13 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
   Table,
   TableBody,
   TableCell,
@@ -36,6 +44,18 @@ import {
 } from "~/components/ui/table";
 import { Skeleton } from "~/components/ui/skeleton";
 import { landingTheme } from "~/config/landing-theme";
+
+function formatRelativeTime(dateInput: Date | string | null | undefined): string {
+  if (!dateInput) return "—";
+  const date = new Date(dateInput);
+  const now = new Date();
+  const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diffSec < 60) return "Just now";
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  if (diffSec < 604800) return `${Math.floor(diffSec / 86400)}d ago`;
+  return date.toLocaleDateString([], { month: "short", day: "numeric" });
+}
 
 export interface FormListItem {
   id: string;
@@ -216,7 +236,7 @@ export function FormsTable({
                       </SelectItem>
                       <SelectItem value="PUBLIC" className="text-xs">
                         <span className="flex items-center gap-1.5">
-                          <GlobeIcon className="size-3 text-blue-500" />
+                          <GlobeIcon className={`size-3 ${landingTheme.iconColor}`} />
                           Public
                         </span>
                       </SelectItem>
@@ -255,68 +275,68 @@ export function FormsTable({
                     <Button
                       variant="ghost"
                       size="icon"
-                      title="Duplicate"
-                      onClick={() => onClone(form.id)}
-                      className="size-7"
-                    >
-                      <CopyPlusIcon className="size-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
                       title="Copy Link"
                       onClick={() => onCopyLink(target)}
                       className="size-7"
                     >
                       <CopyIcon className="size-3.5" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      title="Website Embed & QR Code"
-                      onClick={() => {
-                        onOpenQr({
-                          title: form.title,
-                          url: `${window.location.origin}/form/${target}`,
-                          slug: form.slug,
-                        });
-                      }}
-                      className="size-7"
-                    >
-                      <QrCodeIcon className="size-3.5" />
-                    </Button>
-                    {form.isArchived ? (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        title="Restore"
-                        onClick={() => onToggleArchive(form.id, true)}
-                        className="size-7 text-emerald-400"
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" title="More options" className="size-7">
+                          <MoreHorizontalIcon className="size-3.5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="end"
+                        className="w-44 bg-card border-border/80 shadow-lg"
                       >
-                        <ArchiveRestoreIcon className="size-3.5" />
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        title="Archive"
-                        onClick={() => onToggleArchive(form.id, false)}
-                        className="size-7 text-muted-foreground"
-                      >
-                        <ArchiveIcon className="size-3.5" />
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      asChild
-                      title="Open Live"
-                      className="size-7"
-                    >
-                      <Link href={`/form/${target}`} target="_blank">
-                        <ExternalLinkIcon className="size-3.5" />
-                      </Link>
-                    </Button>
+                        <DropdownMenuItem
+                          onClick={() => onClone(form.id)}
+                          className="cursor-pointer gap-2 text-xs"
+                        >
+                          <CopyPlusIcon className="size-3.5 text-muted-foreground" />
+                          <span>Duplicate</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            onOpenQr({
+                              title: form.title,
+                              url: `${window.location.origin}/form/${target}`,
+                              slug: form.slug,
+                            });
+                          }}
+                          className="cursor-pointer gap-2 text-xs"
+                        >
+                          <QrCodeIcon className="size-3.5 text-muted-foreground" />
+                          <span>Embed & QR Code</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild className="cursor-pointer gap-2 text-xs">
+                          <Link href={`/form/${target}`} target="_blank">
+                            <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
+                            <span>Open Live</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {form.isArchived ? (
+                          <DropdownMenuItem
+                            onClick={() => onToggleArchive(form.id, true)}
+                            className="cursor-pointer gap-2 text-xs text-emerald-400"
+                          >
+                            <ArchiveRestoreIcon className="size-3.5" />
+                            <span>Restore</span>
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem
+                            onClick={() => onToggleArchive(form.id, false)}
+                            className="cursor-pointer gap-2 text-xs text-muted-foreground"
+                          >
+                            <ArchiveIcon className="size-3.5" />
+                            <span>Archive</span>
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </div>
@@ -338,7 +358,7 @@ export function FormsTable({
               <TableHead className="w-36 font-semibold text-foreground">Visibility</TableHead>
               <TableHead className="font-semibold text-foreground">Description</TableHead>
               <TableHead className="w-28 font-semibold text-foreground">Created</TableHead>
-              <TableHead className="w-44 text-right font-semibold text-foreground">
+              <TableHead className="w-36 text-right font-semibold text-foreground">
                 Actions
               </TableHead>
             </TableRow>
@@ -502,7 +522,7 @@ export function FormsTable({
                           </SelectItem>
                           <SelectItem value="PUBLIC" className="text-xs">
                             <span className="flex items-center gap-1.5">
-                              <GlobeIcon className="size-3 text-blue-500" />
+                              <GlobeIcon className={`size-3 ${landingTheme.iconColor}`} />
                               Public
                             </span>
                           </SelectItem>
@@ -514,13 +534,17 @@ export function FormsTable({
                       {form.description ?? "—"}
                     </TableCell>
 
-                    <TableCell className="text-muted-foreground text-xs" suppressHydrationWarning>
-                      {form.createdAt ? new Date(form.createdAt).toLocaleDateString() : "—"}
+                    <TableCell
+                      className="text-muted-foreground text-xs"
+                      suppressHydrationWarning
+                      title={form.createdAt ? new Date(form.createdAt).toLocaleString() : undefined}
+                    >
+                      {formatRelativeTime(form.createdAt)}
                     </TableCell>
 
                     <TableCell>
                       <div className="flex items-center justify-end gap-1">
-                        {/* Edit Builder */}
+                        {/* 1. Edit Builder */}
                         <Button
                           variant="ghost"
                           size="icon"
@@ -534,7 +558,7 @@ export function FormsTable({
                           </Link>
                         </Button>
 
-                        {/* Submissions */}
+                        {/* 2. Submissions / Responses */}
                         <Button
                           variant="ghost"
                           size="icon"
@@ -548,19 +572,7 @@ export function FormsTable({
                           </Link>
                         </Button>
 
-                        {/* Clone / Duplicate Form */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          title="Duplicate / Clone Form"
-                          onClick={() => onClone(form.id)}
-                          className={landingTheme.buttonGhostHover}
-                        >
-                          <CopyPlusIcon className="size-4 text-muted-foreground group-hover:text-foreground" />
-                          <span className="sr-only">Clone {form.title}</span>
-                        </Button>
-
-                        {/* Share Link */}
+                        {/* 3. Share / Copy Link */}
                         <Button
                           variant="ghost"
                           size="icon"
@@ -572,64 +584,73 @@ export function FormsTable({
                           <span className="sr-only">Copy Link</span>
                         </Button>
 
-                        {/* Embed & QR Code */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          title="Website Embed & QR Code"
-                          onClick={() => {
-                            onOpenQr({
-                              title: form.title,
-                              url: `${window.location.origin}/form/${target}`,
-                              slug: form.slug,
-                            });
-                          }}
-                          className={landingTheme.buttonGhostHover}
-                        >
-                          <QrCodeIcon className="size-4" />
-                          <span className="sr-only">Embed & QR Code for {form.title}</span>
-                        </Button>
-
-                        {/* Archive / Unarchive */}
-                        {form.isArchived ? (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            title="Restore Form"
-                            onClick={() => onToggleArchive(form.id, true)}
-                            className="hover:bg-emerald-500/15"
+                        {/* 4. More Options Dropdown (⋯) */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="More options"
+                              className={landingTheme.buttonGhostHover}
+                            >
+                              <MoreHorizontalIcon className="size-4" />
+                              <span className="sr-only">More options for {form.title}</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            className="w-48 bg-card border-border/80 shadow-lg"
                           >
-                            <ArchiveRestoreIcon className="size-4 text-emerald-400 hover:text-emerald-300" />
-                            <span className="sr-only">Restore {form.title}</span>
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            title="Archive Form"
-                            onClick={() => onToggleArchive(form.id, false)}
-                            className={landingTheme.buttonGhostHover}
-                          >
-                            <ArchiveIcon
-                              className={`size-4 text-muted-foreground hover:${landingTheme.iconColor}`}
-                            />
-                            <span className="sr-only">Archive {form.title}</span>
-                          </Button>
-                        )}
+                            <DropdownMenuItem
+                              onClick={() => onClone(form.id)}
+                              className="cursor-pointer gap-2 text-xs"
+                            >
+                              <CopyPlusIcon className="size-3.5 text-muted-foreground" />
+                              <span>Duplicate Form</span>
+                            </DropdownMenuItem>
 
-                        {/* Open live public form */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          asChild
-                          title="Open Public Form"
-                          className={landingTheme.buttonGhostHover}
-                        >
-                          <Link href={`/form/${target}`} target="_blank">
-                            <ExternalLinkIcon className="size-4" />
-                            <span className="sr-only">Open {form.title}</span>
-                          </Link>
-                        </Button>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                onOpenQr({
+                                  title: form.title,
+                                  url: `${window.location.origin}/form/${target}`,
+                                  slug: form.slug,
+                                });
+                              }}
+                              className="cursor-pointer gap-2 text-xs"
+                            >
+                              <QrCodeIcon className="size-3.5 text-muted-foreground" />
+                              <span>Embed & QR Code</span>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild className="cursor-pointer gap-2 text-xs">
+                              <Link href={`/form/${target}`} target="_blank">
+                                <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
+                                <span>Open Live Form</span>
+                              </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
+                            {form.isArchived ? (
+                              <DropdownMenuItem
+                                onClick={() => onToggleArchive(form.id, true)}
+                                className="cursor-pointer gap-2 text-xs text-emerald-400 focus:text-emerald-300"
+                              >
+                                <ArchiveRestoreIcon className="size-3.5" />
+                                <span>Restore Form</span>
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                onClick={() => onToggleArchive(form.id, false)}
+                                className="cursor-pointer gap-2 text-xs text-muted-foreground hover:text-foreground"
+                              >
+                                <ArchiveIcon className="size-3.5" />
+                                <span>Archive Form</span>
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>

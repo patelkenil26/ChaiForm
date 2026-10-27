@@ -97,16 +97,20 @@ export default function DashboardPage() {
 
   // Aggregate Metrics
   const totalForms = forms?.length ?? 0;
+  const totalSubmissions = stats?.totalSubmissions ?? 0;
   const publishedCount = useMemo(() => forms?.filter((f) => f.isPublished).length ?? 0, [forms]);
   const draftCount = useMemo(() => forms?.filter((f) => !f.isPublished).length ?? 0, [forms]);
   const totalViews = useMemo(
     () => forms?.reduce((acc, f) => acc + (f.views ?? 0), 0) ?? 0,
     [forms],
   );
-  const totalSubmissions = stats?.totalSubmissions ?? 0;
   const completionRate = useMemo(() => {
-    if (totalViews <= 0) return totalSubmissions > 0 ? 100 : 0;
-    return Math.min(100, Math.round((totalSubmissions / totalViews) * 100));
+    if (totalSubmissions <= 0) return null;
+    if (totalViews <= 0) return 100;
+    return Math.min(
+      100,
+      Math.round((totalSubmissions / Math.max(totalViews, totalSubmissions)) * 100),
+    );
   }, [totalSubmissions, totalViews]);
 
   // Top 6 Recent Forms
@@ -196,7 +200,7 @@ export default function DashboardPage() {
               className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.badge}`}
             >
               <IconSparkles className={`size-3 ${landingTheme.iconColor}`} />
-              <span>Workspace Command Center</span>
+              <span>Workspace Overview</span>
             </Badge>
           </div>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl text-foreground">
@@ -207,7 +211,7 @@ export default function DashboardPage() {
             !
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Real-time telemetry, response velocity, recent forms, and live submission feeds.
+            Your forms, responses and activity — at a glance.
           </p>
         </div>
 
@@ -269,49 +273,61 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        {/* Total Responses (Emerald) */}
-        <Card className="relative p-5 rounded-2xl border border-border/75 bg-gradient-to-b from-emerald-500/[0.05] via-card to-card hover:border-emerald-500/50 transition-all duration-200 overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent group-hover:via-emerald-400 transition-all" />
+        {/* Total Responses */}
+        <Card
+          className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+        >
+          <div className={landingTheme.cardBeam} />
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Total Responses
             </span>
-            <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconSend className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-400">
+            <div
+              className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.primaryText}`}
+            >
               {isDataLoading ? <Skeleton className="h-8 w-16" /> : totalSubmissions}
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              {totalSubmissions === 1
-                ? "1 submission collected"
-                : `${totalSubmissions} submissions recorded`}
+              {totalSubmissions === 0
+                ? "No responses recorded yet"
+                : totalSubmissions === 1
+                  ? "1 response recorded"
+                  : `${totalSubmissions} responses recorded across workspace`}
             </p>
           </div>
         </Card>
 
-        {/* Form Impressions / Views (Blue) */}
-        <Card className="relative p-5 rounded-2xl border border-border/75 bg-gradient-to-b from-blue-500/[0.05] via-card to-card hover:border-blue-500/50 transition-all duration-200 overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-400/50 to-transparent group-hover:via-blue-400 transition-all" />
+        {/* Total Views */}
+        <Card
+          className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+        >
+          <div className={landingTheme.cardBeam} />
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Visitor Impressions
+              Total Views
             </span>
-            <div className="flex size-9 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30">
+            <div
+              className={`flex size-9 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
               <IconEye className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-blue-400">
+            <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
               {isDataLoading ? <Skeleton className="h-8 w-16" /> : totalViews}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">Across all conversational forms</p>
+            <p className="mt-1 text-xs text-muted-foreground">Across all active forms</p>
           </div>
         </Card>
 
-        {/* Overall Conversion Rate */}
+        {/* Overall Conversion / Completion Rate */}
         <Card
           className={`relative p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
         >
@@ -330,9 +346,19 @@ export default function DashboardPage() {
             <div
               className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${landingTheme.gradientText}`}
             >
-              {isDataLoading ? <Skeleton className="h-8 w-14" /> : `${completionRate}%`}
+              {isDataLoading ? (
+                <Skeleton className="h-8 w-14" />
+              ) : completionRate === null ? (
+                "—"
+              ) : (
+                `${completionRate}%`
+              )}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">Average responses per impression</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {completionRate === null
+                ? "No responses collected yet"
+                : "Average responses per form view"}
+            </p>
           </div>
         </Card>
       </div>
@@ -372,6 +398,33 @@ export default function DashboardPage() {
         <div className="h-64 w-full">
           {isDataLoading ? (
             <Skeleton className="h-full w-full rounded-xl" />
+          ) : totalSubmissions === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center p-6 text-center border border-dashed border-border/70 rounded-xl bg-card/40">
+              <div
+                className={`size-10 rounded-xl ${landingTheme.iconBg} flex items-center justify-center mb-3`}
+              >
+                <IconTrendingUp className="size-5" />
+              </div>
+              <h4 className="text-sm font-semibold text-foreground">Abhi koi response nahi</h4>
+              <p className="text-xs text-muted-foreground mt-1 max-w-sm">
+                First response aane pe graph yahan live telemetry ke saath bharega. Apna form share
+                karein!
+              </p>
+              {forms && forms.length > 0 && forms[0] && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const first = forms[0];
+                    if (first) handleCopyLink(first.id, first.slug);
+                  }}
+                  className={`mt-4 text-xs gap-1.5 h-8 ${landingTheme.buttonOutlineHover}`}
+                >
+                  <IconCopy className="size-3.5" />
+                  <span>Share Form Link</span>
+                </Button>
+              )}
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -514,7 +567,9 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <CardDescription className="line-clamp-2 text-xs min-h-[32px] mt-1">
-                      {form.description || "No description provided"}
+                      {form.description || (
+                        <span className="italic opacity-60">No description</span>
+                      )}
                     </CardDescription>
                   </CardHeader>
 
@@ -523,7 +578,7 @@ export default function DashboardPage() {
                       <IconEye
                         className={`size-3.5 text-muted-foreground group-hover:${landingTheme.primaryText} transition-colors`}
                       />
-                      <span>{form.views ?? 0} views</span>
+                      <span>{form.isPublished ? `${form.views ?? 0} views` : "— (Draft)"}</span>
                     </div>
 
                     <div className="flex items-center gap-1" title="Created date">
@@ -654,8 +709,11 @@ export default function DashboardPage() {
                   className={`flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:px-5 gap-3 ${landingTheme.tableRowHover}`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                      <IconSend className="size-4" />
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted border border-border/60 text-muted-foreground">
+                      <span
+                        className={`absolute -top-0.5 -right-0.5 size-2 rounded-full ${landingTheme.activeDot}`}
+                      />
+                      <IconSend className="size-3.5" />
                     </div>
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -666,8 +724,8 @@ export default function DashboardPage() {
                           {sub.answersCount} {sub.answersCount === 1 ? "answer" : "answers"}
                         </Badge>
                       </div>
-                      <span className="text-[11px] text-muted-foreground font-mono">
-                        Submission ID: {sub.id.slice(0, 8)}...
+                      <span className="text-[11px] text-muted-foreground">
+                        Verified response • {formatRelativeTime(sub.createdAt)}
                       </span>
                     </div>
                   </div>

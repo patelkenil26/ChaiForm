@@ -176,18 +176,58 @@ export function SignupForm({
           {errors.password ? (
             <span className="text-xs text-destructive">{errors.password.message}</span>
           ) : (
-            <div className="flex items-center gap-2 pt-0.5 text-[11px] text-muted-foreground">
-              <span
-                className={`inline-flex items-center gap-1 ${passwordValue.length >= 8 ? "text-emerald-400 font-medium" : "text-muted-foreground"}`}
-              >
-                {passwordValue.length >= 8 ? (
-                  <Check className="size-3 text-emerald-400" />
-                ) : (
-                  <span className="size-1.5 rounded-full bg-muted-foreground/40" />
-                )}
-                <span>8+ characters</span>
-              </span>
-            </div>
+            passwordValue && (
+              <div className="space-y-1.5 pt-1">
+                {(() => {
+                  let score = 0;
+                  if (passwordValue.length >= 8) score++;
+                  if (/[A-Z]/.test(passwordValue) && /[a-z]/.test(passwordValue)) score++;
+                  if (/\d/.test(passwordValue) || /[^A-Za-z0-9]/.test(passwordValue)) score++;
+                  const isTooShort = passwordValue.length < 8;
+                  const label = isTooShort
+                    ? "Too short (min 8 chars)"
+                    : score === 1
+                      ? "Weak"
+                      : score === 2
+                        ? "Good"
+                        : "Strong";
+                  const color = isTooShort
+                    ? "bg-rose-500"
+                    : score === 1
+                      ? "bg-rose-500"
+                      : score === 2
+                        ? "bg-amber-400"
+                        : "bg-emerald-400";
+                  const textColor = isTooShort
+                    ? "text-rose-400"
+                    : score === 1
+                      ? "text-rose-400"
+                      : score === 2
+                        ? "text-amber-400"
+                        : "text-emerald-400";
+
+                  return (
+                    <>
+                      <div className="flex items-center gap-1.5 h-1.5 w-full">
+                        <div
+                          className={`h-full flex-1 rounded-full transition-all ${score >= 1 || isTooShort ? color : "bg-muted/60"}`}
+                        />
+                        <div
+                          className={`h-full flex-1 rounded-full transition-all ${score >= 2 && !isTooShort ? color : "bg-muted/60"}`}
+                        />
+                        <div
+                          className={`h-full flex-1 rounded-full transition-all ${score >= 3 && !isTooShort ? color : "bg-muted/60"}`}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-muted-foreground">Strength:</span>
+                        <span className={`font-medium ${textColor}`}>{label}</span>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            )
           )}
         </div>
 

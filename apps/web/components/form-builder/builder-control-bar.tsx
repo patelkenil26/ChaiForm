@@ -76,7 +76,7 @@ export function BuilderControlBar({
             className="text-[11px] text-muted-foreground border-border/60 gap-1"
           >
             <span className="size-1.5 rounded-full bg-emerald-400" />
-            Saved & Locked
+            All changes saved
           </Badge>
         )}
       </div>
@@ -105,12 +105,16 @@ export function BuilderControlBar({
           className={`h-8 gap-1.5 text-xs font-semibold ${
             isSaveActive
               ? landingTheme.primaryButton
-              : "opacity-40 cursor-not-allowed border border-border/40"
+              : "opacity-50 cursor-not-allowed border border-border/40 bg-muted/30 text-muted-foreground"
           }`}
-          title="Validate all questions and save to database"
+          title={
+            isSaveActive
+              ? "Validate all questions and save to database"
+              : "All changes are saved to the cloud"
+          }
         >
           <SaveIcon className="size-3.5" />
-          <span>{isSyncing ? "Saving..." : "Save Changes"}</span>
+          <span>{isSyncing ? "Saving..." : isSaveActive ? "Save Changes" : "Saved"}</span>
         </Button>
       </div>
     </div>

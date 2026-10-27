@@ -37,41 +37,56 @@ interface TemplateCardProps {
 
 const DEFAULT_CATEGORY = {
   label: "General Form",
-  badgeClass: "bg-muted text-muted-foreground border-border",
+  badgeClass: "bg-muted text-muted-foreground border-border/60",
   accentBorder: landingTheme.cardBorderHover,
 };
 
-const CATEGORY_STYLES: Record<
-  string,
-  { label: string; badgeClass: string; accentBorder: string }
-> = {
-  SURVEYS: {
-    label: "Surveys",
-    badgeClass: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    accentBorder: "group-hover:border-blue-500/40",
-  },
-  FEEDBACK: {
-    label: "Feedback",
-    badgeClass: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-    accentBorder: "group-hover:border-purple-500/40",
-  },
-  QUIZZES: {
-    label: "Quizzes",
-    badgeClass: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-    accentBorder: "group-hover:border-amber-500/40",
-  },
-  EVENTS: {
-    label: "Event Registration",
-    badgeClass: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-    accentBorder: "group-hover:border-emerald-500/40",
-  },
-  APPLICATIONS: {
-    label: "Job Applications",
-    badgeClass: "bg-rose-500/10 text-rose-500 border-rose-500/20",
-    accentBorder: "group-hover:border-rose-500/40",
-  },
-  GENERAL: DEFAULT_CATEGORY,
-};
+const CATEGORY_STYLES: Record<string, { label: string; badgeClass: string; accentBorder: string }> =
+  {
+    SURVEYS: {
+      label: "Surveys",
+      badgeClass: "bg-muted/80 text-muted-foreground border-border/70",
+      accentBorder: landingTheme.cardBorderHover,
+    },
+    FEEDBACK: {
+      label: "Feedback",
+      badgeClass: "bg-muted/80 text-muted-foreground border-border/70",
+      accentBorder: landingTheme.cardBorderHover,
+    },
+    QUIZZES: {
+      label: "Quizzes",
+      badgeClass: "bg-muted/80 text-muted-foreground border-border/70",
+      accentBorder: landingTheme.cardBorderHover,
+    },
+    EVENTS: {
+      label: "Event Registration",
+      badgeClass: "bg-muted/80 text-muted-foreground border-border/70",
+      accentBorder: landingTheme.cardBorderHover,
+    },
+    APPLICATIONS: {
+      label: "Job Applications",
+      badgeClass: "bg-muted/80 text-muted-foreground border-border/70",
+      accentBorder: landingTheme.cardBorderHover,
+    },
+    GENERAL: DEFAULT_CATEGORY,
+  };
+
+function getQuestionMix(category: string): string[] {
+  switch (category?.toUpperCase()) {
+    case "SURVEYS":
+      return ["★ Rating ×1", "○ Choice ×3", "≡ Text ×2"];
+    case "FEEDBACK":
+      return ["★ Rating ×1", "≡ Long Text ×2", "○ Choice ×1"];
+    case "QUIZZES":
+      return ["○ Choice ×4", "✓ Multi ×2", "★ Score ×1"];
+    case "EVENTS":
+      return ["✉ Email ×1", "☎ Phone ×1", "📅 Date ×1"];
+    case "APPLICATIONS":
+      return ["✉ Email ×1", "≡ Long Text ×2", "🔗 URL ×1"];
+    default:
+      return ["✉ Email ×1", "≡ Short Text ×2", "○ Choice ×1"];
+  }
+}
 
 export function TemplateCard({ template }: TemplateCardProps) {
   const router = useRouter();
@@ -115,7 +130,10 @@ export function TemplateCard({ template }: TemplateCardProps) {
           </Badge>
 
           {typeof template.views === "number" && template.views > 0 && (
-            <div className="flex items-center gap-1 text-[11px] text-muted-foreground" title="Total Views">
+            <div
+              className="flex items-center gap-1 text-[11px] text-muted-foreground"
+              title="Total Views"
+            >
               <IconEye className="size-3.5" />
               <span>{template.views}</span>
             </div>
@@ -123,17 +141,32 @@ export function TemplateCard({ template }: TemplateCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className={`text-base font-semibold text-foreground ${landingTheme.linkHover} line-clamp-1`}>
+        <h3
+          className={`text-base font-semibold text-foreground ${landingTheme.linkHover} line-clamp-1`}
+        >
           {template.title}
         </h3>
 
         {/* Description */}
         <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[32px]">
-          {template.description || "Pre-built production-ready form template with conversational fields."}
+          {template.description ||
+            "Pre-built production-ready form template with conversational fields."}
         </p>
 
+        {/* Question Type Mix Preview Chips */}
+        <div className="mt-3 flex items-center gap-1.5 flex-wrap">
+          {getQuestionMix(template.category).map((chip, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 font-mono"
+            >
+              {chip}
+            </span>
+          ))}
+        </div>
+
         {/* Metadata Pill Row */}
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground border-t border-border/40 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground border-t border-border/40 pt-2.5">
           <div className="flex items-center gap-1">
             <IconHelpCircle className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>{template.fieldsCount ?? 0} Questions</span>

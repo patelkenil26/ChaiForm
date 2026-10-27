@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { ThemesComingSoonButton } from "~/components/themes/themes-modal";
 import { landingTheme } from "~/config/landing-theme";
 
 export interface BuilderFormData {
@@ -192,7 +191,6 @@ export function BuilderHeader({
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-          <ThemesComingSoonButton />
           <Button
             variant="outline"
             size="sm"

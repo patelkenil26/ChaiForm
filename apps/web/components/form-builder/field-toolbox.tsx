@@ -147,12 +147,26 @@ interface FieldToolboxProps {
 
 export function FieldToolbox({ onAddField }: FieldToolboxProps) {
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<
+    "all" | "text" | "choice" | "input" | "special"
+  >("all");
 
-  const filteredFields = TOOLBOX_FIELDS.filter(
-    (f) =>
+  const filteredFields = TOOLBOX_FIELDS.filter((f) => {
+    const matchesCategory = selectedCategory === "all" || f.category === selectedCategory;
+    const matchesSearch =
+      !search.trim() ||
       f.label.toLowerCase().includes(search.toLowerCase()) ||
-      f.description.toLowerCase().includes(search.toLowerCase()),
-  );
+      f.description.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const categories: { id: "all" | "text" | "choice" | "input" | "special"; label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "text", label: "Basic Text" },
+    { id: "choice", label: "Choice" },
+    { id: "input", label: "Contact" },
+    { id: "special", label: "Advanced" },
+  ];
 
   return (
     <div className="w-full xl:w-72 shrink-0 flex flex-col rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md p-3.5 shadow-sm space-y-3">
@@ -173,6 +187,24 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
         Drag any field into the form canvas, or click{" "}
         <PlusIcon className={`inline size-3 ${landingTheme.iconColor}`} /> to add directly.
       </p>
+
+      {/* Category Pills Grouping */}
+      <div className="flex items-center gap-1 flex-wrap pt-0.5">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            type="button"
+            onClick={() => setSelectedCategory(cat.id)}
+            className={`px-2 py-0.5 rounded-md text-[10px] font-medium transition-colors cursor-pointer select-none ${
+              selectedCategory === cat.id
+                ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                : "bg-muted/40 text-muted-foreground hover:text-foreground border border-transparent hover:bg-muted/60"
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
 
       {/* Search Filter */}
       <div className="relative">

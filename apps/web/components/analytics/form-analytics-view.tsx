@@ -251,7 +251,8 @@ export function FormAnalyticsView({
             variant="outline"
             size="sm"
             onClick={handleExportCsv}
-            className="h-9 gap-1.5 text-xs rounded-xl"
+            disabled={!submissions || submissions.length === 0}
+            className="h-9 gap-1.5 text-xs rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
             title="Download formatted CSV spreadsheet"
           >
             <IconFileSpreadsheet className="size-4 text-emerald-500" />
@@ -262,7 +263,8 @@ export function FormAnalyticsView({
             variant="outline"
             size="sm"
             onClick={handleExportJson}
-            className="h-9 gap-1.5 text-xs rounded-xl"
+            disabled={!submissions || submissions.length === 0}
+            className="h-9 gap-1.5 text-xs rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
             title="Download full JSON dataset"
           >
             <IconFileCode className="size-4 text-blue-500" />
@@ -273,11 +275,11 @@ export function FormAnalyticsView({
 
       {/* 4 Form-Level Stat Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {/* Total Views (Impressions) */}
+        {/* Total Views */}
         <Card className="p-5 relative overflow-hidden transition-all hover:border-primary/40 hover:shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Form Views
+              Total Views
             </span>
             <div className="flex size-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
               <IconEye className="size-5" />
@@ -319,16 +321,30 @@ export function FormAnalyticsView({
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Completions
             </span>
-            <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500">
+            <div
+              className={`flex size-9 items-center justify-center rounded-xl ${
+                totalCompletions > 0
+                  ? "bg-emerald-500/10 text-emerald-500"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
               <IconSend className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
+            <div
+              className={`text-2xl sm:text-3xl font-extrabold ${
+                totalCompletions > 0 ? "text-emerald-500 dark:text-emerald-400" : "text-foreground"
+              }`}
+            >
               {isLoading ? <Skeleton className="h-8 w-16" /> : totalCompletions.toLocaleString()}
             </div>
             <p className="mt-1 text-xs text-muted-foreground flex items-center gap-1">
-              <span>{completionRate}% completion rate</span>
+              {totalCompletions > 0 ? (
+                <span>{completionRate}% completion rate</span>
+              ) : (
+                <span>— completion rate (No responses yet)</span>
+              )}
             </p>
           </div>
         </Card>
@@ -339,16 +355,38 @@ export function FormAnalyticsView({
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Drop-off Rate
             </span>
-            <div className="flex size-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500">
+            <div
+              className={`flex size-9 items-center justify-center rounded-xl ${
+                totalCompletions === 0
+                  ? "bg-muted text-muted-foreground"
+                  : dropOffRate > 50
+                    ? "bg-rose-500/10 text-rose-400"
+                    : "bg-amber-500/10 text-amber-500"
+              }`}
+            >
               <IconPercentage className="size-5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400">
-              {isLoading ? <Skeleton className="h-8 w-16" /> : `${dropOffRate}%`}
+            <div
+              className={`text-2xl sm:text-3xl font-extrabold ${
+                totalCompletions === 0
+                  ? "text-foreground"
+                  : dropOffRate > 50
+                    ? "text-rose-500 dark:text-rose-400"
+                    : "text-amber-500 dark:text-amber-400"
+              }`}
+            >
+              {isLoading ? (
+                <Skeleton className="h-8 w-16" />
+              ) : totalCompletions === 0 ? (
+                "—"
+              ) : (
+                `${dropOffRate}%`
+              )}
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              <span>Visitors who abandoned form</span>
+              {totalCompletions === 0 ? "Awaiting submissions" : "Visitors who abandoned form"}
             </p>
           </div>
         </Card>

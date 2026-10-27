@@ -79,13 +79,17 @@ export function ProductShowcaseSection() {
 
           {/* Step 2 */}
           <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+            <div className={landingTheme.cardBeam} />
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-blue-400 tracking-wider uppercase">
+                <span
+                  className={`text-xs font-bold ${landingTheme.primaryText} tracking-wider uppercase`}
+                >
                   Step 02
                 </span>
-                <div className="size-8 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                <div
+                  className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}
+                >
                   <IconShare className="size-4" />
                 </div>
               </div>
@@ -99,17 +103,23 @@ export function ProductShowcaseSection() {
 
           {/* Step 3 */}
           <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+            <div className={landingTheme.cardBeam} />
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-emerald-400 tracking-wider uppercase">
+                <span
+                  className={`text-xs font-bold ${landingTheme.primaryText} tracking-wider uppercase`}
+                >
                   Step 03
                 </span>
-                <div className="size-8 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                <div
+                  className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}
+                >
                   <IconChartBar className="size-4" />
                 </div>
               </div>
-              <h3 className="font-bold text-base text-foreground">Track Live Responses & Export</h3>
+              <h3 className="font-bold text-base text-foreground">
+                Track Live Responses &amp; Export
+              </h3>
               <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
                 Watch verified answers stream directly into your submissions hub. Search, filter by
                 dates, and export to CSV in 1 click.

@@ -87,7 +87,8 @@ export function PricingView() {
           </Badge>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight">
-            Invest in Higher Form Conversion
+            Higher form conversion,{" "}
+            <span className={landingTheme.gradientText}>without the Typeform bill</span>
           </h1>
 
           <p className="mt-4 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
@@ -263,7 +264,12 @@ export function PricingView() {
               </p>
 
               <div className="mt-6 mb-6">
-                <div className="flex items-baseline gap-1">
+                <div className="flex items-baseline gap-2">
+                  {isYearly && (
+                    <span className="text-xl line-through text-muted-foreground/60">
+                      {currency === "USD" ? "$19" : "₹1,499"}
+                    </span>
+                  )}
                   <span className="text-4xl font-extrabold tracking-tight text-foreground">
                     {proPrice.display}
                   </span>
@@ -336,7 +342,12 @@ export function PricingView() {
               </p>
 
               <div className="mt-6 mb-6">
-                <div className="flex items-baseline gap-1">
+                <div className="flex items-baseline gap-2">
+                  {isYearly && (
+                    <span className="text-xl line-through text-muted-foreground/60">
+                      {currency === "USD" ? "$49" : "₹3,999"}
+                    </span>
+                  )}
                   <span className="text-4xl font-extrabold tracking-tight">
                     {teamPrice.display}
                   </span>
@@ -383,6 +394,26 @@ export function PricingView() {
           </div>
         </div>
 
+        {/* Trust Guarantees Row (Immediately below cards) */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs text-muted-foreground border-y border-border/40 py-4">
+          <div className="flex items-center gap-1.5">
+            <IconShieldCheck className="size-4 text-emerald-500" />
+            <span>30-Day Money-Back Guarantee</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <IconCheck className="size-4 text-emerald-500" />
+            <span>Cancel anytime from your dashboard</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <IconCheck className="size-4 text-emerald-500" />
+            <span>No credit card required for Starter</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <IconCheck className="size-4 text-emerald-500" />
+            <span>SSL encrypted submissions</span>
+          </div>
+        </div>
+
         {/* Custom Plan / Enterprise Banner */}
         <div className="mt-8 rounded-2xl border border-border/60 bg-card/40 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -405,26 +436,6 @@ export function PricingView() {
               <IconArrowRight className="size-3.5" />
             </a>
           </Button>
-        </div>
-
-        {/* Trust Guarantees Row (Real claims only) */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs text-muted-foreground border-y border-border/40 py-6">
-          <div className="flex items-center gap-2">
-            <IconShieldCheck className="size-4 text-emerald-500" />
-            <span>30-Day Money-Back Guarantee</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <IconCheck className="size-4 text-emerald-500" />
-            <span>Cancel anytime from your dashboard</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <IconCheck className="size-4 text-emerald-500" />
-            <span>No credit card required for Starter</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <IconCheck className="size-4 text-emerald-500" />
-            <span>SSL encrypted submissions in transit</span>
-          </div>
         </div>
 
         {/* Full Feature Comparison Matrix */}
@@ -516,6 +527,18 @@ export function PricingView() {
                       className="p-3 px-5 font-bold text-foreground text-xs uppercase tracking-wider"
                     >
                       Form Builder & Question Types
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 sm:p-5 font-medium text-foreground">
+                      Branded Forms &amp; Custom Slugs
+                    </td>
+                    <td className="p-4 sm:p-5 text-center text-muted-foreground">Standard slug</td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500 bg-primary/5">
+                      Custom slug (/form/your-brand)
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-semibold text-emerald-500">
+                      White-label + Custom slug
                     </td>
                   </tr>
                   <tr>

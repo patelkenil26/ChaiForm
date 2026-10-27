@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -35,6 +35,7 @@ const TEMPLATE_CATEGORIES = [
   { id: "EVENTS", label: "Events & RSVPs" },
   { id: "APPLICATIONS", label: "Applications" },
   { id: "QUIZZES", label: "Quizzes" },
+  { id: "GENERAL", label: "General Forms" },
 ];
 
 export function TemplatesView() {
@@ -47,14 +48,27 @@ export function TemplatesView() {
   const [sortBy, setSortBy] = useState<"popular" | "newest" | "questions">("popular");
   const [cloningId, setCloningId] = useState<string | null>(null);
 
-  // Fetch all templates with React Query
-  const { publicForms, isLoading } = useListPublicForms({});
+  // Fetch all templates with React Query (same source as dashboard explore)
+  const { publicForms, isLoading } = useListPublicForms();
 
   const allForms = publicForms ?? [];
 
+  // Count items per category
+  const folderCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: allForms.length };
+    for (const form of allForms) {
+      const cat = form.category?.toUpperCase() || "GENERAL";
+      counts[cat] = (counts[cat] || 0) + 1;
+    }
+    return counts;
+  }, [allForms]);
+
   // Filter
   const filteredTemplates = allForms.filter((tpl) => {
-    if (selectedCategory !== "ALL" && tpl.category?.toUpperCase() !== selectedCategory.toUpperCase()) {
+    if (
+      selectedCategory !== "ALL" &&
+      tpl.category?.toUpperCase() !== selectedCategory.toUpperCase()
+    ) {
       return false;
     }
     if (!searchQuery.trim()) return true;
@@ -121,7 +135,8 @@ export function TemplatesView() {
           </h1>
 
           <p className="mt-3.5 max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Jumpstart your data collection with ready-made conversational templates. Test-drive any form live or clone it to your workspace with one click.
+            Jumpstart your data collection with ready-made conversational templates. Test-drive any
+            form live or clone it to your workspace with one click.
           </p>
 
           {/* Search + Category Controls */}
@@ -149,18 +164,30 @@ export function TemplatesView() {
           <div className="mt-6 flex items-center justify-center flex-wrap gap-2">
             {TEMPLATE_CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat.id;
+              const count = folderCounts[cat.id];
               return (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
+                  className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                     isSelected
                       ? landingTheme.activePill
                       : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
-                  {cat.label}
+                  <span>{cat.label}</span>
+                  {count !== undefined && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full tabular-nums font-semibold ${
+                        isSelected
+                          ? "bg-background/25 text-background dark:bg-foreground/25 dark:text-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -250,12 +277,15 @@ export function TemplatesView() {
                 {/* Card Body */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className={`text-base font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}>
+                    <h3
+                      className={`text-base font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}
+                    >
                       {tpl.title}
                     </h3>
 
                     <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[32px]">
-                      {tpl.description || "Conversational multi-field template ready for immediate deployment."}
+                      {tpl.description ||
+                        "Conversational multi-field template ready for immediate deployment."}
                     </p>
 
                     <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border/40 pt-3">
@@ -346,8 +376,13 @@ export function TemplatesView() {
         )}
 
         {/* Bottom Banner */}
-        <div className={`mt-16 rounded-2xl ${landingTheme.ctaBox} p-8 sm:p-10 text-center flex flex-col items-center`}>
-          <Badge variant="outline" className={`text-xs px-3 py-1 mb-3 gap-1.5 ${landingTheme.ctaBadge}`}>
+        <div
+          className={`mt-16 rounded-2xl ${landingTheme.ctaBox} p-8 sm:p-10 text-center flex flex-col items-center`}
+        >
+          <Badge
+            variant="outline"
+            className={`text-xs px-3 py-1 mb-3 gap-1.5 ${landingTheme.ctaBadge}`}
+          >
             <IconBolt className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>Build From Scratch</span>
           </Badge>
@@ -355,7 +390,8 @@ export function TemplatesView() {
             Need a completely custom conversational form?
           </h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-xl leading-relaxed">
-            Our visual builder lets you assemble custom question steps, set up password security, pick designer themes, and embed on any website in under 2 minutes.
+            Our visual builder lets you assemble custom question steps, set up password security,
+            pick designer themes, and embed on any website in under 2 minutes.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
             <Button

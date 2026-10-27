@@ -4,6 +4,7 @@ import { use, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, BarChart3Icon, TablePropertiesIcon } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
@@ -34,6 +35,13 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
   const { submissions, isLoading: submissionsLoading } = useGetFormSubmissions(formId);
 
   const isLoading = fieldsLoading || submissionsLoading;
+
+  const handleCopyLink = () => {
+    if (!form) return;
+    const target = form.slug || form.id;
+    navigator.clipboard.writeText(`${window.location.origin}/form/${target}`);
+    toast.success("Form link copied to clipboard!");
+  };
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full animate-in fade-in duration-300">
@@ -96,6 +104,7 @@ export default function SubmissionsPage({ params }: { params: Promise<{ id: stri
             submissions={submissions as SubmissionItem[] | undefined}
             isLoading={isLoading}
             formTitle={form?.title}
+            onCopyShareLink={handleCopyLink}
           />
         </TabsContent>
       </Tabs>

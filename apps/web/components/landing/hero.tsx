@@ -139,33 +139,49 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Real Product Core Value Strip */}
+        {/* Real Product Core Value Strip: Consistent Gold Accents */}
         <div className="mt-12 w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">
-          <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
+          <div
+            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+          >
+            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               1-At-A-Time
             </div>
             <p className="mt-1 text-xs text-muted-foreground font-medium">Conversational pacing</p>
           </div>
 
-          <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">14 Types</div>
+          <div
+            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+          >
+            <div className={landingTheme.cardBeam} />
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
+              14 Types
+            </div>
             <p className="mt-1 text-xs text-muted-foreground font-medium">Flexible input fields</p>
           </div>
 
-          <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
-            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">1-Click</div>
+          <div
+            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+          >
+            <div className={landingTheme.cardBeam} />
+            <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
+              1-Click
+            </div>
             <p className="mt-1 text-xs text-muted-foreground font-medium">
-              Instant share & iframe embeds
+              Instant share &amp; iframe embeds
             </p>
           </div>
 
-          <div className="rounded-2xl border border-border/60 bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs">
+          <div
+            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+          >
+            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               Live Feed
             </div>
             <p className="mt-1 text-xs text-muted-foreground font-medium">
-              Instant analytics & CSV export
+              Instant analytics &amp; CSV export
             </p>
           </div>
         </div>

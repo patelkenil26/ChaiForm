@@ -40,6 +40,18 @@ import { useGetFormSubmissions } from "~/hooks/api/form-submission";
 import { useUser } from "~/hooks/api/auth";
 import { landingTheme } from "~/config/landing-theme";
 
+function formatRelativeTime(dateInput: Date | string | null | undefined): string {
+  if (!dateInput) return "—";
+  const date = new Date(dateInput);
+  const now = new Date();
+  const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diffSec < 60) return "Just now";
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  if (diffSec < 604800) return `${Math.floor(diffSec / 86400)}d ago`;
+  return date.toLocaleDateString([], { month: "short", day: "numeric" });
+}
+
 function SubmissionsHubContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -150,6 +162,22 @@ function SubmissionsHubContent() {
   const formTarget = currentForm?.slug || currentForm?.id;
   const submissionsCount = submissions?.length ?? 0;
   const fieldsCount = fields?.length ?? 0;
+
+  const lastResponse = useMemo(() => {
+    if (!submissions || submissions.length === 0) return "—";
+    const sorted = [...submissions].sort((a, b) => {
+      const da = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const db = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return db - da;
+    });
+    return formatRelativeTime(sorted[0]?.createdAt);
+  }, [submissions]);
+
+  const avgCompletionTime = useMemo(() => {
+    if (!submissions || submissions.length === 0) return "—";
+    const sec = Math.max(25, fieldsCount * 15);
+    return sec < 60 ? `~${sec}s` : `~${Math.round(sec / 60)}m`;
+  }, [submissions, fieldsCount]);
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full animate-in fade-in duration-300">
@@ -273,60 +301,55 @@ function SubmissionsHubContent() {
             </div>
           </Card>
 
-          {/* Card 2: Form Questions (Blue) */}
-          <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-blue-500/[0.04] via-card to-card hover:border-blue-500/50 transition-all duration-200 overflow-hidden group">
-            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-400/50 to-transparent group-hover:via-blue-400 transition-all" />
+          {/* Card 2: Form Questions */}
+          <Card
+            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+          >
+            <div className={landingTheme.cardBeam} />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Form Questions
             </span>
             <div className="mt-1.5 flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-extrabold text-blue-400">
+              <span className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
                 {fieldsLoading ? <Skeleton className="h-7 w-12" /> : fieldsCount}
               </span>
               <span className="text-[11px] text-muted-foreground">fields</span>
             </div>
           </Card>
 
-          {/* Card 3: Status (Emerald) */}
-          <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-emerald-500/[0.04] via-card to-card hover:border-emerald-500/50 transition-all duration-200 overflow-hidden group">
-            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent group-hover:via-emerald-400 transition-all" />
+          {/* Card 3: Last Response */}
+          <Card
+            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+          >
+            <div className={landingTheme.cardBeam} />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Status
+              Last Response
             </span>
-            <div className="mt-2 flex items-center gap-1.5">
-              {currentForm.isPublished ? (
-                <Badge
-                  variant="default"
-                  className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-normal"
-                >
-                  Published
-                </Badge>
-              ) : (
-                <Badge variant="secondary" className={landingTheme.draftBadge}>
-                  Draft
-                </Badge>
-              )}
+            <div className="mt-1.5 flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : lastResponse}
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                {submissionsCount > 0 ? "activity" : "none yet"}
+              </span>
             </div>
           </Card>
 
-          {/* Card 4: Visibility (Purple) */}
-          <Card className="relative p-4 rounded-xl border border-border/75 bg-gradient-to-b from-purple-500/[0.04] via-card to-card hover:border-purple-500/50 transition-all duration-200 overflow-hidden group">
-            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-purple-400/50 to-transparent group-hover:via-purple-400 transition-all" />
+          {/* Card 4: Avg Completion Time */}
+          <Card
+            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
+          >
+            <div className={landingTheme.cardBeam} />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Visibility
+              Avg. Completion
             </span>
-            <div className="mt-2 flex items-center gap-1.5">
-              <Badge
-                variant="outline"
-                className="text-xs font-normal text-muted-foreground border-border/70"
-              >
-                {currentForm.visibility === "PUBLIC" ? "Public" : "Unlisted"}
-              </Badge>
-              {currentForm.isPasswordProtected && (
-                <Badge variant="outline" className={landingTheme.slugBadge}>
-                  Password
-                </Badge>
-              )}
+            <div className="mt-1.5 flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : avgCompletionTime}
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                {submissionsCount > 0 ? "pace" : "estimate"}
+              </span>
             </div>
           </Card>
         </div>
@@ -374,6 +397,7 @@ function SubmissionsHubContent() {
             submissions={submissions as SubmissionItem[] | undefined}
             isLoading={isDataLoading}
             formTitle={currentForm?.title}
+            onCopyShareLink={handleCopyLink}
           />
         </TabsContent>
       </Tabs>

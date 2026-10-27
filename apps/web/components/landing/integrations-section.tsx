@@ -93,13 +93,10 @@ export function IntegrationsSection() {
           ))}
         </div>
 
-        {/* Subtle Developer Architecture Note */}
+        {/* Built for Developers Note */}
         <div className="mt-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
-          <IconCode className="size-3.5" />
-          <span>
-            Developers: ChaiForm is also 100% type-safe, powered by modern Next.js 16, tRPC &
-            PostgreSQL.
-          </span>
+          <IconCode className={`size-3.5 ${landingTheme.iconColor}`} />
+          <span>Built for developers: webhooks, JSON export &amp; responsive embed API.</span>
         </div>
       </div>
     </section>

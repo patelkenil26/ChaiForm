@@ -2,11 +2,25 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlusIcon, ArchiveIcon, LayoutListIcon, SearchIcon, XIcon, SparklesIcon } from "lucide-react";
+import {
+  PlusIcon,
+  ArchiveIcon,
+  LayoutListIcon,
+  SearchIcon,
+  XIcon,
+  SparklesIcon,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { QrCodeDialog } from "~/components/qr-code-dialog";
 import { CreateFormDialog, type CreateFormValues } from "~/components/forms/create-form-dialog";
 import { FormsTable, type FormListItem } from "~/components/forms/forms-table";
@@ -24,6 +38,7 @@ export default function FormsPage() {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useUser();
   const [activeTab, setActiveTab] = useState<"ACTIVE" | "ARCHIVED">("ACTIVE");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "PUBLISHED" | "DRAFT">("ALL");
   const [createOpen, setCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -47,25 +62,30 @@ export default function FormsPage() {
 
   const activeForms = useMemo(
     () => (forms as FormListItem[] | undefined)?.filter((f) => !f.isArchived) ?? [],
-    [forms]
+    [forms],
   );
 
   const archivedForms = useMemo(
     () => (forms as FormListItem[] | undefined)?.filter((f) => f.isArchived) ?? [],
-    [forms]
+    [forms],
   );
 
   const displayedForms = useMemo(() => {
-    const list = activeTab === "ACTIVE" ? activeForms : archivedForms;
+    let list = activeTab === "ACTIVE" ? activeForms : archivedForms;
+    if (statusFilter === "PUBLISHED") {
+      list = list.filter((f) => f.isPublished);
+    } else if (statusFilter === "DRAFT") {
+      list = list.filter((f) => !f.isPublished);
+    }
     if (!searchQuery.trim()) return list;
     const q = searchQuery.toLowerCase().trim();
     return list.filter(
       (f) =>
         f.title.toLowerCase().includes(q) ||
         (f.description?.toLowerCase().includes(q) ?? false) ||
-        (f.slug?.toLowerCase().includes(q) ?? false)
+        (f.slug?.toLowerCase().includes(q) ?? false),
     );
-  }, [activeTab, activeForms, archivedForms, searchQuery]);
+  }, [activeTab, activeForms, archivedForms, searchQuery, statusFilter]);
 
   const handleCreateForm = async (values: CreateFormValues) => {
     try {
@@ -92,7 +112,7 @@ export default function FormsPage() {
       toast.success(
         !currentPublished
           ? "Form published! Live & accepting responses."
-          : "Form unpublished! Submissions paused."
+          : "Form unpublished! Submissions paused.",
       );
     } catch {
       toast.error("Failed to update status");
@@ -101,19 +121,14 @@ export default function FormsPage() {
     }
   };
 
-  const handleVisibilityChange = async (
-    formId: string,
-    visibility: "PUBLIC" | "UNLISTED"
-  ) => {
+  const handleVisibilityChange = async (formId: string, visibility: "PUBLIC" | "UNLISTED") => {
     setUpdatingId(formId);
     try {
       await updateFormVisibilityAsync({
         formId,
         visibility,
       });
-      toast.success(
-        `Visibility changed to ${visibility === "PUBLIC" ? "Public" : "Unlisted"}`
-      );
+      toast.success(`Visibility changed to ${visibility === "PUBLIC" ? "Public" : "Unlisted"}`);
     } catch {
       toast.error("Failed to update visibility");
     } finally {
@@ -140,7 +155,7 @@ export default function FormsPage() {
       toast.success(
         isCurrentlyArchived
           ? "Form unarchived & restored to active list!"
-          : "Form moved to archive."
+          : "Form moved to archive.",
       );
     } catch {
       toast.error("Failed to update archive status");
@@ -193,16 +208,12 @@ export default function FormsPage() {
             size="sm"
             onClick={() => setActiveTab("ACTIVE")}
             className={`h-7.5 px-3 text-xs gap-1.5 rounded-md transition-all cursor-pointer ${
-              activeTab === "ACTIVE"
-                ? landingTheme.tabActive
-                : landingTheme.tabInactive
+              activeTab === "ACTIVE" ? landingTheme.tabActive : landingTheme.tabInactive
             }`}
           >
             <LayoutListIcon
               className={`size-3.5 ${
-                activeTab === "ACTIVE"
-                  ? landingTheme.iconColor
-                  : "text-muted-foreground"
+                activeTab === "ACTIVE" ? landingTheme.iconColor : "text-muted-foreground"
               }`}
             />
             <span>Active Forms</span>
@@ -223,16 +234,12 @@ export default function FormsPage() {
             size="sm"
             onClick={() => setActiveTab("ARCHIVED")}
             className={`h-7.5 px-3 text-xs gap-1.5 rounded-md transition-all cursor-pointer ${
-              activeTab === "ARCHIVED"
-                ? landingTheme.tabActive
-                : landingTheme.tabInactive
+              activeTab === "ARCHIVED" ? landingTheme.tabActive : landingTheme.tabInactive
             }`}
           >
             <ArchiveIcon
               className={`size-3.5 ${
-                activeTab === "ARCHIVED"
-                  ? landingTheme.iconColor
-                  : "text-muted-foreground"
+                activeTab === "ARCHIVED" ? landingTheme.iconColor : "text-muted-foreground"
               }`}
             />
             <span>Archived</span>
@@ -250,25 +257,49 @@ export default function FormsPage() {
           </Button>
         </div>
 
-        {/* In-Page Quick Filter Input */}
-        <div className="relative w-full sm:w-64">
-          <SearchIcon className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-          <Input
-            type="text"
-            placeholder="Search forms..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={`h-8 pl-8 pr-7 text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer"
+        {/* Status Filter & In-Page Quick Search */}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Select
+            value={statusFilter}
+            onValueChange={(val: "ALL" | "PUBLISHED" | "DRAFT") => setStatusFilter(val)}
+          >
+            <SelectTrigger
+              className={`h-8 text-xs w-[115px] bg-card border-border/70 ${landingTheme.inputFocus}`}
             >
-              <XIcon className="size-3" />
-            </button>
-          )}
+              <SelectValue placeholder="All Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL" className="text-xs">
+                All Status
+              </SelectItem>
+              <SelectItem value="PUBLISHED" className="text-xs">
+                Published
+              </SelectItem>
+              <SelectItem value="DRAFT" className="text-xs">
+                Draft
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="relative w-full sm:w-60">
+            <SearchIcon className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              type="text"
+              placeholder="Search forms..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`h-8 pl-8 pr-7 text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer"
+              >
+                <XIcon className="size-3" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -285,7 +316,7 @@ export default function FormsPage() {
         onToggleArchive={handleToggleArchive}
         emptyMessage={
           activeTab === "ACTIVE"
-            ? "No active forms. Click \"Create Form\" to start building."
+            ? 'No active forms. Click "Create Form" to start building.'
             : "No archived forms. Archived forms will appear here safely without deleting any data."
         }
       />

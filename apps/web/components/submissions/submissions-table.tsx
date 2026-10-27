@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { SearchXIcon, StarIcon } from "lucide-react";
+import { SearchXIcon, StarIcon, CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Button } from "~/components/ui/button";
@@ -42,6 +42,7 @@ interface SubmissionsTableProps {
   submissions: SubmissionItem[] | undefined;
   isLoading: boolean;
   formTitle?: string | null;
+  onCopyShareLink?: () => void;
 }
 
 export function SubmissionsTable({
@@ -49,6 +50,7 @@ export function SubmissionsTable({
   submissions,
   isLoading,
   formTitle,
+  onCopyShareLink,
 }: SubmissionsTableProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [datePreset, setDatePreset] = useState<DatePreset>("ALL");
@@ -262,12 +264,26 @@ export function SubmissionsTable({
               <TableRow>
                 <TableCell
                   colSpan={sortedFields.length + 1}
-                  className="h-32 text-center text-muted-foreground"
+                  className="h-44 text-center text-muted-foreground py-8"
                 >
-                  <p className="font-medium text-sm">No responses submitted yet.</p>
-                  <p className="text-xs text-muted-foreground/80 mt-1">
-                    Share your form link with respondents to begin collecting answers.
+                  <p className="font-semibold text-sm text-foreground">
+                    No responses submitted yet
                   </p>
+                  <p className="text-xs text-muted-foreground/80 mt-1 max-w-sm mx-auto">
+                    Share your live form link with respondents to begin collecting answers and
+                    telemetry.
+                  </p>
+                  {onCopyShareLink && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={onCopyShareLink}
+                      className={`mt-3.5 h-8 text-xs gap-1.5 ${landingTheme.primaryButton}`}
+                    >
+                      <CopyIcon className="size-3.5" />
+                      <span>Copy Share Link</span>
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ) : totalFiltered === 0 ? (

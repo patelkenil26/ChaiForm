@@ -30,6 +30,7 @@ const LANDING_CATEGORIES = [
   { id: "EVENTS", label: "Events & RSVPs" },
   { id: "APPLICATIONS", label: "Applications" },
   { id: "QUIZZES", label: "Quizzes" },
+  { id: "GENERAL", label: "General Forms" },
 ];
 
 export function TemplatesSection() {
@@ -39,9 +40,20 @@ export function TemplatesSection() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [cloningId, setCloningId] = useState<string | null>(null);
 
-  // Fetch all public templates once with 5m cache (avoids repeated API calls on filter changes)
-  const { publicForms, isLoading } = useListPublicForms({});
+  // Fetch all public templates once with 5m cache (same source as dashboard explore)
+  const { publicForms, isLoading } = useListPublicForms();
   const formsList = publicForms ?? [];
+
+  // Count items per category
+  const categoryCounts = formsList.reduce(
+    (acc: Record<string, number>, form) => {
+      acc.ALL = (acc.ALL || 0) + 1;
+      const cat = form.category?.toUpperCase() || "GENERAL";
+      acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    },
+    { ALL: formsList.length },
+  );
 
   // Client-side category filtering: instant response and zero redundant network calls
   const filteredForms = formsList.filter((form) => {
@@ -72,7 +84,10 @@ export function TemplatesSection() {
   };
 
   return (
-    <section id="templates" className="relative py-20 md:py-28 overflow-hidden border-t border-border/40">
+    <section
+      id="templates"
+      className="relative py-20 md:py-28 overflow-hidden border-t border-border/40"
+    >
       {/* Background Subtle Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
         <div className={`h-[400px] w-[700px] rounded-full ${landingTheme.heroGlow}`} />
@@ -94,25 +109,38 @@ export function TemplatesSection() {
           </h2>
 
           <p className="mt-3.5 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
-            Don&apos;t build from scratch. Clone battle-tested conversational templates directly into your account or test-drive them right now with zero signup.
+            Don&apos;t build from scratch. Clone battle-tested conversational templates directly
+            into your account or test-drive them right now with zero signup.
           </p>
 
           {/* Category Filter Pills */}
           <div className="mt-7 flex items-center justify-center flex-wrap gap-2">
             {LANDING_CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat.id;
+              const count = categoryCounts[cat.id];
               return (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
+                  className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                     isSelected
                       ? landingTheme.activePill
                       : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
-                  {cat.label}
+                  <span>{cat.label}</span>
+                  {count !== undefined && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full tabular-nums font-semibold ${
+                        isSelected
+                          ? "bg-background/25 text-background dark:bg-foreground/25 dark:text-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -123,10 +151,7 @@ export function TemplatesSection() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="rounded-xl border border-border/60 bg-card p-5 space-y-4"
-              >
+              <div key={i} className="rounded-xl border border-border/60 bg-card p-5 space-y-4">
                 <div className="flex justify-between">
                   <Skeleton className="h-5 w-20 rounded-md" />
                   <Skeleton className="h-4 w-12 rounded-md" />
@@ -166,13 +191,16 @@ export function TemplatesSection() {
                   </div>
 
                   {/* Title */}
-                  <h3 className={`text-base font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}>
+                  <h3
+                    className={`text-base font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}
+                  >
                     {tpl.title}
                   </h3>
 
                   {/* Description */}
                   <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[32px]">
-                    {tpl.description || "Conversational multi-field template engineered for high completion."}
+                    {tpl.description ||
+                      "Conversational multi-field template engineered for high completion."}
                   </p>
 
                   {/* Metadata info */}
