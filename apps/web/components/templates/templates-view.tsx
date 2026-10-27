@@ -22,6 +22,13 @@ import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { useListPublicForms, useUseTemplate } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
 import { getSafeErrorMessage } from "~/lib/error";
@@ -211,20 +218,31 @@ export function TemplatesView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground flex items-center gap-1">
-              <IconFilter className="size-3.5" />
+            <span className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium">
+              <IconFilter className={`size-3.5 ${landingTheme.iconColor}`} />
               <span>Sort by:</span>
             </span>
-            <select
+            <Select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as "popular" | "newest" | "questions")}
-              aria-label="Sort templates by"
-              className="bg-card border border-border/60 rounded-lg px-2.5 py-1 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              onValueChange={(val: "popular" | "newest" | "questions") => setSortBy(val)}
             >
-              <option value="popular">Most Popular</option>
-              <option value="newest">Newest First</option>
-              <option value="questions">Question Count</option>
-            </select>
+              <SelectTrigger
+                className={`h-8 w-[145px] text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
+              >
+                <SelectValue placeholder="Sort templates" />
+              </SelectTrigger>
+              <SelectContent align="end" className="bg-card border-border/70">
+                <SelectItem value="popular" className="cursor-pointer text-xs">
+                  Most Popular
+                </SelectItem>
+                <SelectItem value="newest" className="cursor-pointer text-xs">
+                  Newest First
+                </SelectItem>
+                <SelectItem value="questions" className="cursor-pointer text-xs">
+                  Question Count
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

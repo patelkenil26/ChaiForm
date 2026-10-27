@@ -116,9 +116,8 @@ export function TemplateCard({ template }: TemplateCardProps) {
 
   return (
     <div
-      className={`group relative flex flex-col justify-between rounded-xl border ${landingTheme.cardBg} p-5 transition-all duration-200 overflow-hidden ${landingTheme.cardBorderHover} ${categoryConfig.accentBorder}`}
+      className={`group flex flex-col justify-between rounded-xl border ${landingTheme.cardBg} p-5 transition-all duration-200 ${landingTheme.cardBorderHover} ${categoryConfig.accentBorder}`}
     >
-      <div className={landingTheme.cardBeam} />
       <div>
         {/* Header: Category Badge + Views */}
         <div className="flex items-center justify-between gap-2 mb-3">

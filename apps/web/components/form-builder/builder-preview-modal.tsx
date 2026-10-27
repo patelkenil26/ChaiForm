@@ -118,7 +118,10 @@ export function BuilderPreviewModal({
                     Interactive Simulator
                   </Badge>
                 </div>
-                <span className="text-[11px] text-muted-foreground truncate max-w-[200px] sm:max-w-xs">
+                <span
+                  className="text-[11px] text-muted-foreground truncate max-w-[200px] sm:max-w-xs block"
+                  title={form?.title || "Untitled Form"}
+                >
                   {form?.title || "Untitled Form"} • {fields.length}{" "}
                   {fields.length === 1 ? "question" : "questions"}
                 </span>

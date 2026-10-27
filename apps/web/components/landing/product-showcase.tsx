@@ -54,8 +54,7 @@ export function ProductShowcaseSection() {
 
         {/* 3-Step Walkthrough Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-12">
-          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className={landingTheme.cardBeam} />
+          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span
@@ -78,8 +77,7 @@ export function ProductShowcaseSection() {
           </div>
 
           {/* Step 2 */}
-          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className={landingTheme.cardBeam} />
+          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span
@@ -102,8 +100,7 @@ export function ProductShowcaseSection() {
           </div>
 
           {/* Step 3 */}
-          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs relative overflow-hidden flex flex-col justify-between">
-            <div className={landingTheme.cardBeam} />
+          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 backdrop-blur-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span

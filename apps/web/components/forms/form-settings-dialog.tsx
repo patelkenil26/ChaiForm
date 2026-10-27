@@ -23,6 +23,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { Button } from "~/components/ui/button";
+import { CharacterCounter } from "~/components/ui/character-counter";
+import { toast } from "sonner";
 import { landingTheme } from "~/config/landing-theme";
 
 export interface FormSettingsPayload {
@@ -107,6 +109,24 @@ export function FormSettingsDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (hasSlug && slugValue.trim()) {
+      const trimmedSlug = slugValue.toLowerCase().trim();
+      if (trimmedSlug.length < 3) {
+        toast.error("Custom URL slug must be at least 3 characters.");
+        return;
+      }
+      if (trimmedSlug.length > 60) {
+        toast.error("Custom URL slug cannot exceed 60 characters.");
+        return;
+      }
+    }
+
+    if (hasPassword && passwordValue.length > 50) {
+      toast.error("Access password cannot exceed 50 characters.");
+      return;
+    }
+
     const closesAt = hasExpiry && expiryValue ? new Date(expiryValue) : null;
     const responseLimit = hasLimit && limitValue ? parseInt(limitValue, 10) : null;
     const slug = hasSlug && slugValue.trim() ? slugValue.toLowerCase().trim() : null;
@@ -183,11 +203,19 @@ export function FormSettingsDialog({
                         ? "•••••••• (Leave blank to keep unchanged)"
                         : "Enter access password"
                     }
+                    maxLength={50}
                     value={passwordValue}
                     onChange={(e) => setPasswordValue(e.target.value)}
-                    className="text-sm pr-10"
+                    className="text-sm pr-16"
                     required={hasPassword && !form.isPasswordProtected}
                   />
+                  {passwordValue.length > 0 && (
+                    <CharacterCounter
+                      current={passwordValue.length}
+                      max={50}
+                      className="absolute right-9 top-1/2 -translate-y-1/2 pointer-events-none"
+                    />
+                  )}
                   <Button
                     type="button"
                     variant="ghost"
@@ -239,6 +267,7 @@ export function FormSettingsDialog({
                     id="custom-slug"
                     type="text"
                     placeholder="my-form-name"
+                    maxLength={60}
                     value={slugValue}
                     onChange={(e) => {
                       const val = e.target.value
@@ -250,6 +279,7 @@ export function FormSettingsDialog({
                     className="w-full bg-transparent px-1.5 py-2 text-xs font-mono outline-none"
                     required={hasSlug}
                   />
+                  <CharacterCounter current={slugValue.length} max={60} className="shrink-0 ml-1" />
                 </div>
                 <p className="text-[11px] text-muted-foreground">
                   Letters, numbers, and hyphens only (min 3 chars).

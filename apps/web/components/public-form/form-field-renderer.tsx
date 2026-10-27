@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Field, FieldLabel, FieldDescription, FieldError } from "~/components/ui/field";
+import { CharacterCounter } from "~/components/ui/character-counter";
 import { cn } from "~/lib/utils";
 import { landingTheme } from "~/config/landing-theme";
 import type { PublicFormField } from "./types";
@@ -79,19 +80,30 @@ export function FormFieldRenderer({
 
   // 2. Long Text / Textarea
   if (field.type === "TEXTAREA") {
+    const val = (watch(field.labelKey) as string) || "";
     return (
       <Field data-invalid={!!error}>
-        <FieldLabel htmlFor={field.labelKey}>
-          {field.label}
-          {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
-        </FieldLabel>
+        <div className="flex items-center justify-between">
+          <FieldLabel htmlFor={field.labelKey}>
+            {field.label}
+            {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
+          </FieldLabel>
+          <CharacterCounter current={val.length} max={2000} />
+        </div>
         {field.description && <FieldDescription>{field.description}</FieldDescription>}
         <Textarea
           id={field.labelKey}
           placeholder={field.placeholder ?? undefined}
           rows={4}
+          maxLength={2000}
           aria-invalid={!!error}
-          {...register(field.labelKey, rules)}
+          {...register(field.labelKey, {
+            ...rules,
+            maxLength: {
+              value: 2000,
+              message: `${field.label} cannot exceed 2000 characters`,
+            },
+          })}
         />
         {error && <FieldError>{error.message}</FieldError>}
       </Field>
@@ -258,20 +270,36 @@ export function FormFieldRenderer({
   };
 
   const inputType = inputTypeMap[field.type] || "text";
+  const textVal = (watch(field.labelKey) as string) || "";
+  const isTextType = field.type === "TEXT";
 
   return (
     <Field data-invalid={!!error}>
-      <FieldLabel htmlFor={field.labelKey}>
-        {field.label}
-        {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
-      </FieldLabel>
+      <div className="flex items-center justify-between">
+        <FieldLabel htmlFor={field.labelKey}>
+          {field.label}
+          {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
+        </FieldLabel>
+        {isTextType && <CharacterCounter current={textVal.length} max={250} />}
+      </div>
       {field.description && <FieldDescription>{field.description}</FieldDescription>}
       <Input
         id={field.labelKey}
         type={inputType}
         placeholder={field.placeholder ?? undefined}
+        maxLength={isTextType ? 250 : undefined}
         aria-invalid={!!error}
-        {...register(field.labelKey, rules)}
+        {...register(field.labelKey, {
+          ...rules,
+          ...(isTextType
+            ? {
+                maxLength: {
+                  value: 250,
+                  message: `${field.label} cannot exceed 250 characters`,
+                },
+              }
+            : {}),
+        })}
       />
       {error && <FieldError>{error.message}</FieldError>}
     </Field>

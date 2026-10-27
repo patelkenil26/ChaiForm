@@ -15,9 +15,13 @@ export const metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <div className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}>
+    <div
+      className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}
+    >
       {/* Background Ambient Glows */}
-      <div className={`pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full ${landingTheme.heroGlow} -z-10`} />
+      <div
+        className={`pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full ${landingTheme.heroGlow} -z-10`}
+      />
 
       <div className="flex w-full max-w-md flex-col gap-6">
         {/* Brand Link */}
@@ -36,8 +40,9 @@ export default function ForgotPasswordPage() {
         </Link>
 
         {/* Card */}
-        <div className={`rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8 relative overflow-hidden`}>
-          <div className={landingTheme.cardBeam} />
+        <div
+          className={`rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8`}
+        >
           <ForgotPasswordForm />
         </div>
 

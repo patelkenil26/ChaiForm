@@ -87,7 +87,10 @@ export function BuilderHeader({
           </Button>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+              <h1
+                className="text-xl md:text-2xl font-bold tracking-tight max-w-[240px] sm:max-w-md truncate block"
+                title={form?.title || "Form Builder"}
+              >
                 {form?.title ? (
                   <span className={landingTheme.gradientText}>{form.title}</span>
                 ) : (

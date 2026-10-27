@@ -460,11 +460,11 @@ export function PricingView() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-muted/60 border-b border-border/60">
-                    <th className="p-4 sm:p-5 font-semibold text-muted-foreground uppercase tracking-wider w-2/5">
+                  <tr className="bg-amber-500/[0.12] dark:bg-amber-500/[0.16] border-b border-amber-500/25">
+                    <th className="p-4 sm:p-5 font-bold text-foreground uppercase tracking-wider w-2/5">
                       Feature
                     </th>
-                    <th className="p-4 sm:p-5 font-semibold text-foreground text-center w-1/5">
+                    <th className="p-4 sm:p-5 font-bold text-foreground uppercase tracking-wider text-center w-1/5">
                       Starter
                     </th>
                     <th

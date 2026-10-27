@@ -139,12 +139,11 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Real Product Core Value Strip: Consistent Gold Accents */}
+        {/* Real Product Core Value Strip */}
         <div className="mt-12 w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">
           <div
-            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+            className={`rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs transition-all duration-200`}
           >
-            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               1-At-A-Time
             </div>
@@ -152,9 +151,8 @@ export function HeroSection() {
           </div>
 
           <div
-            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+            className={`rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs transition-all duration-200`}
           >
-            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               14 Types
             </div>
@@ -162,9 +160,8 @@ export function HeroSection() {
           </div>
 
           <div
-            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+            className={`rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs transition-all duration-200`}
           >
-            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               1-Click
             </div>
@@ -174,9 +171,8 @@ export function HeroSection() {
           </div>
 
           <div
-            className={`relative rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs overflow-hidden transition-all duration-200 group`}
+            className={`rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} p-4 sm:p-5 backdrop-blur-xs shadow-xs transition-all duration-200`}
           >
-            <div className={landingTheme.cardBeam} />
             <div className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
               Live Feed
             </div>

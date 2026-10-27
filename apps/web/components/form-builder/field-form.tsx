@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { XIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
@@ -17,11 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import {
-  FIELD_TYPES,
-  FIELD_TYPE_LABELS,
-  type FieldFormValues,
-} from "./field-types";
+import { FIELD_TYPES, FIELD_TYPE_LABELS, type FieldFormValues } from "./field-types";
+import { CharacterCounter } from "~/components/ui/character-counter";
+import { FieldOptionsEditor } from "./field-options-editor";
 import { landingTheme } from "~/config/landing-theme";
 
 interface FieldFormProps {
@@ -43,13 +41,13 @@ export function FieldForm({
     defaultValues,
   });
 
-  const [newOptionInput, setNewOptionInput] = useState("");
-
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
   const type = watch("type");
+  const labelValue = watch("label") || "";
+  const descValue = watch("description") || "";
   const isChoiceType = type === "SELECT" || type === "RADIO" || type === "CHECKBOX";
   const hasPlaceholder =
     type !== "YES_NO" && type !== "RATING" && type !== "CHECKBOX" && type !== "RADIO";
@@ -58,10 +56,14 @@ export function FieldForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="label">Label / Question</FieldLabel>
+          <div className="flex items-center justify-between">
+            <FieldLabel htmlFor="label">Label / Question</FieldLabel>
+            <CharacterCounter current={labelValue.length} max={100} />
+          </div>
           <Input
             id="label"
             placeholder="e.g. What is your email address?"
+            maxLength={100}
             {...register("label", { required: true, maxLength: 100 })}
           />
         </Field>
@@ -94,79 +96,29 @@ export function FieldForm({
             <Controller
               name="options"
               control={control}
-              render={({ field }) => {
-                const currentOptions = field.value || [];
-
-                const handleAdd = () => {
-                  if (!newOptionInput.trim()) return;
-                  field.onChange([...currentOptions, newOptionInput.trim()]);
-                  setNewOptionInput("");
-                };
-
-                const handleRemove = (idxToRemove: number) => {
-                  field.onChange(currentOptions.filter((_, i) => i !== idxToRemove));
-                };
-
-                return (
-                  <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3">
-                    <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto">
-                      {currentOptions.map((opt, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md border bg-card text-xs shadow-2xs"
-                        >
-                          <span className="truncate">{opt}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemove(i)}
-                            className="text-muted-foreground hover:text-destructive transition-colors"
-                          >
-                            <XIcon className="size-3.5" />
-                          </button>
-                        </div>
-                      ))}
-                      {currentOptions.length === 0 && (
-                        <p className="text-xs text-muted-foreground italic py-1">
-                          No options added yet. Add at least one option below.
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Input
-                        placeholder="Add an option..."
-                        value={newOptionInput}
-                        onChange={(e) => setNewOptionInput(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            handleAdd();
-                          }
-                        }}
-                        className="h-8 text-xs"
-                      />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        onClick={handleAdd}
-                        className="h-8 text-xs shrink-0"
-                      >
-                        Add
-                      </Button>
-                    </div>
-                  </div>
-                );
-              }}
+              render={({ field }) => (
+                <div className="rounded-lg border bg-muted/20 p-3">
+                  <FieldOptionsEditor
+                    options={field.value || []}
+                    onChange={field.onChange}
+                    placeholder="Add an option..."
+                  />
+                </div>
+              )}
             />
           </Field>
         )}
 
         <Field>
-          <FieldLabel htmlFor="description">Helper Text / Description</FieldLabel>
+          <div className="flex items-center justify-between">
+            <FieldLabel htmlFor="description">Helper Text / Description</FieldLabel>
+            <CharacterCounter current={descValue.length} max={300} />
+          </div>
           <Textarea
             id="description"
             placeholder="Subtext shown below the question (optional)"
             rows={2}
+            maxLength={300}
             {...register("description")}
           />
         </Field>

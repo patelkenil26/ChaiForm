@@ -106,3 +106,56 @@ export function getFieldPlaceholder(type: FieldType): string {
       return "Enter question title...";
   }
 }
+
+import {
+  TypeIcon,
+  AlignLeftIcon,
+  MailIcon,
+  HashIcon,
+  PhoneIcon,
+  GlobeIcon,
+  CheckSquareIcon,
+  RadioIcon,
+  ChevronDownSquareIcon,
+  ToggleLeftIcon,
+  StarIcon,
+  CalendarIcon,
+  ClockIcon,
+  LockIcon,
+  type LucideIcon,
+} from "lucide-react";
+
+export function getFieldIcon(type: FieldType): LucideIcon {
+  switch (type) {
+    case "TEXT":
+      return TypeIcon;
+    case "TEXTAREA":
+      return AlignLeftIcon;
+    case "EMAIL":
+      return MailIcon;
+    case "NUMBER":
+      return HashIcon;
+    case "PHONE":
+      return PhoneIcon;
+    case "URL":
+      return GlobeIcon;
+    case "CHECKBOX":
+      return CheckSquareIcon;
+    case "RADIO":
+      return RadioIcon;
+    case "SELECT":
+      return ChevronDownSquareIcon;
+    case "YES_NO":
+      return ToggleLeftIcon;
+    case "RATING":
+      return StarIcon;
+    case "DATE":
+      return CalendarIcon;
+    case "TIME":
+      return ClockIcon;
+    case "PASSWORD":
+      return LockIcon;
+    default:
+      return TypeIcon;
+  }
+}

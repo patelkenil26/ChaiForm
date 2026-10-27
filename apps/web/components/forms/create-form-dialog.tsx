@@ -2,6 +2,7 @@
 
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { GlobeIcon, LinkIcon, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
 import {
@@ -21,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { CharacterCounter } from "~/components/ui/character-counter";
 import { landingTheme } from "~/config/landing-theme";
 
 export interface CreateFormValues {
@@ -29,6 +31,9 @@ export interface CreateFormValues {
   visibility: "PUBLIC" | "UNLISTED";
   isPublished: boolean;
 }
+
+const TITLE_MAX = 55;
+const DESC_MAX = 300;
 
 interface CreateFormDialogProps {
   open: boolean;
@@ -48,7 +53,8 @@ export function CreateFormDialog({
     handleSubmit,
     control,
     reset,
-    formState: { isSubmitting },
+    watch,
+    formState: { isSubmitting, errors },
   } = useForm<CreateFormValues>({
     defaultValues: {
       title: "",
@@ -58,37 +64,87 @@ export function CreateFormDialog({
     },
   });
 
+  const titleValue = watch("title") || "";
+  const descValue = watch("description") || "";
+
   const handleFormSubmit: SubmitHandler<CreateFormValues> = async (values) => {
+    if (!values.title.trim()) {
+      toast.error("Form title cannot be empty");
+      return;
+    }
+    if (values.title.length > TITLE_MAX) {
+      toast.error(`Form title cannot exceed ${TITLE_MAX} characters`);
+      return;
+    }
+    if (values.description && values.description.length > DESC_MAX) {
+      toast.error(`Description cannot exceed ${DESC_MAX} characters`);
+      return;
+    }
     await onSubmit(values);
     reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create a new form</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 mt-2">
-          <FieldGroup>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 mt-1">
+          <FieldGroup className="gap-3.5">
             <Field>
-              <FieldLabel htmlFor="title">Title</FieldLabel>
+              <div className="flex items-center justify-between mb-1">
+                <FieldLabel htmlFor="create-form-title" className="text-xs font-semibold">
+                  Form Title <span className="text-destructive">*</span>
+                </FieldLabel>
+                <CharacterCounter current={titleValue.length} max={TITLE_MAX} />
+              </div>
               <Input
-                id="title"
+                id="create-form-title"
                 placeholder="e.g. Customer Feedback Survey"
-                {...register("title", { required: true, maxLength: 55 })}
+                maxLength={TITLE_MAX}
+                {...register("title", {
+                  required: "Form title is required",
+                  maxLength: {
+                    value: TITLE_MAX,
+                    message: `Title cannot exceed ${TITLE_MAX} characters`,
+                  },
+                })}
+                className="h-9 text-xs sm:text-sm focus-visible:ring-amber-400/40"
               />
+              {errors.title && (
+                <p className="text-[11px] text-destructive font-medium mt-1">
+                  {errors.title.message}
+                </p>
+              )}
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="description">Description</FieldLabel>
+              <div className="flex items-center justify-between mb-1">
+                <FieldLabel htmlFor="create-form-desc" className="text-xs font-semibold">
+                  Description
+                </FieldLabel>
+                <CharacterCounter current={descValue.length} max={DESC_MAX} />
+              </div>
               <Textarea
-                id="description"
+                id="create-form-desc"
                 placeholder="What is this form for? (optional)"
                 rows={3}
-                {...register("description", { maxLength: 300 })}
+                maxLength={DESC_MAX}
+                {...register("description", {
+                  maxLength: {
+                    value: DESC_MAX,
+                    message: `Description cannot exceed ${DESC_MAX} characters`,
+                  },
+                })}
+                className="text-xs sm:text-sm resize-none focus-visible:ring-amber-400/40"
               />
+              {errors.description && (
+                <p className="text-[11px] text-destructive font-medium mt-1">
+                  {errors.description.message}
+                </p>
+              )}
             </Field>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">

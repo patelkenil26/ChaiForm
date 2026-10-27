@@ -4,18 +4,10 @@ import Link from "next/link";
 import {
   PencilIcon,
   BarChart3Icon,
-  ExternalLinkIcon,
   CopyIcon,
   GlobeIcon,
   LinkIcon,
-  ClockIcon,
-  UsersIcon,
-  QrCodeIcon,
-  LockIcon,
-  CopyPlusIcon,
   ArchiveIcon,
-  ArchiveRestoreIcon,
-  MoreHorizontalIcon,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -28,13 +20,6 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -44,32 +29,12 @@ import {
 } from "~/components/ui/table";
 import { Skeleton } from "~/components/ui/skeleton";
 import { landingTheme } from "~/config/landing-theme";
+import { formatRelativeTime } from "~/lib/date-utils";
+import { FormMetaBadges } from "./form-meta-badges";
+import { FormActionsDropdown } from "./form-actions-dropdown";
+import { FormMobileCard, type FormListItem } from "./form-mobile-card";
 
-function formatRelativeTime(dateInput: Date | string | null | undefined): string {
-  if (!dateInput) return "—";
-  const date = new Date(dateInput);
-  const now = new Date();
-  const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (diffSec < 60) return "Just now";
-  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
-  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
-  if (diffSec < 604800) return `${Math.floor(diffSec / 86400)}d ago`;
-  return date.toLocaleDateString([], { month: "short", day: "numeric" });
-}
-
-export interface FormListItem {
-  id: string;
-  title: string;
-  description?: string | null;
-  slug?: string | null;
-  isPublished: boolean;
-  visibility: "PUBLIC" | "UNLISTED";
-  isArchived: boolean;
-  closesAt?: Date | string | null;
-  responseLimit?: number | null;
-  isPasswordProtected?: boolean;
-  createdAt?: Date | string | null;
-}
+export type { FormListItem };
 
 interface FormsTableProps {
   forms: FormListItem[] | undefined;
@@ -121,244 +86,45 @@ export function FormsTable({
             {emptyMessage}
           </div>
         ) : (
-          forms.map((form) => {
-            const target = form.slug || form.id;
-            const isExpired = form.closesAt ? new Date() > new Date(form.closesAt) : false;
-
-            return (
-              <div
-                key={form.id}
-                className={`p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} relative overflow-hidden transition-all space-y-3 shadow-xs`}
-              >
-                <div className={landingTheme.cardBeam} />
-
-                {/* Title & Status Badge */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href={`/forms/${form.id}`}
-                      className={`font-semibold text-sm sm:text-base block truncate text-foreground ${landingTheme.linkHover}`}
-                    >
-                      {form.title}
-                    </Link>
-                    {form.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
-                        {form.description}
-                      </p>
-                    )}
-                  </div>
-                  <div className="shrink-0 flex items-center gap-1.5">
-                    {form.isArchived ? (
-                      <Badge
-                        variant="secondary"
-                        className="bg-muted text-muted-foreground text-[10px] py-0.5 px-2"
-                      >
-                        Archived
-                      </Badge>
-                    ) : form.isPublished ? (
-                      <Badge
-                        variant="default"
-                        className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] py-0.5 px-2"
-                      >
-                        Published
-                      </Badge>
-                    ) : (
-                      <Badge
-                        variant="secondary"
-                        className={`text-[10px] py-0.5 px-2 ${landingTheme.draftBadge}`}
-                      >
-                        Draft
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {/* Metadata badges */}
-                {(form.slug || form.closesAt || form.responseLimit || form.isPasswordProtected) && (
-                  <div className="flex items-center gap-1.5 flex-wrap text-xs">
-                    {form.slug && <span className={landingTheme.slugBadge}>/form/{form.slug}</span>}
-                    {form.closesAt && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <ClockIcon className={`size-3 ${landingTheme.iconColor}`} />
-                        {isExpired
-                          ? "Expired"
-                          : `Closes ${new Date(form.closesAt).toLocaleDateString()}`}
-                      </span>
-                    )}
-                    {form.responseLimit && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <UsersIcon className="size-3 text-blue-500" />
-                        Limit: {form.responseLimit}
-                      </span>
-                    )}
-                    {form.isPasswordProtected && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
-                        <LockIcon className="size-3" />
-                        Protected
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Controls: Publish Switch & Visibility Dropdown */}
-                <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/50">
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      id={`mobile-switch-${form.id}`}
-                      checked={form.isPublished}
-                      disabled={updatingId === form.id || form.isArchived}
-                      onCheckedChange={() => onTogglePublish(form.id, form.isPublished)}
-                    />
-                    <label
-                      htmlFor={`mobile-switch-${form.id}`}
-                      className="text-xs text-muted-foreground select-none cursor-pointer"
-                    >
-                      {form.isPublished ? "Accepting" : "Paused"}
-                    </label>
-                  </div>
-
-                  <Select
-                    value={form.visibility}
-                    disabled={updatingId === form.id || form.isArchived}
-                    onValueChange={(val: "PUBLIC" | "UNLISTED") => onVisibilityChange(form.id, val)}
-                  >
-                    <SelectTrigger
-                      className={`h-7 text-xs w-[105px] gap-1 border-border/70 ${landingTheme.inputFocus}`}
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="UNLISTED" className="text-xs">
-                        <span className="flex items-center gap-1.5">
-                          <LinkIcon className="size-3 text-muted-foreground" />
-                          Unlisted
-                        </span>
-                      </SelectItem>
-                      <SelectItem value="PUBLIC" className="text-xs">
-                        <span className="flex items-center gap-1.5">
-                          <GlobeIcon className={`size-3 ${landingTheme.iconColor}`} />
-                          Public
-                        </span>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Action Buttons Row */}
-                <div className="flex items-center justify-between gap-1 pt-2 border-t border-border/50">
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      asChild
-                      className={`h-7 text-xs px-2.5 gap-1 ${landingTheme.buttonOutlineHover}`}
-                    >
-                      <Link href={`/forms/${form.id}`}>
-                        <PencilIcon className="size-3" />
-                        <span>Builder</span>
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      asChild
-                      className={`h-7 text-xs px-2.5 gap-1 ${landingTheme.buttonOutlineHover}`}
-                    >
-                      <Link href={`/forms/${form.id}/submissions`}>
-                        <BarChart3Icon className={`size-3 ${landingTheme.iconColor}`} />
-                        <span>Answers</span>
-                      </Link>
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center gap-0.5">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      title="Copy Link"
-                      onClick={() => onCopyLink(target)}
-                      className="size-7"
-                    >
-                      <CopyIcon className="size-3.5" />
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" title="More options" className="size-7">
-                          <MoreHorizontalIcon className="size-3.5" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="end"
-                        className="w-44 bg-card border-border/80 shadow-lg"
-                      >
-                        <DropdownMenuItem
-                          onClick={() => onClone(form.id)}
-                          className="cursor-pointer gap-2 text-xs"
-                        >
-                          <CopyPlusIcon className="size-3.5 text-muted-foreground" />
-                          <span>Duplicate</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            onOpenQr({
-                              title: form.title,
-                              url: `${window.location.origin}/form/${target}`,
-                              slug: form.slug,
-                            });
-                          }}
-                          className="cursor-pointer gap-2 text-xs"
-                        >
-                          <QrCodeIcon className="size-3.5 text-muted-foreground" />
-                          <span>Embed & QR Code</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild className="cursor-pointer gap-2 text-xs">
-                          <Link href={`/form/${target}`} target="_blank">
-                            <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
-                            <span>Open Live</span>
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {form.isArchived ? (
-                          <DropdownMenuItem
-                            onClick={() => onToggleArchive(form.id, true)}
-                            className="cursor-pointer gap-2 text-xs text-emerald-400"
-                          >
-                            <ArchiveRestoreIcon className="size-3.5" />
-                            <span>Restore</span>
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem
-                            onClick={() => onToggleArchive(form.id, false)}
-                            className="cursor-pointer gap-2 text-xs text-muted-foreground"
-                          >
-                            <ArchiveIcon className="size-3.5" />
-                            <span>Archive</span>
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
-              </div>
-            );
-          })
+          forms.map((form) => (
+            <FormMobileCard
+              key={form.id}
+              form={form}
+              isUpdating={updatingId === form.id}
+              onTogglePublish={onTogglePublish}
+              onVisibilityChange={onVisibilityChange}
+              onCopyLink={onCopyLink}
+              onOpenQr={onOpenQr}
+              onClone={onClone}
+              onToggleArchive={onToggleArchive}
+            />
+          ))
         )}
       </div>
 
       {/* Desktop Table View (hidden md:block) */}
       <div
-        className={`hidden md:block relative rounded-xl border ${landingTheme.cardBg} shadow-xs overflow-hidden ${landingTheme.cardBorderHover} transition-all duration-200`}
+        className={`hidden md:block rounded-xl border ${landingTheme.cardBg} shadow-xs overflow-hidden ${landingTheme.cardBorderHover} transition-all duration-200`}
       >
-        <div className={landingTheme.cardBeam} />
         <Table>
-          <TableHeader className="bg-muted/40 border-b border-border/60">
-            <TableRow>
-              <TableHead className="font-semibold text-foreground">Title</TableHead>
-              <TableHead className="w-44 font-semibold text-foreground">Status</TableHead>
-              <TableHead className="w-36 font-semibold text-foreground">Visibility</TableHead>
-              <TableHead className="font-semibold text-foreground">Description</TableHead>
-              <TableHead className="w-28 font-semibold text-foreground">Created</TableHead>
-              <TableHead className="w-36 text-right font-semibold text-foreground">
+          <TableHeader className="bg-amber-500/[0.12] dark:bg-amber-500/[0.16] border-b border-amber-500/25">
+            <TableRow className="hover:bg-transparent border-b border-amber-500/20">
+              <TableHead className="font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
+                Title
+              </TableHead>
+              <TableHead className="w-44 font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
+                Status
+              </TableHead>
+              <TableHead className="w-36 font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
+                Visibility
+              </TableHead>
+              <TableHead className="font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
+                Description
+              </TableHead>
+              <TableHead className="w-32 font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
+                Created
+              </TableHead>
+              <TableHead className="w-36 text-right font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
                 Actions
               </TableHead>
             </TableRow>
@@ -404,62 +170,48 @@ export function FormsTable({
             ) : (
               forms.map((form) => {
                 const target = form.slug || form.id;
-                const isExpired = form.closesAt ? new Date() > new Date(form.closesAt) : false;
 
                 return (
-                  <TableRow key={form.id} className={landingTheme.tableRowHover}>
-                    <TableCell className="font-medium">
+                  <TableRow
+                    key={form.id}
+                    className="hover:bg-amber-500/[0.06] dark:hover:bg-amber-500/[0.07] transition-colors border-b border-border/50"
+                  >
+                    <TableCell className="font-medium py-3.5 px-4 max-w-[280px]">
                       <div className="flex items-center gap-2 flex-wrap">
                         <Link
                           href={`/forms/${form.id}`}
-                          className={`${landingTheme.linkHover} block text-foreground`}
+                          className={`${landingTheme.linkHover} block text-foreground font-semibold truncate max-w-[230px]`}
+                          title={form.title}
                         >
                           {form.title}
                         </Link>
                         {form.isArchived && (
                           <Badge
                             variant="outline"
-                            className={`text-[10px] py-0 px-1.5 gap-1 ${landingTheme.draftBadge}`}
+                            className={`text-[10px] py-0 px-1.5 gap-1 shrink-0 ${landingTheme.draftBadge}`}
                           >
                             <ArchiveIcon className="size-2.5" />
                             Archived
                           </Badge>
                         )}
                       </div>
-
-                      {(form.slug ||
-                        form.closesAt ||
-                        form.responseLimit ||
-                        form.isPasswordProtected) && (
-                        <div className="flex items-center gap-2 mt-1 flex-wrap">
-                          {form.slug && (
-                            <span className={landingTheme.slugBadge}>/form/{form.slug}</span>
-                          )}
-                          {form.closesAt && (
-                            <span
-                              className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"
-                              suppressHydrationWarning
-                            >
-                              <ClockIcon className={`size-3 ${landingTheme.iconColor}`} />
-                              {isExpired
-                                ? "Expired"
-                                : `Closes ${new Date(form.closesAt).toLocaleDateString()}`}
-                            </span>
-                          )}
-                          {form.responseLimit && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                              <UsersIcon className="size-3 text-blue-500" />
-                              Limit: {form.responseLimit}
-                            </span>
-                          )}
-                          {form.isPasswordProtected && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
-                              <LockIcon className="size-3" />
-                              Protected
-                            </span>
-                          )}
-                        </div>
+                      {form.description && (
+                        <p
+                          className="text-xs text-muted-foreground truncate max-w-[250px] mt-0.5"
+                          title={form.description}
+                        >
+                          {form.description}
+                        </p>
                       )}
+
+                      <div className="mt-1">
+                        <FormMetaBadges
+                          slug={form.slug}
+                          closesAt={form.closesAt}
+                          responseLimit={form.responseLimit}
+                          isPasswordProtected={form.isPasswordProtected}
+                        />
+                      </div>
                     </TableCell>
 
                     {/* Status Toggle & Badge */}
@@ -585,72 +337,18 @@ export function FormsTable({
                         </Button>
 
                         {/* 4. More Options Dropdown (⋯) */}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              title="More options"
-                              className={landingTheme.buttonGhostHover}
-                            >
-                              <MoreHorizontalIcon className="size-4" />
-                              <span className="sr-only">More options for {form.title}</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className="w-48 bg-card border-border/80 shadow-lg"
-                          >
-                            <DropdownMenuItem
-                              onClick={() => onClone(form.id)}
-                              className="cursor-pointer gap-2 text-xs"
-                            >
-                              <CopyPlusIcon className="size-3.5 text-muted-foreground" />
-                              <span>Duplicate Form</span>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuItem
-                              onClick={() => {
-                                onOpenQr({
-                                  title: form.title,
-                                  url: `${window.location.origin}/form/${target}`,
-                                  slug: form.slug,
-                                });
-                              }}
-                              className="cursor-pointer gap-2 text-xs"
-                            >
-                              <QrCodeIcon className="size-3.5 text-muted-foreground" />
-                              <span>Embed & QR Code</span>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuItem asChild className="cursor-pointer gap-2 text-xs">
-                              <Link href={`/form/${target}`} target="_blank">
-                                <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
-                                <span>Open Live Form</span>
-                              </Link>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuSeparator />
-
-                            {form.isArchived ? (
-                              <DropdownMenuItem
-                                onClick={() => onToggleArchive(form.id, true)}
-                                className="cursor-pointer gap-2 text-xs text-emerald-400 focus:text-emerald-300"
-                              >
-                                <ArchiveRestoreIcon className="size-3.5" />
-                                <span>Restore Form</span>
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                onClick={() => onToggleArchive(form.id, false)}
-                                className="cursor-pointer gap-2 text-xs text-muted-foreground hover:text-foreground"
-                              >
-                                <ArchiveIcon className="size-3.5" />
-                                <span>Archive Form</span>
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <FormActionsDropdown
+                          formId={form.id}
+                          formTitle={form.title}
+                          target={target}
+                          slug={form.slug}
+                          isArchived={form.isArchived}
+                          onClone={onClone}
+                          onOpenQr={onOpenQr}
+                          onToggleArchive={onToggleArchive}
+                          triggerClassName={landingTheme.buttonGhostHover}
+                          iconClassName="size-4"
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

@@ -226,21 +226,28 @@ export function SubmissionsTable({
       )}
 
       {/* Main Table Container */}
-      <div className="rounded-xl border overflow-hidden bg-card shadow-xs">
+      <div className="rounded-xl border border-border/80 overflow-hidden bg-card shadow-xs">
         <Table>
-          <TableHeader className="bg-muted/60">
-            <TableRow>
-              <TableHead className="w-44 font-semibold">Submitted At</TableHead>
+          <TableHeader className="bg-amber-500/[0.12] dark:bg-amber-500/[0.16] border-b border-amber-500/25">
+            <TableRow className="hover:bg-transparent border-b border-amber-500/20">
+              <TableHead className="w-48 text-xs font-bold uppercase tracking-wider text-foreground py-3.5 px-4">
+                Submitted At
+              </TableHead>
               {isLoading
                 ? Array.from({ length: 3 }).map((_, i) => (
-                    <TableHead key={i}>
+                    <TableHead key={i} className="py-3.5 px-4">
                       <Skeleton className="h-4 w-24" />
                     </TableHead>
                   ))
                 : sortedFields.map((field) => (
-                    <TableHead key={field.id} className="font-semibold">
-                      {field.label}
-                      {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
+                    <TableHead
+                      key={field.id}
+                      className="text-xs font-bold uppercase tracking-wider text-foreground py-3.5 px-4 max-w-[240px]"
+                    >
+                      <span className="truncate block" title={field.label}>
+                        {field.label}
+                        {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
+                      </span>
                     </TableHead>
                   ))}
             </TableRow>
@@ -318,9 +325,12 @@ export function SubmissionsTable({
                 );
 
                 return (
-                  <TableRow key={submission.id} className="hover:bg-muted/40 transition-colors">
+                  <TableRow
+                    key={submission.id}
+                    className="hover:bg-amber-500/[0.06] dark:hover:bg-amber-500/[0.07] transition-colors border-b border-border/60"
+                  >
                     <TableCell
-                      className="text-muted-foreground text-sm whitespace-nowrap font-mono text-xs"
+                      className="text-muted-foreground text-xs whitespace-nowrap font-mono py-3.5 px-4"
                       suppressHydrationWarning
                     >
                       {submission.createdAt
@@ -333,7 +343,10 @@ export function SubmissionsTable({
                     {sortedFields.map((field) => {
                       const val = valueMap.get(field.id);
                       return (
-                        <TableCell key={field.id} className="text-sm">
+                        <TableCell
+                          key={field.id}
+                          className="text-sm py-3.5 px-4 text-foreground max-w-[240px]"
+                        >
                           {val !== undefined && val !== "" ? (
                             field.type === "RATING" ? (
                               <span
@@ -345,7 +358,9 @@ export function SubmissionsTable({
                                 <span>{val} / 5</span>
                               </span>
                             ) : (
-                              val
+                              <span className="truncate block max-w-[220px]" title={String(val)}>
+                                {String(val)}
+                              </span>
                             )
                           ) : (
                             <span className="text-muted-foreground/40 italic">—</span>

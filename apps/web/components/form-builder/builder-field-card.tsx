@@ -1,28 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import {
   PencilIcon,
   Trash2Icon,
   GripVerticalIcon,
   CheckIcon,
-  PlusIcon,
-  XIcon,
   ChevronUpIcon,
   ChevronDownIcon,
-  TypeIcon,
-  AlignLeftIcon,
-  MailIcon,
-  HashIcon,
-  PhoneIcon,
-  GlobeIcon,
-  CheckSquareIcon,
-  RadioIcon,
-  ChevronDownSquareIcon,
-  ToggleLeftIcon,
-  StarIcon,
-  CalendarIcon,
-  ClockIcon,
 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -38,44 +22,14 @@ import {
   FIELD_TYPES,
   FIELD_TYPE_LABELS,
   getFieldPlaceholder,
+  getFieldIcon,
   toLabelKey,
   type FieldRow,
   type FieldType,
 } from "./field-types";
+import { CharacterCounter } from "~/components/ui/character-counter";
+import { FieldOptionsEditor } from "./field-options-editor";
 import { landingTheme } from "~/config/landing-theme";
-
-function getFieldIcon(type: FieldType) {
-  switch (type) {
-    case "TEXT":
-      return TypeIcon;
-    case "TEXTAREA":
-      return AlignLeftIcon;
-    case "EMAIL":
-      return MailIcon;
-    case "NUMBER":
-      return HashIcon;
-    case "PHONE":
-      return PhoneIcon;
-    case "URL":
-      return GlobeIcon;
-    case "CHECKBOX":
-      return CheckSquareIcon;
-    case "RADIO":
-      return RadioIcon;
-    case "SELECT":
-      return ChevronDownSquareIcon;
-    case "YES_NO":
-      return ToggleLeftIcon;
-    case "RATING":
-      return StarIcon;
-    case "DATE":
-      return CalendarIcon;
-    case "TIME":
-      return ClockIcon;
-    default:
-      return TypeIcon;
-  }
-}
 
 export type ExtendedFieldRow = FieldRow & {
   isDraft?: boolean;
@@ -113,27 +67,8 @@ export function BuilderFieldCard({
   onDropRow,
   onDragEndRow,
 }: BuilderFieldCardProps) {
-  const [newOption, setNewOption] = useState("");
   const isChoice = field.type === "SELECT" || field.type === "RADIO" || field.type === "CHECKBOX";
   const slug = toLabelKey(field.label) || "field_slug";
-
-  const handleAddOption = () => {
-    if (!newOption.trim()) return;
-    const currentOptions = field.options || [];
-    onUpdate({
-      ...field,
-      options: [...currentOptions, newOption.trim()],
-    });
-    setNewOption("");
-  };
-
-  const handleRemoveOption = (optIndex: number) => {
-    const currentOptions = field.options || [];
-    onUpdate({
-      ...field,
-      options: currentOptions.filter((_, i) => i !== optIndex),
-    });
-  };
 
   return (
     <div
@@ -228,26 +163,34 @@ export function BuilderFieldCard({
           {isEditMode ? (
             <div className="flex flex-col gap-1 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <Input
-                  value={field.label}
-                  placeholder={field.placeholder || getFieldPlaceholder(field.type)}
-                  draggable={false}
-                  onDragStart={(e) => e.stopPropagation()}
-                  onChange={(e) =>
-                    onUpdate({
-                      ...field,
-                      label: e.target.value,
-                      labelKey: toLabelKey(e.target.value),
-                      hasError: false,
-                    })
-                  }
-                  className={`h-8 text-sm font-medium rounded-lg w-full sm:w-auto sm:max-w-md bg-background/80 transition ${
-                    field.hasError
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : "border-border/80 focus-visible:ring-amber-500/30 focus-visible:border-amber-500/50"
-                  }`}
-                  autoFocus={!field.label}
-                />
+                <div className="relative flex-1 sm:max-w-md w-full">
+                  <Input
+                    value={field.label}
+                    placeholder={field.placeholder || getFieldPlaceholder(field.type)}
+                    draggable={false}
+                    maxLength={100}
+                    onDragStart={(e) => e.stopPropagation()}
+                    onChange={(e) =>
+                      onUpdate({
+                        ...field,
+                        label: e.target.value,
+                        labelKey: toLabelKey(e.target.value),
+                        hasError: false,
+                      })
+                    }
+                    className={`h-8 text-sm font-medium rounded-lg w-full pr-14 bg-background/80 transition ${
+                      field.hasError
+                        ? "border-destructive focus-visible:ring-destructive"
+                        : "border-border/80 focus-visible:ring-amber-500/30 focus-visible:border-amber-500/50"
+                    }`}
+                    autoFocus={!field.label}
+                  />
+                  <CharacterCounter
+                    current={field.label?.length || 0}
+                    max={100}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                  />
+                </div>
 
                 {/* Inline Type Selector */}
                 <Select
@@ -323,11 +266,17 @@ export function BuilderFieldCard({
                     Q{index + 1}
                   </span>
                   {field.label ? (
-                    <span className="font-semibold text-sm text-foreground tracking-tight">
+                    <span
+                      className="font-semibold text-sm text-foreground tracking-tight truncate max-w-[200px] sm:max-w-md block"
+                      title={field.label}
+                    >
                       {field.label}
                     </span>
                   ) : (
-                    <span className="font-medium text-sm text-muted-foreground/70 italic tracking-tight">
+                    <span
+                      className="font-medium text-sm text-muted-foreground/70 italic tracking-tight truncate max-w-[200px] sm:max-w-md block"
+                      title={field.placeholder || "Untitled Question (Click to edit)"}
+                    >
                       {field.placeholder || "Untitled Question (Click to edit)"}
                     </span>
                   )}
@@ -431,51 +380,11 @@ export function BuilderFieldCard({
 
       {/* Choice Options Editor (Only if select/radio/checkbox and in edit mode) */}
       {isChoice && isEditMode && (
-        <div className="pl-0 sm:pl-6.5 pt-1 flex flex-col gap-1.5 border-t border-border/40 mt-1">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[11px] text-muted-foreground font-medium">Choices:</span>
-            {(field.options || []).map((opt, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-muted/80 text-foreground border border-border/50"
-              >
-                {opt}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveOption(i)}
-                  className="hover:text-destructive cursor-pointer"
-                  title="Remove option"
-                >
-                  <XIcon className="size-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 max-w-xs">
-            <Input
-              value={newOption}
-              onChange={(e) => setNewOption(e.target.value)}
-              placeholder="Add another option..."
-              className="h-7 text-xs rounded-md"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddOption();
-                }
-              }}
-            />
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={handleAddOption}
-              className="h-7 px-2 text-xs gap-1"
-            >
-              <PlusIcon className="size-3" />
-              <span>Add</span>
-            </Button>
-          </div>
+        <div className="pl-0 sm:pl-6.5 pt-1 border-t border-border/40 mt-1">
+          <FieldOptionsEditor
+            options={field.options || []}
+            onChange={(newOptions) => onUpdate({ ...field, options: newOptions })}
+          />
         </div>
       )}
 

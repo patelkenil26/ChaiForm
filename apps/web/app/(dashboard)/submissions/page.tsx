@@ -33,24 +33,14 @@ import {
   type SubmissionField,
   type SubmissionItem,
 } from "~/components/submissions/submissions-table";
+import { SubmissionsSummaryCards } from "~/components/submissions/submissions-summary-cards";
 import { FormAnalyticsView } from "~/components/analytics/form-analytics-view";
 import { useListForms } from "~/hooks/api/form";
 import { useGetFields } from "~/hooks/api/form-field";
 import { useGetFormSubmissions } from "~/hooks/api/form-submission";
 import { useUser } from "~/hooks/api/auth";
 import { landingTheme } from "~/config/landing-theme";
-
-function formatRelativeTime(dateInput: Date | string | null | undefined): string {
-  if (!dateInput) return "—";
-  const date = new Date(dateInput);
-  const now = new Date();
-  const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (diffSec < 60) return "Just now";
-  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
-  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
-  if (diffSec < 604800) return `${Math.floor(diffSec / 86400)}d ago`;
-  return date.toLocaleDateString([], { month: "short", day: "numeric" });
-}
+import { formatRelativeTime } from "~/lib/date-utils";
 
 function SubmissionsHubContent() {
   const router = useRouter();
@@ -284,75 +274,14 @@ function SubmissionsHubContent() {
 
       {/* Summary Stats Row */}
       {currentForm && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-          {/* Card 1: Total Responses (Amber/Gold) */}
-          <Card
-            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} hover:border-amber-400/50 transition-all duration-200 overflow-hidden group`}
-          >
-            <div className={landingTheme.cardBeam} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Responses
-            </span>
-            <div className="mt-1.5 flex items-baseline gap-2">
-              <span className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
-                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : submissionsCount}
-              </span>
-              <span className="text-[11px] text-muted-foreground">collected</span>
-            </div>
-          </Card>
-
-          {/* Card 2: Form Questions */}
-          <Card
-            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
-          >
-            <div className={landingTheme.cardBeam} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Form Questions
-            </span>
-            <div className="mt-1.5 flex items-baseline gap-2">
-              <span className={`text-2xl sm:text-3xl font-extrabold ${landingTheme.primaryText}`}>
-                {fieldsLoading ? <Skeleton className="h-7 w-12" /> : fieldsCount}
-              </span>
-              <span className="text-[11px] text-muted-foreground">fields</span>
-            </div>
-          </Card>
-
-          {/* Card 3: Last Response */}
-          <Card
-            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
-          >
-            <div className={landingTheme.cardBeam} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Last Response
-            </span>
-            <div className="mt-1.5 flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : lastResponse}
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                {submissionsCount > 0 ? "activity" : "none yet"}
-              </span>
-            </div>
-          </Card>
-
-          {/* Card 4: Avg Completion Time */}
-          <Card
-            className={`relative p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200 overflow-hidden group`}
-          >
-            <div className={landingTheme.cardBeam} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Avg. Completion
-            </span>
-            <div className="mt-1.5 flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                {submissionsLoading ? <Skeleton className="h-7 w-12" /> : avgCompletionTime}
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                {submissionsCount > 0 ? "pace" : "estimate"}
-              </span>
-            </div>
-          </Card>
-        </div>
+        <SubmissionsSummaryCards
+          submissionsCount={submissionsCount}
+          fieldsCount={fieldsCount}
+          lastResponse={lastResponse}
+          avgCompletionTime={avgCompletionTime}
+          submissionsLoading={submissionsLoading}
+          fieldsLoading={fieldsLoading}
+        />
       )}
 
       {/* Main Content Tabs: Analytics vs Responses Table */}
