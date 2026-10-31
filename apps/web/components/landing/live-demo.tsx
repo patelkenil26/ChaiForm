@@ -173,7 +173,6 @@ export function LiveDemoSection() {
                   Type any name to test instant live response capturing.
                 </p>
                 <Input
-                  autoFocus
                   placeholder="e.g. Acme Studio or ChaiAI"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}

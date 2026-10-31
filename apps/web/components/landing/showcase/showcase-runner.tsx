@@ -133,7 +133,6 @@ export function ShowcaseRunner() {
 
           <div className="pt-2">
             <Input
-              autoFocus
               placeholder="e.g. Sarah Connor / Acme Corp"
               value={name}
               onChange={(e) => setName(e.target.value)}

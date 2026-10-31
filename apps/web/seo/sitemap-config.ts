@@ -21,9 +21,14 @@ export const PUBLIC_ROUTES: Array<{
     priority: 1.0, // Primary homepage
   },
   {
-    path: "/templates",
-    changeFrequency: "daily",
-    priority: 0.9, // High commercial intent
+    path: "/features",
+    changeFrequency: "weekly",
+    priority: 0.9, // Core product features & conversational capabilities
+  },
+  {
+    path: "/integrations",
+    changeFrequency: "weekly",
+    priority: 0.85, // High-intent framework embed & webhook integrations
   },
   {
     path: "/pricing",

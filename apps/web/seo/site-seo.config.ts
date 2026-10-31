@@ -17,7 +17,7 @@ export const SITE_CONFIG = {
     name: "Kenil Patel",
     url: "https://kenilpatel.in",
     role: "Full Stack Engineer & Creator",
-    github: "https://github.com/kenilpatel",
+    github: "https://github.com/patelkenil26",
     twitter: "https://x.com/kenilpatel",
     linkedin: "https://linkedin.com/in/kenilpatel",
     email: "support@chaiform.kenilpatel.in",

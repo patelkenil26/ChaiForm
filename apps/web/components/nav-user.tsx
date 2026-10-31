@@ -61,8 +61,15 @@ export function NavUser({
     const toastId = toast.loading("Logging out...");
 
     try {
-      // 1. Call tRPC backend procedure to clear HTTP-only cookie on Express API
-      await signOutAsync();
+      // 1. Call tRPC backend procedure to clear HTTP-only cookie on Express API with 3.5s timeout
+      await Promise.race([
+        signOutAsync(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Sign out network request timed out")), 3500),
+        ),
+      ]).catch((err) => {
+        console.warn("Backend signOut response delayed or failed, continuing cleanup:", err);
+      });
 
       // 2. Call Next.js route handler to clear cookie in Next.js server cookie store
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
@@ -193,7 +200,14 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleLogout}
+              onSelect={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
               disabled={isLoggingOut}
               className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-2 font-medium"
             >

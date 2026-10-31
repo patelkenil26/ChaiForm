@@ -8,7 +8,8 @@ import { SITE_CONFIG, DISALLOWED_ROBOT_PATHS } from "~/seo";
 export default function robots(): MetadataRoute.Robots {
   const publicAllowedPaths = [
     "/",
-    "/templates",
+    "/features",
+    "/integrations",
     "/pricing",
     "/form/*",
     "/terms",

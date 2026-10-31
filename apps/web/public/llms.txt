@@ -30,8 +30,9 @@
 
 ## Core Documentation & Navigation URLs
 - [Home & Form Builder](https://chaiform.kenilpatel.in/): Build, preview, and test conversational forms.
-- [Form Templates Gallery](https://chaiform.kenilpatel.in/templates): Curated templates for RSVPs, customer feedback, job applications, and lead generation.
-- [Pricing](https://chaiform.kenilpatel.in/pricing): Honest, transparent tier breakdown.
+- [Features](https://chaiform.kenilpatel.in/features): 14 input field types, QR code studio, keyboard navigation, password gating, and response limits.
+- [Integrations](https://chaiform.kenilpatel.in/integrations): Next.js, React, Webflow, and HTML iframe embed snippets with real-time CSV/JSON export.
+- [Pricing](https://chaiform.kenilpatel.in/pricing): Honest, transparent tier breakdown with 250 free monthly submissions.
 - [Create Free Account](https://chaiform.kenilpatel.in/signup): Quick 60-second sign up.
 - [Terms of Service](https://chaiform.kenilpatel.in/terms): Usage policies.
 - [Privacy Policy](https://chaiform.kenilpatel.in/privacy): Security and data handling.
