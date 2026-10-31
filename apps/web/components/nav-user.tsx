@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   IconCreditCard,
   IconDotsVertical,
@@ -43,6 +44,7 @@ export function NavUser({
   const { isMobile, setOpenMobile } = useSidebar();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { signOutAsync } = useSignOut();
+  const queryClient = useQueryClient();
 
   const isLoggedIn = Boolean(user.email && user.email !== "user@example.com");
 
@@ -63,7 +65,7 @@ export function NavUser({
     try {
       // 1. Call tRPC backend procedure to clear HTTP-only cookie on Express API with 3.5s timeout
       await Promise.race([
-        signOutAsync(),
+        signOutAsync({}),
         new Promise((_, reject) =>
           setTimeout(() => reject(new Error("Sign out network request timed out")), 3500),
         ),
@@ -71,25 +73,29 @@ export function NavUser({
         console.warn("Backend signOut response delayed or failed, continuing cleanup:", err);
       });
 
-      // 2. Call Next.js route handler to clear cookie in Next.js server cookie store
+      // 2. Clear all TanStack query caches in memory
+      queryClient.clear();
+
+      // 3. Call Next.js route handler to clear cookie in Next.js server cookie store
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
 
-      // 3. Fallback client-side cookie deletion
+      // 4. Fallback client-side cookie deletion
       document.cookie =
         "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
       toast.success("Logged out successfully!", { id: toastId });
 
-      // 4. Hard redirect to /login to completely reset client memory and re-check session
-      window.location.href = "/login";
+      // 5. Hard replace redirect to /login to completely reset client memory and re-check session
+      window.location.replace("/login");
     } catch (error) {
       console.error("Logout error:", error);
       // Fallback clean and redirect even if backend was unreachable
+      queryClient.clear();
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
       document.cookie =
         "authentication-token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       toast.success("Logged out", { id: toastId });
-      window.location.href = "/login";
+      window.location.replace("/login");
     } finally {
       setIsLoggingOut(false);
     }

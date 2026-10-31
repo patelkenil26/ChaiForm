@@ -13,6 +13,7 @@ import { env } from "./env";
 import cookieParser from "cookie-parser";
 
 export const app = express();
+app.set("trust proxy", 1);
 const openApiDocument = generateOpenApiDocument(serverRouter, {
   title: " OpenAPI",
   version: "1.0.0",
@@ -102,4 +103,3 @@ app.use((err: unknown, req: express.Request, res: express.Response, next: expres
 });
 
 export default app;
-
