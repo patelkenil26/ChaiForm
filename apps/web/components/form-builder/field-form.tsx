@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { Loader2 } from "lucide-react";
+import { IconLoader2 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
@@ -162,7 +162,7 @@ export function FieldForm({
           disabled={isSubmitting}
           className={`gap-2 ${landingTheme.primaryButton}`}
         >
-          {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+          {isSubmitting && <IconLoader2 className="size-4 animate-spin" />}
           {isSubmitting ? "Saving..." : submitLabel}
         </Button>
       </DialogFooter>

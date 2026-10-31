@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import {
-  MoreHorizontalIcon,
-  CopyPlusIcon,
-  QrCodeIcon,
-  ExternalLinkIcon,
-  ArchiveRestoreIcon,
-  ArchiveIcon,
-} from "lucide-react";
+  IconDots,
+  IconCopy,
+  IconQrcode,
+  IconExternalLink,
+  IconArchiveOff,
+  IconArchive,
+} from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -46,14 +46,19 @@ export function FormActionsDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" title="More options" className={triggerClassName}>
-          <MoreHorizontalIcon className={iconClassName} />
+        <Button
+          variant="ghost"
+          size="icon"
+          title="More options"
+          className={`${triggerClassName} cursor-pointer`}
+        >
+          <IconDots className={iconClassName} />
           <span className="sr-only">More options for {formTitle}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48 bg-card border-border/80 shadow-lg">
         <DropdownMenuItem onClick={() => onClone(formId)} className="cursor-pointer gap-2 text-xs">
-          <CopyPlusIcon className="size-3.5 text-muted-foreground" />
+          <IconCopy className="size-3.5 text-muted-foreground" />
           <span>Duplicate Form</span>
         </DropdownMenuItem>
 
@@ -67,13 +72,13 @@ export function FormActionsDropdown({
           }}
           className="cursor-pointer gap-2 text-xs"
         >
-          <QrCodeIcon className="size-3.5 text-muted-foreground" />
+          <IconQrcode className="size-3.5 text-muted-foreground" />
           <span>Embed &amp; QR Code</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild className="cursor-pointer gap-2 text-xs">
           <Link href={`/form/${target}`} target="_blank">
-            <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
+            <IconExternalLink className="size-3.5 text-muted-foreground" />
             <span>Open Live Form</span>
           </Link>
         </DropdownMenuItem>
@@ -83,9 +88,9 @@ export function FormActionsDropdown({
         {isArchived ? (
           <DropdownMenuItem
             onClick={() => onToggleArchive(formId, true)}
-            className="cursor-pointer gap-2 text-xs text-emerald-400 focus:text-emerald-300"
+            className="cursor-pointer gap-2 text-xs text-emerald-600 dark:text-emerald-400 focus:text-emerald-500"
           >
-            <ArchiveRestoreIcon className="size-3.5" />
+            <IconArchiveOff className="size-3.5" />
             <span>Restore Form</span>
           </DropdownMenuItem>
         ) : (
@@ -93,7 +98,7 @@ export function FormActionsDropdown({
             onClick={() => onToggleArchive(formId, false)}
             className="cursor-pointer gap-2 text-xs text-muted-foreground hover:text-foreground"
           >
-            <ArchiveIcon className="size-3.5" />
+            <IconArchive className="size-3.5" />
             <span>Archive Form</span>
           </DropdownMenuItem>
         )}

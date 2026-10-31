@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PencilIcon, BarChart3Icon, CopyIcon, LinkIcon, GlobeIcon } from "lucide-react";
+import { IconPencil, IconChartBar, IconCopy, IconLink, IconWorld } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
@@ -87,14 +87,14 @@ export function FormMobileCard({
           ) : form.isPublished ? (
             <Badge
               variant="default"
-              className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] py-0.5 px-2"
+              className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px] py-0.5 px-2 font-medium"
             >
               Published
             </Badge>
           ) : (
             <Badge
               variant="secondary"
-              className={`text-[10px] py-0.5 px-2 ${landingTheme.draftBadge}`}
+              className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 text-[10px] py-0.5 px-2 font-medium"
             >
               Draft
             </Badge>
@@ -133,20 +133,20 @@ export function FormMobileCard({
           onValueChange={(val: "PUBLIC" | "UNLISTED") => onVisibilityChange(form.id, val)}
         >
           <SelectTrigger
-            className={`h-7 text-xs w-[105px] gap-1 border-border/70 ${landingTheme.inputFocus}`}
+            className={`h-7 text-xs w-[110px] gap-1 border-border/70 ${landingTheme.inputFocus}`}
           >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="UNLISTED" className="text-xs">
               <span className="flex items-center gap-1.5">
-                <LinkIcon className="size-3 text-muted-foreground" />
+                <IconLink className="size-3 text-muted-foreground" />
                 Unlisted
               </span>
             </SelectItem>
             <SelectItem value="PUBLIC" className="text-xs">
               <span className="flex items-center gap-1.5">
-                <GlobeIcon className={`size-3 ${landingTheme.iconColor}`} />
+                <IconWorld className={`size-3 ${landingTheme.iconColor}`} />
                 Public
               </span>
             </SelectItem>
@@ -156,15 +156,15 @@ export function FormMobileCard({
 
       {/* Action Buttons Row */}
       <div className="flex items-center justify-between gap-1 pt-2 border-t border-border/50">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <Button
             variant="outline"
             size="sm"
             asChild
-            className={`h-7 text-xs px-2.5 gap-1 ${landingTheme.buttonOutlineHover}`}
+            className={`h-7.5 text-xs px-2.5 gap-1.5 cursor-pointer ${landingTheme.buttonOutlineHover}`}
           >
             <Link href={`/forms/${form.id}`}>
-              <PencilIcon className="size-3" />
+              <IconPencil className="size-3.5" />
               <span>Builder</span>
             </Link>
           </Button>
@@ -172,24 +172,24 @@ export function FormMobileCard({
             variant="outline"
             size="sm"
             asChild
-            className={`h-7 text-xs px-2.5 gap-1 ${landingTheme.buttonOutlineHover}`}
+            className={`h-7.5 text-xs px-2.5 gap-1.5 cursor-pointer ${landingTheme.buttonOutlineHover}`}
           >
             <Link href={`/forms/${form.id}/submissions`}>
-              <BarChart3Icon className={`size-3 ${landingTheme.iconColor}`} />
+              <IconChartBar className={`size-3.5 ${landingTheme.iconColor}`} />
               <span>Answers</span>
             </Link>
           </Button>
         </div>
 
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
             title="Copy Link"
             onClick={() => onCopyLink(target)}
-            className="size-7"
+            className="size-7.5 cursor-pointer hover:bg-muted/60"
           >
-            <CopyIcon className="size-3.5" />
+            <IconCopy className="size-3.5" />
           </Button>
 
           <FormActionsDropdown
@@ -201,7 +201,7 @@ export function FormMobileCard({
             onClone={onClone}
             onOpenQr={onOpenQr}
             onToggleArchive={onToggleArchive}
-            triggerClassName="size-7"
+            triggerClassName="size-7.5"
             iconClassName="size-3.5"
           />
         </div>

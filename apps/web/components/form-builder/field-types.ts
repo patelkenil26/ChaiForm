@@ -108,54 +108,54 @@ export function getFieldPlaceholder(type: FieldType): string {
 }
 
 import {
-  TypeIcon,
-  AlignLeftIcon,
-  MailIcon,
-  HashIcon,
-  PhoneIcon,
-  GlobeIcon,
-  CheckSquareIcon,
-  RadioIcon,
-  ChevronDownSquareIcon,
-  ToggleLeftIcon,
-  StarIcon,
-  CalendarIcon,
-  ClockIcon,
-  LockIcon,
-  type LucideIcon,
-} from "lucide-react";
+  IconTypography,
+  IconAlignLeft,
+  IconMail,
+  IconHash,
+  IconPhone,
+  IconWorld,
+  IconCheckbox,
+  IconCircleDot,
+  IconChevronDown,
+  IconToggleLeft,
+  IconStar,
+  IconCalendar,
+  IconClock,
+  IconKey,
+  type Icon,
+} from "@tabler/icons-react";
 
-export function getFieldIcon(type: FieldType): LucideIcon {
+export function getFieldIcon(type: FieldType): Icon {
   switch (type) {
     case "TEXT":
-      return TypeIcon;
+      return IconTypography;
     case "TEXTAREA":
-      return AlignLeftIcon;
+      return IconAlignLeft;
     case "EMAIL":
-      return MailIcon;
+      return IconMail;
     case "NUMBER":
-      return HashIcon;
+      return IconHash;
     case "PHONE":
-      return PhoneIcon;
+      return IconPhone;
     case "URL":
-      return GlobeIcon;
+      return IconWorld;
     case "CHECKBOX":
-      return CheckSquareIcon;
+      return IconCheckbox;
     case "RADIO":
-      return RadioIcon;
+      return IconCircleDot;
     case "SELECT":
-      return ChevronDownSquareIcon;
+      return IconChevronDown;
     case "YES_NO":
-      return ToggleLeftIcon;
+      return IconToggleLeft;
     case "RATING":
-      return StarIcon;
+      return IconStar;
     case "DATE":
-      return CalendarIcon;
+      return IconCalendar;
     case "TIME":
-      return ClockIcon;
+      return IconClock;
     case "PASSWORD":
-      return LockIcon;
+      return IconKey;
     default:
-      return TypeIcon;
+      return IconTypography;
   }
 }

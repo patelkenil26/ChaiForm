@@ -231,28 +231,33 @@ function SubmissionsHubContent() {
               <Button
                 variant="outline"
                 size="sm"
-                className={`h-9 gap-1.5 text-xs ${landingTheme.buttonOutlineHover}`}
+                className={`h-9 gap-1.5 text-xs border-border/70 ${landingTheme.buttonOutlineHover}`}
                 onClick={handleCopyLink}
-                title="Copy Public Link"
+                title="Copy public link to share on WhatsApp or Email"
               >
                 {copied ? (
-                  <IconCheck className="size-3.5 text-emerald-500" />
+                  <>
+                    <IconCheck className="size-3.5 text-emerald-400" />
+                    <span className="text-emerald-400 font-semibold">Copied</span>
+                  </>
                 ) : (
-                  <IconCopy className="size-3.5" />
+                  <>
+                    <IconCopy className="size-3.5 text-muted-foreground" />
+                    <span className="hidden sm:inline">Share Form</span>
+                  </>
                 )}
-                <span className="hidden md:inline">Share</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="sm"
-                className={`h-9 gap-1.5 text-xs ${landingTheme.buttonOutlineHover}`}
+                className={`h-9 gap-1.5 text-xs border-border/70 ${landingTheme.buttonOutlineHover}`}
                 asChild
-                title="Open Form Builder"
+                title="Open form builder to edit questions and fields"
               >
                 <Link href={`/forms/${currentForm.id}`}>
-                  <IconPencil className="size-3.5" />
-                  <span className="hidden md:inline">Builder</span>
+                  <IconPencil className="size-3.5 text-muted-foreground" />
+                  <span className="hidden sm:inline">Edit Questions</span>
                 </Link>
               </Button>
 
@@ -260,11 +265,11 @@ function SubmissionsHubContent() {
                 size="sm"
                 className={`h-9 gap-1.5 text-xs ${landingTheme.primaryButton}`}
                 asChild
-                title="Open Live Public Form"
+                title="Open live public form in a new tab"
               >
                 <Link href={`/form/${formTarget}`} target="_blank">
                   <IconExternalLink className="size-3.5" />
-                  <span>Live Form</span>
+                  <span>Open Live Form</span>
                 </Link>
               </Button>
             </div>
@@ -284,7 +289,7 @@ function SubmissionsHubContent() {
         />
       )}
 
-      {/* Main Content Tabs: Analytics vs Responses Table */}
+      {/* Main Content Tabs: Responses Table vs Analytics */}
       <Tabs defaultValue="responses" className="w-full">
         <TabsList className="mb-2 inline-flex h-9 items-center p-0.5 rounded-lg bg-muted/30 border border-border/50 gap-1">
           <TabsTrigger
@@ -327,6 +332,7 @@ function SubmissionsHubContent() {
             isLoading={isDataLoading}
             formTitle={currentForm?.title}
             onCopyShareLink={handleCopyLink}
+            formSlugOrId={currentForm?.slug || currentForm?.id}
           />
         </TabsContent>
       </Tabs>

@@ -2,18 +2,18 @@
 
 import React, { useState } from "react";
 import {
-  CodeIcon,
-  CopyIcon,
-  CheckIcon,
-  SparklesIcon,
-  LayersIcon,
-  SunIcon,
-  MoonIcon,
-  HelpCircleIcon,
-  ExternalLinkIcon,
-  EyeIcon,
-  SmartphoneIcon,
-} from "lucide-react";
+  IconCode,
+  IconCopy,
+  IconCheck,
+  IconSparkles,
+  IconStack2,
+  IconSun,
+  IconMoon,
+  IconHelpCircle,
+  IconExternalLink,
+  IconEye,
+  IconDeviceMobile,
+} from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -69,7 +69,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
       <div
         className={`flex items-start gap-2.5 p-3 rounded-xl border ${landingTheme.callout.border} ${landingTheme.callout.bg} text-xs ${landingTheme.callout.text}`}
       >
-        <SparklesIcon className={`size-4 ${landingTheme.callout.accent} shrink-0 mt-0.5`} />
+        <IconSparkles className={`size-4 ${landingTheme.callout.accent} shrink-0 mt-0.5`} />
         <div className="min-w-0 flex-1 leading-relaxed">
           <span className={`font-semibold ${landingTheme.callout.accent}`}>
             Live Auto-Sync Enabled:{" "}
@@ -84,7 +84,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
         {/* Theme Mode Selector */}
         <div className="space-y-1.5 min-w-0">
           <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-            <LayersIcon className="size-3" /> Background Theme
+            <IconStack2 className="size-3" /> Background Theme
           </label>
           <div className="grid grid-cols-3 gap-1 p-1 bg-muted/60 rounded-lg border border-border/40 text-xs">
             <button
@@ -108,7 +108,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <MoonIcon className="size-3 shrink-0" />
+              <IconMoon className="size-3 shrink-0" />
               <span>Dark</span>
             </button>
             <button
@@ -120,7 +120,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <SunIcon className="size-3 shrink-0" />
+              <IconSun className="size-3 shrink-0" />
               <span>Light</span>
             </button>
           </div>
@@ -129,7 +129,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
         {/* Embed Mode */}
         <div className="space-y-1.5 min-w-0">
           <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-            <CodeIcon className="size-3" /> Embed Engine
+            <IconCode className="size-3" /> Embed Engine
           </label>
           <div className="grid grid-cols-2 gap-1 p-1 bg-muted/60 rounded-lg border border-border/40 text-xs">
             <button
@@ -202,12 +202,12 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
           >
             {copied ? (
               <>
-                <CheckIcon className="size-3.5" />
+                <IconCheck className="size-3.5" />
                 <span>Copied!</span>
               </>
             ) : (
               <>
-                <CopyIcon className="size-3.5" />
+                <IconCopy className="size-3.5" />
                 <span>Copy Embed Code</span>
               </>
             )}
@@ -230,7 +230,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
             onClick={() => setShowPreview(!showPreview)}
             className="flex items-center gap-1.5 hover:text-foreground cursor-pointer transition font-medium"
           >
-            <EyeIcon className={`size-3.5 ${landingTheme.iconColor}`} />
+            <IconEye className={`size-3.5 ${landingTheme.iconColor}`} />
             <span>{showPreview ? "Hide Preview" : "Preview Embedded Form"}</span>
           </button>
           <a
@@ -240,7 +240,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
             className="flex items-center gap-1 hover:text-primary transition"
           >
             <span>Open preview tab</span>
-            <ExternalLinkIcon className="size-3" />
+            <IconExternalLink className="size-3" />
           </a>
         </div>
 
@@ -257,7 +257,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
           >
             <div className="flex items-center justify-between text-[10px] uppercase font-mono tracking-wider text-muted-foreground mb-2 pb-1.5 border-b border-border/40">
               <span className="flex items-center gap-1">
-                <SmartphoneIcon className="size-3" />
+                <IconDeviceMobile className="size-3" />
                 Live Embedded Mockup
               </span>
               <span>Theme: {theme}</span>
@@ -277,7 +277,7 @@ export function EmbedCodeTab({ url, title, slug }: EmbedCodeTabProps) {
       <div className="rounded-xl border border-border/60 bg-muted/30 p-3 text-xs w-full min-w-0">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-1.5 font-semibold text-foreground">
-            <HelpCircleIcon className="size-3.5 text-muted-foreground shrink-0" />
+            <IconHelpCircle className="size-3.5 text-muted-foreground shrink-0" />
             <span>Quick Setup Guide:</span>
           </div>
           <div className="flex flex-wrap gap-1">

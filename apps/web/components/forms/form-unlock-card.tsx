@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { LockIcon, EyeIcon, EyeOffIcon, ArrowRightIcon, ShieldCheckIcon } from "lucide-react";
+import {
+  IconLock,
+  IconEye,
+  IconEyeOff,
+  IconArrowRight,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -47,9 +53,9 @@ export function FormUnlockCard({
         <div
           className={`relative mx-auto size-16 rounded-2xl ${landingTheme.iconBg} flex items-center justify-center shadow-inner`}
         >
-          <LockIcon className="size-8 animate-pulse" />
+          <IconLock className="size-8 animate-pulse text-lime-600 dark:text-[#ccff00]" />
           <div className="absolute -top-1 -right-1 size-4 bg-emerald-500 rounded-full border-2 border-background flex items-center justify-center">
-            <ShieldCheckIcon className="size-2.5 text-white" />
+            <IconShieldCheck className="size-2.5 text-white" />
           </div>
         </div>
 
@@ -57,9 +63,9 @@ export function FormUnlockCard({
         <div className="space-y-2">
           <Badge
             variant="outline"
-            className={`text-xs uppercase tracking-wider font-mono gap-1 text-muted-foreground ${landingTheme.callout.border}`}
+            className="text-xs uppercase tracking-wider font-mono gap-1 text-muted-foreground border-lime-500/30"
           >
-            <LockIcon className={`size-3 ${landingTheme.iconColor}`} />
+            <IconLock className={`size-3 ${landingTheme.iconColor}`} />
             Protected Form
           </Badge>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
@@ -90,11 +96,11 @@ export function FormUnlockCard({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute right-1 size-8 text-muted-foreground hover:text-foreground"
+                className="absolute right-1 size-8 text-muted-foreground hover:text-foreground cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+                {showPassword ? <IconEyeOff className="size-4" /> : <IconEye className="size-4" />}
                 <span className="sr-only">Toggle password visibility</span>
               </Button>
             </div>
@@ -109,7 +115,7 @@ export function FormUnlockCard({
           <Button
             type="submit"
             disabled={isUnlocking || !password.trim()}
-            className={`w-full h-11 rounded-xl gap-2 font-semibold text-sm transition-all shadow-md shadow-amber-500/10 ${landingTheme.primaryButton}`}
+            className={`w-full h-11 rounded-xl gap-2 font-semibold text-sm transition-all shadow-md cursor-pointer ${landingTheme.primaryButton}`}
           >
             {isUnlocking ? (
               <>
@@ -119,7 +125,7 @@ export function FormUnlockCard({
             ) : (
               <>
                 <span>Unlock & Continue</span>
-                <ArrowRightIcon className="size-4" />
+                <IconArrowRight className="size-4" />
               </>
             )}
           </Button>

@@ -15,20 +15,20 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: Icon;
-  }[];
-}) {
+export interface NavMainItem {
+  title: string;
+  url: string;
+  icon?: Icon;
+  badge?: number | string | null;
+  onClick?: () => void;
+}
+
+export function NavMain({ items }: { items: NavMainItem[] }) {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
 
   const isItemActive = (url: string) => {
-    if (!pathname) return false;
+    if (!pathname || url === "#") return false;
     if (url === "/dashboard") {
       return pathname === "/dashboard";
     }
@@ -59,7 +59,10 @@ export function NavMain({
     return pathname === url || pathname.startsWith(url + "/");
   };
 
-  const handleLinkClick = () => {
+  const handleItemClick = (item: NavMainItem) => {
+    if (item.onClick) {
+      item.onClick();
+    }
     if (isMobile) {
       setOpenMobile(false);
     }
@@ -71,6 +74,49 @@ export function NavMain({
         <SidebarMenu className="gap-1">
           {items.map((item) => {
             const active = isItemActive(item.url);
+
+            const content = (
+              <>
+                {item.icon && (
+                  <item.icon
+                    className={cn(
+                      "size-4 shrink-0 transition-colors",
+                      active
+                        ? "text-primary stroke-[2.2]"
+                        : "text-foreground/70 dark:text-zinc-400 group-hover:text-foreground dark:group-hover:text-zinc-200",
+                    )}
+                  />
+                )}
+                <span
+                  className={cn(
+                    "truncate text-xs transition-colors",
+                    active
+                      ? "text-foreground font-semibold"
+                      : "text-foreground/80 dark:text-zinc-300 font-medium group-hover:text-foreground dark:group-hover:text-zinc-100",
+                  )}
+                >
+                  {item.title}
+                </span>
+
+                {item.badge !== undefined && item.badge !== null && (
+                  <span
+                    className={cn(
+                      "ml-auto text-[10px] font-mono font-medium px-1.5 py-0.2 rounded-full border transition-colors",
+                      active
+                        ? "bg-primary/20 text-foreground border-primary/40 font-bold"
+                        : "bg-muted/50 text-foreground/70 dark:text-zinc-400 border-border/60 group-hover:text-foreground",
+                    )}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+
+                {active && !item.badge && (
+                  <span className="ml-auto size-1.5 rounded-full bg-primary shrink-0 shadow-[0_0_8px_rgba(204,255,0,0.5)]" />
+                )}
+              </>
+            );
+
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -78,41 +124,29 @@ export function NavMain({
                   isActive={active}
                   tooltip={item.title}
                   className={cn(
-                    "relative transition-all duration-150 rounded-lg px-2.5 py-2 font-medium cursor-pointer",
+                    "relative transition-all duration-150 rounded-lg px-2.5 py-2 cursor-pointer group",
                     active
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold border border-primary/50 ring-1 ring-primary/30 shadow-xs dark:bg-sidebar-accent dark:border-primary/50 dark:ring-primary/20"
-                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground border border-transparent active:bg-sidebar-accent/80 active:text-foreground",
+                      ? "bg-primary/10 text-foreground font-semibold border border-primary/35 shadow-xs"
+                      : "text-foreground/80 dark:text-zinc-300 hover:bg-muted/50 dark:hover:bg-white/[0.05] border border-transparent",
                   )}
                 >
-                  <Link
-                    href={item.url}
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 w-full"
-                  >
-                    {item.icon && (
-                      <item.icon
-                        className={cn(
-                          "size-4 shrink-0 transition-colors",
-                          active
-                            ? "text-primary stroke-[2.2]"
-                            : "text-muted-foreground group-hover:text-foreground",
-                        )}
-                      />
-                    )}
-                    <span
-                      className={cn(
-                        "truncate",
-                        active
-                          ? "text-foreground font-semibold"
-                          : "text-muted-foreground group-hover:text-foreground",
-                      )}
+                  {item.onClick ? (
+                    <button
+                      type="button"
+                      onClick={() => handleItemClick(item)}
+                      className="flex items-center gap-2.5 w-full text-left"
                     >
-                      {item.title}
-                    </span>
-                    {active && (
-                      <span className="ml-auto size-1.5 rounded-full bg-primary shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-                    )}
-                  </Link>
+                      {content}
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.url}
+                      onClick={() => handleItemClick(item)}
+                      className="flex items-center gap-2.5 w-full"
+                    >
+                      {content}
+                    </Link>
+                  )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );

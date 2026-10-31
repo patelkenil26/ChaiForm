@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 import {
-  TypeIcon,
-  AlignLeftIcon,
-  MailIcon,
-  HashIcon,
-  PhoneIcon,
-  GlobeIcon,
-  CalendarIcon,
-  ClockIcon,
-  ToggleLeftIcon,
-  CheckSquareIcon,
-  RadioIcon,
-  ChevronDownSquareIcon,
-  StarIcon,
-  GripVerticalIcon,
-  PlusIcon,
-  SearchIcon,
-  SparklesIcon,
-} from "lucide-react";
+  IconTypography,
+  IconAlignLeft,
+  IconMail,
+  IconHash,
+  IconPhone,
+  IconWorld,
+  IconCalendar,
+  IconClock,
+  IconToggleLeft,
+  IconCheckbox,
+  IconCircleDot,
+  IconChevronDown,
+  IconStar,
+  IconKey,
+  IconGripVertical,
+  IconPlus,
+  IconSearch,
+  IconSparkles,
+  type Icon,
+} from "@tabler/icons-react";
 import { type FieldType } from "./field-types";
 import { Input } from "~/components/ui/input";
 import { Badge } from "~/components/ui/badge";
@@ -30,7 +32,7 @@ export interface ToolboxFieldDef {
   label: string;
   defaultTitle: string;
   category: "text" | "choice" | "input" | "special";
-  icon: React.ComponentType<{ className?: string }>;
+  icon: Icon;
   description: string;
 }
 
@@ -40,7 +42,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Short Text",
     defaultTitle: "Short Text Question",
     category: "text",
-    icon: TypeIcon,
+    icon: IconTypography,
     description: "Single-line response (e.g. Name, Job title)",
   },
   {
@@ -48,7 +50,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Long Text",
     defaultTitle: "Paragraph Question",
     category: "text",
-    icon: AlignLeftIcon,
+    icon: IconAlignLeft,
     description: "Multi-line feedback, bio, or description",
   },
   {
@@ -56,7 +58,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Email Address",
     defaultTitle: "What is your email address?",
     category: "input",
-    icon: MailIcon,
+    icon: IconMail,
     description: "Validated email input with syntax checks",
   },
   {
@@ -64,7 +66,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Number",
     defaultTitle: "Enter a number",
     category: "input",
-    icon: HashIcon,
+    icon: IconHash,
     description: "Numeric inputs (e.g. Age, Quantity)",
   },
   {
@@ -72,7 +74,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Phone Number",
     defaultTitle: "Phone Number",
     category: "input",
-    icon: PhoneIcon,
+    icon: IconPhone,
     description: "Contact phone number input",
   },
   {
@@ -80,15 +82,23 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Website / URL",
     defaultTitle: "Website or Portfolio Link",
     category: "input",
-    icon: GlobeIcon,
+    icon: IconWorld,
     description: "Valid web link with https validation",
+  },
+  {
+    type: "PASSWORD",
+    label: "Password",
+    defaultTitle: "Enter access password",
+    category: "input",
+    icon: IconKey,
+    description: "Masked password / secret token input",
   },
   {
     type: "CHECKBOX",
     label: "Multiple Choice",
     defaultTitle: "Select all that apply",
     category: "choice",
-    icon: CheckSquareIcon,
+    icon: IconCheckbox,
     description: "Multi-select checkboxes with custom options",
   },
   {
@@ -96,7 +106,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Single Choice",
     defaultTitle: "Choose one option",
     category: "choice",
-    icon: RadioIcon,
+    icon: IconCircleDot,
     description: "Radio button list with single selection",
   },
   {
@@ -104,7 +114,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Dropdown",
     defaultTitle: "Select from dropdown",
     category: "choice",
-    icon: ChevronDownSquareIcon,
+    icon: IconChevronDown,
     description: "Compact dropdown selector",
   },
   {
@@ -112,7 +122,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Yes / No",
     defaultTitle: "Yes or No question?",
     category: "choice",
-    icon: ToggleLeftIcon,
+    icon: IconToggleLeft,
     description: "Binary yes/no toggle switch",
   },
   {
@@ -120,7 +130,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Star Rating",
     defaultTitle: "How would you rate your experience?",
     category: "special",
-    icon: StarIcon,
+    icon: IconStar,
     description: "Interactive 1 to 5 star rating scale",
   },
   {
@@ -128,7 +138,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Date Picker",
     defaultTitle: "Select a date",
     category: "special",
-    icon: CalendarIcon,
+    icon: IconCalendar,
     description: "Calendar date picker for bookings or deadlines",
   },
   {
@@ -136,7 +146,7 @@ export const TOOLBOX_FIELDS: ToolboxFieldDef[] = [
     label: "Time Picker",
     defaultTitle: "Select a time",
     category: "special",
-    icon: ClockIcon,
+    icon: IconClock,
     description: "Time selector input",
   },
 ];
@@ -164,28 +174,28 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
     { id: "all", label: "All" },
     { id: "text", label: "Basic Text" },
     { id: "choice", label: "Choice" },
-    { id: "input", label: "Contact" },
+    { id: "input", label: "Contact & Key" },
     { id: "special", label: "Advanced" },
   ];
 
   return (
-    <div className="w-full xl:w-72 shrink-0 flex flex-col rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md p-3.5 shadow-sm space-y-3">
+    <div className="w-full xl:w-72 shrink-0 flex flex-col rounded-2xl border border-border/80 bg-card/70 backdrop-blur-md p-3.5 shadow-sm space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between pb-1 border-b border-border/40">
         <div className="flex items-center gap-1.5">
-          <SparklesIcon className={`size-3.5 ${landingTheme.iconColor}`} />
-          <span className="text-xs font-semibold tracking-tight text-foreground uppercase">
+          <IconSparkles className={`size-3.5 ${landingTheme.iconColor}`} />
+          <span className="text-xs font-bold tracking-tight text-foreground uppercase">
             Field Toolbox
           </span>
         </div>
         <Badge variant="outline" className={`text-[10px] font-mono ${landingTheme.dashboardBadge}`}>
-          Drag & Drop
+          Drag &amp; Drop
         </Badge>
       </div>
 
       <p className="text-[11px] text-muted-foreground leading-snug">
         Drag any field into the form canvas, or click{" "}
-        <PlusIcon className={`inline size-3 ${landingTheme.iconColor}`} /> to add directly.
+        <IconPlus className={`inline size-3 ${landingTheme.iconColor}`} /> to append directly.
       </p>
 
       {/* Category Pills Grouping */}
@@ -197,7 +207,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
             onClick={() => setSelectedCategory(cat.id)}
             className={`px-2 py-0.5 rounded-md text-[10px] font-medium transition-colors cursor-pointer select-none ${
               selectedCategory === cat.id
-                ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                ? "bg-lime-500/15 text-lime-700 dark:text-[#ccff00] border border-lime-600/30 dark:border-[#ccff00]/30 font-semibold shadow-2xs"
                 : "bg-muted/40 text-muted-foreground hover:text-foreground border border-transparent hover:bg-muted/60"
             }`}
           >
@@ -208,7 +218,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
 
       {/* Search Filter */}
       <div className="relative">
-        <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+        <IconSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground pointer-events-none" />
         <Input
           placeholder="Filter field types..."
           value={search}
@@ -220,7 +230,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
       {/* Field Items List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-1.5 max-h-[380px] xl:max-h-[calc(100vh-320px)] overflow-y-auto pr-0.5 custom-scrollbar">
         {filteredFields.map((item) => {
-          const Icon = item.icon;
+          const IconComponent = item.icon;
           return (
             <div
               key={item.type}
@@ -240,11 +250,11 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
                 <div
                   className={`size-7 rounded-lg bg-muted/60 ${landingTheme.iconBg} flex items-center justify-center shrink-0 transition-colors`}
                 >
-                  <Icon className="size-3.5" />
+                  <IconComponent className="size-3.5" />
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span
-                    className={`text-xs font-medium text-foreground group-hover:${landingTheme.primaryText} transition-colors truncate`}
+                    className={`text-xs font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors truncate`}
                   >
                     {item.label}
                   </span>
@@ -255,9 +265,7 @@ export function FieldToolbox({ onAddField }: FieldToolboxProps) {
               </div>
 
               <div className="flex items-center gap-1 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
-                <GripVerticalIcon
-                  className={`size-3.5 text-muted-foreground group-hover:${landingTheme.primaryText}`}
-                />
+                <IconGripVertical className="size-3.5 text-muted-foreground group-hover:text-foreground" />
               </div>
             </div>
           );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PlusIcon, XIcon } from "lucide-react";
+import { IconPlus, IconX } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
@@ -36,25 +36,26 @@ export function FieldOptionsEditor({
   };
 
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`}>
       {/* Existing Option Pills */}
       <div className="flex items-center gap-1.5 flex-wrap">
         <span className="text-[11px] text-muted-foreground font-medium">Choices:</span>
         {options.map((opt, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-muted/80 text-foreground border border-border/50"
+            className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-muted/70 text-foreground border border-border/60 transition-colors"
           >
-            <span className="max-w-[140px] truncate" title={opt}>
+            <span className="max-w-[150px] truncate" title={opt}>
               {opt}
             </span>
             <button
               type="button"
               onClick={() => handleRemove(i)}
-              className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors"
+              className="p-0.5 rounded hover:bg-destructive/15 text-muted-foreground hover:text-destructive cursor-pointer transition-colors"
               title={`Remove ${opt}`}
+              aria-label={`Remove ${opt}`}
             >
-              <XIcon className="size-3" />
+              <IconX className="size-3.5" />
             </button>
           </span>
         ))}
@@ -64,13 +65,13 @@ export function FieldOptionsEditor({
       </div>
 
       {/* Add New Option Input Bar */}
-      <div className="flex items-center gap-2 max-w-xs mt-0.5">
+      <div className="flex items-center gap-2 max-w-sm mt-0.5">
         <Input
           value={newOption}
           onChange={(e) => setNewOption(e.target.value)}
           placeholder={placeholder}
           maxLength={100}
-          className="h-7 text-xs rounded-md"
+          className="h-8 sm:h-7 text-xs rounded-lg"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -83,9 +84,9 @@ export function FieldOptionsEditor({
           size="sm"
           variant="outline"
           onClick={handleAdd}
-          className="h-7 px-2 text-xs gap-1 shrink-0"
+          className="h-8 sm:h-7 px-2.5 text-xs gap-1 shrink-0 cursor-pointer"
         >
-          <PlusIcon className="size-3" />
+          <IconPlus className="size-3.5" />
           <span>Add</span>
         </Button>
       </div>

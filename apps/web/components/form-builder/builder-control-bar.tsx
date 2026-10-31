@@ -1,6 +1,6 @@
 "use client";
 
-import { LayersIcon, RotateCcwIcon, SaveIcon } from "lucide-react";
+import { IconStack2, IconRotateClockwise, IconDeviceFloppy } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { landingTheme } from "~/config/landing-theme";
@@ -34,7 +34,7 @@ export function BuilderControlBar({
       {/* Left: Info & Status */}
       <div className="flex items-center gap-2.5 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <LayersIcon className={`size-4 ${landingTheme.iconColor}`} />
+          <IconStack2 className={`size-4 ${landingTheme.iconColor}`} />
           <span className="text-sm font-semibold text-foreground tracking-tight">
             Form Questions
           </span>
@@ -49,25 +49,25 @@ export function BuilderControlBar({
         {isRestoredFromDraft ? (
           <Badge
             variant="secondary"
-            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
+            className="text-[11px] bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 gap-1 font-medium"
           >
-            <span className={`size-1.5 rounded-full ${landingTheme.activeDot} animate-pulse`} />
+            <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
             Unsaved Draft (Restored from session)
           </Badge>
         ) : hasDrafts ? (
           <Badge
             variant="secondary"
-            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
+            className="text-[11px] bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-700 dark:text-[#ccff00] border border-lime-500/30 gap-1 font-medium"
           >
-            <span className={`size-1.5 rounded-full ${landingTheme.activeDot} animate-pulse`} />
+            <span className="size-1.5 rounded-full bg-lime-500 dark:bg-[#ccff00] animate-pulse" />
             Unsaved Changes
           </Badge>
         ) : editingFieldId ? (
           <Badge
             variant="secondary"
-            className={`text-[11px] ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border} gap-1`}
+            className="text-[11px] bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-700 dark:text-[#ccff00] border border-lime-500/30 gap-1 font-medium"
           >
-            <span className={`size-1.5 rounded-full ${landingTheme.activeDot}`} />
+            <span className="size-1.5 rounded-full bg-lime-500 dark:bg-[#ccff00]" />
             Editing 1 Question
           </Badge>
         ) : (
@@ -75,7 +75,7 @@ export function BuilderControlBar({
             variant="outline"
             className="text-[11px] text-muted-foreground border-border/60 gap-1"
           >
-            <span className="size-1.5 rounded-full bg-emerald-400" />
+            <span className="size-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
             All changes saved
           </Badge>
         )}
@@ -89,10 +89,10 @@ export function BuilderControlBar({
             variant="ghost"
             size="sm"
             onClick={onDiscardDraft}
-            className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10 cursor-pointer"
             title="Discard unsaved local drafts and revert to cloud saved state"
           >
-            <RotateCcwIcon className="size-3.5" />
+            <IconRotateClockwise className="size-3.5" />
             <span>Discard</span>
           </Button>
         )}
@@ -102,7 +102,7 @@ export function BuilderControlBar({
           size="sm"
           disabled={!isSaveActive || isSyncing}
           onClick={onSaveChanges}
-          className={`h-8 gap-1.5 text-xs font-semibold ${
+          className={`h-8 gap-1.5 text-xs font-semibold cursor-pointer ${
             isSaveActive
               ? landingTheme.primaryButton
               : "opacity-50 cursor-not-allowed border border-border/40 bg-muted/30 text-muted-foreground"
@@ -113,7 +113,7 @@ export function BuilderControlBar({
               : "All changes are saved to the cloud"
           }
         >
-          <SaveIcon className="size-3.5" />
+          <IconDeviceFloppy className="size-3.5" />
           <span>{isSyncing ? "Saving..." : isSaveActive ? "Save Changes" : "Saved"}</span>
         </Button>
       </div>

@@ -4,12 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconUserCircle,
   IconLoader2,
   IconLogin,
+  IconSettings,
+  IconSparkles,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 
@@ -32,15 +32,16 @@ import {
 import { useSignOut } from "~/hooks/api/auth";
 import { landingTheme } from "~/config/landing-theme";
 
-export function NavUser({
-  user,
-}: {
+export interface NavUserProps {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
-}) {
+  onOpenSettings?: () => void;
+}
+
+export function NavUser({ user, onOpenSettings }: NavUserProps) {
   const { isMobile, setOpenMobile } = useSidebar();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { signOutAsync } = useSignOut();
@@ -180,13 +181,17 @@ export function NavUser({
                 className={`${landingTheme.buttonGhostHover} cursor-pointer`}
               >
                 <Link
-                  href="/forms"
+                  href="/settings"
                   onClick={() => {
                     if (isMobile) setOpenMobile(false);
                   }}
+                  className="flex items-center justify-between gap-2"
                 >
-                  <IconUserCircle className="size-4" />
-                  My Forms
+                  <div className="flex items-center gap-2">
+                    <IconSettings className="size-4 text-muted-foreground" />
+                    <span>Workspace Settings</span>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground font-mono">⌘,</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -194,13 +199,19 @@ export function NavUser({
                 className={`${landingTheme.buttonGhostHover} cursor-pointer`}
               >
                 <Link
-                  href="/dashboard"
+                  href="/pricing"
                   onClick={() => {
                     if (isMobile) setOpenMobile(false);
                   }}
+                  className="flex items-center justify-between gap-2"
                 >
-                  <IconCreditCard className="size-4" />
-                  Dashboard
+                  <div className="flex items-center gap-2">
+                    <IconSparkles className="size-4 text-amber-400" />
+                    <span>Upgrade to Pro</span>
+                  </div>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full font-mono bg-amber-500/10 text-amber-500 border border-amber-500/20 font-semibold">
+                    PRO
+                  </span>
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { GlobeIcon, LinkIcon, Loader2 } from "lucide-react";
+import { IconWorld, IconLink, IconLoader2, IconClipboardPlus } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
@@ -10,6 +11,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
@@ -40,6 +42,7 @@ interface CreateFormDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: CreateFormValues) => Promise<void>;
   errorMessage?: string | null;
+  defaultTitle?: string;
 }
 
 export function CreateFormDialog({
@@ -47,6 +50,7 @@ export function CreateFormDialog({
   onOpenChange,
   onSubmit,
   errorMessage,
+  defaultTitle,
 }: CreateFormDialogProps) {
   const {
     register,
@@ -57,12 +61,23 @@ export function CreateFormDialog({
     formState: { isSubmitting, errors },
   } = useForm<CreateFormValues>({
     defaultValues: {
-      title: "",
+      title: defaultTitle || "",
       description: "",
       visibility: "UNLISTED",
       isPublished: true,
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      reset({
+        title: defaultTitle || "",
+        description: "",
+        visibility: "UNLISTED",
+        isPublished: true,
+      });
+    }
+  }, [open, defaultTitle, reset]);
 
   const titleValue = watch("title") || "";
   const descValue = watch("description") || "";
@@ -88,7 +103,21 @@ export function CreateFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create a new form</DialogTitle>
+          <div className="flex items-center gap-2.5">
+            <div
+              className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
+              <IconClipboardPlus className="size-4" />
+            </div>
+            <div className="min-w-0">
+              <DialogTitle className="text-base sm:text-lg font-bold text-foreground">
+                Create New Form
+              </DialogTitle>
+              <DialogDescription className="text-xs text-muted-foreground mt-0.5">
+                Set up form title, visibility, and publication preferences.
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 mt-1">
@@ -161,13 +190,13 @@ export function CreateFormDialog({
                       <SelectContent>
                         <SelectItem value="UNLISTED" className="text-xs">
                           <span className="flex items-center gap-1.5">
-                            <LinkIcon className="size-3 text-muted-foreground" />
+                            <IconLink className="size-3 text-muted-foreground" />
                             Unlisted (Link only)
                           </span>
                         </SelectItem>
                         <SelectItem value="PUBLIC" className="text-xs">
                           <span className="flex items-center gap-1.5">
-                            <GlobeIcon className="size-3 text-blue-500" />
+                            <IconWorld className="size-3 text-blue-500" />
                             Public (Listed)
                           </span>
                         </SelectItem>
@@ -221,7 +250,7 @@ export function CreateFormDialog({
               disabled={isSubmitting}
               className={`gap-2 ${landingTheme.primaryButton}`}
             >
-              {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+              {isSubmitting && <IconLoader2 className="size-4 animate-spin" />}
               {isSubmitting ? "Creating..." : "Create Form"}
             </Button>
           </DialogFooter>

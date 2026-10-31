@@ -7,21 +7,21 @@ import {
   IconSearch,
   IconCompass,
   IconSparkles,
-  IconArrowRight,
-  IconHelpCircle,
-  IconEye,
-  IconCopy,
-  IconExternalLink,
-  IconX,
-  IconCheck,
-  IconBolt,
   IconFilter,
-  IconLoader2,
+  IconX,
+  IconPlus,
+  IconChartBar,
+  IconMessageDots,
+  IconCalendarEvent,
+  IconBriefcase,
+  IconBrain,
+  IconForms,
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Card } from "~/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -34,15 +34,17 @@ import { useUser } from "~/hooks/api/auth";
 import { getSafeErrorMessage } from "~/lib/error";
 import { toast } from "sonner";
 import { landingTheme } from "~/config/landing-theme";
+import { TemplateCard, type PublicTemplateItem } from "./template-card";
+import { TemplatePreviewSheet } from "./template-preview-sheet";
 
 const TEMPLATE_CATEGORIES = [
-  { id: "ALL", label: "All Templates" },
-  { id: "SURVEYS", label: "Surveys" },
-  { id: "FEEDBACK", label: "Feedback" },
-  { id: "EVENTS", label: "Events & RSVPs" },
-  { id: "APPLICATIONS", label: "Applications" },
-  { id: "QUIZZES", label: "Quizzes" },
-  { id: "GENERAL", label: "General Forms" },
+  { id: "ALL", label: "All Templates", icon: IconCompass },
+  { id: "SURVEYS", label: "Surveys & NPS", icon: IconChartBar },
+  { id: "FEEDBACK", label: "Feedback", icon: IconMessageDots },
+  { id: "EVENTS", label: "Events & RSVPs", icon: IconCalendarEvent },
+  { id: "APPLICATIONS", label: "Job Applications", icon: IconBriefcase },
+  { id: "QUIZZES", label: "Quizzes", icon: IconBrain },
+  { id: "GENERAL", label: "General Forms", icon: IconForms },
 ];
 
 export function TemplatesView() {
@@ -52,13 +54,16 @@ export function TemplatesView() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState<"popular" | "newest" | "questions">("popular");
+  const [sortBy, setSortBy] = useState<"popular" | "questions" | "newest">("popular");
   const [cloningId, setCloningId] = useState<string | null>(null);
 
-  // Fetch all templates with React Query (same source as dashboard explore)
-  const { publicForms, isLoading } = useListPublicForms();
+  // In-app preview sheet state
+  const [previewTemplate, setPreviewTemplate] = useState<PublicTemplateItem | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
-  const allForms = publicForms ?? [];
+  // Fetch all templates with React Query
+  const { publicForms, isLoading } = useListPublicForms();
+  const allForms = (publicForms as PublicTemplateItem[] | undefined) ?? [];
 
   // Count items per category
   const folderCounts = useMemo(() => {
@@ -71,32 +76,40 @@ export function TemplatesView() {
   }, [allForms]);
 
   // Filter
-  const filteredTemplates = allForms.filter((tpl) => {
-    if (
-      selectedCategory !== "ALL" &&
-      tpl.category?.toUpperCase() !== selectedCategory.toUpperCase()
-    ) {
-      return false;
-    }
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase().trim();
-    const matchesTitle = tpl.title.toLowerCase().includes(q);
-    const matchesDesc = tpl.description?.toLowerCase().includes(q) ?? false;
-    const matchesCat = tpl.category?.toLowerCase().includes(q) ?? false;
-    return matchesTitle || matchesDesc || matchesCat;
-  });
+  const filteredTemplates = useMemo(() => {
+    return allForms.filter((tpl) => {
+      if (
+        selectedCategory !== "ALL" &&
+        tpl.category?.toUpperCase() !== selectedCategory.toUpperCase()
+      ) {
+        return false;
+      }
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase().trim();
+      const matchesTitle = tpl.title.toLowerCase().includes(q);
+      const matchesDesc = tpl.description?.toLowerCase().includes(q) ?? false;
+      const matchesCat = tpl.category?.toLowerCase().includes(q) ?? false;
+      return matchesTitle || matchesDesc || matchesCat;
+    });
+  }, [allForms, selectedCategory, searchQuery]);
 
   // Sort
-  const sortedTemplates = [...filteredTemplates].sort((a, b) => {
-    if (sortBy === "popular") {
-      return (b.views ?? 0) - (a.views ?? 0);
-    }
-    if (sortBy === "questions") {
-      return (b.fieldsCount ?? 0) - (a.fieldsCount ?? 0);
-    }
-    // newest
-    return new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime();
-  });
+  const sortedTemplates = useMemo(() => {
+    return [...filteredTemplates].sort((a, b) => {
+      if (sortBy === "popular") {
+        return (b.views ?? 0) - (a.views ?? 0);
+      }
+      if (sortBy === "questions") {
+        return (b.fieldsCount ?? 0) - (a.fieldsCount ?? 0);
+      }
+      return new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime();
+    });
+  }, [filteredTemplates, sortBy]);
+
+  const handleOpenPreview = (tpl: PublicTemplateItem) => {
+    setPreviewTemplate(tpl);
+    setPreviewOpen(true);
+  };
 
   const handleUseTemplate = async (templateId: string) => {
     if (!user) {
@@ -111,6 +124,7 @@ export function TemplatesView() {
     try {
       const res = await useTemplateAsync({ formId: templateId });
       toast.success("Template cloned to your forms!");
+      setPreviewOpen(false);
       router.push(`/forms/${res.id}`);
     } catch (err: unknown) {
       toast.error(getSafeErrorMessage(err, "Failed to clone template"));
@@ -121,7 +135,7 @@ export function TemplatesView() {
 
   return (
     <div>
-      {/* Header Banner */}
+      {/* Hero Header Banner */}
       <section className="relative overflow-hidden pt-12 pb-12 md:pt-16 md:pb-16 border-b border-border/40 text-center">
         {/* Subtle Ambient Glow */}
         <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
@@ -133,12 +147,12 @@ export function TemplatesView() {
             variant="outline"
             className={`mb-4 gap-1.5 px-3 py-1 text-xs font-medium ${landingTheme.badge}`}
           >
-            <IconCompass className="size-3.5" />
-            <span>Curated Template Directory</span>
+            <IconSparkles className="size-3.5" />
+            <span>Curated Community Templates</span>
           </Badge>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Conversational Form Templates
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+            Conversational Form <span className={landingTheme.gradientText}>Templates</span>
           </h1>
 
           <p className="mt-3.5 max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
@@ -146,7 +160,7 @@ export function TemplatesView() {
             form live or clone it to your workspace with one click.
           </p>
 
-          {/* Search + Category Controls */}
+          {/* Search Bar */}
           <div className="mt-8 w-full max-w-md relative">
             <IconSearch className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
@@ -161,6 +175,7 @@ export function TemplatesView() {
                 type="button"
                 onClick={() => setSearchQuery("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer"
+                title="Clear search"
               >
                 <IconX className="size-4" />
               </button>
@@ -172,23 +187,26 @@ export function TemplatesView() {
             {TEMPLATE_CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat.id;
               const count = folderCounts[cat.id];
+              const CatIcon = cat.icon;
+
               return (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                  className={`text-xs font-medium px-3.5 py-1.5 rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5 border select-none ${
                     isSelected
-                      ? landingTheme.activePill
-                      : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? `${landingTheme.tabActive} shadow-xs`
+                      : "bg-muted/40 border-border/60 text-muted-foreground hover:bg-muted/70 hover:text-foreground"
                   }`}
                 >
+                  <CatIcon className="size-3.5" />
                   <span>{cat.label}</span>
                   {count !== undefined && (
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full tabular-nums font-semibold ${
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full tabular-nums font-mono font-semibold ${
                         isSelected
-                          ? "bg-background/25 text-background dark:bg-foreground/25 dark:text-foreground"
+                          ? "bg-primary/20 text-foreground"
                           : "bg-muted text-muted-foreground"
                       }`}
                     >
@@ -203,9 +221,9 @@ export function TemplatesView() {
       </section>
 
       {/* Grid Section */}
-      <section className="py-12 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 md:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Count & Sorting Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-border/40 text-xs">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 pb-4 border-b border-border/40 text-xs">
           <div className="text-muted-foreground">
             {isLoading ? (
               <span>Loading templates...</span>
@@ -224,7 +242,7 @@ export function TemplatesView() {
             </span>
             <Select
               value={sortBy}
-              onValueChange={(val: "popular" | "newest" | "questions") => setSortBy(val)}
+              onValueChange={(val: "popular" | "questions" | "newest") => setSortBy(val)}
             >
               <SelectTrigger
                 className={`h-8 w-[145px] text-xs bg-card border-border/70 ${landingTheme.inputFocus}`}
@@ -235,11 +253,11 @@ export function TemplatesView() {
                 <SelectItem value="popular" className="cursor-pointer text-xs">
                   Most Popular
                 </SelectItem>
-                <SelectItem value="newest" className="cursor-pointer text-xs">
-                  Newest First
-                </SelectItem>
                 <SelectItem value="questions" className="cursor-pointer text-xs">
                   Question Count
+                </SelectItem>
+                <SelectItem value="newest" className="cursor-pointer text-xs">
+                  Newest First
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -248,188 +266,66 @@ export function TemplatesView() {
 
         {/* Content */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-xl border border-border/60 bg-card p-5 space-y-4">
-                <Skeleton className="h-28 w-full rounded-lg" />
-                <Skeleton className="h-5 w-20 rounded-md" />
+              <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 space-y-4">
+                <Skeleton className="h-5 w-24 rounded-md" />
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-10 w-full" />
-                <div className="flex gap-2 pt-2">
-                  <Skeleton className="h-8 flex-1 rounded-md" />
-                  <Skeleton className="h-8 flex-1 rounded-md" />
+                <div className="flex gap-2 pt-2 border-t border-border/40">
+                  <Skeleton className="h-8 flex-1 rounded-xl" />
+                  <Skeleton className="h-8 flex-1 rounded-xl" />
                 </div>
               </div>
             ))}
           </div>
         ) : sortedTemplates.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {sortedTemplates.map((tpl) => (
-              <div
+              <TemplateCard
                 key={tpl.id}
-                className={`group relative flex flex-col justify-between rounded-xl border border-border/80 bg-card shadow-xs overflow-hidden transition-all duration-200 ${landingTheme.cardBorderHover}`}
-              >
-                {/* Visual Thumbnail Header (Card Preview) */}
-                <div className="h-24 bg-gradient-to-br from-primary/10 via-card/50 to-card/90 border-b border-border/40 p-3.5 flex flex-col justify-between relative overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-background/80 border border-border/60 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur-xs">
-                      {tpl.category || "General"}
-                    </span>
-                    {typeof tpl.views === "number" && tpl.views > 0 && (
-                      <span className="flex items-center gap-1 text-[10px] text-muted-foreground bg-background/60 px-2 py-0.5 rounded-full">
-                        <IconEye className="size-3" />
-                        <span>{tpl.views}</span>
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Mini Form Question Wireframe */}
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className={`size-2 rounded-full ${landingTheme.activeDot} animate-pulse`}
-                    />
-                    <span className="text-[11px] font-medium text-foreground/80 truncate">
-                      1-by-1 Step Survey
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3
-                      className={`text-base font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}
-                    >
-                      {tpl.title}
-                    </h3>
-
-                    <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[32px]">
-                      {tpl.description ||
-                        "Conversational multi-field template ready for immediate deployment."}
-                    </p>
-
-                    <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border/40 pt-3">
-                      <div className="flex items-center gap-1.5">
-                        <IconHelpCircle className={`size-3.5 ${landingTheme.iconColor}`} />
-                        <span>{tpl.fieldsCount ?? 0} questions</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-emerald-500 font-medium">
-                        <IconCheck className="size-3" />
-                        <span>Ready to use</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="mt-5 flex items-center gap-2 pt-2 border-t border-border/40">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      asChild
-                      className="flex-1 text-xs gap-1.5 h-8.5 hover:border-border"
-                    >
-                      <Link
-                        href={`/form/${tpl.slug || tpl.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <IconExternalLink className="size-3.5" />
-                        <span>Preview Live</span>
-                      </Link>
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      onClick={() => handleUseTemplate(tpl.id)}
-                      disabled={cloningId === tpl.id}
-                      className={`flex-1 text-xs gap-1.5 h-8.5 ${landingTheme.primaryButton}`}
-                    >
-                      {cloningId === tpl.id ? (
-                        <>
-                          <IconLoader2 className="size-3.5 animate-spin" />
-                          <span>Cloning...</span>
-                        </>
-                      ) : (
-                        <>
-                          <IconCopy className="size-3.5" />
-                          <span>Use Template</span>
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                template={tpl}
+                onPreview={handleOpenPreview}
+                onUseTemplate={handleUseTemplate}
+                isCloning={cloningId === tpl.id}
+              />
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 px-4 text-center border border-dashed rounded-2xl bg-card/40 max-w-md mx-auto">
-            <IconCompass className="size-10 text-muted-foreground/60 mb-3" />
-            <h3 className="text-base font-semibold">No templates found</h3>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {searchQuery
-                ? `No templates matched "${searchQuery}".`
-                : "No templates exist in this category yet."}
+          <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed rounded-2xl bg-card/40">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-muted mb-3 text-muted-foreground">
+              <IconCompass className="size-6" />
+            </div>
+            <h3 className="text-base font-bold text-foreground">No matching templates</h3>
+            <p className="mt-1 max-w-sm text-xs text-muted-foreground">
+              No public templates found. Try resetting your search query or selecting a different
+              category.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              {(searchQuery || selectedCategory !== "ALL") && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedCategory("ALL");
-                  }}
-                  className="text-xs gap-1.5"
-                >
-                  <IconX className="size-3.5" />
-                  <span>Clear Filters</span>
-                </Button>
-              )}
-              <Button asChild size="sm" className={`text-xs gap-1.5 ${landingTheme.primaryButton}`}>
-                <Link href="/login">
-                  <span>Create Custom Form</span>
-                  <IconArrowRight className="size-3.5" />
-                </Link>
+            <div className="mt-4 flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSelectedCategory("ALL");
+                  setSearchQuery("");
+                }}
+                className="text-xs"
+              >
+                Reset Filters
               </Button>
             </div>
-          </div>
+          </Card>
         )}
-
-        {/* Bottom Banner */}
-        <div
-          className={`mt-16 rounded-2xl ${landingTheme.ctaBox} p-8 sm:p-10 text-center flex flex-col items-center`}
-        >
-          <Badge
-            variant="outline"
-            className={`text-xs px-3 py-1 mb-3 gap-1.5 ${landingTheme.ctaBadge}`}
-          >
-            <IconBolt className={`size-3.5 ${landingTheme.iconColor}`} />
-            <span>Build From Scratch</span>
-          </Badge>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Need a completely custom conversational form?
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground max-w-xl leading-relaxed">
-            Our visual builder lets you assemble custom question steps, set up password security,
-            pick designer themes, and embed on any website in under 2 minutes.
-          </p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
-            <Button
-              asChild
-              size="lg"
-              className={`h-11 px-7 text-sm ${landingTheme.primaryButton} gap-2`}
-            >
-              <Link href="/signup">
-                <span>Start Free</span>
-                <IconArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="h-11 px-6 text-sm">
-              <Link href="/pricing">View Pricing Plans</Link>
-            </Button>
-          </div>
-        </div>
       </section>
+
+      {/* In-App Template Preview Sheet */}
+      <TemplatePreviewSheet
+        template={previewTemplate}
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        onUseTemplate={handleUseTemplate}
+        isCloning={cloningId === previewTemplate?.id}
+      />
     </div>
   );
 }

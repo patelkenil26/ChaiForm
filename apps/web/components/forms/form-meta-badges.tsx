@@ -1,6 +1,6 @@
 "use client";
 
-import { ClockIcon, UsersIcon, LockIcon } from "lucide-react";
+import { IconClock, IconUsers, IconLock } from "@tabler/icons-react";
 import { landingTheme } from "~/config/landing-theme";
 
 interface FormMetaBadgesProps {
@@ -24,28 +24,32 @@ export function FormMetaBadges({
 
   return (
     <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap text-xs">
-      {slug && <span className={landingTheme.slugBadge}>/form/{slug}</span>}
+      {slug && (
+        <span className="text-[11px] font-mono px-2 py-0.5 rounded-md border border-lime-500/30 bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-700 dark:text-[#ccff00]">
+          /form/{slug}
+        </span>
+      )}
 
       {closesAt && (
         <span
           className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"
           suppressHydrationWarning
         >
-          <ClockIcon className={`size-3 ${landingTheme.iconColor}`} />
+          <IconClock className={`size-3 ${landingTheme.iconColor}`} />
           {isExpired ? "Expired" : `Closes ${new Date(closesAt).toLocaleDateString()}`}
         </span>
       )}
 
       {responseLimit && (
         <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-          <UsersIcon className="size-3 text-blue-500" />
+          <IconUsers className="size-3 text-blue-500" />
           Limit: {responseLimit}
         </span>
       )}
 
       {isPasswordProtected && (
-        <span className="inline-flex items-center gap-1 text-[11px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">
-          <LockIcon className="size-3" />
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium font-mono text-lime-700 dark:text-[#ccff00] bg-lime-500/10 dark:bg-[#ccff00]/10 border border-lime-500/20 px-1.5 py-0.5 rounded-md">
+          <IconLock className="size-3" />
           Protected
         </span>
       )}

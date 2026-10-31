@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import {
-  PencilIcon,
-  BarChart3Icon,
-  CopyIcon,
-  GlobeIcon,
-  LinkIcon,
-  ArchiveIcon,
-} from "lucide-react";
+  IconPencil,
+  IconChartBar,
+  IconCopy,
+  IconWorld,
+  IconLink,
+  IconArchive,
+} from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Switch } from "~/components/ui/switch";
@@ -177,7 +177,7 @@ export function FormsTable({
                       <div className="flex items-center gap-2 flex-wrap">
                         <Link
                           href={`/forms/${form.id}`}
-                          className={`${landingTheme.linkHover} block text-foreground font-semibold truncate max-w-[230px]`}
+                          className="hover:text-lime-700 dark:hover:text-[#ccff00] transition-colors block text-foreground font-semibold truncate max-w-[230px]"
                           title={form.title}
                         >
                           {form.title}
@@ -185,9 +185,9 @@ export function FormsTable({
                         {form.isArchived && (
                           <Badge
                             variant="outline"
-                            className={`text-[10px] py-0 px-1.5 gap-1 shrink-0 ${landingTheme.draftBadge}`}
+                            className="text-[10px] py-0 px-1.5 gap-1 shrink-0 border-border/70 text-muted-foreground"
                           >
-                            <ArchiveIcon className="size-2.5" />
+                            <IconArchive className="size-2.5" />
                             Archived
                           </Badge>
                         )}
@@ -236,12 +236,15 @@ export function FormsTable({
                         ) : form.isPublished ? (
                           <Badge
                             variant="default"
-                            className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border-emerald-500/20 text-xs font-normal"
+                            className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 border-emerald-500/30 text-xs font-medium"
                           >
                             Published
                           </Badge>
                         ) : (
-                          <Badge variant="secondary" className={landingTheme.draftBadge}>
+                          <Badge
+                            variant="secondary"
+                            className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs font-medium"
+                          >
                             Draft
                           </Badge>
                         )}
@@ -265,13 +268,13 @@ export function FormsTable({
                         <SelectContent>
                           <SelectItem value="UNLISTED" className="text-xs">
                             <span className="flex items-center gap-1.5">
-                              <LinkIcon className="size-3 text-muted-foreground" />
+                              <IconLink className="size-3 text-muted-foreground" />
                               Unlisted
                             </span>
                           </SelectItem>
                           <SelectItem value="PUBLIC" className="text-xs">
                             <span className="flex items-center gap-1.5">
-                              <GlobeIcon className={`size-3 ${landingTheme.iconColor}`} />
+                              <IconWorld className={`size-3 ${landingTheme.iconColor}`} />
                               Public
                             </span>
                           </SelectItem>
@@ -299,10 +302,10 @@ export function FormsTable({
                           size="icon"
                           asChild
                           title="Edit in builder"
-                          className={landingTheme.buttonGhostHover}
+                          className={`${landingTheme.buttonGhostHover} cursor-pointer`}
                         >
                           <Link href={`/forms/${form.id}`}>
-                            <PencilIcon className="size-4" />
+                            <IconPencil className="size-4" />
                             <span className="sr-only">Edit {form.title}</span>
                           </Link>
                         </Button>
@@ -313,10 +316,10 @@ export function FormsTable({
                           size="icon"
                           asChild
                           title="View Submissions"
-                          className={landingTheme.buttonGhostHover}
+                          className={`${landingTheme.buttonGhostHover} cursor-pointer`}
                         >
                           <Link href={`/forms/${form.id}/submissions`}>
-                            <BarChart3Icon className="size-4" />
+                            <IconChartBar className="size-4" />
                             <span className="sr-only">Submissions for {form.title}</span>
                           </Link>
                         </Button>
@@ -327,9 +330,9 @@ export function FormsTable({
                           size="icon"
                           title="Copy Public Link"
                           onClick={() => onCopyLink(target)}
-                          className={landingTheme.buttonGhostHover}
+                          className={`${landingTheme.buttonGhostHover} cursor-pointer`}
                         >
-                          <CopyIcon className="size-4" />
+                          <IconCopy className="size-4" />
                           <span className="sr-only">Copy Link</span>
                         </Button>
 

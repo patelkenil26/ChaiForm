@@ -17,6 +17,7 @@ import { CreateFormDialog, type CreateFormValues } from "~/components/forms/crea
 import { DashboardMetrics } from "~/components/dashboard/dashboard-metrics";
 import { DashboardChart } from "~/components/dashboard/dashboard-chart";
 import { DashboardRecentForms } from "~/components/dashboard/dashboard-recent-forms";
+import { DashboardQuota } from "~/components/dashboard/dashboard-quota";
 import { DashboardActivityFeed } from "~/components/dashboard/dashboard-activity-feed";
 import { DashboardShortcuts } from "~/components/dashboard/dashboard-shortcuts";
 
@@ -24,7 +25,13 @@ export default function DashboardPage() {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useUser();
   const [open, setOpen] = useState(false);
+  const [presetTitle, setPresetTitle] = useState<string | undefined>(undefined);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleOpenCreate = (title?: string) => {
+    setPresetTitle(title);
+    setOpen(true);
+  };
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -56,52 +63,15 @@ export default function DashboardPage() {
     );
   }, [totalSubmissions, totalViews]);
 
-  // Top 6 Recent Forms
-  const recentForms = useMemo(() => {
+  // Sorted Forms (passed to recent forms hub, which handles responsive slicing & search)
+  const sortedForms = useMemo(() => {
     if (!forms) return [];
-    return [...forms]
-      .sort((a, b) => {
-        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        return timeB - timeA;
-      })
-      .slice(0, 6);
+    return [...forms].sort((a, b) => {
+      const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return timeB - timeA;
+    });
   }, [forms]);
-
-  // 14-Day Timeline Data Generator for Recharts Area
-  const timelineData = useMemo(() => {
-    const days: { date: string; rawDate: string; submissions: number }[] = [];
-    const now = new Date();
-
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date(now);
-      d.setDate(d.getDate() - i);
-      const rawDate = d.toISOString().split("T")[0] ?? "";
-      const displayLabel = d.toLocaleDateString([], { month: "short", day: "numeric" });
-      days.push({
-        date: displayLabel,
-        rawDate,
-        submissions: 0,
-      });
-    }
-
-    if (stats?.allSubmissions && stats.allSubmissions.length > 0) {
-      const map = new Map<string, number>();
-      stats.allSubmissions.forEach((sub) => {
-        if (!sub.createdAt) return;
-        const dStr = new Date(sub.createdAt).toISOString().split("T")[0] ?? "";
-        map.set(dStr, (map.get(dStr) || 0) + 1);
-      });
-
-      days.forEach((day) => {
-        if (map.has(day.rawDate)) {
-          day.submissions = map.get(day.rawDate) || 0;
-        }
-      });
-    }
-
-    return days;
-  }, [stats]);
 
   const handleCreateForm = async (values: CreateFormValues) => {
     try {
@@ -137,8 +107,8 @@ export default function DashboardPage() {
   const firstForm = forms && forms.length > 0 && forms[0] ? forms[0] : null;
 
   return (
-    <div className="flex flex-col gap-8 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full animate-in fade-in duration-300">
-      {/* 1. Header & Quick Actions */}
+    <div className="flex flex-col gap-5 sm:gap-6 p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full animate-in fade-in duration-300">
+      {/* 1. Header & Quick Actions Bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
@@ -147,9 +117,15 @@ export default function DashboardPage() {
               className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.badge}`}
             >
               <IconSparkles className={`size-3 ${landingTheme.iconColor}`} />
-              <span>Workspace Overview</span>
+              <span>Workspace Cockpit</span>
             </Badge>
+
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground bg-muted/30 px-2 py-0.5 rounded-full border border-border/50">
+              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Operational</span>
+            </span>
           </div>
+
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl text-foreground">
             Welcome back,{" "}
             <span className={landingTheme.gradientText}>
@@ -158,11 +134,13 @@ export default function DashboardPage() {
             !
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Your forms, responses and activity — at a glance.
+            Live telemetry, response velocity, and forms management — at a glance.
           </p>
         </div>
 
+        {/* Action Controls */}
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          {/* Templates CTA (Retained & active as requested) */}
           <Button
             asChild
             variant="outline"
@@ -176,9 +154,9 @@ export default function DashboardPage() {
           </Button>
 
           <Button
-            onClick={() => setOpen(true)}
+            onClick={() => handleOpenCreate()}
             size="sm"
-            className={`gap-2 h-9 text-xs ${landingTheme.primaryButton}`}
+            className={`gap-1.5 h-9 text-xs font-semibold ${landingTheme.primaryButton}`}
           >
             <IconPlus className="size-3.5" />
             <span>Create Form</span>
@@ -186,7 +164,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 2. Executive KPI Metrics Cards */}
+      {/* 2. Executive KPI Metrics Strip (4 High-Contrast Cards) */}
       <DashboardMetrics
         isDataLoading={isDataLoading}
         totalForms={totalForms}
@@ -197,35 +175,69 @@ export default function DashboardPage() {
         completionRate={completionRate}
       />
 
-      {/* 3. Submissions Velocity Chart */}
-      <DashboardChart
-        isDataLoading={isDataLoading}
-        totalSubmissions={totalSubmissions}
-        timelineData={timelineData}
-        firstForm={firstForm}
-        onCopyFirstFormLink={
-          firstForm ? () => handleCopyLink(firstForm.id, firstForm.slug) : undefined
-        }
-      />
+      {/* 3. Asymmetric 2-Column SaaS Cockpit Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+        {/* Left / Main Stage (8 Columns): Velocity Chart + Active Forms Hub */}
+        <div className="lg:col-span-8 flex flex-col gap-5 sm:gap-6">
+          {/* Interactive Submissions Velocity Chart (with 7D/14D/30D switch) */}
+          <DashboardChart
+            isDataLoading={isDataLoading}
+            totalSubmissions={totalSubmissions}
+            allSubmissions={stats?.allSubmissions}
+            firstForm={firstForm}
+            onCopyFirstFormLink={
+              firstForm ? () => handleCopyLink(firstForm.id, firstForm.slug) : undefined
+            }
+          />
 
-      {/* 4. Recent Forms (Top 6 Cards) */}
-      <DashboardRecentForms
-        forms={recentForms}
-        totalForms={totalForms}
-        isLoading={isFormsLoading}
-        copiedId={copiedId}
-        onCopyLink={handleCopyLink}
-        onCreateOpen={() => setOpen(true)}
-      />
+          {/* Active Forms Hub (with Status Filter Tabs & Instant Search) */}
+          <DashboardRecentForms
+            forms={sortedForms}
+            totalForms={totalForms}
+            isLoading={isFormsLoading}
+            copiedId={copiedId}
+            onCopyLink={handleCopyLink}
+            onCreateOpen={handleOpenCreate}
+          />
+        </div>
 
-      {/* 5. Live Activity Feed (Incoming Responses) */}
-      <DashboardActivityFeed submissions={stats?.recentSubmissions} isLoading={isStatsLoading} />
+        {/* Right / Utility Rail (4 Columns on desktop, 2-column grid on tablet) */}
+        <div className="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-col gap-5 sm:gap-6">
+          {/* Workspace Quota & Capacity Meter */}
+          <div className="w-full">
+            <DashboardQuota
+              isDataLoading={isDataLoading}
+              totalSubmissions={totalSubmissions}
+              totalForms={totalForms}
+              publishedCount={publishedCount}
+            />
+          </div>
 
-      {/* 6. Pro Shortcuts Hub */}
-      <DashboardShortcuts onCreateOpen={() => setOpen(true)} />
+          {/* Realtime Submissions Stream */}
+          <div className="w-full">
+            <DashboardActivityFeed
+              submissions={stats?.recentSubmissions}
+              isLoading={isStatsLoading}
+            />
+          </div>
+
+          {/* Pro Action Launcher Shortcuts */}
+          <div className="w-full md:col-span-2 lg:col-span-1">
+            <DashboardShortcuts onCreateOpen={() => handleOpenCreate()} />
+          </div>
+        </div>
+      </div>
 
       {/* Standardized Create Form Dialog */}
-      <CreateFormDialog open={open} onOpenChange={setOpen} onSubmit={handleCreateForm} />
+      <CreateFormDialog
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) setPresetTitle(undefined);
+        }}
+        onSubmit={handleCreateForm}
+        defaultTitle={presetTitle}
+      />
     </div>
   );
 }

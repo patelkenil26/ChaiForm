@@ -13,6 +13,7 @@ import {
   IconArrowRight,
   IconCheck,
   IconSparkles,
+  IconSettings,
 } from "@tabler/icons-react";
 import {
   CommandDialog,
@@ -230,6 +231,16 @@ export function GlobalCommandPalette({
             <IconCompass className="size-4 text-muted-foreground" />
             <span className="text-xs sm:text-sm font-medium">Templates Gallery</span>
             <CommandShortcut className="text-[10px] font-mono">/explore</CommandShortcut>
+          </CommandItem>
+
+          <CommandItem
+            value="navigation settings workspace account preferences"
+            onSelect={() => handleSelect(() => router.push("/settings"))}
+            className="flex items-center gap-2.5 py-2 px-3 rounded-lg cursor-pointer hover:bg-accent"
+          >
+            <IconSettings className="size-4 text-muted-foreground" />
+            <span className="text-xs sm:text-sm font-medium">Workspace Settings</span>
+            <CommandShortcut className="text-[10px] font-mono">/settings</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 

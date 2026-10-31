@@ -3,13 +3,13 @@
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  PlusIcon,
-  ArchiveIcon,
-  LayoutListIcon,
-  SearchIcon,
-  XIcon,
-  SparklesIcon,
-} from "lucide-react";
+  IconPlus,
+  IconArchive,
+  IconLayoutList,
+  IconSearch,
+  IconX,
+  IconSparkles,
+} from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -179,7 +179,7 @@ export default function FormsPage() {
               variant="outline"
               className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.dashboardBadge}`}
             >
-              <SparklesIcon className={`size-3 ${landingTheme.iconColor}`} />
+              <IconSparkles className={`size-3 ${landingTheme.iconColor}`} />
               <span>Form Directory</span>
             </Badge>
           </div>
@@ -192,9 +192,9 @@ export default function FormsPage() {
         </div>
         <Button
           onClick={() => setCreateOpen(true)}
-          className={`gap-1.5 self-start sm:self-auto h-9 text-xs ${landingTheme.primaryButton}`}
+          className={`gap-1.5 self-start sm:self-auto h-9 text-xs cursor-pointer ${landingTheme.primaryButton}`}
         >
-          <PlusIcon className="size-4" />
+          <IconPlus className="size-4" />
           <span>Create Form</span>
         </Button>
       </div>
@@ -211,7 +211,7 @@ export default function FormsPage() {
               activeTab === "ACTIVE" ? landingTheme.tabActive : landingTheme.tabInactive
             }`}
           >
-            <LayoutListIcon
+            <IconLayoutList
               className={`size-3.5 ${
                 activeTab === "ACTIVE" ? landingTheme.iconColor : "text-muted-foreground"
               }`}
@@ -237,7 +237,7 @@ export default function FormsPage() {
               activeTab === "ARCHIVED" ? landingTheme.tabActive : landingTheme.tabInactive
             }`}
           >
-            <ArchiveIcon
+            <IconArchive
               className={`size-3.5 ${
                 activeTab === "ARCHIVED" ? landingTheme.iconColor : "text-muted-foreground"
               }`}
@@ -282,7 +282,7 @@ export default function FormsPage() {
           </Select>
 
           <div className="relative w-full sm:w-60">
-            <SearchIcon className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <IconSearch className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
               placeholder="Search forms..."
@@ -294,9 +294,10 @@ export default function FormsPage() {
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs cursor-pointer p-0.5 rounded"
+                aria-label="Clear search"
               >
-                <XIcon className="size-3" />
+                <IconX className="size-3" />
               </button>
             )}
           </div>

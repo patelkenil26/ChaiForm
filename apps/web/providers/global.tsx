@@ -36,7 +36,7 @@ export const GlobalProviders: React.FC<{ children: React.ReactNode }> = ({ child
       >
         <trpc.Provider queryClient={queryClient} client={trpcClient}>
           {children}
-          <Toaster />
+          <Toaster position="top-right" />
         </trpc.Provider>
       </NextThemesProvider>
     </QueryClientProvider>

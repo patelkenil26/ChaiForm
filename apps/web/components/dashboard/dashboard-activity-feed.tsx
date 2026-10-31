@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { IconInbox, IconArrowRight, IconSend } from "@tabler/icons-react";
+import { IconInbox, IconArrowRight, IconSend, IconChevronRight } from "@tabler/icons-react";
 import { Card } from "~/components/ui/card";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { landingTheme } from "~/config/landing-theme";
@@ -24,22 +23,29 @@ export interface DashboardActivityFeedProps {
 }
 
 /**
- * Real-time incoming respondent submissions feed with instant audit links.
+ * Compact, real-time incoming respondent submissions feed tailored for the SaaS cockpit right rail.
  */
 export function DashboardActivityFeed({ submissions, isLoading }: DashboardActivityFeedProps) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+    <Card
+      className={`p-4 sm:p-5 rounded-2xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} relative overflow-hidden transition-all`}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <IconInbox className="size-4 text-emerald-400" />
-            <h2 className="text-base sm:text-lg font-bold tracking-tight">
-              Recent Submissions Feed
-            </h2>
+            <div
+              className={`flex size-8 items-center justify-center rounded-lg ${landingTheme.iconBg}`}
+            >
+              <IconInbox className="size-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold tracking-tight text-foreground">
+                Recent Submissions
+              </h3>
+              <p className="text-[11px] text-muted-foreground">Live respondent answers stream</p>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Live respondents answering your conversational forms across the workspace.
-          </p>
         </div>
 
         {submissions && submissions.length > 0 && (
@@ -47,91 +53,82 @@ export function DashboardActivityFeed({ submissions, isLoading }: DashboardActiv
             variant="ghost"
             size="sm"
             asChild
-            className={`text-xs gap-1.5 font-medium text-muted-foreground ${landingTheme.linkHover}`}
+            className={`h-7 px-2 text-xs font-semibold gap-1 text-muted-foreground ${landingTheme.linkHover}`}
+            title="Open all respondent submissions table"
           >
             <Link href="/submissions">
-              <span>All Submissions</span>
-              <IconArrowRight className="size-3.5" />
+              <span>View All</span>
+              <IconArrowRight className="size-3" />
             </Link>
           </Button>
         )}
       </div>
 
+      {/* Content */}
       {isLoading ? (
-        <Card className="p-6">
-          <Skeleton className="h-6 w-full mb-3" />
-          <Skeleton className="h-6 w-full mb-3" />
-          <Skeleton className="h-6 w-full" />
-        </Card>
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3 p-2">
+              <Skeleton className="size-8 rounded-lg shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-3 w-3/4" />
+                <Skeleton className="h-2 w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : !submissions || submissions.length === 0 ? (
-        <Card className="flex flex-col items-center justify-center p-8 text-center border-dashed">
+        <div className="flex flex-col items-center justify-center p-6 text-center border border-dashed border-border/60 rounded-xl bg-card/40">
           <div
-            className={`flex size-10 items-center justify-center rounded-full ${landingTheme.iconBg} mb-2`}
+            className={`flex size-9 items-center justify-center rounded-xl ${landingTheme.iconBg} mb-2`}
           >
-            <IconInbox className="size-5" />
+            <IconInbox className="size-4.5" />
           </div>
-          <h4 className="text-sm font-semibold">No recent submissions yet</h4>
-          <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-            As soon as users complete any of your live forms, incoming responses will stream into
-            this feed.
+          <h4 className="text-xs font-semibold text-foreground">No submissions recorded yet</h4>
+          <p className="text-[11px] text-muted-foreground mt-0.5 max-w-xs leading-relaxed">
+            When someone completes any of your live forms, their submitted answers will appear here
+            in real-time.
           </p>
-        </Card>
+        </div>
       ) : (
-        <div
-          className={`rounded-2xl border ${landingTheme.cardBg} overflow-hidden ${landingTheme.cardBorderHover} transition-all`}
-        >
-          <div className="divide-y divide-border/50">
-            {submissions.map((sub) => (
-              <div
+        <div className="space-y-2 max-h-[340px] overflow-y-auto pr-1">
+          {submissions.slice(0, 5).map((sub) => {
+            const inspectHref = sub.formId ? `/forms/${sub.formId}/submissions` : "/submissions";
+            return (
+              <Link
                 key={sub.id}
-                className={`flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:px-5 gap-3 ${landingTheme.tableRowHover}`}
+                href={inspectHref}
+                title="Click to view full answer sheet"
+                className="group flex items-center justify-between p-2.5 rounded-xl border border-border/40 bg-muted/20 hover:bg-muted/40 hover:border-lime-500/30 transition-all cursor-pointer"
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted border border-border/60 text-muted-foreground">
-                    <span
-                      className={`absolute -top-0.5 -right-0.5 size-2 rounded-full ${landingTheme.activeDot}`}
-                    />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="relative flex size-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground group-hover:text-foreground transition-colors">
+                    <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-emerald-400" />
                     <IconSend className="size-3.5" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span
-                        className="font-semibold text-xs sm:text-sm text-foreground truncate max-w-[200px] sm:max-w-xs"
-                        title={sub.formTitle || "Untitled Form"}
-                      >
-                        {sub.formTitle || "Untitled Form"}
-                      </span>
-                      <Badge variant="outline" className={landingTheme.draftBadge}>
-                        {sub.answersCount} {sub.answersCount === 1 ? "answer" : "answers"}
-                      </Badge>
-                    </div>
-                    <span className="text-[11px] text-muted-foreground">
-                      Verified response • {formatRelativeTime(sub.createdAt)}
+                    <span
+                      className="font-semibold text-xs text-foreground truncate max-w-[140px] sm:max-w-[170px] group-hover:text-lime-400 transition-colors"
+                      title={sub.formTitle || "Untitled Form"}
+                    >
+                      {sub.formTitle || "Untitled Form"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {sub.answersCount} {sub.answersCount === 1 ? "answer" : "answers"} •{" "}
+                      {formatRelativeTime(sub.createdAt)}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-                  <span className="text-xs text-muted-foreground">
-                    {formatRelativeTime(sub.createdAt)}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className={`text-xs h-7.5 gap-1 border-border/70 ${landingTheme.buttonOutlineHover}`}
-                  >
-                    <Link href={sub.formId ? `/submissions?formId=${sub.formId}` : "/submissions"}>
-                      <span>Inspect</span>
-                      <IconArrowRight className="size-3" />
-                    </Link>
-                  </Button>
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground group-hover:text-lime-400 transition-colors pl-2 shrink-0">
+                  <span className="hidden sm:inline">Review</span>
+                  <IconChevronRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </div>
-            ))}
-          </div>
+              </Link>
+            );
+          })}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { SparklesIcon } from "lucide-react";
+import { IconSparkles } from "@tabler/icons-react";
 import { landingTheme } from "~/config/landing-theme";
 
 export function DropInsertionLine() {
@@ -11,7 +11,7 @@ export function DropInsertionLine() {
         <div
           className={`flex items-center gap-1.5 px-3 py-0.5 rounded-full ${landingTheme.primaryButton} font-bold text-[10px] tracking-wide uppercase shadow-md border border-white/20`}
         >
-          <SparklesIcon className="size-3" />
+          <IconSparkles className="size-3" />
           <span>Insert Here</span>
         </div>
       </div>

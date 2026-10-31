@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import {
-  SlidersHorizontalIcon,
-  LockIcon,
-  EyeIcon,
-  EyeOffIcon,
-  LinkIcon,
-  ClockIcon,
-  UsersIcon,
-  Loader2,
-} from "lucide-react";
+  IconAdjustmentsHorizontal,
+  IconLock,
+  IconEye,
+  IconEyeOff,
+  IconLink,
+  IconClock,
+  IconUsers,
+  IconLoader2,
+} from "@tabler/icons-react";
 import {
   Dialog,
   DialogContent,
@@ -99,7 +99,7 @@ export function FormSettingsDialog({
 
       if (form.isPasswordProtected) {
         setHasPassword(true);
-        setPasswordValue(""); // Keep empty as placeholder to avoid exposing hash or if creator wants to change it
+        setPasswordValue(""); // Keep empty as placeholder to avoid exposing hash
       } else {
         setHasPassword(false);
         setPasswordValue("");
@@ -131,15 +131,11 @@ export function FormSettingsDialog({
     const responseLimit = hasLimit && limitValue ? parseInt(limitValue, 10) : null;
     const slug = hasSlug && slugValue.trim() ? slugValue.toLowerCase().trim() : null;
 
-    // If password toggle is turned off, send null to remove it from DB.
-    // If password toggle is on and user typed a new password, send it.
-    // If password toggle is on and field is blank, send undefined to preserve existing password.
     let passwordPayload: string | null = null;
     if (hasPassword) {
       if (passwordValue.trim().length > 0) {
         passwordPayload = passwordValue.trim();
       } else if (form.isPasswordProtected) {
-        // preserve existing password by sending undefined or leaving unchanged
         passwordPayload = undefined as unknown as string;
       }
     } else {
@@ -160,14 +156,14 @@ export function FormSettingsDialog({
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <SlidersHorizontalIcon className="size-5 text-primary" />
-            Form Settings, URL & Access
+            <IconAdjustmentsHorizontal className="size-5 text-lime-600 dark:text-[#ccff00]" />
+            <span>Form Settings & Access</span>
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
           {/* Submission status banner */}
-          <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/40 text-xs">
+          <div className="flex items-center justify-between p-3 rounded-xl border border-border/70 bg-muted/40 text-xs">
             <span className="text-muted-foreground">Current Submissions:</span>
             <span className="font-semibold text-foreground">
               {form.submissionCount} {form.responseLimit ? `/ ${form.responseLimit}` : "responses"}
@@ -175,11 +171,11 @@ export function FormSettingsDialog({
           </div>
 
           {/* Password Protection Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 p-4 bg-card">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <LockIcon className="size-3.5 text-primary" />
+                  <IconLock className="size-3.5 text-lime-600 dark:text-[#ccff00]" />
                   <Label htmlFor="toggle-password" className="text-sm font-medium cursor-pointer">
                     Password Protection
                   </Label>
@@ -220,14 +216,14 @@ export function FormSettingsDialog({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-1 size-7 text-muted-foreground hover:text-foreground"
+                    className="absolute right-1 size-7 text-muted-foreground hover:text-foreground cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)}
                     tabIndex={-1}
                   >
                     {showPassword ? (
-                      <EyeOffIcon className="size-4" />
+                      <IconEyeOff className="size-4" />
                     ) : (
-                      <EyeIcon className="size-4" />
+                      <IconEye className="size-4" />
                     )}
                     <span className="sr-only">Toggle password visibility</span>
                   </Button>
@@ -240,11 +236,11 @@ export function FormSettingsDialog({
           </div>
 
           {/* Custom Slug / Clean URL Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 p-4 bg-card">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <LinkIcon className="size-3.5 text-blue-500" />
+                  <IconLink className="size-3.5 text-blue-500" />
                   <Label htmlFor="toggle-slug" className="text-sm font-medium cursor-pointer">
                     Custom Clean URL
                   </Label>
@@ -259,7 +255,7 @@ export function FormSettingsDialog({
             {hasSlug && (
               <div className="pt-2 space-y-1.5">
                 <FieldLabel htmlFor="custom-slug">Public URL Slug</FieldLabel>
-                <div className="flex items-center rounded-md border bg-muted/40 px-3 focus-within:ring-1 focus-within:ring-ring">
+                <div className="flex items-center rounded-lg border border-border/70 bg-muted/40 px-3 focus-within:ring-1 focus-within:ring-lime-500/50">
                   <span className="text-xs text-muted-foreground font-mono select-none">
                     /form/
                   </span>
@@ -276,7 +272,7 @@ export function FormSettingsDialog({
                         .replace(/[^a-z0-9-]/g, "");
                       setSlugValue(val);
                     }}
-                    className="w-full bg-transparent px-1.5 py-2 text-xs font-mono outline-none"
+                    className="w-full bg-transparent px-1.5 py-2 text-xs font-mono outline-hidden text-foreground"
                     required={hasSlug}
                   />
                   <CharacterCounter current={slugValue.length} max={60} className="shrink-0 ml-1" />
@@ -289,11 +285,11 @@ export function FormSettingsDialog({
           </div>
 
           {/* Expiry Date Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 p-4 bg-card">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <ClockIcon className={`size-3.5 ${landingTheme.iconColor}`} />
+                  <IconClock className={`size-3.5 ${landingTheme.iconColor}`} />
                   <Label htmlFor="toggle-expiry" className="text-sm font-medium cursor-pointer">
                     Schedule Expiration
                   </Label>
@@ -321,11 +317,11 @@ export function FormSettingsDialog({
           </div>
 
           {/* Response Limit Section */}
-          <div className="flex flex-col gap-3 rounded-xl border p-4 bg-card">
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 p-4 bg-card">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <UsersIcon className="size-3.5 text-emerald-500" />
+                  <IconUsers className="size-3.5 text-emerald-500" />
                   <Label htmlFor="toggle-limit" className="text-sm font-medium cursor-pointer">
                     Response Cap
                   </Label>
@@ -368,7 +364,7 @@ export function FormSettingsDialog({
               disabled={isSaving}
               className={`gap-2 ${landingTheme.primaryButton}`}
             >
-              {isSaving && <Loader2 className="size-4 animate-spin" />}
+              {isSaving && <IconLoader2 className="size-4 animate-spin" />}
               {isSaving ? "Saving..." : "Save Settings"}
             </Button>
           </DialogFooter>

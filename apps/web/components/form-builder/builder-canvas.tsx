@@ -4,6 +4,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { BuilderFieldCard, type ExtendedFieldRow } from "./builder-field-card";
 import { DropInsertionLine } from "./drop-insertion-line";
 import { BuilderEmptyCanvas } from "./builder-empty-canvas";
+import type { FieldType } from "./field-types";
 
 interface BuilderCanvasProps {
   fields: ExtendedFieldRow[];
@@ -24,7 +25,7 @@ interface BuilderCanvasProps {
   onDropRow: (e: React.DragEvent, index: number) => void;
   onDragEndRow: () => void;
   onMoveField?: (index: number, direction: "up" | "down") => void;
-  onAddFirstQuestion: () => void;
+  onAddFirstQuestion: (type?: FieldType) => void;
 }
 
 export function BuilderCanvas({

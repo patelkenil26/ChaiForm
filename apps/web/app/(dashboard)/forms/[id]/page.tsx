@@ -229,7 +229,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
             onDropRow={handleDropRow}
             onDragEndRow={handleDragEndRow}
             onMoveField={handleMoveField}
-            onAddFirstQuestion={() => handleAddField("TEXT")}
+            onAddFirstQuestion={(type) => handleAddField(type ?? "TEXT")}
           />
         </div>
 

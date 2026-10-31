@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useState, useMemo } from "react";
-import { PlusIcon, SearchIcon, XIcon, SparklesIcon } from "lucide-react";
+import { IconPlus, IconSearch, IconX, IconSparkles } from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import {
@@ -69,7 +69,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
           className={`group flex items-center gap-2 h-11 px-4 rounded-full ${landingTheme.primaryButton} text-xs sm:text-sm shadow-xl border border-white/20 active:scale-95 transition-all cursor-pointer whitespace-nowrap`}
         >
           <div className="size-5 rounded-full bg-neutral-950/15 flex items-center justify-center shrink-0">
-            <PlusIcon className="size-3.5 stroke-[2.5]" />
+            <IconPlus className="size-3.5 stroke-[2.5]" />
           </div>
           <span className="tracking-tight text-neutral-950 font-semibold whitespace-nowrap">
             Add Question
@@ -87,7 +87,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                 <div
                   className={`size-7 rounded-lg ${landingTheme.iconBg} flex items-center justify-center`}
                 >
-                  <SparklesIcon className="size-3.5" />
+                  <IconSparkles className="size-3.5" />
                 </div>
                 <div>
                   <DrawerTitle className="text-base font-semibold tracking-tight text-foreground">
@@ -102,16 +102,16 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="size-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                className="size-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
                 aria-label="Close"
               >
-                <XIcon className="size-4" />
+                <IconX className="size-4" />
               </button>
             </div>
 
             {/* Quick Search Input */}
             <div className="relative mt-3">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+              <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground pointer-events-none" />
               <Input
                 placeholder="Search question types (e.g. Email, Star, Dropdown)..."
                 value={search}
@@ -122,9 +122,9 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                 <button
                   type="button"
                   onClick={() => setSearch("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
                 >
-                  <XIcon className="size-3.5" />
+                  <IconX className="size-3.5" />
                 </button>
               )}
             </div>
@@ -141,7 +141,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                     className={cn(
                       "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer",
                       isActive
-                        ? `${landingTheme.iconBg} font-semibold shadow-xs`
+                        ? "bg-lime-500/15 text-lime-700 dark:text-[#ccff00] border border-lime-600/30 dark:border-[#ccff00]/30 font-semibold shadow-xs"
                         : "text-muted-foreground hover:text-foreground bg-muted/40 hover:bg-muted/70 border border-transparent",
                     )}
                   >
@@ -156,7 +156,7 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
           <div className="flex-1 overflow-y-auto px-4 py-3 custom-scrollbar">
             <div className="grid grid-cols-2 gap-2 pb-6">
               {filteredFields.map((field) => {
-                const Icon = field.icon;
+                const IconComponent = field.icon;
                 return (
                   <button
                     key={field.type}
@@ -168,19 +168,18 @@ export function MobileAddFieldDrawer({ onAddField }: MobileAddFieldDrawerProps) 
                       <div
                         className={`size-8 rounded-lg bg-muted/60 ${landingTheme.iconBg} flex items-center justify-center transition-colors`}
                       >
-                        <Icon className="size-4" />
+                        <IconComponent className="size-4" />
                       </div>
                       <span
                         className={`size-5 rounded-full flex items-center justify-center text-muted-foreground/60 group-hover:${landingTheme.primaryText} transition-colors`}
                       >
-                        <PlusIcon className="size-3.5" />
+                        <IconPlus className="size-3.5" />
                       </span>
                     </div>
 
                     <span
                       className={`text-xs font-semibold text-foreground group-hover:${landingTheme.primaryText} transition-colors line-clamp-1`}
                     >
-                      {field.label}
                       {field.label}
                     </span>
                     <span className="text-[11px] text-muted-foreground leading-tight mt-0.5 line-clamp-2">

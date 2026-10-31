@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconClipboardPlus } from "@tabler/icons-react";
-import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { SidebarTrigger } from "~/components/ui/sidebar";
 import {
@@ -17,6 +15,8 @@ import {
 } from "~/components/ui/breadcrumb";
 import { ThemesComingSoonButton } from "~/components/themes/themes-modal";
 import { GlobalCommandPalette, CommandSearchTrigger } from "~/components/global-command-palette";
+import { WorkspaceQuotaPill } from "~/components/workspace/workspace-quota-pill";
+import { ThemeToggle } from "~/components/theme-toggle";
 import { landingTheme } from "~/config/landing-theme";
 
 export function SiteHeader() {
@@ -104,6 +104,16 @@ export function SiteHeader() {
       );
     }
 
+    if (pathname === "/settings" || pathname.startsWith("/settings/")) {
+      return (
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage className="font-semibold text-foreground">Settings</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      );
+    }
+
     return (
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -121,22 +131,18 @@ export function SiteHeader() {
         <div className="flex-1 min-w-0">
           <Breadcrumb className="truncate text-xs sm:text-sm">{renderBreadcrumbs()}</Breadcrumb>
         </div>
-        <div className="ml-auto flex items-center gap-2 shrink-0">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Monthly Response Capacity Pill */}
+          <WorkspaceQuotaPill />
+
+          {/* Global Search Palette (⌘K) */}
           <CommandSearchTrigger onClick={() => setSearchOpen(true)} />
-          <ThemesComingSoonButton />
-          {pathname !== "/forms" && pathname !== "/dashboard/forms" && (
-            <Button
-              size="sm"
-              asChild
-              variant="outline"
-              className={`hidden lg:inline-flex text-xs border-border/70 ${landingTheme.buttonOutlineHover}`}
-            >
-              <Link href="/forms">
-                <IconClipboardPlus className={`size-3.5 mr-1.5 ${landingTheme.iconColor}`} />
-                Forms
-              </Link>
-            </Button>
-          )}
+
+          {/* Themes Preview Modal */}
+          <ThemesComingSoonButton className="hidden sm:inline-flex" />
+
+          {/* Dark / Light Mode Switcher */}
+          <ThemeToggle className="size-8" />
         </div>
       </div>
 

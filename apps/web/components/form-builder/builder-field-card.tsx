@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  PencilIcon,
-  Trash2Icon,
-  GripVerticalIcon,
-  CheckIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-} from "lucide-react";
+  IconPencil,
+  IconTrash,
+  IconGripVertical,
+  IconCheck,
+  IconChevronUp,
+  IconChevronDown,
+} from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -108,7 +108,7 @@ export function BuilderFieldCard({
         field.hasError
           ? "border-destructive/80 bg-destructive/5"
           : field.isDraft
-            ? "border-primary/40 bg-primary/5 shadow-2xs"
+            ? "border-lime-500/40 bg-lime-500/5 dark:bg-[#ccff00]/5 shadow-2xs"
             : isEditMode
               ? "border-border/90 bg-card"
               : "border-border/60 bg-card/60"
@@ -117,17 +117,17 @@ export function BuilderFieldCard({
       <div className="flex items-center justify-between gap-3 min-w-0">
         {/* Left: Drag Handle (Only in Edit Mode) + Input / Display */}
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          {/* Reordering Controls: Drag handle on desktop, Up/Down arrows everywhere in edit mode or touch devices */}
+          {/* Reordering Controls: Drag handle on desktop, Up/Down arrows with touch-friendly size */}
           {canDrag && isEditMode && (
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <div
                 className="hidden sm:flex cursor-grab active:cursor-grabbing text-muted-foreground/50 hover:text-foreground transition-colors p-0.5"
                 title="Drag to reorder question"
               >
-                <GripVerticalIcon className="size-4" />
+                <IconGripVertical className="size-4" />
               </div>
               {onMoveField && (
-                <div className="flex flex-col -space-y-0.5">
+                <div className="flex flex-row sm:flex-col items-center gap-1 sm:gap-0.5">
                   <button
                     type="button"
                     disabled={index === 0}
@@ -135,11 +135,11 @@ export function BuilderFieldCard({
                       e.stopPropagation();
                       onMoveField(index, "up");
                     }}
-                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+                    className="size-7 sm:size-5 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground bg-muted/50 hover:bg-muted disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer border border-border/40"
                     title="Move question up"
                     aria-label="Move question up"
                   >
-                    <ChevronUpIcon className="size-3 stroke-[2.5]" />
+                    <IconChevronUp className="size-4 sm:size-3 stroke-[2.5]" />
                   </button>
                   <button
                     type="button"
@@ -148,11 +148,11 @@ export function BuilderFieldCard({
                       e.stopPropagation();
                       onMoveField(index, "down");
                     }}
-                    className="size-4 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+                    className="size-7 sm:size-5 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground bg-muted/50 hover:bg-muted disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer border border-border/40"
                     title="Move question down"
                     aria-label="Move question down"
                   >
-                    <ChevronDownIcon className="size-3 stroke-[2.5]" />
+                    <IconChevronDown className="size-4 sm:size-3 stroke-[2.5]" />
                   </button>
                 </div>
               )}
@@ -161,9 +161,9 @@ export function BuilderFieldCard({
 
           {/* Title Area: Inline Edit vs View Mode */}
           {isEditMode ? (
-            <div className="flex flex-col gap-1 flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <div className="relative flex-1 sm:max-w-md w-full">
+            <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-wrap">
+                <div className="relative flex-1 min-w-[200px] w-full">
                   <Input
                     value={field.label}
                     placeholder={field.placeholder || getFieldPlaceholder(field.type)}
@@ -181,7 +181,7 @@ export function BuilderFieldCard({
                     className={`h-8 text-sm font-medium rounded-lg w-full pr-14 bg-background/80 transition ${
                       field.hasError
                         ? "border-destructive focus-visible:ring-destructive"
-                        : "border-border/80 focus-visible:ring-primary/30 focus-visible:border-primary/50"
+                        : "border-border/80 focus-visible:ring-lime-500/30 focus-visible:border-lime-500/50 dark:focus-visible:ring-[#ccff00]/30"
                     }`}
                     autoFocus={!field.label}
                   />
@@ -192,52 +192,54 @@ export function BuilderFieldCard({
                   />
                 </div>
 
-                {/* Inline Type Selector */}
-                <Select
-                  value={field.type}
-                  onValueChange={(val) =>
-                    onUpdate({
-                      ...field,
-                      type: val as FieldType,
-                      options:
-                        val === "SELECT" || val === "RADIO" || val === "CHECKBOX"
-                          ? field.options?.length
-                            ? field.options
-                            : ["Option 1", "Option 2"]
-                          : undefined,
-                    })
-                  }
-                >
-                  <SelectTrigger className="h-7 text-xs px-2.5 rounded-lg border-border/70 bg-background/60 w-auto gap-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {FIELD_TYPES.map((t) => (
-                      <SelectItem key={t} value={t} className="text-xs">
-                        {FIELD_TYPE_LABELS[t]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Inline Type Selector */}
+                  <Select
+                    value={field.type}
+                    onValueChange={(val) =>
+                      onUpdate({
+                        ...field,
+                        type: val as FieldType,
+                        options:
+                          val === "SELECT" || val === "RADIO" || val === "CHECKBOX"
+                            ? field.options?.length
+                              ? field.options
+                              : ["Option 1", "Option 2"]
+                            : undefined,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-7 text-xs px-2.5 rounded-lg border-border/70 bg-background/60 w-auto gap-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {FIELD_TYPES.map((t) => (
+                        <SelectItem key={t} value={t} className="text-xs">
+                          {FIELD_TYPE_LABELS[t]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                {/* Inline Required Toggle Badge */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    onUpdate({
-                      ...field,
-                      isRequired: !field.isRequired,
-                    })
-                  }
-                  className={`h-7 px-2.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer select-none inline-flex items-center gap-1 ${
-                    field.isRequired
-                      ? `${landingTheme.callout.bg} ${landingTheme.callout.border} ${landingTheme.callout.accent}`
-                      : "bg-muted/40 border-border/50 text-muted-foreground hover:text-foreground"
-                  }`}
-                  title="Click to toggle required"
-                >
-                  <span>{field.isRequired ? "Required" : "Optional"}</span>
-                </button>
+                  {/* Inline Required Toggle Badge */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onUpdate({
+                        ...field,
+                        isRequired: !field.isRequired,
+                      })
+                    }
+                    className={`h-7 px-2.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer select-none inline-flex items-center gap-1 ${
+                      field.isRequired
+                        ? "bg-lime-500/10 dark:bg-[#ccff00]/10 border-lime-500/30 text-lime-700 dark:text-[#ccff00]"
+                        : "bg-muted/40 border-border/50 text-muted-foreground hover:text-foreground"
+                    }`}
+                    title="Click to toggle required"
+                  >
+                    <span>{field.isRequired ? "Required" : "Optional"}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Validation error text */}
@@ -289,7 +291,7 @@ export function BuilderFieldCard({
                   {field.isRequired ? (
                     <Badge
                       variant="secondary"
-                      className={`text-[10px] ${landingTheme.callout.bg} ${landingTheme.callout.accent} ${landingTheme.callout.border} font-medium py-0 px-1.5`}
+                      className="text-[10px] bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-700 dark:text-[#ccff00] border border-lime-500/20 font-medium py-0 px-1.5"
                     >
                       Required
                     </Badge>
@@ -347,7 +349,7 @@ export function BuilderFieldCard({
               onClick={() => onToggleSingleEdit(field.id)}
               title="Done editing question"
             >
-              <CheckIcon className={`size-3.5 ${landingTheme.iconColor}`} />
+              <IconCheck className={`size-3.5 ${landingTheme.iconColor}`} />
               <span>Save</span>
             </Button>
           ) : (
@@ -355,11 +357,11 @@ export function BuilderFieldCard({
               type="button"
               variant="ghost"
               size="icon"
-              className="size-8 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+              className="size-8 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
               onClick={() => onToggleSingleEdit(field.id)}
               title={`Edit ${field.label}`}
             >
-              <PencilIcon className="size-4" />
+              <IconPencil className="size-4" />
               <span className="sr-only">Toggle edit</span>
             </Button>
           )}
@@ -368,11 +370,11 @@ export function BuilderFieldCard({
             type="button"
             variant="ghost"
             size="icon"
-            className="size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            className="size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
             onClick={() => onDelete(field.id)}
             title={`Delete ${field.label}`}
           >
-            <Trash2Icon className="size-4" />
+            <IconTrash className="size-4" />
             <span className="sr-only">Delete</span>
           </Button>
         </div>
@@ -380,7 +382,7 @@ export function BuilderFieldCard({
 
       {/* Choice Options Editor (Only if select/radio/checkbox and in edit mode) */}
       {isChoice && isEditMode && (
-        <div className="pl-0 sm:pl-6.5 pt-1 border-t border-border/40 mt-1">
+        <div className="pl-0 sm:pl-7 pt-1 border-t border-border/40 mt-1">
           <FieldOptionsEditor
             options={field.options || []}
             onChange={(newOptions) => onUpdate({ ...field, options: newOptions })}
@@ -389,7 +391,7 @@ export function BuilderFieldCard({
       )}
 
       {/* Slug / Key Preview (Aligned cleanly with title) */}
-      <div className={canDrag && isEditMode ? "pl-0 sm:pl-6.5" : "pl-0"}>
+      <div className={canDrag && isEditMode ? "pl-0 sm:pl-7" : "pl-0"}>
         {field.label ? (
           <p className="text-xs text-muted-foreground/60 font-mono truncate">{slug}</p>
         ) : (
