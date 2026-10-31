@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { IconSparkles, IconMail } from "@tabler/icons-react";
 import { landingTheme } from "~/config/landing-theme";
+import { ChaiFormLogo } from "~/components/brand/chaiform-logo";
 
 export function LandingFooter() {
   return (
@@ -13,19 +13,12 @@ export function LandingFooter() {
           {/* Brand Info (Spans 2 cols on md) */}
           <div className="col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative size-7 flex items-center justify-center">
-                <Image
-                  src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-                  alt="ChaiForm"
-                  width={28}
-                  height={28}
-                  className="size-full object-contain"
-                />
-              </div>
+              <ChaiFormLogo size={28} />
               <span className="font-bold text-foreground text-base tracking-tight">ChaiForm</span>
             </Link>
             <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
-              Create fluid, conversational forms that people actually enjoy filling. 1-question-at-a-time focus, instant QR codes, and real-time response analytics.
+              Create fluid, conversational forms that people actually enjoy filling.
+              1-question-at-a-time focus, instant QR codes, and real-time response analytics.
             </p>
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground pt-1">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -45,13 +38,13 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/#features" className="hover:text-foreground transition-colors">
-                  14 Field Types
+                <Link href="/features" className="hover:text-foreground transition-colors">
+                  14 Field Types &amp; Features
                 </Link>
               </li>
               <li>
-                <Link href="/#integrations" className="hover:text-foreground transition-colors">
-                  Integrations
+                <Link href="/integrations" className="hover:text-foreground transition-colors">
+                  Embeds &amp; Webhooks
                 </Link>
               </li>
               <li>
@@ -162,4 +155,3 @@ export function LandingFooter() {
     </footer>
   );
 }
-

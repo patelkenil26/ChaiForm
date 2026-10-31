@@ -74,17 +74,17 @@ const CATEGORY_STYLES: Record<string, { label: string; badgeClass: string; accen
 function getQuestionMix(category: string): string[] {
   switch (category?.toUpperCase()) {
     case "SURVEYS":
-      return ["★ Rating ×1", "○ Choice ×3", "≡ Text ×2"];
+      return ["Rating ×1", "Choice ×3", "Text ×2"];
     case "FEEDBACK":
-      return ["★ Rating ×1", "≡ Long Text ×2", "○ Choice ×1"];
+      return ["Rating ×1", "Long Text ×2", "Choice ×1"];
     case "QUIZZES":
-      return ["○ Choice ×4", "✓ Multi ×2", "★ Score ×1"];
+      return ["Choice ×4", "Multi ×2", "Score ×1"];
     case "EVENTS":
-      return ["✉ Email ×1", "☎ Phone ×1", "📅 Date ×1"];
+      return ["Email ×1", "Phone ×1", "Date ×1"];
     case "APPLICATIONS":
-      return ["✉ Email ×1", "≡ Long Text ×2", "🔗 URL ×1"];
+      return ["Email ×1", "Long Text ×2", "URL ×1"];
     default:
-      return ["✉ Email ×1", "≡ Short Text ×2", "○ Choice ×1"];
+      return ["Email ×1", "Short Text ×2", "Choice ×1"];
   }
 }
 

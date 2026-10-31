@@ -21,15 +21,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "productivity", "utilities"],
     icons: [
       {
-        src: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/logo/chaiform-logo-dark-mode.png",
+        sizes: "192x192 512x512",
+        type: "image/png",
         purpose: "any",
       },
       {
-        src: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/logo/chaiform-logo-dark-mode.png",
+        sizes: "192x192 512x512",
+        type: "image/png",
         purpose: "maskable",
       },
     ],

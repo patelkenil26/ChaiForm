@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   IconFileSpreadsheet,
   IconBrandSlack,
@@ -8,95 +9,85 @@ import {
   IconBrandNextjs,
   IconWorld,
   IconSparkles,
-  IconCheck,
-  IconArrowRight,
   IconCode,
 } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
-import { landingTheme } from "~/config/landing-theme";
+import { CodeEditorWindow } from "~/components/common/code-editor-window";
+import { EMBED_TABS_CONFIG } from "./integrations/snippets-data";
+
+const ECOSYSTEM_TOOLS = [
+  { name: "Google Sheets", desc: "1-Click CSV sync", icon: IconFileSpreadsheet },
+  { name: "Slack", desc: "Instant lead pings", icon: IconBrandSlack },
+  { name: "Webhooks", desc: "Realtime JSON stream", icon: IconWebhook },
+  { name: "Email Alerts", desc: "Instant submissions dispatch", icon: IconMail },
+  { name: "Next.js & React", desc: "Native clean embed", icon: IconBrandNextjs },
+  { name: "Webflow & Framer", desc: "Zero iframe resizing bugs", icon: IconWorld },
+] as const;
 
 export function IntegrationsSection() {
-  const integrations = [
-    {
-      name: "Google Sheets & Excel",
-      desc: "Instant 1-click CSV export ready to open in Sheets, Excel, or Airtable.",
-      icon: IconFileSpreadsheet,
-      color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
-    },
-    {
-      name: "Webflow & WordPress",
-      desc: "Embed fluid conversational forms with zero custom CSS or iframe resizing bugs.",
-      icon: IconWorld,
-      color: "text-blue-400 bg-blue-500/10 border-blue-500/25",
-    },
-    {
-      name: "Next.js & React Sites",
-      desc: "Native responsive embed snippets that match your dark mode and typography seamlessly.",
-      icon: IconBrandNextjs,
-      color: "text-neutral-200 bg-neutral-500/10 border-neutral-500/25",
-    },
-    {
-      name: "Real-Time Webhooks",
-      desc: "Trigger automated HTTP JSON payloads to your own backend API or automation workflows.",
-      icon: IconWebhook,
-      color: "text-amber-400 bg-amber-500/10 border-amber-500/25",
-    },
-    {
-      name: "Email & Notification Alerts",
-      desc: "Get notified the moment a customer submits critical survey answers or lead inquiries.",
-      icon: IconMail,
-      color: "text-rose-400 bg-rose-500/10 border-rose-500/25",
-    },
-    {
-      name: "High-Resolution QR Codes",
-      desc: "Generate custom vector SVG & PNG QR codes with branded colors for print flyers and pitch decks.",
-      icon: IconSparkles,
-      color: "text-purple-400 bg-purple-500/10 border-purple-500/25",
-    },
-  ];
+  const [embedTab, setEmbedTab] = useState<string>("nextjs");
 
   return (
-    <section id="integrations" className="py-20 md:py-24 relative border-t border-border/40">
+    <section
+      id="integrations"
+      className="py-20 md:py-28 relative bg-background text-foreground border-t border-border/40 overflow-hidden"
+    >
+      {/* Ambient Atmospheric Light Beam */}
+      <div className="pointer-events-none absolute inset-0 -z-10 flex flex-col items-center overflow-hidden">
+        <div className="h-64 w-[85%] max-w-4xl rounded-full bg-gradient-to-b from-lime-500/10 via-emerald-500/5 to-transparent dark:from-[#CCFF00]/12 dark:via-[#CCFF00]/3 dark:to-transparent blur-[120px] -translate-y-1/2" />
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge
             variant="outline"
-            className={`text-xs px-3 py-1 ${landingTheme.badge} gap-1.5 mb-3`}
+            className="text-xs px-3.5 py-1 border-lime-600/30 dark:border-[#CCFF00]/30 bg-gradient-to-r from-lime-500/10 via-emerald-500/10 to-lime-500/5 dark:from-[#CCFF00]/15 dark:via-[#CCFF00]/10 dark:to-[#CCFF00]/5 text-lime-800 dark:text-[#CCFF00] gap-1.5 mb-4 shadow-xs font-semibold"
           >
-            <IconWebhook className="size-3.5" />
-            <span>Connected Workflows</span>
+            <IconSparkles className="size-3.5" />
+            <span>Developer Friendly &amp; Embeddable</span>
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Fits right into your existing stack.
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            <span className="bg-gradient-to-b from-foreground via-foreground/95 to-foreground/75 bg-clip-text text-transparent">
+              Embed anywhere.{" "}
+            </span>
+            <span className="bg-gradient-to-r from-lime-600 via-emerald-600 to-lime-700 dark:from-[#CCFF00] dark:via-[#E2FF66] dark:to-[#A3E635] bg-clip-text text-transparent">
+              Export to everything.
+            </span>
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Collect answers where your audience lives, and send responses wherever your team works.
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Drop your conversational form into Next.js, Webflow, or Framer with a 1-line snippet.
+            Verified responses stream automatically into your spreadsheet or backend.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {integrations.map((item) => (
-            <div
-              key={item.name}
-              className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl border border-border/70 bg-card/50 hover:border-border hover:bg-card/80 transition-all group shadow-2xs"
-            >
-              <div>
-                <div
-                  className={`flex size-11 items-center justify-center rounded-xl border ${item.color} mb-3.5 group-hover:scale-105 transition-transform`}
-                >
-                  <item.icon className="size-5" />
-                </div>
-                <h3 className="text-base font-bold text-foreground">{item.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Modular Code Editor Studio Component */}
+        <CodeEditorWindow
+          title="Embed Snippet Generator"
+          titleIcon={IconCode}
+          tabs={EMBED_TABS_CONFIG}
+          activeTabId={embedTab}
+          onTabChange={setEmbedTab}
+          className="mb-16"
+        />
 
-        {/* Built for Developers Note */}
-        <div className="mt-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
-          <IconCode className={`size-3.5 ${landingTheme.iconColor}`} />
-          <span>Built for developers: webhooks, JSON export &amp; responsive embed API.</span>
+        {/* Ecosystem Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {ECOSYSTEM_TOOLS.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <div
+                key={tool.name}
+                className="rounded-xl border border-border/80 bg-card p-4 text-center flex flex-col items-center justify-center hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-colors group shadow-xs"
+              >
+                <div className="size-9 rounded-lg bg-muted border border-border/70 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                  <Icon className="size-5 text-muted-foreground group-hover:text-lime-800 dark:group-hover:text-[#CCFF00] transition-colors" />
+                </div>
+                <div className="font-semibold text-xs text-foreground">{tool.name}</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{tool.desc}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

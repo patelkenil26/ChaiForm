@@ -6,7 +6,6 @@ import {
   IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
   IconLoader2,
   IconLogin,

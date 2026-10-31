@@ -12,12 +12,15 @@ import {
   IconCurrencyDollar,
   IconLogin,
   IconLayoutDashboard,
+  IconCode,
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet";
 import { useUser } from "~/hooks/api/auth";
 import { landingTheme } from "~/config/landing-theme";
+import { ChaiFormLogo } from "~/components/brand/chaiform-logo";
+import { ThemeToggle } from "~/components/theme-toggle";
 
 export function LandingNavbar() {
   const { user, isLoading } = useUser();
@@ -28,16 +31,11 @@ export function LandingNavbar() {
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative size-8 sm:size-9 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
-            <Image
-              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-              alt="ChaiForm Logo"
-              width={36}
-              height={36}
-              className="size-full object-contain"
-              priority
-            />
-          </div>
+          <ChaiFormLogo
+            size={36}
+            priority
+            className="transition-transform duration-200 group-hover:scale-105"
+          />
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-base font-bold tracking-tight text-foreground">ChaiForm</span>
@@ -55,16 +53,25 @@ export function LandingNavbar() {
         </Link>
 
         {/* Center Nav Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-muted-foreground">
           <Link
             href="/templates"
             className="transition-colors hover:text-foreground text-sm font-medium"
           >
             Templates
           </Link>
-          <a href="/#features" className="transition-colors hover:text-foreground text-sm">
+          <Link
+            href="/features"
+            className="transition-colors hover:text-foreground text-sm font-medium"
+          >
             Features
-          </a>
+          </Link>
+          <Link
+            href="/integrations"
+            className="transition-colors hover:text-foreground text-sm font-medium"
+          >
+            Integrations
+          </Link>
           <Link
             href="/pricing"
             className="transition-colors hover:text-foreground text-sm font-medium"
@@ -75,6 +82,9 @@ export function LandingNavbar() {
 
         {/* Right CTA Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Theme Toggle (Light / Dark) */}
+          <ThemeToggle />
+
           {user && !isLoading ? (
             <Button
               asChild
@@ -122,23 +132,17 @@ export function LandingNavbar() {
             >
               <div>
                 <SheetHeader className="text-left border-b border-border/50 pb-4 mb-4">
-                  <SheetTitle className="flex items-center gap-2.5">
-                    <div className="relative size-7 flex items-center justify-center">
-                      <Image
-                        src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-                        alt="ChaiForm"
-                        width={28}
-                        height={28}
-                        className="size-full object-contain"
-                      />
+                  <SheetTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <ChaiFormLogo size={28} />
+                      <span className="font-bold text-base">ChaiForm</span>
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] py-0 px-1.5 h-4 ${landingTheme.badge}`}
+                      >
+                        v2.0
+                      </Badge>
                     </div>
-                    <span className="font-bold text-base">ChaiForm</span>
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] py-0 px-1.5 h-4 ${landingTheme.badge}`}
-                    >
-                      v2.0
-                    </Badge>
                   </SheetTitle>
                 </SheetHeader>
 
@@ -153,14 +157,23 @@ export function LandingNavbar() {
                     <span>Templates</span>
                   </Link>
 
-                  <a
-                    href="/#features"
+                  <Link
+                    href="/features"
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground hover:bg-muted transition-colors"
                   >
-                    <IconFlame className="size-4.5 text-indigo-400" />
+                    <IconFlame className="size-4.5 text-[#CCFF00]" />
                     <span>Features</span>
-                  </a>
+                  </Link>
+
+                  <Link
+                    href="/integrations"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground hover:bg-muted transition-colors"
+                  >
+                    <IconCode className="size-4.5 text-blue-400" />
+                    <span>Integrations</span>
+                  </Link>
 
                   <Link
                     href="/pricing"

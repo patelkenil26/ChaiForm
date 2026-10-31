@@ -1,10 +1,9 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
-import { landingTheme } from "~/config/landing-theme";
 
 export interface PasswordInputProps extends React.ComponentProps<typeof Input> {
   toggleAriaLabel?: string;
@@ -20,9 +19,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           ref={ref}
           type={showPassword ? "text" : "password"}
           className={cn(
-            "h-10 pr-10 border-input/60 bg-background/50",
-            landingTheme.inputFocus,
-            "transition-all",
+            "h-11 pr-11 border-border/80 bg-background/80 focus-visible:ring-2 focus-visible:ring-lime-600/40 dark:focus-visible:ring-[#CCFF00]/40 rounded-xl transition-all text-sm",
             className,
           )}
           {...props}
@@ -30,11 +27,11 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         <button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md focus:outline-none cursor-pointer"
           aria-label={toggleAriaLabel}
           tabIndex={-1}
         >
-          {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          {showPassword ? <IconEyeOff className="size-4.5" /> : <IconEye className="size-4.5" />}
         </button>
       </div>
     );

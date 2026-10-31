@@ -373,6 +373,103 @@ export const THEME_PRESETS = {
       { name: "Amber Ochre", hex: "#d97706" },
     ],
   },
+
+  // --------------------------------------------------------------------------
+  // [4] Stealth Carbon & Acid Citron (High-Taste / Non-AI Slop)
+  // --------------------------------------------------------------------------
+  stealth_acid_citron: {
+    id: "stealth_acid_citron",
+    name: "4. Stealth Carbon & Acid Citron (High-Taste)",
+    description:
+      "Matte stealth carbon (#0A0B0D) paired with electric acid citron (#CCFF00). Distinct, non-generic craft.",
+    paletteHex: ["#CCFF00", "#D4FF00", "#BEF264", "#0A0B0D"],
+    primaryHex: "#CCFF00",
+    primaryLightHex: "#D4FF00",
+    logoGradient:
+      "bg-[#ccff00] text-[#0a0b0d] font-bold shadow-md shadow-[#ccff00]/30 ring-1 ring-white/20",
+    badge:
+      "border-lime-600/30 dark:border-[#ccff00]/30 bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-800 dark:text-[#ccff00] backdrop-blur-md hover:border-lime-600/50 dark:hover:border-[#ccff00]/50 transition-all shadow-xs",
+    dashboardBadge: "border border-border/70 bg-card/60 text-muted-foreground",
+    primaryText: "text-lime-800 dark:text-[#ccff00]",
+    gradientText:
+      "text-lime-800 dark:text-[#ccff00] dark:drop-shadow-[0_2px_10px_rgba(204,255,0,0.15)]",
+    heroGlow: "bg-gradient-to-tr from-[#ccff00]/12 via-white/5 to-transparent blur-[140px]",
+    primaryButton:
+      "bg-[#ccff00] hover:bg-[#b8e600] active:scale-[0.99] text-[#0a0b0d] font-bold shadow-md shadow-[#ccff00]/25 transition-all cursor-pointer",
+    buttonOutlineHover:
+      "hover:border-lime-600/40 dark:hover:border-[#ccff00]/40 hover:bg-lime-500/10 dark:hover:bg-[#ccff00]/10 hover:text-lime-800 dark:hover:text-[#ccff00] transition-colors",
+    buttonGhostHover:
+      "hover:bg-lime-500/10 dark:hover:bg-[#ccff00]/10 hover:text-lime-800 dark:hover:text-[#ccff00] transition-colors",
+    switchChecked:
+      "data-[state=checked]:bg-[#ccff00] data-[state=checked]:border-[#ccff00] data-[state=checked]:text-[#0a0b0d] data-[state=checked]:shadow-[0_0_12px_rgba(204,255,0,0.35)]",
+    switchFocus: "focus-visible:ring-[#ccff00]/40",
+    checkboxChecked:
+      "data-[state=checked]:border-[#ccff00] data-[state=checked]:bg-[#ccff00] data-[state=checked]:text-[#0a0b0d] dark:data-[state=checked]:border-[#ccff00] dark:data-[state=checked]:bg-[#ccff00] dark:data-[state=checked]:text-[#0a0b0d]",
+    checkboxFocus: "focus-visible:ring-[#ccff00]/40",
+    cardBg: "bg-gradient-to-b from-[#ccff00]/[0.02] via-card to-card border-border/75",
+    cardBeam:
+      "absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#ccff00]/50 to-transparent group-hover:via-[#ccff00] transition-all",
+    cardBorderHover:
+      "hover:border-lime-600/40 dark:hover:border-[#ccff00]/40 transition-colors duration-150",
+    cardHighlightBorder:
+      "border-2 border-lime-600 dark:border-[#ccff00] bg-gradient-to-b from-[#ccff00]/[0.08] via-card to-card shadow-2xl shadow-[#ccff00]/10",
+    cardHighlightBadge:
+      "bg-lime-600 dark:bg-[#ccff00] text-white dark:text-[#0a0b0d] font-bold shadow-xs",
+    activePill:
+      "bg-lime-600 dark:bg-[#ccff00] text-white dark:text-[#0a0b0d] font-bold shadow-xs transition-all",
+    tabActive:
+      "border border-lime-600/40 dark:border-[#ccff00]/40 bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-800 dark:text-[#ccff00] shadow-xs font-semibold",
+    tabInactive:
+      "text-muted-foreground hover:text-foreground hover:bg-muted/50 border border-transparent transition-colors",
+    tabActiveIcon:
+      "group-data-[state=active]:text-lime-700 dark:group-data-[state=active]:text-[#ccff00]",
+    iconColor: "text-lime-700 dark:text-[#ccff00]",
+    iconBg:
+      "bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-800 dark:text-[#ccff00] border border-lime-600/25 dark:border-[#ccff00]/25",
+    checkColor: "text-lime-700 dark:text-[#ccff00]",
+    progressBar: "bg-[#ccff00] shadow-[0_0_10px_rgba(204,255,0,0.5)]",
+    ratingStar: "text-amber-500 dark:text-[#ccff00] drop-shadow-[0_0_8px_rgba(204,255,0,0.6)]",
+    activeDot: "bg-lime-600 dark:bg-[#ccff00] shadow-[0_0_8px_rgba(204,255,0,0.8)]",
+    draftBadge: "bg-secondary text-muted-foreground border border-border/60 text-xs font-normal",
+    publishedBadge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-normal",
+    slugBadge:
+      "inline-flex items-center gap-1 text-[11px] font-mono text-lime-800 dark:text-[#ccff00] bg-lime-500/10 dark:bg-[#ccff00]/10 border border-lime-600/25 dark:border-[#ccff00]/25 px-1.5 py-0.5 rounded",
+    tableRowHover: "hover:bg-[#ccff00]/[0.03] border-border/50 transition-colors group",
+    linkHover: "hover:underline hover:text-lime-800 dark:hover:text-[#ccff00] transition-colors",
+    inputFocus: "focus-visible:ring-[#ccff00]/40 focus-visible:border-[#ccff00]/60",
+    navActive:
+      "bg-lime-500/10 dark:bg-[#ccff00]/10 text-lime-800 dark:text-[#ccff00] font-semibold border border-lime-600/30 dark:border-[#ccff00]/30 shadow-xs",
+    navInactive:
+      "text-muted-foreground hover:bg-lime-500/10 dark:hover:bg-[#ccff00]/[0.06] hover:text-lime-800 dark:hover:text-[#ccff00] border border-transparent",
+    avatarBorder: "border-lime-600/30 dark:border-[#ccff00]/40",
+    avatarFallback:
+      "rounded-lg bg-lime-500/15 dark:bg-[#ccff00]/15 text-lime-800 dark:text-[#ccff00] font-bold text-xs",
+    ctaBox:
+      "border border-lime-600/30 dark:border-[#ccff00]/30 bg-card shadow-2xl shadow-lime-500/10 dark:shadow-[#ccff00]/10",
+    ctaGlow: "bg-lime-500/15 dark:bg-[#ccff00]/15 blur-[100px]",
+    ctaBadge: "border border-border/70 bg-card/60 text-muted-foreground",
+    selection: "selection:bg-[#ccff00] selection:text-[#0a0b0d]",
+    callout: {
+      border: "border-lime-600/30 dark:border-[#ccff00]/30",
+      bg: "bg-lime-500/10 dark:bg-[#ccff00]/10",
+      text: "text-lime-800 dark:text-[#ccff00]",
+      accent: "text-lime-800 dark:text-[#ccff00]",
+    },
+    chart: {
+      stroke: "#ccff00",
+      stopColor: "#ccff00",
+      fill: "rgba(204, 255, 0, 0.15)",
+    },
+    confettiColors: ["#ccff00", "#d4ff00", "#ffffff", "#10b981", "#38bdf8"],
+    qrCodePresets: [
+      { name: "Acid Citron (Brand)", hex: "#ccff00" },
+      { name: "Classic Black", hex: "#000000" },
+      { name: "Chai Indigo", hex: "#4f46e5" },
+      { name: "Emerald Green", hex: "#059669" },
+      { name: "Crimson Rose", hex: "#e11d48" },
+      { name: "Amber Ochre", hex: "#d97706" },
+    ],
+  },
 } as const satisfies Record<string, LandingThemeConfig>;
 
 export type ThemePresetKey = keyof typeof THEME_PRESETS;
@@ -385,9 +482,10 @@ export type ThemePresetKey = keyof typeof THEME_PRESETS;
  *   - "frosty_mint"
  *   - "desert_champagne_gold"
  *   - "sexy_blue"
+ *   - "stealth_acid_citron" [ACTIVE / HIGH-TASTE]
  * ============================================================================
  */
-export const ACTIVE_THEME_ID: ThemePresetKey = "desert_champagne_gold";
+export const ACTIVE_THEME_ID: ThemePresetKey = "stealth_acid_citron";
 
 // Export active theme tokens
 export const landingTheme: LandingThemeConfig = THEME_PRESETS[ACTIVE_THEME_ID];
@@ -458,7 +556,7 @@ export const toastTheme: ToastThemeConfig = {
     error: "!bg-rose-950/92 !border-rose-500/40 !text-rose-50 shadow-rose-950/40",
     warning: "!bg-amber-950/92 !border-amber-500/40 !text-amber-50 shadow-amber-950/40",
     info: "!bg-blue-950/92 !border-blue-500/40 !text-blue-50 shadow-blue-950/40",
-    loading: "!bg-neutral-900/95 !border-amber-500/35 !text-neutral-100 shadow-amber-950/20",
+    loading: "!bg-neutral-900/95 !border-primary/40 !text-neutral-100 shadow-neutral-950/20",
   },
   icons: {
     success: "size-4 text-emerald-400 shrink-0",

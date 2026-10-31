@@ -25,7 +25,7 @@ export function SubmissionsSummaryCards({
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
       {/* Card 1: Total Responses */}
       <Card
-        className={`p-4 rounded-xl border ${landingTheme.cardBg} hover:border-amber-400/50 transition-all duration-200`}
+        className={`p-4 rounded-xl border ${landingTheme.cardBg} ${landingTheme.cardBorderHover} transition-all duration-200`}
       >
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Total Responses

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { ChaiFormLogo } from "~/components/brand/chaiform-logo";
 import {
   IconDashboard,
   IconSettings,
@@ -80,15 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 }}
                 className="flex items-center gap-2.5"
               >
-                <div className="relative size-7 flex items-center justify-center">
-                  <Image
-                    src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-                    alt="ChaiForm"
-                    width={28}
-                    height={28}
-                    className="size-full object-contain"
-                  />
-                </div>
+                <ChaiFormLogo size={28} />
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="text-base font-bold tracking-tight">ChaiForm</span>
                   <span className="text-xs text-muted-foreground">Form Builder</span>

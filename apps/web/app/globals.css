@@ -80,37 +80,37 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.82 0.145 80);
-  --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0A0B0D;
+  --foreground: #ECECED;
+  --card: #12141A;
+  --card-foreground: #ECECED;
+  --popover: #161822;
+  --popover-foreground: #ECECED;
+  --primary: #CCFF00;
+  --primary-foreground: #0A0B0D;
+  --secondary: rgba(255, 255, 255, 0.06);
+  --secondary-foreground: #ECECED;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #8E929B;
+  --accent: rgba(204, 255, 0, 0.12);
+  --accent-foreground: #CCFF00;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.82 0.145 80 / 45%);
-  --chart-1: oklch(0.82 0.145 80);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.828 0.189 84.429);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.82 0.145 80);
-  --sidebar-primary-foreground: oklch(0.145 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.82 0.145 80 / 45%);
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.10);
+  --ring: rgba(204, 255, 0, 0.40);
+  --chart-1: #CCFF00;
+  --chart-2: #38BDF8;
+  --chart-3: #10B981;
+  --chart-4: #F59E0B;
+  --chart-5: #A855F7;
+  --sidebar: #0D0E12;
+  --sidebar-foreground: #ECECED;
+  --sidebar-primary: #CCFF00;
+  --sidebar-primary-foreground: #0A0B0D;
+  --sidebar-accent: rgba(204, 255, 0, 0.10);
+  --sidebar-accent-foreground: #CCFF00;
+  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-ring: rgba(204, 255, 0, 0.40);
 }
 
 @layer base {

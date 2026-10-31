@@ -3,6 +3,6 @@
   <ShortName>ChaiForm</ShortName>
   <Description>Search conversational form templates and surveys on ChaiForm</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/svg+xml">https://chaiform.kenilpatel.in/chaiform-logo-transparent-for-dark-bg%20(3).svg</Image>
+  <Image width="16" height="16" type="image/png">https://chaiform.kenilpatel.in/logo/chaiform-logo-dark-mode.png</Image>
   <Url type="text/html" template="https://chaiform.kenilpatel.in/templates?search={searchTerms}"/>
 </OpenSearchDescription>

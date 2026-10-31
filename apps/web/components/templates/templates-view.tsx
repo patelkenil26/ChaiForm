@@ -267,10 +267,10 @@ export function TemplatesView() {
             {sortedTemplates.map((tpl) => (
               <div
                 key={tpl.id}
-                className={`group relative flex flex-col justify-between rounded-xl border border-border/60 bg-card/60 backdrop-blur-xs overflow-hidden transition-all duration-200 ${landingTheme.cardBorderHover}`}
+                className={`group relative flex flex-col justify-between rounded-xl border border-border/80 bg-card shadow-xs overflow-hidden transition-all duration-200 ${landingTheme.cardBorderHover}`}
               >
                 {/* Visual Thumbnail Header (Card Preview) */}
-                <div className="h-24 bg-gradient-to-br from-amber-500/10 via-neutral-900/50 to-neutral-950/80 border-b border-border/40 p-3.5 flex flex-col justify-between relative overflow-hidden">
+                <div className="h-24 bg-gradient-to-br from-primary/10 via-card/50 to-card/90 border-b border-border/40 p-3.5 flex flex-col justify-between relative overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-background/80 border border-border/60 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur-xs">
                       {tpl.category || "General"}
@@ -285,7 +285,9 @@ export function TemplatesView() {
 
                   {/* Mini Form Question Wireframe */}
                   <div className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-amber-400 animate-pulse" />
+                    <span
+                      className={`size-2 rounded-full ${landingTheme.activeDot} animate-pulse`}
+                    />
                     <span className="text-[11px] font-medium text-foreground/80 truncate">
                       1-by-1 Step Survey
                     </span>

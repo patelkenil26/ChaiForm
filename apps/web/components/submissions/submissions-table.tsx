@@ -228,8 +228,8 @@ export function SubmissionsTable({
       {/* Main Table Container */}
       <div className="rounded-xl border border-border/80 overflow-hidden bg-card shadow-xs">
         <Table>
-          <TableHeader className="bg-amber-500/[0.12] dark:bg-amber-500/[0.16] border-b border-amber-500/25">
-            <TableRow className="hover:bg-transparent border-b border-amber-500/20">
+          <TableHeader>
+            <TableRow className="hover:bg-transparent border-b border-border/60">
               <TableHead className="w-48 text-xs font-bold uppercase tracking-wider text-foreground py-3.5 px-4">
                 Submitted At
               </TableHead>
@@ -325,10 +325,7 @@ export function SubmissionsTable({
                 );
 
                 return (
-                  <TableRow
-                    key={submission.id}
-                    className="hover:bg-amber-500/[0.06] dark:hover:bg-amber-500/[0.07] transition-colors border-b border-border/60"
-                  >
+                  <TableRow key={submission.id} className={`${landingTheme.tableRowHover}`}>
                     <TableCell
                       className="text-muted-foreground text-xs whitespace-nowrap font-mono py-3.5 px-4"
                       suppressHydrationWarning

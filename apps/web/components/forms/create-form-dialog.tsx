@@ -111,7 +111,7 @@ export function CreateFormDialog({
                     message: `Title cannot exceed ${TITLE_MAX} characters`,
                   },
                 })}
-                className="h-9 text-xs sm:text-sm focus-visible:ring-amber-400/40"
+                className="h-9 text-xs sm:text-sm focus-visible:ring-primary/40"
               />
               {errors.title && (
                 <p className="text-[11px] text-destructive font-medium mt-1">
@@ -138,7 +138,7 @@ export function CreateFormDialog({
                     message: `Description cannot exceed ${DESC_MAX} characters`,
                   },
                 })}
-                className="text-xs sm:text-sm resize-none focus-visible:ring-amber-400/40"
+                className="text-xs sm:text-sm resize-none focus-visible:ring-primary/40"
               />
               {errors.description && (
                 <p className="text-[11px] text-destructive font-medium mt-1">

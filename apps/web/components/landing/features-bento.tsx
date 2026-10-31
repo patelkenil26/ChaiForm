@@ -1,322 +1,361 @@
 "use client";
 
+import { useState } from "react";
 import {
-  IconForms,
-  IconChartBar,
-  IconLock,
   IconQrcode,
   IconSparkles,
-  IconFileSpreadsheet,
-  IconClock,
-  IconCode,
+  IconTerminal2,
+  IconForms,
+  IconLock,
+  IconKeyboard,
   IconCheck,
-  IconStarFilled,
-  IconCircleDot,
-  IconCheckbox,
-  IconChevronDown,
-  IconAlignLeft,
-  IconTypography,
-  IconHash,
-  IconMail,
-  IconPhone,
-  IconCalendar,
-  IconSwitch,
-  IconLink,
 } from "@tabler/icons-react";
 import { Badge } from "~/components/ui/badge";
-import { landingTheme } from "~/config/landing-theme";
-import { cn } from "~/lib/utils";
 
 export function FeaturesBentoSection() {
+  // Interactive QR Studio state
+  const [selectedQrColor, setSelectedQrColor] = useState<string>("#16a34a");
+
+  const qrColorOptions = [
+    {
+      label: "Acid Citron",
+      hex: "#65a30d",
+      darkHex: "#CCFF00",
+      ring: "ring-lime-600 dark:ring-[#CCFF00]",
+    },
+    { label: "Cyber Sky", hex: "#0284c7", darkHex: "#38BDF8", ring: "ring-sky-500" },
+    { label: "Emerald Mint", hex: "#059669", darkHex: "#10B981", ring: "ring-emerald-500" },
+    { label: "Classic Dark", hex: "#18181b", darkHex: "#FFFFFF", ring: "ring-foreground" },
+  ];
+
   return (
-    <section id="features" className="py-20 md:py-28 relative">
+    <section
+      id="features"
+      className="py-20 md:py-28 relative bg-background text-foreground border-t border-border/40 overflow-hidden"
+    >
+      {/* Ambient Atmospheric Light Beam */}
+      <div className="pointer-events-none absolute inset-0 -z-10 flex flex-col items-center overflow-hidden">
+        <div className="h-64 w-[80%] max-w-4xl rounded-full bg-gradient-to-b from-lime-500/10 via-emerald-500/5 to-transparent dark:from-[#CCFF00]/12 dark:via-[#CCFF00]/3 dark:to-transparent blur-[120px] -translate-y-1/2" />
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        {/* Header with Metallic & Citron Text Gradients */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge
             variant="outline"
-            className={cn("text-xs px-3 py-1 gap-1.5 mb-3 backdrop-blur-sm", landingTheme.badge)}
+            className="text-xs px-3.5 py-1 border-lime-600/30 dark:border-[#CCFF00]/30 bg-gradient-to-r from-lime-500/10 via-emerald-500/10 to-lime-500/5 dark:from-[#CCFF00]/15 dark:via-[#CCFF00]/10 dark:to-[#CCFF00]/5 text-lime-800 dark:text-[#CCFF00] gap-1.5 mb-4 shadow-xs font-medium"
           >
-            <IconSparkles className={cn("size-3.5", landingTheme.iconColor)} />
-            <span>Built for Modern Teams</span>
+            <IconSparkles className="size-3.5" />
+            <span>Living Micro-Tools</span>
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Engineered for high engagement.
+            <span className="bg-gradient-to-b from-foreground via-foreground/95 to-foreground/75 bg-clip-text text-transparent">
+              Engineered for high engagement &amp;{" "}
+            </span>
+            <span className="bg-gradient-to-r from-lime-600 via-emerald-600 to-lime-700 dark:from-[#CCFF00] dark:via-[#E2FF66] dark:to-[#A3E635] bg-clip-text text-transparent">
+              zero drop-off.
+            </span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Everything you need to build interactive conversational forms, collect verified answers,
-            and extract actionable business intelligence.
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Everything you need to craft viral conversational surveys, print high-res QR codes, and
+            stream automated webhook payloads to your stack.
           </p>
         </div>
 
         {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Bento Item 1: Conversational (Indigo/Violet Theme) - Spans 2 cols on md */}
-          <div className="md:col-span-2 relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-indigo-950/25 flex flex-col justify-between hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 group">
-            {/* Ambient Glow */}
-            <div className="pointer-events-none absolute -top-24 -left-24 size-64 rounded-full bg-indigo-500/15 blur-3xl group-hover:bg-indigo-500/25 transition-all duration-500" />
-            {/* Top Border Glow Beam */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-500/80 to-transparent" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* WIDGET 1: Interactive Live QR Code Studio (Spans 2 cols on md) */}
+          <div className="md:col-span-2 rounded-2xl border border-border/80 bg-card p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-all duration-300 shadow-xs">
+            {/* Top Chamfered Light Sheen */}
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-lime-600/60 dark:via-[#CCFF00]/70 to-transparent opacity-75 group-hover:opacity-100 transition-opacity" />
 
-            <div className="relative z-10">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 rounded-xl bg-gradient-to-br from-lime-500/20 to-emerald-500/10 dark:from-[#CCFF00]/20 dark:to-[#CCFF00]/5 text-lime-800 dark:text-[#CCFF00] border border-lime-600/30 dark:border-[#CCFF00]/30 flex items-center justify-center">
+                    <IconQrcode className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground tracking-tight">
+                      Interactive QR Code Studio
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Print-ready 1024px vector SVG &amp; PNG
+                    </p>
+                  </div>
+                </div>
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-mono border-border text-muted-foreground"
+                >
+                  Interactive Widget
+                </Badge>
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-lg mb-6">
+                Print ready-to-scan QR codes directly on conference badges, restaurant tables, or
+                presentation slides. Custom brand recoloring built right in.
+              </p>
+
+              {/* Live QR Customizer Card */}
+              <div className="rounded-xl border border-border bg-muted/40 p-5 flex flex-col sm:flex-row items-center justify-between gap-6">
+                {/* SVG QR Code Simulation */}
+                <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col items-center">
+                  <div className="size-36 p-2 rounded-lg bg-white flex items-center justify-center shadow-xs">
+                    {/* Simulated High-Density QR SVG Matrix */}
+                    <svg
+                      viewBox="0 0 100 100"
+                      className="size-full"
+                      style={{ color: selectedQrColor }}
+                    >
+                      <rect width="100" height="100" fill="#ffffff" />
+                      {/* Corner 1 */}
+                      <rect x="10" y="10" width="24" height="24" rx="3" fill="currentColor" />
+                      <rect x="14" y="14" width="16" height="16" rx="2" fill="#ffffff" />
+                      <rect x="18" y="18" width="8" height="8" rx="1" fill="currentColor" />
+                      {/* Corner 2 */}
+                      <rect x="66" y="10" width="24" height="24" rx="3" fill="currentColor" />
+                      <rect x="70" y="14" width="16" height="16" rx="2" fill="#ffffff" />
+                      <rect x="74" y="18" width="8" height="8" rx="1" fill="currentColor" />
+                      {/* Corner 3 */}
+                      <rect x="10" y="66" width="24" height="24" rx="3" fill="currentColor" />
+                      <rect x="14" y="70" width="16" height="16" rx="2" fill="#ffffff" />
+                      <rect x="18" y="74" width="8" height="8" rx="1" fill="currentColor" />
+                      {/* Data Pattern Nodes */}
+                      <rect x="42" y="12" width="6" height="6" fill="currentColor" />
+                      <rect x="52" y="12" width="6" height="6" fill="currentColor" />
+                      <rect x="42" y="24" width="6" height="6" fill="currentColor" />
+                      <rect x="52" y="24" width="6" height="6" fill="currentColor" />
+                      <rect x="12" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="24" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="36" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="48" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="60" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="72" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="84" y="42" width="6" height="6" fill="currentColor" />
+                      <rect x="42" y="66" width="6" height="6" fill="currentColor" />
+                      <rect x="54" y="66" width="6" height="6" fill="currentColor" />
+                      <rect x="66" y="66" width="6" height="6" fill="currentColor" />
+                      <rect x="78" y="66" width="6" height="6" fill="currentColor" />
+                      <rect x="42" y="78" width="6" height="6" fill="currentColor" />
+                      <rect x="66" y="78" width="6" height="6" fill="currentColor" />
+                      <rect x="78" y="78" width="6" height="6" fill="currentColor" />
+                      {/* Center Brand Accent */}
+                      <circle cx="50" cy="50" r="7" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <span className="text-[10px] font-mono text-muted-foreground mt-2">
+                    scan-test.chaiform.com
+                  </span>
+                </div>
+
+                {/* Color Selector Controls */}
+                <div className="flex-1 space-y-3 w-full">
+                  <div className="text-xs font-semibold text-foreground">Pick Brand Palette</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {qrColorOptions.map((opt) => (
+                      <button
+                        key={opt.label}
+                        type="button"
+                        onClick={() => setSelectedQrColor(opt.hex)}
+                        className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all cursor-pointer text-xs ${
+                          selectedQrColor === opt.hex
+                            ? "border-lime-600/60 dark:border-[#CCFF00] bg-lime-500/10 dark:bg-[#CCFF00]/10 font-bold"
+                            : "border-border bg-card/60 hover:bg-card text-muted-foreground"
+                        }`}
+                      >
+                        <span
+                          className={`size-3.5 rounded-full border border-black/20 shrink-0 ${
+                            selectedQrColor === opt.hex ? "ring-2 " + opt.ring : ""
+                          }`}
+                          style={{ backgroundColor: opt.hex }}
+                        />
+                        <span className="truncate">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="pt-2 text-[11px] text-muted-foreground flex items-center gap-1.5">
+                    <IconCheck className="size-3 text-emerald-500" />
+                    <span>High-error correction (Level H) • Scannable on low-contrast paper</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* WIDGET 2: Simulated Live Webhook Terminal */}
+          <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-all duration-300 shadow-xs">
+            {/* Top Chamfered Light Sheen */}
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-75 group-hover:opacity-100 transition-opacity" />
+
+            <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-xs shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                <div className="size-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 text-emerald-500 border border-emerald-500/30 flex items-center justify-center">
+                  <IconTerminal2 className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">
+                    Real-Time Webhooks
+                  </h3>
+                  <p className="text-xs text-muted-foreground">HTTP JSON dispatch in &lt;10ms</p>
+                </div>
+              </div>
+
+              {/* Terminal Code Preview */}
+              <div className="rounded-xl border border-border bg-neutral-950 p-3.5 font-mono text-xs space-y-2 mt-4 text-neutral-100 shadow-md">
+                <div className="flex items-center justify-between text-[10px] text-neutral-400 pb-2 border-b border-neutral-800">
+                  <span>EVENT DISPATCH</span>
+                  <span className="text-emerald-400 font-bold">● LIVE</span>
+                </div>
+                <div className="text-[11px] text-neutral-300 leading-relaxed">
+                  <span className="text-emerald-400 font-bold">POST</span> /api/webhooks/response
+                  <div className="text-neutral-500 text-[10px] mt-0.5">{`{ "event": "submission.created", "time": "8ms" }`}</div>
+                </div>
+                <div className="text-[10px] text-emerald-400 pt-1 flex items-center gap-1">
+                  <IconCheck className="size-3 text-emerald-400" />
+                  <span>200 OK • Payload delivered</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-foreground">
+              Instant sync with Slack, Zapier, Make, and custom backends.
+            </div>
+          </div>
+
+          {/* WIDGET 3: 14 Field Types Cloud */}
+          <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-all duration-300 shadow-xs">
+            {/* Top Chamfered Light Sheen */}
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-75 group-hover:opacity-100 transition-opacity" />
+
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="size-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 text-blue-500 border border-blue-500/30 flex items-center justify-center">
                   <IconForms className="size-5" />
                 </div>
-                <Badge
-                  variant="outline"
-                  className="text-xs border-indigo-500/30 bg-indigo-500/10 text-indigo-300 font-medium"
-                >
-                  Keyboard-First
-                </Badge>
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                Conversational Forms that{" "}
-                <span className="bg-gradient-to-r from-indigo-300 via-indigo-200 to-white bg-clip-text text-transparent">
-                  Never Overwhelm
-                </span>
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-xl">
-                Instead of presenting respondents with a daunting 20-field wall of text, ChaiForm
-                guides them through focused, 1-question-at-a-time steps with smooth keyboard
-                navigation.
-              </p>
-            </div>
-
-            {/* Interactive Visual Element */}
-            <div className="relative z-10 mt-6 rounded-xl border border-indigo-500/25 bg-neutral-950/70 p-4 font-mono text-xs text-muted-foreground backdrop-blur-sm shadow-inner">
-              <div className="flex items-center justify-between pb-2 mb-3 border-b border-indigo-500/20 text-[11px]">
-                <span className="text-indigo-400 font-semibold">QUESTION 2 OF 5</span>
-                <span className="text-emerald-400 font-medium">AUTO-SCROLL ENABLED</span>
-              </div>
-              <div className="text-foreground text-sm font-sans font-medium mb-2">
-                &quot;What is your primary product feedback?&quot;
-              </div>
-              <div className="flex flex-wrap items-center gap-2 pt-1 font-sans">
-                <span className="px-2.5 py-1 rounded-md bg-indigo-950/50 border border-indigo-500/30 text-indigo-200 text-[11px] font-medium">
-                  Press [1] Feature Request
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-indigo-950/50 border border-indigo-500/30 text-indigo-200 text-[11px] font-medium">
-                  Press [2] Bug Report
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-indigo-950/50 border border-indigo-500/30 text-indigo-200 text-[11px] font-medium">
-                  Press [3] General Feedback
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bento Item 2: Embed Anywhere & Instant Share (Cyan/Sky Theme) */}
-          <div className="relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-cyan-950/25 flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300 group">
-            {/* Ambient Glow */}
-            <div className="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-cyan-500/15 blur-3xl group-hover:bg-cyan-500/25 transition-all duration-500" />
-            {/* Top Border Glow Beam */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent" />
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-xs shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-                  <IconCode className="size-5" />
+                <div>
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">
+                    14 Field Types
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Every question pattern supported</p>
                 </div>
-                <Badge
-                  variant="outline"
-                  className="text-xs border-cyan-500/30 bg-cyan-500/10 text-cyan-300 font-medium"
-                >
-                  Embed Anywhere
-                </Badge>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
-                Embed Anywhere in{" "}
-                <span className="bg-gradient-to-r from-cyan-300 via-sky-200 to-white bg-clip-text text-transparent">
-                  1-Click
-                </span>
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Drop your forms seamlessly into Next.js, WordPress, Webflow, Shopify, or share via
-                direct custom links.
-              </p>
+              {/* Field chips cloud */}
+              <div className="flex flex-wrap gap-1.5 mt-4">
+                {[
+                  "Rating Stars",
+                  "Single Choice",
+                  "Multi-Select",
+                  "Short Text",
+                  "Long Text",
+                  "Phone (E.164)",
+                  "Date Picker",
+                  "Email Verification",
+                  "File Upload",
+                  "Password Gate",
+                  "Switch Toggle",
+                  "Website URL",
+                  "Number / Currency",
+                  "Dropdown",
+                ].map((field) => (
+                  <span
+                    key={field}
+                    className="px-2.5 py-1 rounded-md bg-muted/70 border border-border/80 text-[11px] font-medium text-foreground hover:border-lime-600/40 dark:hover:border-[#CCFF00]/30 transition-colors"
+                  >
+                    {field}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className="relative z-10 mt-6 rounded-xl border border-cyan-500/25 bg-neutral-950/90 p-3.5 text-xs font-mono text-cyan-300 overflow-hidden shadow-inner">
-              <p className="text-neutral-500 text-[11px]">// 1-line responsive iframe embed</p>
-              <code className="text-cyan-300 text-[11px]">
-                &lt;iframe src=&quot;/form/feedback&quot; width=&quot;100%&quot; /&gt;
-              </code>
+            <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-foreground">
+              Drag-and-drop ordering with live validation rules.
             </div>
           </div>
 
-          {/* Bento Item 3: Real-Time Analytics (Emerald/Mint Theme) */}
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-emerald-950/25 flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 group">
-            {/* Ambient Glow */}
-            <div className="pointer-events-none absolute -top-20 -left-20 size-56 rounded-full bg-emerald-500/15 blur-3xl group-hover:bg-emerald-500/25 transition-all duration-500" />
-            {/* Top Border Glow Beam */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-500/80 to-transparent" />
+          {/* WIDGET 4: Kinetic Keyboard Navigation */}
+          <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-all duration-300 shadow-xs">
+            {/* Top Chamfered Light Sheen */}
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-lime-600/60 dark:via-[#CCFF00]/70 to-transparent opacity-75 group-hover:opacity-100 transition-opacity" />
 
-            <div className="relative z-10">
+            <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-                  <IconChartBar className="size-5" />
+                <div className="size-10 rounded-xl bg-gradient-to-br from-lime-500/20 to-emerald-500/10 dark:from-[#CCFF00]/20 dark:to-[#CCFF00]/5 text-lime-800 dark:text-[#CCFF00] border border-lime-600/30 dark:border-[#CCFF00]/30 flex items-center justify-center">
+                  <IconKeyboard className="size-5" />
                 </div>
-                <Badge
-                  variant="outline"
-                  className="text-xs border-emerald-500/30 bg-emerald-500/10 text-emerald-300 font-medium"
-                >
-                  Analytics
-                </Badge>
-              </div>
-
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
-                Real-Time{" "}
-                <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-white bg-clip-text text-transparent">
-                  Submissions Hub
-                </span>
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Live submission feed, search answers, filter by date presets (7d, 30d, custom), and
-                1-click export to CSV / Excel for instant analysis.
-              </p>
-            </div>
-
-            <div className="relative z-10 mt-6 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 text-xs font-semibold">
-                <IconFileSpreadsheet className="size-3.5 text-emerald-400" />
-                <span>CSV Export</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-teal-500/30 bg-teal-500/15 text-teal-300 text-xs font-semibold">
-                <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Live Feed</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Bento Item 4: Instant QR Codes & Flyers (Purple/Fuchsia Theme) */}
-          <div className="relative overflow-hidden rounded-2xl border border-purple-500/25 bg-gradient-to-br from-purple-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-purple-950/25 flex flex-col justify-between hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 group">
-            {/* Ambient Glow */}
-            <div className="pointer-events-none absolute -top-20 -right-20 size-56 rounded-full bg-purple-500/15 blur-3xl group-hover:bg-purple-500/25 transition-all duration-500" />
-            {/* Top Border Glow Beam */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-purple-500/80 to-transparent" />
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-purple-500/15 text-purple-400 border border-purple-500/30 shadow-xs shadow-purple-500/20 group-hover:scale-105 transition-transform">
-                  <IconQrcode className="size-5" />
+                <div>
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">
+                    Full Keyboard Flow
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Speedrun form completion</p>
                 </div>
-                <Badge
-                  variant="outline"
-                  className="text-xs border-purple-500/30 bg-purple-500/10 text-purple-300 font-medium"
-                >
-                  1024px HD
-                </Badge>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
-                Instant{" "}
-                <span className="bg-gradient-to-r from-purple-300 via-fuchsia-200 to-white bg-clip-text text-transparent">
-                  QR Codes & Flyers
-                </span>
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Generate high-resolution PNG & vector SVG QR codes with 5 designer color palettes.
-                Print ready-made event flyers with one click.
-              </p>
+              {/* Keyboard keys preview */}
+              <div className="rounded-xl border border-border bg-muted/40 p-4 mt-4 flex items-center justify-around font-mono text-xs">
+                <div className="p-2 rounded-lg bg-card border border-border text-center min-w-[48px] shadow-xs">
+                  <div className="font-bold text-lime-800 dark:text-[#CCFF00]">1-9</div>
+                  <div className="text-[9px] text-muted-foreground">Select</div>
+                </div>
+                <div className="p-2 rounded-lg bg-card border border-border text-center min-w-[56px] shadow-xs">
+                  <div className="font-bold text-foreground">Tab ⇥</div>
+                  <div className="text-[9px] text-muted-foreground">Next</div>
+                </div>
+                <div className="p-2 rounded-lg bg-gradient-to-r from-lime-500/15 to-emerald-500/15 dark:from-[#CCFF00]/20 dark:to-[#CCFF00]/10 border border-lime-600/40 dark:border-[#CCFF00]/40 text-center min-w-[64px] shadow-xs">
+                  <div className="font-bold text-lime-800 dark:text-[#CCFF00]">Enter ↵</div>
+                  <div className="text-[9px] text-lime-800 dark:text-[#CCFF00] font-semibold">
+                    Submit
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="relative z-10 mt-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/30 bg-purple-950/30 w-fit">
-              <span className="size-3 rounded-full bg-black border border-white/20 shadow-xs" />
-              <span className="size-3 rounded-full bg-indigo-500 shadow-xs" />
-              <span className="size-3 rounded-full bg-emerald-500 shadow-xs" />
-              <span className="size-3 rounded-full bg-rose-500 shadow-xs" />
-              <span className="size-3 rounded-full bg-amber-500 shadow-xs" />
-              <span className="text-xs text-purple-200 font-medium ml-1">5 Themes</span>
+            <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-foreground">
+              Zero mouse movement required. Respondents fly through questions.
             </div>
           </div>
 
-          {/* Bento Item 5: Access Limits & Passwords (Amber/Gold Theme) */}
-          <div className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/45 via-card/90 to-background/80 p-6 sm:p-8 backdrop-blur-md shadow-xl shadow-amber-950/25 flex flex-col justify-between hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300 group">
-            {/* Ambient Glow */}
-            <div className="pointer-events-none absolute -top-20 -right-20 size-56 rounded-full bg-amber-500/15 blur-3xl group-hover:bg-amber-500/25 transition-all duration-500" />
-            {/* Top Border Glow Beam */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500/80 to-transparent" />
+          {/* WIDGET 5: Access Protection & Capacity Caps */}
+          <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-all duration-300 shadow-xs">
+            {/* Top Chamfered Light Sheen */}
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent opacity-75 group-hover:opacity-100 transition-opacity" />
 
-            <div className="relative z-10">
+            <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-xs shadow-amber-500/20 group-hover:scale-105 transition-transform">
+                <div className="size-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 text-amber-500 border border-amber-500/30 flex items-center justify-center">
                   <IconLock className="size-5" />
                 </div>
-                <Badge
-                  variant="outline"
-                  className="text-xs border-amber-500/30 bg-amber-500/10 text-amber-300 font-medium"
-                >
-                  Security
-                </Badge>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">
+                    Access Control &amp; Caps
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Auto-close on limits</p>
+                </div>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-foreground">
-                Access Limits &{" "}
-                <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-white bg-clip-text text-transparent">
-                  Passwords
-                </span>
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Protect sensitive forms with cryptographic password protection, set automatic
-                closure deadlines, and cap maximum response limits.
-              </p>
+              {/* Capacity meter preview */}
+              <div className="rounded-xl border border-border bg-muted/40 p-4 mt-4 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-muted-foreground font-medium">CAPACITY LIMIT</span>
+                  <span className="text-lime-800 dark:text-[#CCFF00] font-bold">
+                    148 / 150 SPOTS
+                  </span>
+                </div>
+                <div className="w-full bg-muted h-2 rounded-full overflow-hidden border border-border">
+                  <div className="bg-gradient-to-r from-lime-600 to-emerald-600 dark:from-[#CCFF00] dark:to-[#A3E635] h-full w-[98%]" />
+                </div>
+                <div className="text-[10px] text-muted-foreground pt-1 flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Auto-locks form when quota is fulfilled</span>
+                </div>
+              </div>
             </div>
 
-            <div className="relative z-10 mt-6 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/15 text-amber-300 text-xs font-semibold">
-                <IconClock className="size-3.5 text-amber-400" />
-                <span>Auto-expire</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/15 text-yellow-300 text-xs font-semibold">
-                <IconLock className="size-3.5 text-yellow-400" />
-                <span>Password Lock</span>
-              </span>
+            <div className="mt-6 pt-4 border-t border-border/60 text-xs text-muted-foreground">
+              Includes password gating for confidential executive or internal surveys.
             </div>
-          </div>
-        </div>
-
-        {/* 14 Specialized Question Types Showcase Strip */}
-        <div className="mt-12 rounded-2xl border border-border/80 bg-gradient-to-b from-card/90 via-card/60 to-background/90 p-6 sm:p-8 text-center backdrop-blur-md relative overflow-hidden shadow-2xl">
-          {/* Subtle Dual Accent Glow */}
-          <div className="pointer-events-none absolute -top-24 left-1/4 size-64 rounded-full bg-indigo-500/10 blur-3xl -z-10" />
-          <div className="pointer-events-none absolute -bottom-24 right-1/4 size-64 rounded-full bg-amber-500/10 blur-3xl -z-10" />
-
-          <h4 className="text-base sm:text-lg font-bold text-foreground">
-            14 Specialized Question Field Types Out-of-the-Box
-          </h4>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1 mb-6">
-            Mix and match diverse inputs to create the perfect conversational survey or onboarding
-            flow.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {[
-              { label: "5-Star Rating", icon: IconStarFilled, color: "text-amber-400" },
-              { label: "Single Choice (Radio)", icon: IconCircleDot, color: "text-blue-400" },
-              { label: "Multi-Select Checkboxes", icon: IconCheckbox, color: "text-emerald-400" },
-              { label: "Dropdown Select", icon: IconChevronDown, color: "text-purple-400" },
-              { label: "Long Form Textarea", icon: IconAlignLeft, color: "text-indigo-400" },
-              { label: "Short Answer", icon: IconTypography, color: "text-cyan-400" },
-              { label: "Numerical Inputs", icon: IconHash, color: "text-violet-400" },
-              { label: "Validated Email", icon: IconMail, color: "text-rose-400" },
-              { label: "Phone / WhatsApp", icon: IconPhone, color: "text-emerald-400" },
-              { label: "Website / URL", icon: IconLink, color: "text-sky-400" },
-              { label: "Date & Calendar", icon: IconCalendar, color: "text-amber-400" },
-              { label: "Time Picker", icon: IconClock, color: "text-blue-400" },
-              { label: "Password Protection", icon: IconLock, color: "text-amber-400" },
-              { label: "Yes / No Decision", icon: IconSwitch, color: "text-teal-400" },
-            ].map((item) => (
-              <span
-                key={item.label}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/70 bg-card/80 text-xs font-medium text-foreground shadow-xs hover:border-primary/50 hover:bg-card hover:scale-105 transition-all duration-200 cursor-default"
-              >
-                <item.icon className={`size-3.5 ${item.color}`} />
-                <span>{item.label}</span>
-              </span>
-            ))}
           </div>
         </div>
       </div>

@@ -111,7 +111,7 @@ export function ThemesComingSoonButton({
             <DialogTitle className="text-lg font-bold">Creative Themes System</DialogTitle>
             <Badge
               variant="outline"
-              className="text-[10px] font-medium bg-amber-500/10 text-amber-500 border-amber-500/20"
+              className="text-[10px] font-medium bg-primary/10 text-primary border-primary/20"
             >
               Coming Soon
             </Badge>

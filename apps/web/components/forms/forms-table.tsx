@@ -107,8 +107,8 @@ export function FormsTable({
         className={`hidden md:block rounded-xl border ${landingTheme.cardBg} shadow-xs overflow-hidden ${landingTheme.cardBorderHover} transition-all duration-200`}
       >
         <Table>
-          <TableHeader className="bg-amber-500/[0.12] dark:bg-amber-500/[0.16] border-b border-amber-500/25">
-            <TableRow className="hover:bg-transparent border-b border-amber-500/20">
+          <TableHeader>
+            <TableRow className="hover:bg-transparent border-b border-border/60">
               <TableHead className="font-bold text-xs uppercase tracking-wider text-foreground py-3.5 px-4">
                 Title
               </TableHead>
@@ -172,10 +172,7 @@ export function FormsTable({
                 const target = form.slug || form.id;
 
                 return (
-                  <TableRow
-                    key={form.id}
-                    className="hover:bg-amber-500/[0.06] dark:hover:bg-amber-500/[0.07] transition-colors border-b border-border/50"
-                  >
+                  <TableRow key={form.id} className={`${landingTheme.tableRowHover}`}>
                     <TableCell className="font-medium py-3.5 px-4 max-w-[280px]">
                       <div className="flex items-center gap-2 flex-wrap">
                         <Link

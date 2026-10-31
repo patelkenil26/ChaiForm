@@ -3,12 +3,8 @@ import { redirect } from "next/navigation";
 import { LandingNavbar } from "~/components/landing/navbar";
 import { HeroSection } from "~/components/landing/hero";
 import { ProductShowcaseSection } from "~/components/landing/product-showcase";
-import { LiveDemoSection } from "~/components/landing/live-demo";
-import { UseCasesSection } from "~/components/landing/use-cases";
-import { FeaturesBentoSection } from "~/components/landing/features-bento";
-import { IntegrationsSection } from "~/components/landing/integrations-section";
 import { ComparisonSection } from "~/components/landing/comparison";
-import { TemplatesSection } from "~/components/landing/templates-section";
+import { UseCasesSection } from "~/components/landing/use-cases";
 import { FaqSection } from "~/components/landing/faq-section";
 import { CtaSection } from "~/components/landing/cta-section";
 import { LandingFooter } from "~/components/landing/footer";
@@ -35,12 +31,8 @@ export default async function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <ProductShowcaseSection />
-        <LiveDemoSection />
-        <UseCasesSection />
-        <FeaturesBentoSection />
-        <IntegrationsSection />
         <ComparisonSection />
-        <TemplatesSection />
+        <UseCasesSection />
         <FaqSection />
         <CtaSection />
       </main>

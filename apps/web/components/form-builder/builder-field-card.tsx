@@ -104,11 +104,11 @@ export function BuilderFieldCard({
       onDragEnd={(e) => {
         onDragEndRow?.(e);
       }}
-      className={`group relative flex flex-col gap-2 rounded-xl border bg-card/80 p-3.5 sm:p-4 transition-all hover:border-amber-500/30 hover:shadow-xs ${
+      className={`group relative flex flex-col gap-2 rounded-xl border bg-card/80 p-3.5 sm:p-4 transition-all ${landingTheme.cardBorderHover} hover:shadow-xs ${
         field.hasError
           ? "border-destructive/80 bg-destructive/5"
           : field.isDraft
-            ? "border-amber-500/40 bg-amber-500/5 shadow-2xs"
+            ? "border-primary/40 bg-primary/5 shadow-2xs"
             : isEditMode
               ? "border-border/90 bg-card"
               : "border-border/60 bg-card/60"
@@ -181,7 +181,7 @@ export function BuilderFieldCard({
                     className={`h-8 text-sm font-medium rounded-lg w-full pr-14 bg-background/80 transition ${
                       field.hasError
                         ? "border-destructive focus-visible:ring-destructive"
-                        : "border-border/80 focus-visible:ring-amber-500/30 focus-visible:border-amber-500/50"
+                        : "border-border/80 focus-visible:ring-primary/30 focus-visible:border-primary/50"
                     }`}
                     autoFocus={!field.label}
                   />
@@ -252,7 +252,7 @@ export function BuilderFieldCard({
             <div className="flex items-center gap-3 min-w-0 flex-1">
               {/* Type Icon Box */}
               <div
-                className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center shrink-0 border border-amber-400/20`}
+                className={`size-8 rounded-lg ${landingTheme.iconBg} flex items-center justify-center shrink-0`}
               >
                 {(() => {
                   const Icon = getFieldIcon(field.type as FieldType);
@@ -289,7 +289,7 @@ export function BuilderFieldCard({
                   {field.isRequired ? (
                     <Badge
                       variant="secondary"
-                      className="text-[10px] bg-amber-400/10 text-amber-300 border border-amber-400/20 font-medium py-0 px-1.5"
+                      className={`text-[10px] ${landingTheme.callout.bg} ${landingTheme.callout.accent} ${landingTheme.callout.border} font-medium py-0 px-1.5`}
                     >
                       Required
                     </Badge>

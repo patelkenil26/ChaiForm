@@ -13,6 +13,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { landingTheme } from "~/config/landing-theme";
+import { ChaiFormLogo } from "~/components/brand/chaiform-logo";
 
 export default function NotFound() {
   const router = useRouter();
@@ -27,11 +28,10 @@ export default function NotFound() {
       <div className="flex max-w-md flex-col items-center gap-6">
         {/* App Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div
-            className={`flex aspect-square size-10 items-center justify-center rounded-xl ${landingTheme.logoGradient} transition-transform duration-200 group-hover:scale-105`}
-          >
-            <IconForms className="size-5" />
-          </div>
+          <ChaiFormLogo
+            size={36}
+            className="transition-transform duration-200 group-hover:scale-105"
+          />
           <span className="text-lg font-bold tracking-tight text-foreground">ChaiForm</span>
         </Link>
 

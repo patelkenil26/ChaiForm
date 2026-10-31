@@ -79,9 +79,9 @@ export function createSeoMetadata({
           },
         },
     icons: {
-      icon: { url: "/chaiform-logo-transparent-for-dark-bg (3).svg", type: "image/svg+xml" },
-      shortcut: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-      apple: "/chaiform-logo-transparent-for-dark-bg (3).svg",
+      icon: { url: "/logo/chaiform-logo-dark-mode.png", type: "image/png" },
+      shortcut: "/logo/chaiform-logo-dark-mode.png",
+      apple: "/logo/chaiform-logo-dark-mode.png",
     },
     verification: {
       google: SITE_CONFIG.googleSiteVerification,
@@ -107,9 +107,9 @@ export const rootMetadata: Metadata = {
   creator: SITE_CONFIG.author.name,
   publisher: SITE_CONFIG.legalName,
   icons: {
-    icon: { url: "/chaiform-logo-transparent-for-dark-bg (3).svg", type: "image/svg+xml" },
-    shortcut: "/chaiform-logo-transparent-for-dark-bg (3).svg",
-    apple: "/chaiform-logo-transparent-for-dark-bg (3).svg",
+    icon: { url: "/logo/chaiform-logo-dark-mode.png", type: "image/png" },
+    shortcut: "/logo/chaiform-logo-dark-mode.png",
+    apple: "/logo/chaiform-logo-dark-mode.png",
   },
   verification: {
     google: SITE_CONFIG.googleSiteVerification,
@@ -156,6 +156,34 @@ export const pricingMetadata: Metadata = createSeoMetadata({
     "typeform alternative cheap",
     "free conversational form builder",
     "pro form builder plan",
+  ],
+});
+
+/** Features Page Metadata */
+export const featuresMetadata: Metadata = createSeoMetadata({
+  title: "ChaiForm Features: 14 Input Types, QR Studio & Logic | ChaiForm",
+  description:
+    "Explore the complete ChaiForm conversational feature suite: 14 field types, keyboard-first navigation, print-ready QR codes, and password gating.",
+  path: "/features",
+  keywords: [
+    "conversational form features",
+    "typeform alternative features",
+    "qr code form generator",
+    "keyboard navigation form builder",
+  ],
+});
+
+/** Integrations Page Metadata */
+export const integrationsMetadata: Metadata = createSeoMetadata({
+  title: "ChaiForm Integrations: Next.js, Webflow & Real-Time Webhooks | ChaiForm",
+  description:
+    "Embed conversational forms anywhere with 1-line snippets for Next.js, React, Webflow, and HTML. Real-time webhooks and instant Google Sheets export.",
+  path: "/integrations",
+  keywords: [
+    "nextjs form embed",
+    "webflow form embed",
+    "form webhooks",
+    "form google sheets export",
   ],
 });
 

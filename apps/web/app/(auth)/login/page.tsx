@@ -1,10 +1,18 @@
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconCornerDownLeft,
+  IconTrendingUp,
+  IconBolt,
+  IconDeviceLaptop,
+  IconStarFilled,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 import { LoginForm } from "~/components/login-form";
-import { AuthBrandPanel } from "~/components/auth/auth-brand-panel";
-import { landingTheme } from "~/config/landing-theme";
-
+import { ChaiFormLogo } from "~/components/brand/chaiform-logo";
+import { ThemeToggle } from "~/components/theme-toggle";
+import { Badge } from "~/components/ui/badge";
 import { loginMetadata } from "~/seo";
 
 export const metadata = loginMetadata;
@@ -18,89 +26,239 @@ export default async function LoginPage({
   const redirectUrl = params?.redirect || "/dashboard";
 
   return (
-    <div
-      className={`min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden ${landingTheme.selection}`}
-    >
-      {/* Background Ambient Glows */}
-      <div
-        className={`pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full ${landingTheme.heroGlow} -z-10`}
-      />
+    <div className="h-screen max-h-screen w-full grid grid-cols-1 lg:grid-cols-12 overflow-hidden bg-background text-foreground">
+      {/* ========================================================= */}
+      {/* LEFT HALF: FULL-BLEED SEAMLESS BRAND STAGE (Edge-to-Edge) */}
+      {/* ========================================================= */}
+      <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 flex-col justify-between p-8 xl:p-12 border-r border-border/70 bg-muted/20 relative overflow-hidden">
+        {/* Subtle Ambient Citron Glow */}
+        <div className="pointer-events-none absolute -top-32 -left-32 size-96 rounded-full bg-lime-500/10 dark:bg-[#CCFF00]/10 blur-[130px] -z-10" />
 
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-6">
-        {/* Brand Link (Mobile only) */}
-        <Link href="/" className="lg:hidden flex items-center gap-2.5 self-center group mb-2">
-          <div className="relative size-9 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
-            <Image
-              src="/chaiform-logo-transparent-for-dark-bg (3).svg"
-              alt="ChaiForm"
-              width={36}
-              height={36}
-              className="size-full object-contain"
+        {/* Top Header */}
+        <div className="flex items-center justify-between shrink-0">
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <ChaiFormLogo
+              size={32}
               priority
+              className="transition-transform duration-200 group-hover:scale-105"
             />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">ChaiForm</span>
-        </Link>
-
-        {/* Dual Panel Grid (Desktop 2-col, Mobile 1-col) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left Panel: Modular Brand Story & Live Form Preview (Desktop only) */}
-          <AuthBrandPanel
-            headline={
-              <>
-                Conversational forms that{" "}
-                <span className={landingTheme.gradientText}>convert 3.5× higher</span>
-              </>
-            }
-            subtitle="Replace clunky multi-page questionnaires with one-question-at-a-time flow that respondents love completing."
-            previewBadge="Preview"
-            previewQuestion="What is your primary goal for this workspace?"
-            previewContent={
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2 rounded-lg border border-amber-400/40 bg-amber-400/10 text-amber-200 flex items-center gap-2">
-                  <span className="size-4 rounded-full bg-amber-400/20 text-[10px] font-bold flex items-center justify-center">
-                    A
-                  </span>
-                  <span>Lead Generation</span>
-                </div>
-                <div className="p-2 rounded-lg border border-border/60 bg-muted/30 text-muted-foreground flex items-center gap-2">
-                  <span className="size-4 rounded-full bg-muted text-[10px] font-bold flex items-center justify-center">
-                    B
-                  </span>
-                  <span>User Feedback</span>
-                </div>
-              </div>
-            }
-            previewFooterLeft={
-              <span>
-                Press{" "}
-                <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border/60 text-foreground font-mono">
-                  Enter ↵
-                </kbd>{" "}
-                to proceed
-              </span>
-            }
-            previewFooterRight="92% completion rate"
-          />
-
-          {/* Right Panel: Login Card */}
-          <div className="lg:col-span-5 w-full flex flex-col justify-between gap-4 h-full">
-            <div
-              className={`flex-1 flex flex-col justify-center rounded-2xl border border-border/80 ${landingTheme.cardBg} backdrop-blur-xl shadow-2xl p-6 sm:p-8 relative overflow-hidden min-h-[540px]`}
+            <span className="text-xl font-extrabold tracking-tight text-foreground">ChaiForm</span>
+            <Badge
+              variant="outline"
+              className="text-[10px] font-mono border-lime-600/30 dark:border-[#CCFF00]/30 text-lime-800 dark:text-[#CCFF00] bg-lime-500/10 dark:bg-[#CCFF00]/10 px-2 py-0.5 font-bold"
             >
-              <div className={landingTheme.cardBeam} />
-              <LoginForm redirectUrl={redirectUrl} />
+              v2.4
+            </Badge>
+          </Link>
+
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground bg-background/80 px-2.5 py-1 rounded-full border border-border/60">
+            <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Conversational OS</span>
+          </span>
+        </div>
+
+        {/* Center: Hero Narrative & Interactive Runner Preview */}
+        <div className="my-auto max-w-lg space-y-4 py-4">
+          <div className="space-y-1.5">
+            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
+              Conversational forms that{" "}
+              <span className="text-lime-800 dark:text-[#CCFF00]">convert 3.4× higher</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              Replace boring questionnaires with fluid, one-question-at-a-time flows that
+              respondents love completing.
+            </p>
+          </div>
+
+          {/* Living Interactive Form Runner Preview */}
+          <div className="rounded-2xl border border-border/80 bg-card/90 backdrop-blur-md p-4 shadow-lg space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-border/60 text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <span className="size-2 rounded-full bg-lime-600 dark:bg-[#CCFF00] animate-pulse" />
+                <span className="text-muted-foreground uppercase text-[10px] font-semibold">
+                  LIVE RUNNER PREVIEW
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-lime-800 dark:text-[#CCFF00] font-bold">
+                STEP 1 OF 3 • 100% FLUID
+              </span>
             </div>
 
-            {/* Back to Home Link */}
+            {/* Progress Bar */}
+            <div className="w-full bg-muted h-1 rounded-full overflow-hidden">
+              <div className="bg-lime-600 dark:bg-[#CCFF00] h-full w-[45%]" />
+            </div>
+
+            {/* Question & Choices */}
+            <div className="space-y-2 pt-1">
+              <div className="space-y-0.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-lime-800 dark:text-[#CCFF00]">
+                  01 <IconArrowRight className="size-2.5" />
+                </span>
+                <h3 className="text-sm sm:text-base font-bold text-foreground">
+                  What is your primary collection goal?
+                </h3>
+              </div>
+
+              <div className="space-y-1.5">
+                {[
+                  {
+                    key: "A",
+                    title: "Lead Generation & Waitlists",
+                    desc: "Qualify high-intent inbound leads with zero drop-off",
+                    active: true,
+                  },
+                  {
+                    key: "B",
+                    title: "Event RSVPs & Ticket Passes",
+                    desc: "Print 1024px QR codes with auto-close capacity limits",
+                    active: false,
+                  },
+                  {
+                    key: "C",
+                    title: "Customer CSAT & Feedback",
+                    desc: "Uncover candid sentiment with animated 5-star rating scales",
+                    active: false,
+                  },
+                ].map((opt) => (
+                  <div
+                    key={opt.key}
+                    className={`flex items-center justify-between p-2 rounded-xl border text-xs transition-all ${
+                      opt.active
+                        ? "border-lime-600 dark:border-[#CCFF00] bg-lime-500/10 dark:bg-[#CCFF00]/10 text-foreground ring-1 ring-lime-600/30 dark:ring-[#CCFF00]/40"
+                        : "border-border/60 bg-muted/30 text-muted-foreground opacity-75"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span
+                        className={`size-5 rounded-md flex items-center justify-center font-mono text-[11px] font-bold shrink-0 ${
+                          opt.active
+                            ? "bg-lime-600 dark:bg-[#CCFF00] text-white dark:text-[#0A0B0D]"
+                            : "bg-muted border border-border text-foreground"
+                        }`}
+                      >
+                        {opt.key}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-foreground text-xs truncate">
+                          {opt.title}
+                        </div>
+                        <div className="text-[10px] text-muted-foreground truncate">{opt.desc}</div>
+                      </div>
+                    </div>
+                    {opt.active && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-mono text-lime-800 dark:text-[#CCFF00] font-bold shrink-0 ml-2">
+                        <span>ACTIVE</span>
+                        <IconCornerDownLeft className="size-2.5" />
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Metric Bento Strip */}
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="p-2.5 rounded-xl border border-border/80 bg-card/60">
+              <div className="flex items-center gap-1 text-lime-800 dark:text-[#CCFF00] font-mono text-sm sm:text-base font-extrabold">
+                <IconTrendingUp className="size-3.5 text-emerald-500" />
+                <span>89.4%</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground">Avg Completion</div>
+            </div>
+
+            <div className="p-2.5 rounded-xl border border-border/80 bg-card/60">
+              <div className="flex items-center gap-1 text-lime-800 dark:text-[#CCFF00] font-mono text-sm sm:text-base font-extrabold">
+                <IconBolt className="size-3.5 text-amber-500" />
+                <span>3.4×</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground">Faster Pace</div>
+            </div>
+
+            <div className="p-2.5 rounded-xl border border-border/80 bg-card/60">
+              <div className="flex items-center gap-1 text-lime-800 dark:text-[#CCFF00] font-mono text-sm sm:text-base font-extrabold">
+                <IconDeviceLaptop className="size-3.5 text-blue-500" />
+                <span>1-Click</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground">Embed &amp; Sync</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Social Proof */}
+        <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="flex -space-x-1">
+              <span className="size-5 rounded-full bg-lime-600/30 border border-background text-[9px] font-bold flex items-center justify-center text-foreground">
+                AP
+              </span>
+              <span className="size-5 rounded-full bg-amber-500/30 border border-background text-[9px] font-bold flex items-center justify-center text-foreground">
+                MK
+              </span>
+              <span className="size-5 rounded-full bg-blue-500/30 border border-background text-[9px] font-bold flex items-center justify-center text-foreground">
+                JL
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground">
+              Loved by <strong className="text-foreground">2,400+</strong> creators &amp; growth
+              teams
+            </span>
+          </div>
+
+          <div className="flex items-center gap-0.5 text-amber-500">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <IconStarFilled key={i} className="size-2.5" />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================= */}
+      {/* RIGHT HALF: CLEAN AUTH CONSOLE (Direct on Canvas, No Box) */}
+      {/* ========================================================= */}
+      <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-between p-6 sm:p-10 lg:p-12 relative overflow-hidden bg-background">
+        {/* Top Navbar Actions */}
+        <div className="flex items-center justify-between w-full max-w-md mx-auto shrink-0">
+          {/* Mobile Logo */}
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2">
+            <ChaiFormLogo size={28} priority />
+            <span className="text-base font-extrabold tracking-tight">ChaiForm</span>
+          </Link>
+
+          <div className="ml-auto flex items-center gap-2.5">
+            <span className="hidden sm:inline text-xs text-muted-foreground">
+              New to ChaiForm?{" "}
+              <Link
+                href="/signup"
+                className="font-bold text-lime-800 dark:text-[#CCFF00] hover:underline"
+              >
+                Sign up free
+              </Link>
+            </span>
+            <ThemeToggle className="size-8" />
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-1 shrink-0"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-lg border border-border/60 hover:bg-muted"
             >
-              <ArrowLeft className="size-3.5" />
-              <span>Back to ChaiForm</span>
+              <IconArrowLeft className="size-3.5" />
+              <span className="hidden sm:inline">Website</span>
             </Link>
           </div>
+        </div>
+
+        {/* Center: Login Form resting directly on canvas without a box */}
+        <div className="w-full max-w-md mx-auto my-auto py-2">
+          <LoginForm redirectUrl={redirectUrl} />
+        </div>
+
+        {/* Bottom Legal & Security Footer */}
+        <div className="w-full max-w-md mx-auto text-center text-[11px] text-muted-foreground shrink-0 pt-2">
+          <div className="flex items-center justify-center gap-1 text-muted-foreground/80 mb-0.5">
+            <IconShieldCheck className="size-3.5 text-emerald-500" />
+            <span>256-bit SSL encrypted • Zero telemetry tracking</span>
+          </div>
+          <p>© {new Date().getFullYear()} ChaiForm • Conversational Form OS</p>
         </div>
       </div>
     </div>

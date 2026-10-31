@@ -25,7 +25,7 @@ export const SITE_CONFIG = {
 
   // Brand Imagery & Assets
   images: {
-    logo: "https://chaiform.kenilpatel.in/chaiform-logo-transparent-for-dark-bg (3).svg",
+    logo: "https://chaiform.kenilpatel.in/logo/chaiform-logo-dark-mode.png",
     ogDefault: "https://chaiform.kenilpatel.in/opengraph-image",
     ogWidth: 1200,
     ogHeight: 630,
