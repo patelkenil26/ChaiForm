@@ -153,6 +153,22 @@ export const updateFormSettingsInput = z.object({
     .nullable()
     .optional()
     .describe("Estimated completion time badge (e.g. Takes 2 mins)"),
+
+  // Visual Theme & Appearance
+  themePreset: z.string().max(50).optional().describe("Visual theme preset ID"),
+  customBgColor: z
+    .string()
+    .max(255)
+    .nullable()
+    .optional()
+    .describe("Custom background color or gradient string"),
+  customTextColor: z.string().max(50).nullable().optional().describe("Custom text color"),
+  customAccentColor: z
+    .string()
+    .max(50)
+    .nullable()
+    .optional()
+    .describe("Custom accent/button color"),
 });
 
 export type UpdateFormSettingsInputType = z.infer<typeof updateFormSettingsInput>;

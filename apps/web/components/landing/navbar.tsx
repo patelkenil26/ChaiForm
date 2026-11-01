@@ -162,7 +162,7 @@ export function LandingNavbar() {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground hover:bg-muted transition-colors"
                   >
-                    <IconFlame className="size-4.5 text-[#CCFF00]" />
+                    <IconFlame className={`size-4.5 ${landingTheme.iconColor}`} />
                     <span>Features</span>
                   </Link>
 

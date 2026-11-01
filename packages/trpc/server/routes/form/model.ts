@@ -96,6 +96,10 @@ export const getFormOutputModel = z
     welcomeDescription: z.string().nullable().optional(),
     welcomeButtonText: z.string().default("Start Form"),
     estimatedTime: z.string().nullable().optional(),
+    themePreset: z.string().default("citron-neon"),
+    customBgColor: z.string().nullable().optional(),
+    customTextColor: z.string().nullable().optional(),
+    customAccentColor: z.string().nullable().optional(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
     fields: z.array(formFieldObject),
@@ -220,6 +224,20 @@ export const updateFormSettingsInputModel = z.object({
     .nullable()
     .optional()
     .describe("Estimated completion time badge"),
+  themePreset: z.string().max(50).optional().describe("Visual theme preset identifier"),
+  customBgColor: z
+    .string()
+    .max(255)
+    .nullable()
+    .optional()
+    .describe("Custom background CSS color or gradient"),
+  customTextColor: z.string().max(50).nullable().optional().describe("Custom text color"),
+  customAccentColor: z
+    .string()
+    .max(50)
+    .nullable()
+    .optional()
+    .describe("Custom accent/button color"),
 });
 
 export const updateFormSettingsOutputModel = z.object({
@@ -241,6 +259,10 @@ export const updateFormSettingsOutputModel = z.object({
   welcomeDescription: z.string().nullable().optional(),
   welcomeButtonText: z.string().default("Start Form"),
   estimatedTime: z.string().nullable().optional(),
+  themePreset: z.string().default("citron-neon"),
+  customBgColor: z.string().nullable().optional(),
+  customTextColor: z.string().nullable().optional(),
+  customAccentColor: z.string().nullable().optional(),
 });
 
 export const listPublicFormsInputModel = z

@@ -24,6 +24,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/components/u
 import { FieldGroup } from "~/components/ui/field";
 import { FormFieldRenderer } from "~/components/public-form/form-field-renderer";
 import { landingTheme } from "~/config/landing-theme";
+import { resolveFormTheme } from "~/config/form-themes";
 import type { PublicFormField } from "~/components/public-form/types";
 import type { BuilderFormData } from "./builder-header";
 import type { FieldRow } from "./field-types";
@@ -88,6 +89,13 @@ export function BuilderPreviewModal({
   };
 
   const sortedFields = [...fields].sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
+
+  const activeTheme = resolveFormTheme(
+    form?.themePreset,
+    form?.customBgColor,
+    form?.customTextColor,
+    form?.customAccentColor,
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -249,11 +257,17 @@ export function BuilderPreviewModal({
           <div
             className={`w-full transition-all duration-300 ease-out ${
               viewport === "mobile"
-                ? "max-w-[400px] my-2 bg-card rounded-[2.5rem] border-8 border-border shadow-2xl p-6 relative"
+                ? "max-w-[400px] my-2 rounded-[2.5rem] border-8 shadow-2xl p-6 relative"
                 : viewport === "tablet"
-                  ? "max-w-[640px] my-2 bg-card rounded-2xl border border-border/80 shadow-xl p-8"
-                  : "max-w-[760px] my-2 bg-card rounded-2xl border border-border/80 shadow-lg p-8 md:p-10"
+                  ? "max-w-[640px] my-2 rounded-2xl border shadow-xl p-8"
+                  : "max-w-[760px] my-2 rounded-2xl border shadow-lg p-8 md:p-10"
             }`}
+            style={{
+              background: activeTheme.background,
+              color: activeTheme.textColor,
+              borderColor: activeTheme.cardBorder,
+              boxShadow: `0 20px 50px -10px ${activeTheme.glowColor}`,
+            }}
           >
             {/* Mobile Notch Mockup */}
             {viewport === "mobile" && (
@@ -263,20 +277,38 @@ export function BuilderPreviewModal({
             {isTestSubmitted ? (
               /* Simulated Success State */
               <div className="py-12 flex flex-col items-center text-center space-y-4 animate-in fade-in zoom-in-95 duration-300">
-                <div className="flex aspect-square size-16 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-md">
+                <div
+                  className="flex aspect-square size-16 items-center justify-center rounded-2xl shadow-md"
+                  style={{
+                    backgroundColor: `${activeTheme.accentColor}18`,
+                    color: activeTheme.accentColor,
+                    border: `1px solid ${activeTheme.accentColor}35`,
+                  }}
+                >
                   <IconCheck className="size-8" />
                 </div>
                 <div className="space-y-1.5 max-w-sm">
                   <Badge
                     variant="outline"
-                    className="border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 text-xs px-2.5 py-0.5"
+                    className="text-xs px-2.5 py-0.5"
+                    style={{
+                      borderColor: `${activeTheme.accentColor}40`,
+                      backgroundColor: `${activeTheme.accentColor}12`,
+                      color: activeTheme.accentColor,
+                    }}
                   >
                     Test Submission Successful
                   </Badge>
-                  <h3 className="text-xl font-bold tracking-tight">
+                  <h3
+                    className="text-xl font-bold tracking-tight"
+                    style={{ color: activeTheme.textColor }}
+                  >
                     {form?.thankYouTitle || "Everything works smoothly!"}
                   </h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
+                  <p
+                    className="text-xs sm:text-sm whitespace-pre-line"
+                    style={{ color: activeTheme.textMutedColor }}
+                  >
                     {form?.thankYouDescription ||
                       "This is what respondents will see when they complete your form."}
                   </p>
@@ -288,7 +320,12 @@ export function BuilderPreviewModal({
                     <Button
                       asChild
                       size="sm"
-                      className={`w-full text-xs font-semibold gap-1.5 ${landingTheme.primaryButton}`}
+                      className="w-full text-xs font-semibold gap-1.5 cursor-pointer shadow-md"
+                      style={{
+                        backgroundColor: activeTheme.accentColor,
+                        color: activeTheme.accentTextColor,
+                        boxShadow: `0 4px 15px ${activeTheme.glowColor}`,
+                      }}
                     >
                       <a href={form.thankYouButtonUrl} target="_blank" rel="noopener noreferrer">
                         <span>{form.thankYouButtonText}</span>
@@ -307,11 +344,16 @@ export function BuilderPreviewModal({
                 )}
 
                 <div className="pt-4 flex items-center gap-2">
-                  <Button size="sm" onClick={handleReset} className="gap-1.5">
+                  <Button size="sm" onClick={handleReset} className="gap-1.5 cursor-pointer">
                     <IconRefresh className="size-3.5" />
                     <span>Test Again</span>
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => onOpenChange(false)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => onOpenChange(false)}
+                    className="cursor-pointer"
+                  >
                     Done Testing
                   </Button>
                 </div>
@@ -322,24 +364,40 @@ export function BuilderPreviewModal({
                 <div className="flex items-center gap-2 flex-wrap justify-center">
                   <Badge
                     variant="outline"
-                    className="text-xs font-medium px-2.5 py-0.5 bg-lime-500/10 text-lime-700 dark:text-[#ccff00] border-lime-500/30 gap-1.5"
+                    className="text-xs font-medium px-2.5 py-0.5 gap-1.5"
+                    style={{
+                      borderColor: `${activeTheme.accentColor}40`,
+                      backgroundColor: `${activeTheme.accentColor}15`,
+                      color: activeTheme.accentColor,
+                    }}
                   >
                     <IconClock className="size-3" />
                     <span>{form.estimatedTime || "Takes 2 mins"}</span>
                   </Badge>
                   <Badge
                     variant="outline"
-                    className="text-xs font-medium px-2.5 py-0.5 bg-muted/60 text-muted-foreground border-border"
+                    className="text-xs font-medium px-2.5 py-0.5"
+                    style={{
+                      borderColor: activeTheme.cardBorder,
+                      backgroundColor: "rgba(255, 255, 255, 0.05)",
+                      color: activeTheme.textMutedColor,
+                    }}
                   >
                     {fields.length} {fields.length === 1 ? "question" : "questions"}
                   </Badge>
                 </div>
 
                 <div className="space-y-2 max-w-md">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                  <h2
+                    className="text-2xl sm:text-3xl font-extrabold tracking-tight"
+                    style={{ color: activeTheme.textColor }}
+                  >
                     {form.welcomeTitle || form.title || "Untitled Form"}
                   </h2>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  <p
+                    className="text-xs sm:text-sm leading-relaxed whitespace-pre-line"
+                    style={{ color: activeTheme.textMutedColor }}
+                  >
                     {form.welcomeDescription ||
                       form.description ||
                       "Welcome! Please take a few moments to complete this form."}
@@ -350,7 +408,12 @@ export function BuilderPreviewModal({
                   <Button
                     size="lg"
                     onClick={() => setIsPreviewStarted(true)}
-                    className={`h-11 px-7 text-sm font-bold shadow-md shadow-lime-500/15 gap-2 cursor-pointer ${landingTheme.primaryButton}`}
+                    className="h-11 px-7 text-sm font-bold shadow-md gap-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                      backgroundColor: activeTheme.accentColor,
+                      color: activeTheme.accentTextColor,
+                      boxShadow: `0 4px 20px ${activeTheme.glowColor}`,
+                    }}
                   >
                     <span>{form.welcomeButtonText || "Start Form"}</span>
                     <IconExternalLink className="size-3.5 rotate-45" />
@@ -361,49 +424,86 @@ export function BuilderPreviewModal({
               /* Live Interactive Form */
               <div>
                 {/* Form Header Info */}
-                <div className="mb-6 pb-4 border-b border-border/40">
+                <div className="mb-6 pb-4 border-b" style={{ borderColor: activeTheme.cardBorder }}>
                   <div className="flex items-center gap-2 flex-wrap mb-2">
                     {form?.isPublished ? (
                       <Badge
                         variant="default"
-                        className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] inline-flex items-center gap-1.5"
+                        className="text-[10px] inline-flex items-center gap-1.5"
+                        style={{
+                          backgroundColor: `${activeTheme.accentColor}20`,
+                          color: activeTheme.accentColor,
+                          border: `1px solid ${activeTheme.accentColor}40`,
+                        }}
                       >
-                        <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span
+                          className="size-1.5 rounded-full animate-pulse"
+                          style={{ backgroundColor: activeTheme.accentColor }}
+                        />
                         Published
                       </Badge>
                     ) : (
                       <Badge
                         variant="secondary"
-                        className={`text-[10px] inline-flex items-center gap-1.5 ${landingTheme.callout.bg} ${landingTheme.callout.text} border ${landingTheme.callout.border}`}
+                        className="text-[10px] inline-flex items-center gap-1.5"
+                        style={{
+                          backgroundColor: "rgba(255, 255, 255, 0.08)",
+                          color: activeTheme.textMutedColor,
+                          border: `1px solid ${activeTheme.cardBorder}`,
+                        }}
                       >
-                        <span className={`size-1.5 rounded-full ${landingTheme.activeDot}`} />
+                        <span
+                          className="size-1.5 rounded-full"
+                          style={{ backgroundColor: activeTheme.accentColor }}
+                        />
                         Draft (Unpublished)
                       </Badge>
                     )}
                     {form?.slug && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] font-mono text-muted-foreground"
+                        className="text-[10px] font-mono"
+                        style={{
+                          color: activeTheme.textMutedColor,
+                          borderColor: activeTheme.cardBorder,
+                        }}
                       >
                         /form/{form.slug}
                       </Badge>
                     )}
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                  <h2
+                    className="text-xl sm:text-2xl font-bold tracking-tight"
+                    style={{ color: activeTheme.textColor }}
+                  >
                     {form?.title || "Untitled Form"}
                   </h2>
                   {form?.description && (
-                    <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    <p
+                      className="mt-1.5 text-xs sm:text-sm leading-relaxed"
+                      style={{ color: activeTheme.textMutedColor }}
+                    >
                       {form.description}
                     </p>
                   )}
                 </div>
 
                 {sortedFields.length === 0 ? (
-                  <div className="py-12 flex flex-col items-center justify-center text-center border border-dashed rounded-xl p-6 bg-muted/20">
-                    <IconSparkles className="size-8 text-muted-foreground/60 mb-2" />
-                    <h4 className="text-sm font-semibold">No questions added yet</h4>
-                    <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                  <div
+                    className="py-12 flex flex-col items-center justify-center text-center border border-dashed rounded-xl p-6"
+                    style={{ borderColor: activeTheme.cardBorder }}
+                  >
+                    <IconSparkles
+                      className="size-8 mb-2"
+                      style={{ color: activeTheme.accentColor }}
+                    />
+                    <h4 className="text-sm font-semibold" style={{ color: activeTheme.textColor }}>
+                      No questions added yet
+                    </h4>
+                    <p
+                      className="text-xs mt-1 max-w-xs"
+                      style={{ color: activeTheme.textMutedColor }}
+                    >
                       Click &quot;Add Field&quot; in the builder to start adding inputs. They will
                       appear here instantly!
                     </p>
@@ -426,13 +526,18 @@ export function BuilderPreviewModal({
                     <div className="pt-4 flex flex-col items-center gap-2">
                       <Button
                         type="submit"
-                        className={`w-full h-10 text-sm font-semibold gap-2 shadow-md shadow-amber-500/10 ${landingTheme.primaryButton}`}
+                        className="w-full h-10 text-sm font-semibold gap-2 shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
+                        style={{
+                          backgroundColor: activeTheme.accentColor,
+                          color: activeTheme.accentTextColor,
+                          boxShadow: `0 4px 15px ${activeTheme.glowColor}`,
+                        }}
                         disabled={isSubmitting}
                       >
                         <IconSparkles className="size-3.5" />
                         <span>{form?.submitButtonText || "Submit Response"} (Preview Test)</span>
                       </Button>
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="text-[11px]" style={{ color: activeTheme.textMutedColor }}>
                         Simulate validation & submission flow
                       </span>
                     </div>

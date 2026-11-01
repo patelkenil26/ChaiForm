@@ -17,6 +17,7 @@ import {
   IconEye,
   IconCode,
   IconDots,
+  IconPalette,
 } from "@tabler/icons-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -63,6 +64,10 @@ export interface BuilderFormData {
   welcomeDescription?: string | null;
   welcomeButtonText?: string | null;
   estimatedTime?: string | null;
+  themePreset?: string | null;
+  customBgColor?: string | null;
+  customTextColor?: string | null;
+  customAccentColor?: string | null;
 }
 
 interface BuilderHeaderProps {
@@ -73,6 +78,7 @@ interface BuilderHeaderProps {
   onCopyLink: () => void;
   onOpenQr: () => void;
   onOpenLimits: () => void;
+  onOpenTheme?: () => void;
   onAddField: () => void;
   onOpenPreview: () => void;
   onTogglePublish: (checked: boolean) => void;
@@ -87,6 +93,7 @@ export function BuilderHeader({
   onCopyLink,
   onOpenQr,
   onOpenLimits,
+  onOpenTheme,
   onAddField,
   onOpenPreview,
   onTogglePublish,
@@ -360,6 +367,17 @@ export function BuilderHeader({
         </div>
 
         <div className="flex items-center justify-between sm:justify-end gap-2 flex-wrap pt-2 sm:pt-0 border-t sm:border-t-0 border-border/40">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onOpenTheme}
+            className="h-8 text-xs gap-1.5 cursor-pointer hover:border-lime-500/40 dark:hover:border-[#ccff00]/40 transition-colors"
+            title="Choose curated gradient themes, background colors, and button accents"
+          >
+            <IconPalette className="size-3.5 text-lime-600 dark:text-[#ccff00]" />
+            <span>Design & Theme</span>
+          </Button>
+
           <Button
             variant="outline"
             size="sm"

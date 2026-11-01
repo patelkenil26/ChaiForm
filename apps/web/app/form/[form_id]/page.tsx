@@ -18,6 +18,7 @@ import { FormWelcomeScreen } from "~/components/public-form/form-welcome-screen"
 import { FormUnlockCard } from "~/components/forms/form-unlock-card";
 import { getSafeErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
+import { resolveFormTheme } from "~/config/form-themes";
 import type { PublicFormField } from "~/components/public-form/types";
 
 export default function PublicFormPage({
@@ -237,6 +238,13 @@ export default function PublicFormPage({
     );
   }
 
+  const activeTheme = resolveFormTheme(
+    form?.themePreset,
+    form?.customBgColor,
+    form?.customTextColor,
+    form?.customAccentColor,
+  );
+
   if (submitted) {
     return (
       <FormSuccessScreen
@@ -246,6 +254,7 @@ export default function PublicFormPage({
         buttonText={form.thankYouButtonText}
         buttonUrl={form.thankYouButtonUrl}
         autoRedirectUrl={form.autoRedirectUrl}
+        theme={activeTheme}
         onReset={() => {
           reset();
           setSubmitted(false);
@@ -266,6 +275,7 @@ export default function PublicFormPage({
         estimatedTime={form.estimatedTime}
         fieldCount={form.fields?.length ?? 0}
         category={form.category}
+        theme={activeTheme}
         onStart={() => setIsStarted(true)}
         isEmbed={isEmbed}
       />
@@ -284,10 +294,15 @@ export default function PublicFormPage({
             ? "bg-neutral-950 text-neutral-100"
             : "bg-transparent text-foreground"
       }`
-    : "min-h-screen bg-background flex items-start justify-center py-16 px-4";
+    : "min-h-screen flex items-start justify-center py-16 px-4 transition-colors";
 
   return (
-    <div className={containerClasses}>
+    <div
+      className={containerClasses}
+      style={
+        !isEmbed ? { background: activeTheme.background, color: activeTheme.textColor } : undefined
+      }
+    >
       <div className="w-full max-w-lg">
         {(!hideTitle || form.closesAt || form.responseLimit || form.isPasswordProtected) && (
           <div className="mb-6">
@@ -318,9 +333,7 @@ export default function PublicFormPage({
             {!hideTitle && (
               <>
                 <h1 className="text-2xl font-bold tracking-tight">{form.title}</h1>
-                {form.description && (
-                  <p className="mt-2 text-sm text-muted-foreground">{form.description}</p>
-                )}
+                {form.description && <p className="mt-2 text-sm opacity-80">{form.description}</p>}
               </>
             )}
           </div>
@@ -329,7 +342,7 @@ export default function PublicFormPage({
         <form onSubmit={handleSubmit(onSubmit as Parameters<typeof handleSubmit>[0])}>
           <FieldGroup>
             {sortedFields.length === 0 ? (
-              <p className="text-sm text-muted-foreground">This form has no fields yet.</p>
+              <p className="text-sm opacity-70">This form has no fields yet.</p>
             ) : (
               sortedFields.map((field) => (
                 <FormFieldRenderer
@@ -348,7 +361,14 @@ export default function PublicFormPage({
             <div className="mt-8 flex flex-col items-center gap-2">
               <Button
                 type="submit"
-                className={`w-full h-11 text-sm font-semibold transition-all shadow-md shadow-amber-500/10 gap-2 ${landingTheme.primaryButton}`}
+                className={`w-full h-11 text-sm font-semibold transition-all shadow-md gap-2 ${
+                  !activeTheme ? landingTheme.primaryButton : ""
+                }`}
+                style={{
+                  background: activeTheme.accentColor,
+                  color: activeTheme.accentTextColor,
+                  boxShadow: `0 10px 25px -5px ${activeTheme.glowColor}`,
+                }}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

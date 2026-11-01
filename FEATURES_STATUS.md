@@ -331,13 +331,48 @@ Yeh wo 5 unique features hain jo ChaiForm ko generic Google Forms ya Typeform cl
 
 ### 3.6 🎯 Agency & Marketing Website Innovations
 
-- [ ] **Custom Post-Submission Redirect (Calendly / Custom Thank-You Page)**:
-  - Form submit hote hi respondent ko custom URL (jaise client ka Calendly booking link ya `/thank-you` page) par auto-redirect karne ka setting.
+- [x] **Custom Post-Submission Redirect (Calendly / Custom Thank-You Page)**:
+  - Form submit hote hi respondent ko custom URL (jaise client ka Calendly booking link ya `/thank-you` page) par auto-redirect karne ka setting with 3-second countdown timer.
 - [ ] **Hidden Fields & UTM / Source Attribution**:
   - URL parameters (`?utm_source=instagram`, `?utm_campaign=summer`, `?ref=linkedin`) ko bina user se puche automatically capture karna taaki client ko dashboard me pata chale lead kahan se aayi.
-- [ ] **Custom CTA Submit Button Text**:
-  - Form settings me submit button text customize karna (_"Get Instant Quote"_, _"Claim Free Pass"_, _"Request Callback"_ instead of default _"Submit"_).
-- [ ] **Embed Auto-Resize Script (`embed.js`)**:
-  - Lightweight script jo host website par iframe ki height ko dynamic adjust kare via `postMessage`, completely eliminating ugly double scrollbars.
-- [ ] **Appearance & Theme Customizer (Chameleon Mode)**:
-  - Form Builder me naya Appearance tab: Transparent background toggle (host website me blend hone ke liye), Custom Brand Accent Color picker, and Border Radius styling.
+- [x] **Custom CTA Submit Button Text**:
+  - Form settings me submit button text customize karna (_"Get Instant Quote"_, _"Register Now"_, _"Book Free Demo"_, _"Send Application"_ instead of default _"Submit"_).
+- [x] **Customizable Thank You / Completion Page**:
+  - Custom Thank You title, description, custom Call-to-Action button (Text + URL), aur auto-redirect timer.
+- [x] **Optional Welcome / Start Screen**:
+  - Typeform-style introductory cover screen (Title, Description, Estimated Time badge, Start button, Enter hotkey).
+- [x] **Embed Auto-Resize Script (`embed.js` & postMessage)**:
+  - Responsive postMessage communication jo host website par iframe ki height ko dynamic adjust kare via `postMessage`, completely eliminating ugly double scrollbars.
+- [x] **Appearance & Theme Customizer (Chameleon Mode)**:
+  - Form Builder me dedicated "Design & Theme" palette customizer: 8 curated premium presets (Citron Neon, Midnight Indigo, Sunset Warmth, Emerald Forest, Ocean Abyss, Cyberpunk Neon, Velvet Charcoal, Clean Minimal Light), plus custom palette mode (custom Background, Text Color, Accent Color) with live preview card in dialog, interactive simulator support, and dynamic live public form rendering.
+
+---
+
+## 💎 4. Advance Features Jo Future Me Paid / Pro Plans (₹1,499/mo) Bechne Ke Liye Hone Chahiye
+
+Agar kisi customer se paise charge karne hain, to unhe ye high-value features appeal karte hain:
+
+### 4.1 🏷️ Remove "Powered by ChaiForm" Branding (White-Label)
+
+- **Problem**: Free forms ke bottom par chhota sa "Powered by ChaiForm" badge rehta hai.
+- **Solution**: Pro users isko toggle off kar sakenge taaki unka form 100% unka apna lage aur agencies apne high-ticket clients ko bina ChaiForm watermark ke deliver kar sakein.
+
+### 4.2 🔗 Webhooks & Instant Integrations
+
+- **Problem**: Users ko data doosre tools me le jane ke liye manual export ya complex tools chahiye hote hain.
+- **Solution**: Har submission ka data live webhook URL par real-time JSON POST karna (Zapier, Make.com, n8n, Slack notification bot, CRM, ya direct Google Sheets sync).
+
+### 4.3 🌐 Custom Domains (CNAME Mapping)
+
+- **Problem**: Default link `chaiform.com/form/xyz` company brand se match nahi karti.
+- **Solution**: User apna khud ka domain connect kar sake (jaise `forms.mycompany.com/apply` ya `survey.brand.in`), complete with automatic SSL certificates.
+
+### 4.4 🎨 Form Themes & Custom Accent Color (Per-Form Styling) - Implemented
+
+- **Status**: Implemented with 8 curated presets + custom background/text/accent palette designer across Builder, Simulator, Welcome Screen, and Public Live Form.
+- **Monetization Note**: Free tier can include standard presets, Pro tier (₹1,499) unlocks unlimited custom color hex picking & brand gradient imports.
+
+### 4.5 👥 Team Workspaces & Collaboration (Multi-User Access)
+
+- **Problem**: Team members ek doosre ka login share karte hain jo insecure hai.
+- **Solution**: Form me team members ko email se invite karna with granular roles (`Admin`, `Editor`, `Viewer`), activity audit logs, aur team-shared forms workspace.

@@ -8,6 +8,10 @@ import {
   FormSettingsDialog,
   type FormSettingsPayload,
 } from "~/components/forms/form-settings-dialog";
+import {
+  FormThemeDialog,
+  type FormThemePayload,
+} from "~/components/form-builder/form-theme-dialog";
 import { QrCodeDialog } from "~/components/qr-code-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/components/ui/dialog";
 import { BuilderHeader, type BuilderFormData } from "~/components/form-builder/builder-header";
@@ -96,6 +100,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   // Modal dialog states
   const [createOpen, setCreateOpen] = useState(false);
   const [limitsOpen, setLimitsOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [editingField, setEditingField] = useState<FieldRow | null>(null);
 
@@ -105,6 +110,15 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
       toast.success("Form settings updated!");
     } catch (err: unknown) {
       toast.error(getSafeErrorMessage(err, "Failed to update form settings"));
+    }
+  };
+
+  const handleSaveTheme = async (themeSettings: FormThemePayload) => {
+    try {
+      await updateFormSettingsAsync({ formId, ...themeSettings });
+      toast.success("Form theme updated successfully!");
+    } catch (err: unknown) {
+      toast.error(getSafeErrorMessage(err, "Failed to apply theme"));
     }
   };
 
@@ -177,7 +191,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+    <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 w-full max-w-7xl mx-auto min-w-0 overflow-x-hidden">
       {/* Header Bar */}
       <BuilderHeader
         form={form as BuilderFormData | null | undefined}
@@ -187,6 +201,7 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
         onCopyLink={handleCopyLink}
         onOpenQr={() => setQrOpen(true)}
         onOpenLimits={() => setLimitsOpen(true)}
+        onOpenTheme={() => setThemeOpen(true)}
         onOpenPreview={() => setPreviewOpen(true)}
         onAddField={() => handleAddField("TEXT")}
         onTogglePublish={handleTogglePublish}
@@ -288,6 +303,17 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Form Settings, Limits, Slug & Password modal */}
+      {form && (
+        <FormThemeDialog
+          open={themeOpen}
+          onOpenChange={setThemeOpen}
+          form={form}
+          onSave={handleSaveTheme}
+          isSaving={isUpdatingSettings}
+        />
+      )}
 
       {/* Form Settings, Limits, Slug & Password modal */}
       {form && (

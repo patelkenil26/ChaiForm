@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { landingTheme } from "~/config/landing-theme";
+import type { FormThemeConfig } from "~/config/form-themes";
 
 interface FormSuccessScreenProps {
   onReset?: () => void;
@@ -23,6 +24,7 @@ interface FormSuccessScreenProps {
   buttonText?: string | null;
   buttonUrl?: string | null;
   autoRedirectUrl?: string | null;
+  theme?: FormThemeConfig;
 }
 
 export function FormSuccessScreen({
@@ -33,6 +35,7 @@ export function FormSuccessScreen({
   buttonText,
   buttonUrl,
   autoRedirectUrl,
+  theme,
 }: FormSuccessScreenProps) {
   const [hasCelebrated, setHasCelebrated] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(autoRedirectUrl ? 3 : null);
@@ -123,33 +126,75 @@ export function FormSuccessScreen({
   const showActionButton = Boolean(buttonText?.trim() && buttonUrl?.trim());
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-radial from-background via-background to-muted/20">
-      <div className="text-center space-y-6 max-w-md w-full rounded-3xl border border-border/80 bg-card/90 backdrop-blur-md p-8 sm:p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden">
+    <div
+      className="min-h-screen flex items-center justify-center p-4 bg-radial from-background via-background to-muted/20"
+      style={theme ? { background: theme.background, color: theme.textColor } : undefined}
+    >
+      <div
+        className="text-center space-y-6 max-w-md w-full rounded-3xl border border-border/80 bg-card/90 backdrop-blur-md p-8 sm:p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden"
+        style={
+          theme
+            ? {
+                background: theme.cardBackground,
+                borderColor: theme.cardBorder,
+                color: theme.textColor,
+              }
+            : undefined
+        }
+      >
         {/* Subtle decorative glow */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div
+          className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-3xl pointer-events-none opacity-60"
+          style={{ background: theme ? theme.glowColor : "rgba(16, 185, 129, 0.15)" }}
+        />
 
         {/* Celebratory badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-xs">
+        <div
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border shadow-xs"
+          style={
+            theme
+              ? {
+                  borderColor: theme.cardBorder,
+                  color: theme.accentColor,
+                  background: `${theme.accentColor}18`,
+                }
+              : undefined
+          }
+        >
           <SparklesIcon className="size-3.5 animate-bounce" />
           <span>Response recorded successfully</span>
         </div>
 
         {/* Animated Checkmark Icon with soft ring */}
         <div
-          className="relative mx-auto size-20 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shadow-inner group cursor-pointer transition-transform hover:scale-105 active:scale-95"
+          className="relative mx-auto size-20 rounded-3xl border flex items-center justify-center shadow-inner group cursor-pointer transition-transform hover:scale-105 active:scale-95"
           onClick={fireConfetti}
           title="Click to celebrate again!"
+          style={
+            theme
+              ? {
+                  borderColor: theme.cardBorder,
+                  background: `${theme.accentColor}15`,
+                  color: theme.accentColor,
+                }
+              : undefined
+          }
         >
           <CheckCircle2Icon className="size-10 stroke-[2.2] animate-in zoom-in duration-300" />
-          <div className="absolute inset-0 rounded-3xl ring-4 ring-emerald-500/20 animate-ping opacity-75 pointer-events-none" />
+          <div
+            className="absolute inset-0 rounded-3xl animate-ping opacity-75 pointer-events-none"
+            style={{
+              boxShadow: `0 0 0 4px ${theme ? theme.accentColor : "rgba(16, 185, 129, 0.2)"}`,
+            }}
+          />
         </div>
 
         {/* Title & Description */}
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
             {displayTitle}
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+          <p className="text-sm opacity-80 leading-relaxed whitespace-pre-line">
             {displayDescription}
           </p>
         </div>
@@ -182,7 +227,18 @@ export function FormSuccessScreen({
           <div className="pt-1">
             <Button
               asChild
-              className={`w-full h-11 text-sm font-bold shadow-lg shadow-lime-500/15 gap-2 ${landingTheme.primaryButton}`}
+              className={`w-full h-11 text-sm font-bold shadow-lg gap-2 ${
+                !theme ? landingTheme.primaryButton : ""
+              }`}
+              style={
+                theme
+                  ? {
+                      background: theme.accentColor,
+                      color: theme.accentTextColor,
+                      boxShadow: `0 10px 25px -5px ${theme.glowColor}`,
+                    }
+                  : undefined
+              }
             >
               <a href={buttonUrl} target="_blank" rel="noopener noreferrer">
                 <span>{buttonText}</span>

@@ -11,6 +11,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { landingTheme } from "~/config/landing-theme";
+import type { FormThemeConfig } from "~/config/form-themes";
 
 interface FormWelcomeScreenProps {
   title: string;
@@ -23,6 +24,7 @@ interface FormWelcomeScreenProps {
   category?: string | null;
   onStart: () => void;
   isEmbed?: boolean;
+  theme?: FormThemeConfig;
 }
 
 export function FormWelcomeScreen({
@@ -36,6 +38,7 @@ export function FormWelcomeScreen({
   category,
   onStart,
   isEmbed = false,
+  theme,
 }: FormWelcomeScreenProps) {
   const displayTitle = welcomeTitle?.trim() || title;
   const displayDescription = welcomeDescription?.trim() || description?.trim() || null;
@@ -67,11 +70,31 @@ export function FormWelcomeScreen({
           ? "min-h-[380px] py-8"
           : "min-h-screen py-16 bg-radial from-background via-background to-muted/20"
       }`}
+      style={
+        !isEmbed && theme ? { background: theme.background, color: theme.textColor } : undefined
+      }
     >
-      <div className="relative max-w-xl w-full rounded-3xl border border-border/80 bg-card/90 backdrop-blur-xl p-8 sm:p-12 shadow-2xl animate-in fade-in zoom-in-95 duration-500 overflow-hidden text-center sm:text-left">
+      <div
+        className="relative max-w-xl w-full rounded-3xl border border-border/80 bg-card/90 backdrop-blur-xl p-8 sm:p-12 shadow-2xl animate-in fade-in zoom-in-95 duration-500 overflow-hidden text-center sm:text-left"
+        style={
+          theme
+            ? {
+                background: theme.cardBackground,
+                borderColor: theme.cardBorder,
+                color: theme.textColor,
+              }
+            : undefined
+        }
+      >
         {/* Subtle decorative glow */}
-        <div className="absolute -top-20 -right-20 w-56 h-56 bg-lime-500/10 dark:bg-[#ccff00]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-56 h-56 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div
+          className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-3xl pointer-events-none opacity-60"
+          style={{ background: theme ? theme.glowColor : "rgba(204, 255, 0, 0.15)" }}
+        />
+        <div
+          className="absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl pointer-events-none opacity-40"
+          style={{ background: theme ? theme.glowColor : "rgba(59, 130, 246, 0.15)" }}
+        />
 
         <div className="relative z-10 space-y-6">
           {/* Metadata badges row */}
@@ -87,7 +110,16 @@ export function FormWelcomeScreen({
 
             <Badge
               variant="outline"
-              className="text-xs font-medium px-2.5 py-0.5 bg-lime-500/10 text-lime-700 dark:text-[#ccff00] border-lime-500/30 gap-1.5"
+              className="text-xs font-medium px-2.5 py-0.5 border gap-1.5"
+              style={
+                theme
+                  ? {
+                      borderColor: theme.cardBorder,
+                      color: theme.accentColor,
+                      background: `${theme.accentColor}18`,
+                    }
+                  : undefined
+              }
             >
               <IconClock className="size-3" />
               <span>{displayEstimatedTime}</span>
@@ -108,11 +140,11 @@ export function FormWelcomeScreen({
 
           {/* Title & Description */}
           <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-[1.15]">
               {displayTitle}
             </h1>
             {displayDescription && (
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line max-w-lg">
+              <p className="text-sm sm:text-base opacity-80 leading-relaxed whitespace-pre-line max-w-lg">
                 {displayDescription}
               </p>
             )}
@@ -124,13 +156,24 @@ export function FormWelcomeScreen({
               type="button"
               onClick={onStart}
               size="lg"
-              className={`w-full sm:w-auto h-12 px-8 text-base font-bold shadow-lg shadow-lime-500/15 gap-2.5 group cursor-pointer ${landingTheme.primaryButton}`}
+              className={`w-full sm:w-auto h-12 px-8 text-base font-bold shadow-lg gap-2.5 group cursor-pointer ${
+                !theme ? landingTheme.primaryButton : ""
+              }`}
+              style={
+                theme
+                  ? {
+                      background: theme.accentColor,
+                      color: theme.accentTextColor,
+                      boxShadow: `0 10px 25px -5px ${theme.glowColor}`,
+                    }
+                  : undefined
+              }
             >
               <span>{displayButtonText}</span>
               <IconArrowRight className="size-4.5 transition-transform duration-200 group-hover:translate-x-1" />
             </Button>
 
-            <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-mono select-none">
+            <div className="inline-flex items-center gap-1.5 text-xs opacity-75 font-mono select-none">
               <span>Press</span>
               <kbd className="px-2 py-0.5 text-[11px] font-sans font-semibold rounded-md border border-border bg-muted/60 shadow-2xs inline-flex items-center gap-1">
                 Enter

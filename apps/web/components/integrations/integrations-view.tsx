@@ -20,6 +20,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { IntegrationsSection } from "~/components/landing/integrations-section";
 import { CtaSection } from "~/components/landing/cta-section";
+import { landingTheme } from "~/config/landing-theme";
 import { useUser } from "~/hooks/api/auth";
 
 export function IntegrationsView() {
@@ -48,7 +49,7 @@ export function IntegrationsView() {
     <div className="py-12 sm:py-16 md:py-20 relative bg-background text-foreground">
       {/* Ambient Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-        <div className="h-[460px] w-[800px] rounded-full bg-[#CCFF00]/[0.06] blur-[160px]" />
+        <div className="h-[460px] w-[800px] rounded-full bg-lime-500/[0.08] dark:bg-[#CCFF00]/[0.06] blur-[160px]" />
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +57,7 @@ export function IntegrationsView() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge
             variant="outline"
-            className="text-xs px-3.5 py-1 border-[#CCFF00]/30 bg-[#CCFF00]/10 text-[#CCFF00] gap-1.5 mb-4 shadow-xs"
+            className={`text-xs px-3.5 py-1 ${landingTheme.badge} gap-1.5 mb-4 shadow-xs font-semibold`}
           >
             <IconSparkles className="size-3.5" />
             <span>Developer Studio &amp; Integrations</span>
@@ -101,7 +102,7 @@ export function IntegrationsView() {
       {/* Developer Quickstart Steps */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-mono font-bold text-[#CCFF00] uppercase tracking-wider">
+          <span className="text-xs font-mono font-bold text-lime-800 dark:text-[#CCFF00] uppercase tracking-wider">
             Simple 3-Step Setup
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground mt-2">
@@ -113,10 +114,10 @@ export function IntegrationsView() {
           {developerQuickstart.map((qs) => (
             <div
               key={qs.step}
-              className="rounded-2xl border border-border/80 bg-card p-6 flex flex-col justify-between hover:border-[#CCFF00]/40 transition-colors shadow-xs"
+              className="rounded-2xl border border-border/80 bg-card p-6 flex flex-col justify-between hover:border-lime-600/40 dark:hover:border-[#CCFF00]/40 transition-colors shadow-xs"
             >
               <div>
-                <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-[#CCFF00]">
+                <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-lime-800 dark:text-[#CCFF00]">
                   {qs.step} <IconArrowRight className="size-3" />
                 </span>
                 <h3 className="text-lg font-bold text-foreground mt-2">{qs.title}</h3>

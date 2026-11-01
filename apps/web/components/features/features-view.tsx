@@ -35,6 +35,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { FeaturesBentoSection } from "~/components/landing/features-bento";
 import { CtaSection } from "~/components/landing/cta-section";
+import { landingTheme } from "~/config/landing-theme";
 import { useUser } from "~/hooks/api/auth";
 
 export function FeaturesView() {
@@ -132,7 +133,7 @@ export function FeaturesView() {
     <div className="py-12 sm:py-16 md:py-20 relative bg-background text-foreground">
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-        <div className="h-[460px] w-[800px] rounded-full bg-[#CCFF00]/[0.06] blur-[160px]" />
+        <div className="h-[460px] w-[800px] rounded-full bg-lime-500/[0.08] dark:bg-[#CCFF00]/[0.06] blur-[160px]" />
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,7 +141,7 @@ export function FeaturesView() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge
             variant="outline"
-            className="text-xs px-3.5 py-1 border-[#CCFF00]/30 bg-[#CCFF00]/10 text-[#CCFF00] gap-1.5 mb-4 shadow-xs"
+            className={`text-xs px-3.5 py-1 ${landingTheme.badge} gap-1.5 mb-4 shadow-xs font-semibold`}
           >
             <IconSparkles className="size-3.5" />
             <span>Complete Feature Suite</span>

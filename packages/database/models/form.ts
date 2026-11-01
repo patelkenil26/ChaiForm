@@ -38,6 +38,12 @@ export const formsTable = pgTable("forms", {
   welcomeButtonText: varchar("welcome_button_text", { length: 60 }).default("Start Form"),
   estimatedTime: varchar("estimated_time", { length: 30 }),
 
+  // Visual Theme & Appearance
+  themePreset: varchar("theme_preset", { length: 50 }).default("citron-neon"),
+  customBgColor: varchar("custom_bg_color", { length: 255 }),
+  customTextColor: varchar("custom_text_color", { length: 50 }),
+  customAccentColor: varchar("custom_accent_color", { length: 50 }),
+
   isArchived: boolean("is_archived").default(false).notNull(),
   views: integer("views").default(0).notNull(),
 

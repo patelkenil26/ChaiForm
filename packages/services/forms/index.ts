@@ -215,6 +215,10 @@ class FormService {
         welcomeDescription: formsTable.welcomeDescription,
         welcomeButtonText: formsTable.welcomeButtonText,
         estimatedTime: formsTable.estimatedTime,
+        themePreset: formsTable.themePreset,
+        customBgColor: formsTable.customBgColor,
+        customTextColor: formsTable.customTextColor,
+        customAccentColor: formsTable.customAccentColor,
         createdAt: formsTable.createdAt,
         updatedAt: formsTable.updatedAt,
         field: {
@@ -261,6 +265,10 @@ class FormService {
       welcomeDescription,
       welcomeButtonText,
       estimatedTime,
+      themePreset,
+      customBgColor,
+      customTextColor,
+      customAccentColor,
       createdAt,
       updatedAt,
     } = rows[0]!;
@@ -324,6 +332,10 @@ class FormService {
       welcomeDescription,
       welcomeButtonText: welcomeButtonText ?? "Start Form",
       estimatedTime,
+      themePreset: themePreset ?? "citron-neon",
+      customBgColor,
+      customTextColor,
+      customAccentColor,
       createdAt,
       updatedAt,
       fields,
@@ -352,6 +364,10 @@ class FormService {
       welcomeDescription,
       welcomeButtonText,
       estimatedTime,
+      themePreset,
+      customBgColor,
+      customTextColor,
+      customAccentColor,
     } = await updateFormSettingsInput.parseAsync(payload);
 
     const updateData: {
@@ -374,6 +390,10 @@ class FormService {
       welcomeDescription?: string | null;
       welcomeButtonText?: string | null;
       estimatedTime?: string | null;
+      themePreset?: string;
+      customBgColor?: string | null;
+      customTextColor?: string | null;
+      customAccentColor?: string | null;
     } = {};
     if (category !== undefined) updateData.category = category;
     if (visibility !== undefined) updateData.visibility = visibility;
@@ -391,6 +411,10 @@ class FormService {
     if (welcomeDescription !== undefined) updateData.welcomeDescription = welcomeDescription;
     if (welcomeButtonText !== undefined) updateData.welcomeButtonText = welcomeButtonText;
     if (estimatedTime !== undefined) updateData.estimatedTime = estimatedTime;
+    if (themePreset !== undefined) updateData.themePreset = themePreset;
+    if (customBgColor !== undefined) updateData.customBgColor = customBgColor;
+    if (customTextColor !== undefined) updateData.customTextColor = customTextColor;
+    if (customAccentColor !== undefined) updateData.customAccentColor = customAccentColor;
 
     if (slug !== undefined) {
       if (slug === null || slug.trim() === "") {
@@ -454,6 +478,10 @@ class FormService {
         welcomeDescription: formsTable.welcomeDescription,
         welcomeButtonText: formsTable.welcomeButtonText,
         estimatedTime: formsTable.estimatedTime,
+        themePreset: formsTable.themePreset,
+        customBgColor: formsTable.customBgColor,
+        customTextColor: formsTable.customTextColor,
+        customAccentColor: formsTable.customAccentColor,
       });
 
     if (!result || result.length === 0 || !result[0]) {
@@ -480,6 +508,10 @@ class FormService {
       welcomeDescription: updated.welcomeDescription,
       welcomeButtonText: updated.welcomeButtonText ?? "Start Form",
       estimatedTime: updated.estimatedTime,
+      themePreset: updated.themePreset ?? "citron-neon",
+      customBgColor: updated.customBgColor,
+      customTextColor: updated.customTextColor,
+      customAccentColor: updated.customAccentColor,
     };
   }
 
