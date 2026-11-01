@@ -14,6 +14,7 @@ import { trpc } from "~/trpc/client";
 import { FormFieldRenderer } from "~/components/public-form/form-field-renderer";
 import { FormClosedScreen } from "~/components/public-form/form-closed-screen";
 import { FormSuccessScreen } from "~/components/public-form/form-success-screen";
+import { FormWelcomeScreen } from "~/components/public-form/form-welcome-screen";
 import { FormUnlockCard } from "~/components/forms/form-unlock-card";
 import { getSafeErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
@@ -36,6 +37,7 @@ export default function PublicFormPage({
 
   const [enteredPassword, setEnteredPassword] = useState<string | undefined>(undefined);
   const [isUnlocking, setIsUnlocking] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   const { form, isLoading } = useGetForm(formId, enteredPassword);
   const { recordView } = useRecordFormView();
   const [viewRecorded, setViewRecorded] = useState(false);
@@ -239,10 +241,33 @@ export default function PublicFormPage({
     return (
       <FormSuccessScreen
         formTitle={form.title}
+        customTitle={form.thankYouTitle}
+        customDescription={form.thankYouDescription}
+        buttonText={form.thankYouButtonText}
+        buttonUrl={form.thankYouButtonUrl}
+        autoRedirectUrl={form.autoRedirectUrl}
         onReset={() => {
           reset();
           setSubmitted(false);
+          setIsStarted(false);
         }}
+      />
+    );
+  }
+
+  if (form.showWelcomeScreen && !isStarted) {
+    return (
+      <FormWelcomeScreen
+        title={form.title}
+        description={form.description}
+        welcomeTitle={form.welcomeTitle}
+        welcomeDescription={form.welcomeDescription}
+        welcomeButtonText={form.welcomeButtonText}
+        estimatedTime={form.estimatedTime}
+        fieldCount={form.fields?.length ?? 0}
+        category={form.category}
+        onStart={() => setIsStarted(true)}
+        isEmbed={isEmbed}
       />
     );
   }
@@ -332,7 +357,7 @@ export default function PublicFormPage({
                     <span>Submitting response...</span>
                   </>
                 ) : (
-                  <span>Submit Response</span>
+                  <span>{form.submitButtonText || "Submit Response"}</span>
                 )}
               </Button>
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground select-none">

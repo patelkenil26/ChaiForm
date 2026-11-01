@@ -28,7 +28,15 @@ export default function DashboardPage() {
   const [presetTitle, setPresetTitle] = useState<string | undefined>(undefined);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const MAX_FORMS_LIMIT = 14;
+
   const handleOpenCreate = (title?: string) => {
+    if ((forms?.length ?? 0) >= MAX_FORMS_LIMIT) {
+      toast.error(
+        `Workspace form limit reached (${MAX_FORMS_LIMIT}/${MAX_FORMS_LIMIT}). Please delete an older form to create a new one.`,
+      );
+      return;
+    }
     setPresetTitle(title);
     setOpen(true);
   };
@@ -86,8 +94,9 @@ export default function DashboardPage() {
       if (res?.id) {
         router.push(`/forms/${res.id}`);
       }
-    } catch {
-      toast.error("Failed to create form");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create form";
+      toast.error(msg);
     }
   };
 

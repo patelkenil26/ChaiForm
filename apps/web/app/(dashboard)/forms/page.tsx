@@ -87,6 +87,18 @@ export default function FormsPage() {
     );
   }, [activeTab, activeForms, archivedForms, searchQuery, statusFilter]);
 
+  const MAX_FORMS_LIMIT = 14;
+
+  const handleOpenCreateModal = () => {
+    if ((forms?.length ?? 0) >= MAX_FORMS_LIMIT) {
+      toast.error(
+        `Workspace form limit reached (${MAX_FORMS_LIMIT}/${MAX_FORMS_LIMIT}). Please delete an older form to create a new one.`,
+      );
+      return;
+    }
+    setCreateOpen(true);
+  };
+
   const handleCreateForm = async (values: CreateFormValues) => {
     try {
       await createFormAsync({
@@ -97,8 +109,9 @@ export default function FormsPage() {
       });
       setCreateOpen(false);
       toast.success("Form created successfully!");
-    } catch {
-      toast.error("Failed to create form");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create form";
+      toast.error(msg);
     }
   };
 
@@ -174,13 +187,25 @@ export default function FormsPage() {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
             <Badge
               variant="outline"
               className={`text-[11px] px-2.5 py-0.5 gap-1.5 font-medium ${landingTheme.dashboardBadge}`}
             >
               <IconSparkles className={`size-3 ${landingTheme.iconColor}`} />
               <span>Form Directory</span>
+            </Badge>
+            <Badge
+              variant="outline"
+              className={`text-[10px] font-mono px-2 py-0.5 border-border/80 bg-muted/40 ${
+                activeForms.length >= MAX_FORMS_LIMIT
+                  ? "text-amber-500 border-amber-500/30"
+                  : "text-muted-foreground"
+              }`}
+            >
+              <span>
+                Capacity: {activeForms.length} / {MAX_FORMS_LIMIT}
+              </span>
             </Badge>
           </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
@@ -191,7 +216,7 @@ export default function FormsPage() {
           </p>
         </div>
         <Button
-          onClick={() => setCreateOpen(true)}
+          onClick={handleOpenCreateModal}
           className={`gap-1.5 self-start sm:self-auto h-9 text-xs cursor-pointer ${landingTheme.primaryButton}`}
         >
           <IconPlus className="size-4" />

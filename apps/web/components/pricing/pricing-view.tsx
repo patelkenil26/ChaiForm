@@ -23,10 +23,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { landingTheme } from "~/config/landing-theme";
 
-type Currency = "USD" | "INR";
-
 export function PricingView() {
-  const [currency, setCurrency] = useState<Currency>("USD");
   const [isYearly, setIsYearly] = useState(true);
   const [sliderIndex, setSliderIndex] = useState(2); // default 10,000 responses
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -34,94 +31,69 @@ export function PricingView() {
     "all",
   );
 
-  // Response tiers for the interactive savings calculator
+  // Response tiers for the interactive savings calculator (INR)
   const responseTiers = [
     {
       responses: "500",
-      typeformCostUSD: 29,
       typeformCostINR: 2400,
       bestPlan: "starter",
-      chaiformUSD: 0,
       chaiformINR: 0,
     },
     {
       responses: "2,500",
-      typeformCostUSD: 59,
       typeformCostINR: 4900,
       bestPlan: "pro",
-      chaiformUSD: isYearly ? 15 : 19,
       chaiformINR: isYearly ? 1199 : 1499,
     },
     {
       responses: "10,000",
-      typeformCostUSD: 99,
       typeformCostINR: 8200,
       bestPlan: "pro",
-      chaiformUSD: isYearly ? 15 : 19,
       chaiformINR: isYearly ? 1199 : 1499,
     },
     {
       responses: "50,000",
-      typeformCostUSD: 249,
       typeformCostINR: 20500,
       bestPlan: "team",
-      chaiformUSD: isYearly ? 39 : 49,
       chaiformINR: isYearly ? 3199 : 3999,
     },
     {
       responses: "100,000+",
-      typeformCostUSD: 499,
       typeformCostINR: 41000,
       bestPlan: "team",
-      chaiformUSD: isYearly ? 39 : 49,
       chaiformINR: isYearly ? 3199 : 3999,
     },
   ];
 
   const currentTier = responseTiers[sliderIndex] ?? responseTiers[2]!;
-  const monthlySavingsUSD = currentTier.typeformCostUSD - currentTier.chaiformUSD;
-  const yearlySavingsUSD = monthlySavingsUSD * 12;
-
   const monthlySavingsINR = currentTier.typeformCostINR - currentTier.chaiformINR;
   const yearlySavingsINR = monthlySavingsINR * 12;
 
   const getPrice = (plan: "starter" | "pro" | "team") => {
     if (plan === "starter") {
       return {
-        display: currency === "USD" ? "$0" : "₹0",
+        display: "₹0",
         period: "/ month",
-        subtext: "Free forever • No credit card",
+        subtext: "Free in beta • Up to 14 forms included",
       };
     }
     if (plan === "pro") {
-      if (currency === "USD") {
-        return isYearly
-          ? { display: "$15", period: "/ month", subtext: "Billed annually ($180/yr) • Save $48" }
-          : { display: "$19", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
-      } else {
-        return isYearly
-          ? {
-              display: "₹1,199",
-              period: "/ month",
-              subtext: "Billed annually (₹14,388/yr) • Save ₹3,600",
-            }
-          : { display: "₹1,499", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
-      }
-    }
-    // Team
-    if (currency === "USD") {
-      return isYearly
-        ? { display: "$39", period: "/ month", subtext: "Billed annually ($468/yr) • Save $120" }
-        : { display: "$49", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
-    } else {
       return isYearly
         ? {
-            display: "₹3,199",
+            display: "₹1,199",
             period: "/ month",
-            subtext: "Billed annually (₹38,388/yr) • Save ₹9,600",
+            subtext: "Billed annually (₹14,388/yr) • Save ₹3,600",
           }
-        : { display: "₹3,999", period: "/ month", subtext: "Billed monthly • Cancel anytime" };
+        : { display: "₹1,499", period: "/ month", subtext: "Billed monthly • Launching soon" };
     }
+    // Team
+    return isYearly
+      ? {
+          display: "₹3,199",
+          period: "/ month",
+          subtext: "Billed annually (₹38,388/yr) • Save ₹9,600",
+        }
+      : { display: "₹3,999", period: "/ month", subtext: "Billed monthly • Launching soon" };
   };
 
   const proPrice = getPrice("pro");
@@ -154,31 +126,13 @@ export function PricingView() {
 
         {/* Technical Floating Control Bar */}
         <div className="mt-10 inline-flex flex-wrap items-center justify-center gap-3 p-1.5 rounded-2xl bg-muted/70 border border-border/80 shadow-md">
-          {/* Currency Toggle */}
-          <div className="flex items-center p-0.5 rounded-xl bg-card border border-border/70 text-xs font-mono font-semibold">
-            <button
-              type="button"
-              onClick={() => setCurrency("USD")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                currency === "USD"
-                  ? "bg-[#CCFF00] text-[#0A0B0D] shadow-xs font-bold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              USD ($)
-            </button>
-            <button
-              type="button"
-              onClick={() => setCurrency("INR")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                currency === "INR"
-                  ? "bg-[#CCFF00] text-[#0A0B0D] shadow-xs font-bold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <span>INR (₹)</span>
-              <span className="text-[10px] opacity-80">UPI</span>
-            </button>
+          {/* Indian Currency Indicator */}
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-card border border-border/70 text-xs font-mono font-semibold text-foreground">
+            <span className="size-2 rounded-full bg-lime-500 dark:bg-[#CCFF00] animate-pulse" />
+            <span>INDIAN RUPEES (₹)</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground uppercase font-bold">
+              BETA
+            </span>
           </div>
 
           <div className="h-5 w-[1px] bg-border hidden sm:block" />
@@ -238,13 +192,11 @@ export function PricingView() {
                 <span>ANNUAL SAVINGS</span>
               </div>
               <div className="text-3xl font-black text-foreground mt-0.5 font-mono">
-                {currency === "USD"
-                  ? `$${yearlySavingsUSD}`
-                  : `₹${yearlySavingsINR.toLocaleString("en-IN")}`}
+                {`₹${yearlySavingsINR.toLocaleString("en-IN")}`}
                 <span className="text-xs font-normal text-muted-foreground"> / yr</span>
               </div>
               <span className="text-[11px] text-muted-foreground block mt-0.5">
-                vs Typeform (${currentTier.typeformCostUSD * 12}/yr)
+                vs Typeform (₹{(currentTier.typeformCostINR * 12).toLocaleString("en-IN")}/yr)
               </span>
             </div>
           </div>
@@ -323,7 +275,7 @@ export function PricingView() {
               <div className="border-t border-border/60 pt-4 space-y-3 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2 text-foreground font-medium">
                   <IconCheck className="size-4 text-emerald-500 shrink-0" />
-                  <span>3 active live forms</span>
+                  <span>Up to 14 active published forms</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground font-medium">
                   <IconCheck className="size-4 text-emerald-500 shrink-0" />
@@ -350,7 +302,7 @@ export function PricingView() {
                 variant="outline"
                 className="w-full text-xs font-semibold h-10 border-border bg-card hover:bg-muted text-foreground cursor-pointer"
               >
-                <Link href="/signup">Start Free</Link>
+                <Link href="/forms">Start Free (14 Forms)</Link>
               </Button>
             </div>
           </div>
@@ -360,8 +312,8 @@ export function PricingView() {
             {/* Top Citron Pill */}
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-lime-600 dark:bg-[#CCFF00] text-white dark:text-[#0A0B0D] text-[11px] font-mono font-bold tracking-wide uppercase shadow-md">
-                <IconStarFilled className="size-3 text-white dark:text-[#0A0B0D]" /> RECOMMENDED
-                CHOICE
+                <IconStarFilled className="size-3 text-white dark:text-[#0A0B0D]" /> PRO TIER •
+                COMING SOON
               </span>
             </div>
 
@@ -389,7 +341,7 @@ export function PricingView() {
                   <div className="flex items-baseline gap-2">
                     {isYearly && (
                       <span className="text-lg line-through text-muted-foreground/60 font-mono">
-                        {currency === "USD" ? "$19" : "₹1,499"}
+                        ₹1,499
                       </span>
                     )}
                     <span className="text-5xl font-black tracking-tight text-foreground font-mono">
@@ -450,13 +402,11 @@ export function PricingView() {
 
             <div className="mt-8 pt-5 border-t border-border/80">
               <Button
-                asChild
-                className={`w-full text-sm font-mono font-bold h-12 rounded-xl ${landingTheme.primaryButton} flex items-center justify-center gap-2`}
+                disabled
+                className="w-full text-xs font-mono font-bold h-12 rounded-xl bg-muted border border-border text-foreground flex items-center justify-center gap-2 cursor-not-allowed opacity-90 shadow-xs"
               >
-                <Link href="/signup?plan=pro">
-                  <span>GET STARTED WITH PRO</span>
-                  <IconArrowRight className="size-4" />
-                </Link>
+                <IconLock className="size-4 text-lime-600 dark:text-[#CCFF00]" />
+                <span>COMING SOON • BETA ACCESS ACTIVE</span>
               </Button>
             </div>
           </div>
@@ -516,11 +466,11 @@ export function PricingView() {
 
             <div className="mt-8 pt-4 border-t border-border/60">
               <Button
-                asChild
+                disabled
                 variant="outline"
-                className="w-full text-xs font-semibold h-10 border-border bg-card hover:bg-muted text-foreground cursor-pointer"
+                className="w-full text-xs font-semibold h-10 border-border bg-muted/40 text-muted-foreground cursor-not-allowed"
               >
-                <Link href="/signup?plan=agency">Get Agency Access</Link>
+                <span>Coming Soon</span>
               </Button>
             </div>
           </div>
@@ -689,12 +639,12 @@ export function PricingView() {
                   <>
                     <tr className="hover:bg-muted/30">
                       <td className="p-4 font-medium text-foreground">Active Forms</td>
-                      <td className="p-4 text-center text-muted-foreground font-mono">3</td>
+                      <td className="p-4 text-center text-muted-foreground font-mono">14 (Beta)</td>
                       <td className="p-4 text-center font-mono font-bold text-lime-800 dark:text-[#CCFF00] bg-lime-500/5 dark:bg-[#CCFF00]/[0.03] border-x border-lime-600/15 dark:border-[#CCFF00]/15">
-                        UNLIMITED
+                        UNLIMITED (Soon)
                       </td>
                       <td className="p-4 text-center font-mono font-bold text-foreground">
-                        UNLIMITED
+                        UNLIMITED (Soon)
                       </td>
                     </tr>
                     <tr className="hover:bg-muted/30">

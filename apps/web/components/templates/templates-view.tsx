@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useListPublicForms, useUseTemplate } from "~/hooks/api/form";
+import { useListForms, useListPublicForms, useUseTemplate } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
 import { getSafeErrorMessage } from "~/lib/error";
 import { toast } from "sonner";
@@ -50,6 +50,7 @@ const TEMPLATE_CATEGORIES = [
 export function TemplatesView() {
   const router = useRouter();
   const { user } = useUser();
+  const { forms } = useListForms();
   const { useTemplateAsync } = useUseTemplate();
 
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
@@ -117,6 +118,14 @@ export function TemplatesView() {
         description: "Your selection will be preserved after signing in.",
       });
       router.push(`/login?redirect=/templates`);
+      return;
+    }
+
+    const MAX_FORMS_LIMIT = 14;
+    if ((forms?.length ?? 0) >= MAX_FORMS_LIMIT) {
+      toast.error(
+        `Workspace form limit reached (${MAX_FORMS_LIMIT}/${MAX_FORMS_LIMIT}). Please delete an older form to clone or use a new template.`,
+      );
       return;
     }
 

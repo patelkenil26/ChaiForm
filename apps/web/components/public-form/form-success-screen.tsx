@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import confetti from "canvas-confetti";
-import { CheckCircle2Icon, RotateCcwIcon, SparklesIcon, ExternalLinkIcon } from "lucide-react";
+import {
+  CheckCircle2Icon,
+  RotateCcwIcon,
+  SparklesIcon,
+  ExternalLinkIcon,
+  ArrowRightIcon,
+  HourglassIcon,
+  XIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { landingTheme } from "~/config/landing-theme";
@@ -10,10 +18,26 @@ import { landingTheme } from "~/config/landing-theme";
 interface FormSuccessScreenProps {
   onReset?: () => void;
   formTitle?: string;
+  customTitle?: string | null;
+  customDescription?: string | null;
+  buttonText?: string | null;
+  buttonUrl?: string | null;
+  autoRedirectUrl?: string | null;
 }
 
-export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps) {
+export function FormSuccessScreen({
+  onReset,
+  formTitle,
+  customTitle,
+  customDescription,
+  buttonText,
+  buttonUrl,
+  autoRedirectUrl,
+}: FormSuccessScreenProps) {
   const [hasCelebrated, setHasCelebrated] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(autoRedirectUrl ? 3 : null);
+  const [isRedirectCancelled, setIsRedirectCancelled] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const fireConfetti = () => {
     try {
@@ -50,6 +74,37 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
     setHasCelebrated(true);
   }, []);
 
+  // Handle auto-redirect countdown
+  useEffect(() => {
+    if (!autoRedirectUrl || isRedirectCancelled) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          clearInterval(interval);
+          if (typeof window !== "undefined") {
+            window.location.href = autoRedirectUrl;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    timerRef.current = interval;
+
+    return () => clearInterval(interval);
+  }, [autoRedirectUrl, isRedirectCancelled]);
+
+  const handleCancelRedirect = () => {
+    setIsRedirectCancelled(true);
+    setCountdown(null);
+    if (timerRef.current) clearInterval(timerRef.current);
+  };
+
   const handleReset = () => {
     if (onReset) {
       onReset();
@@ -58,9 +113,18 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
     }
   };
 
+  const displayTitle = customTitle?.trim() || "Thank you!";
+  const displayDescription =
+    customDescription?.trim() ||
+    (formTitle
+      ? `Your submission for "${formTitle}" has been securely recorded.`
+      : "Your response has been securely recorded and sent to the form creator.");
+
+  const showActionButton = Boolean(buttonText?.trim() && buttonUrl?.trim());
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-radial from-background via-background to-muted/20">
-      <div className="text-center space-y-6 max-w-md w-full rounded-3xl border bg-card/90 backdrop-blur-md p-8 sm:p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden">
+      <div className="text-center space-y-6 max-w-md w-full rounded-3xl border border-border/80 bg-card/90 backdrop-blur-md p-8 sm:p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden">
         {/* Subtle decorative glow */}
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -82,15 +146,51 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
 
         {/* Title & Description */}
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Thank you!
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
+            {displayTitle}
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {formTitle
-              ? `Your submission for "${formTitle}" has been securely recorded.`
-              : "Your response has been securely recorded and sent to the form creator."}
+          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            {displayDescription}
           </p>
         </div>
+
+        {/* Auto-Redirect countdown banner */}
+        {autoRedirectUrl && !isRedirectCancelled && countdown !== null && (
+          <div className="p-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 text-xs flex items-center justify-between gap-2 text-amber-700 dark:text-amber-300 animate-in fade-in">
+            <div className="flex items-center gap-2 text-left">
+              <HourglassIcon className="size-4 animate-spin text-amber-500 shrink-0" />
+              <span>
+                Redirecting you in <strong>{countdown}s</strong>...{" "}
+                <a href={autoRedirectUrl} className="underline font-semibold hover:text-amber-500">
+                  Go now
+                </a>
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCancelRedirect}
+              className="p-1 rounded-md hover:bg-amber-500/20 text-muted-foreground hover:text-foreground cursor-pointer"
+              title="Cancel automatic redirect"
+            >
+              <XIcon className="size-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Primary Call-to-Action Button if configured */}
+        {showActionButton && buttonUrl && (
+          <div className="pt-1">
+            <Button
+              asChild
+              className={`w-full h-11 text-sm font-bold shadow-lg shadow-lime-500/15 gap-2 ${landingTheme.primaryButton}`}
+            >
+              <a href={buttonUrl} target="_blank" rel="noopener noreferrer">
+                <span>{buttonText}</span>
+                <ArrowRightIcon className="size-4" />
+              </a>
+            </Button>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 justify-center">
@@ -115,7 +215,7 @@ export function FormSuccessScreen({ onReset, formTitle }: FormSuccessScreenProps
         </div>
 
         {/* Footer Brand */}
-        <div className="pt-4 border-t text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
+        <div className="pt-4 border-t border-border/60 text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
           <span>Powered by</span>
           <Link
             href="/"

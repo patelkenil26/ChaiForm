@@ -47,6 +47,7 @@ export function BuilderPreviewModal({
 }: BuilderPreviewModalProps) {
   const [viewport, setViewport] = useState<ViewportMode>("desktop");
   const [isTestSubmitted, setIsTestSubmitted] = useState(false);
+  const [isPreviewStarted, setIsPreviewStarted] = useState(false);
 
   const {
     register,
@@ -61,6 +62,7 @@ export function BuilderPreviewModal({
   useEffect(() => {
     if (open) {
       setIsTestSubmitted(false);
+      setIsPreviewStarted(false);
       reset();
     }
   }, [open, reset]);
@@ -82,6 +84,7 @@ export function BuilderPreviewModal({
   const handleReset = () => {
     reset();
     setIsTestSubmitted(false);
+    setIsPreviewStarted(false);
   };
 
   const sortedFields = [...fields].sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
@@ -270,11 +273,39 @@ export function BuilderPreviewModal({
                   >
                     Test Submission Successful
                   </Badge>
-                  <h3 className="text-xl font-bold tracking-tight">Everything works smoothly!</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    This is what respondents will see when they complete your form.
+                  <h3 className="text-xl font-bold tracking-tight">
+                    {form?.thankYouTitle || "Everything works smoothly!"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
+                    {form?.thankYouDescription ||
+                      "This is what respondents will see when they complete your form."}
                   </p>
                 </div>
+
+                {/* Simulated Custom Action Button */}
+                {form?.thankYouButtonText && form?.thankYouButtonUrl && (
+                  <div className="pt-1 w-full max-w-xs">
+                    <Button
+                      asChild
+                      size="sm"
+                      className={`w-full text-xs font-semibold gap-1.5 ${landingTheme.primaryButton}`}
+                    >
+                      <a href={form.thankYouButtonUrl} target="_blank" rel="noopener noreferrer">
+                        <span>{form.thankYouButtonText}</span>
+                        <IconExternalLink className="size-3" />
+                      </a>
+                    </Button>
+                  </div>
+                )}
+
+                {/* Simulated Auto-Redirect note */}
+                {form?.autoRedirectUrl && (
+                  <div className="px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-[11px] text-amber-700 dark:text-amber-300">
+                    Auto-redirect configured:{" "}
+                    <span className="font-mono">{form.autoRedirectUrl}</span> (in 3s)
+                  </div>
+                )}
+
                 <div className="pt-4 flex items-center gap-2">
                   <Button size="sm" onClick={handleReset} className="gap-1.5">
                     <IconRefresh className="size-3.5" />
@@ -282,6 +313,47 @@ export function BuilderPreviewModal({
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => onOpenChange(false)}>
                     Done Testing
+                  </Button>
+                </div>
+              </div>
+            ) : form?.showWelcomeScreen && !isPreviewStarted ? (
+              /* Simulated Welcome / Start Screen */
+              <div className="py-10 px-2 sm:px-6 flex flex-col items-center text-center space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <Badge
+                    variant="outline"
+                    className="text-xs font-medium px-2.5 py-0.5 bg-lime-500/10 text-lime-700 dark:text-[#ccff00] border-lime-500/30 gap-1.5"
+                  >
+                    <IconClock className="size-3" />
+                    <span>{form.estimatedTime || "Takes 2 mins"}</span>
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="text-xs font-medium px-2.5 py-0.5 bg-muted/60 text-muted-foreground border-border"
+                  >
+                    {fields.length} {fields.length === 1 ? "question" : "questions"}
+                  </Badge>
+                </div>
+
+                <div className="space-y-2 max-w-md">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                    {form.welcomeTitle || form.title || "Untitled Form"}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                    {form.welcomeDescription ||
+                      form.description ||
+                      "Welcome! Please take a few moments to complete this form."}
+                  </p>
+                </div>
+
+                <div className="pt-2">
+                  <Button
+                    size="lg"
+                    onClick={() => setIsPreviewStarted(true)}
+                    className={`h-11 px-7 text-sm font-bold shadow-md shadow-lime-500/15 gap-2 cursor-pointer ${landingTheme.primaryButton}`}
+                  >
+                    <span>{form.welcomeButtonText || "Start Form"}</span>
+                    <IconExternalLink className="size-3.5 rotate-45" />
                   </Button>
                 </div>
               </div>
@@ -358,7 +430,7 @@ export function BuilderPreviewModal({
                         disabled={isSubmitting}
                       >
                         <IconSparkles className="size-3.5" />
-                        <span>Submit Response (Preview Test)</span>
+                        <span>{form?.submitButtonText || "Submit Response"} (Preview Test)</span>
                       </Button>
                       <span className="text-[11px] text-muted-foreground">
                         Simulate validation & submission flow

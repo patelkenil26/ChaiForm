@@ -53,6 +53,8 @@ const RESERVED_SLUGS = new Set([
   "support",
 ]);
 
+export const MAX_USER_FORMS_LIMIT = 14;
+
 class FormService {
   public async createForm(payload: CreateFormInputType) {
     const {
@@ -67,6 +69,19 @@ class FormService {
       slug,
       password,
     } = await createFormInput.parseAsync(payload);
+
+    // Enforce workspace limit of 14 forms per user
+    const existingFormsRes = await db
+      .select({ count: count() })
+      .from(formsTable)
+      .where(eq(formsTable.createdBy, createdBy));
+
+    const currentFormsCount = Number(existingFormsRes[0]?.count ?? 0);
+    if (currentFormsCount >= MAX_USER_FORMS_LIMIT) {
+      throw new BadRequestError(
+        `Workspace form limit reached. You can create up to ${MAX_USER_FORMS_LIMIT} forms in beta. Please delete an older form to create a new one.`,
+      );
+    }
 
     let normalizedSlug: string | null = null;
     if (slug) {
@@ -189,6 +204,17 @@ class FormService {
         passwordHash: formsTable.passwordHash,
         passwordSalt: formsTable.passwordSalt,
         views: formsTable.views,
+        submitButtonText: formsTable.submitButtonText,
+        thankYouTitle: formsTable.thankYouTitle,
+        thankYouDescription: formsTable.thankYouDescription,
+        thankYouButtonText: formsTable.thankYouButtonText,
+        thankYouButtonUrl: formsTable.thankYouButtonUrl,
+        autoRedirectUrl: formsTable.autoRedirectUrl,
+        showWelcomeScreen: formsTable.showWelcomeScreen,
+        welcomeTitle: formsTable.welcomeTitle,
+        welcomeDescription: formsTable.welcomeDescription,
+        welcomeButtonText: formsTable.welcomeButtonText,
+        estimatedTime: formsTable.estimatedTime,
         createdAt: formsTable.createdAt,
         updatedAt: formsTable.updatedAt,
         field: {
@@ -224,6 +250,17 @@ class FormService {
       passwordHash,
       passwordSalt,
       views,
+      submitButtonText,
+      thankYouTitle,
+      thankYouDescription,
+      thankYouButtonText,
+      thankYouButtonUrl,
+      autoRedirectUrl,
+      showWelcomeScreen,
+      welcomeTitle,
+      welcomeDescription,
+      welcomeButtonText,
+      estimatedTime,
       createdAt,
       updatedAt,
     } = rows[0]!;
@@ -276,6 +313,17 @@ class FormService {
       isOpen,
       isExpired,
       isLimitReached,
+      submitButtonText: submitButtonText ?? "Submit",
+      thankYouTitle,
+      thankYouDescription,
+      thankYouButtonText,
+      thankYouButtonUrl,
+      autoRedirectUrl,
+      showWelcomeScreen: showWelcomeScreen ?? false,
+      welcomeTitle,
+      welcomeDescription,
+      welcomeButtonText: welcomeButtonText ?? "Start Form",
+      estimatedTime,
       createdAt,
       updatedAt,
       fields,
@@ -293,6 +341,17 @@ class FormService {
       responseLimit,
       slug,
       password,
+      submitButtonText,
+      thankYouTitle,
+      thankYouDescription,
+      thankYouButtonText,
+      thankYouButtonUrl,
+      autoRedirectUrl,
+      showWelcomeScreen,
+      welcomeTitle,
+      welcomeDescription,
+      welcomeButtonText,
+      estimatedTime,
     } = await updateFormSettingsInput.parseAsync(payload);
 
     const updateData: {
@@ -304,12 +363,34 @@ class FormService {
       slug?: string | null;
       passwordHash?: string | null;
       passwordSalt?: string | null;
+      submitButtonText?: string | null;
+      thankYouTitle?: string | null;
+      thankYouDescription?: string | null;
+      thankYouButtonText?: string | null;
+      thankYouButtonUrl?: string | null;
+      autoRedirectUrl?: string | null;
+      showWelcomeScreen?: boolean;
+      welcomeTitle?: string | null;
+      welcomeDescription?: string | null;
+      welcomeButtonText?: string | null;
+      estimatedTime?: string | null;
     } = {};
     if (category !== undefined) updateData.category = category;
     if (visibility !== undefined) updateData.visibility = visibility;
     if (isPublished !== undefined) updateData.isPublished = isPublished;
     if (closesAt !== undefined) updateData.closesAt = closesAt;
     if (responseLimit !== undefined) updateData.responseLimit = responseLimit;
+    if (submitButtonText !== undefined) updateData.submitButtonText = submitButtonText;
+    if (thankYouTitle !== undefined) updateData.thankYouTitle = thankYouTitle;
+    if (thankYouDescription !== undefined) updateData.thankYouDescription = thankYouDescription;
+    if (thankYouButtonText !== undefined) updateData.thankYouButtonText = thankYouButtonText;
+    if (thankYouButtonUrl !== undefined) updateData.thankYouButtonUrl = thankYouButtonUrl;
+    if (autoRedirectUrl !== undefined) updateData.autoRedirectUrl = autoRedirectUrl;
+    if (showWelcomeScreen !== undefined) updateData.showWelcomeScreen = showWelcomeScreen;
+    if (welcomeTitle !== undefined) updateData.welcomeTitle = welcomeTitle;
+    if (welcomeDescription !== undefined) updateData.welcomeDescription = welcomeDescription;
+    if (welcomeButtonText !== undefined) updateData.welcomeButtonText = welcomeButtonText;
+    if (estimatedTime !== undefined) updateData.estimatedTime = estimatedTime;
 
     if (slug !== undefined) {
       if (slug === null || slug.trim() === "") {
@@ -362,6 +443,17 @@ class FormService {
         responseLimit: formsTable.responseLimit,
         slug: formsTable.slug,
         passwordHash: formsTable.passwordHash,
+        submitButtonText: formsTable.submitButtonText,
+        thankYouTitle: formsTable.thankYouTitle,
+        thankYouDescription: formsTable.thankYouDescription,
+        thankYouButtonText: formsTable.thankYouButtonText,
+        thankYouButtonUrl: formsTable.thankYouButtonUrl,
+        autoRedirectUrl: formsTable.autoRedirectUrl,
+        showWelcomeScreen: formsTable.showWelcomeScreen,
+        welcomeTitle: formsTable.welcomeTitle,
+        welcomeDescription: formsTable.welcomeDescription,
+        welcomeButtonText: formsTable.welcomeButtonText,
+        estimatedTime: formsTable.estimatedTime,
       });
 
     if (!result || result.length === 0 || !result[0]) {
@@ -377,6 +469,17 @@ class FormService {
       responseLimit: updated.responseLimit,
       slug: updated.slug,
       isPasswordProtected: Boolean(updated.passwordHash),
+      submitButtonText: updated.submitButtonText ?? "Submit",
+      thankYouTitle: updated.thankYouTitle,
+      thankYouDescription: updated.thankYouDescription,
+      thankYouButtonText: updated.thankYouButtonText,
+      thankYouButtonUrl: updated.thankYouButtonUrl,
+      autoRedirectUrl: updated.autoRedirectUrl,
+      showWelcomeScreen: updated.showWelcomeScreen ?? false,
+      welcomeTitle: updated.welcomeTitle,
+      welcomeDescription: updated.welcomeDescription,
+      welcomeButtonText: updated.welcomeButtonText ?? "Start Form",
+      estimatedTime: updated.estimatedTime,
     };
   }
 
@@ -446,6 +549,19 @@ class FormService {
 
   public async cloneForm(payload: CloneFormInputType) {
     const { formId, userId, allowPublicTemplate } = await cloneFormInput.parseAsync(payload);
+
+    // Enforce workspace limit of 14 forms per user
+    const existingFormsRes = await db
+      .select({ count: count() })
+      .from(formsTable)
+      .where(eq(formsTable.createdBy, userId));
+
+    const currentFormsCount = Number(existingFormsRes[0]?.count ?? 0);
+    if (currentFormsCount >= MAX_USER_FORMS_LIMIT) {
+      throw new BadRequestError(
+        `Workspace form limit reached. You can create up to ${MAX_USER_FORMS_LIMIT} forms in beta. Please delete an older form to clone or use a template.`,
+      );
+    }
 
     // Fetch original form: allow if owned by user or if it's a public published template
     const whereClause = allowPublicTemplate

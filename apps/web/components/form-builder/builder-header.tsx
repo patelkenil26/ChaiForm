@@ -52,6 +52,17 @@ export interface BuilderFormData {
   submissionCount: number;
   isLimitReached?: boolean;
   isPasswordProtected?: boolean;
+  submitButtonText?: string | null;
+  thankYouTitle?: string | null;
+  thankYouDescription?: string | null;
+  thankYouButtonText?: string | null;
+  thankYouButtonUrl?: string | null;
+  autoRedirectUrl?: string | null;
+  showWelcomeScreen?: boolean;
+  welcomeTitle?: string | null;
+  welcomeDescription?: string | null;
+  welcomeButtonText?: string | null;
+  estimatedTime?: string | null;
 }
 
 interface BuilderHeaderProps {

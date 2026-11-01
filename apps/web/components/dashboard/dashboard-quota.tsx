@@ -22,6 +22,7 @@ export interface DashboardQuotaProps {
 }
 
 const MONTHLY_LIMIT = 250;
+const FORMS_LIMIT = 14;
 
 /**
  * Premium Workspace Capacity & Health Meter (Quota, Free Tier limits, and Health telemetry).
@@ -34,6 +35,7 @@ export function DashboardQuota({
 }: DashboardQuotaProps) {
   const usagePercent = Math.min(100, Math.round((totalSubmissions / MONTHLY_LIMIT) * 100));
   const remaining = Math.max(0, MONTHLY_LIMIT - totalSubmissions);
+  const formsRemaining = Math.max(0, FORMS_LIMIT - totalForms);
 
   return (
     <Card
@@ -51,17 +53,17 @@ export function DashboardQuota({
             <IconCpu className="size-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold tracking-tight text-foreground">Monthly Quota</h3>
-            <p className="text-[11px] text-muted-foreground">Free Community Tier</p>
+            <h3 className="text-sm font-bold tracking-tight text-foreground">Workspace Quota</h3>
+            <p className="text-[11px] text-muted-foreground">Community Beta Tier</p>
           </div>
         </div>
 
         <span
           className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold"
-          title="Your workspace has active responses remaining"
+          title="Your workspace has active responses and form slots remaining"
         >
           <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Healthy
+          {formsRemaining > 0 ? "Healthy" : "Form Limit Reached"}
         </span>
       </div>
 
@@ -88,7 +90,7 @@ export function DashboardQuota({
         </div>
 
         <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-          <span>{remaining} responses available</span>
+          <span>{remaining} responses left</span>
           <span className="font-semibold text-foreground">{usagePercent}% consumed</span>
         </div>
       </div>
@@ -97,23 +99,28 @@ export function DashboardQuota({
       <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-muted/30 border border-border/50 text-xs mb-4">
         <div>
           <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">
-            Published Forms
+            Forms Created
           </span>
-          <span className="font-bold text-foreground mt-0.5 inline-block text-xs">
+          <span className="font-bold text-foreground mt-0.5 inline-block text-xs font-mono">
             {isDataLoading ? (
               <Skeleton className="h-4 w-6" />
             ) : (
-              `${publishedCount} of ${totalForms || 1} live`
+              <span className={totalForms >= FORMS_LIMIT ? "text-amber-500" : "text-foreground"}>
+                {totalForms} / {FORMS_LIMIT}
+              </span>
             )}
           </span>
         </div>
         <div>
           <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">
-            Security Status
+            Published Live
           </span>
-          <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5 text-xs">
-            <IconShieldCheck className="size-3.5" />
-            <span>256-bit SSL</span>
+          <span className="font-bold text-foreground mt-0.5 inline-block text-xs font-mono">
+            {isDataLoading ? (
+              <Skeleton className="h-4 w-6" />
+            ) : (
+              `${publishedCount} of ${totalForms}`
+            )}
           </span>
         </div>
       </div>
@@ -124,12 +131,12 @@ export function DashboardQuota({
         variant="outline"
         size="sm"
         className={`w-full h-8 text-xs justify-between border-border/70 ${landingTheme.buttonOutlineHover} group`}
-        title="Upgrade plan to get higher response limits, custom domains, and team members"
+        title="View plans and capabilities"
       >
         <Link href="/pricing">
           <span className="flex items-center gap-1.5 font-semibold">
             <IconSparkles className={`size-3.5 ${landingTheme.iconColor}`} />
-            <span>Upgrade for More Responses</span>
+            <span>View Plans &amp; Limits</span>
           </span>
           <IconArrowUpRight className="size-3.5 text-muted-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>

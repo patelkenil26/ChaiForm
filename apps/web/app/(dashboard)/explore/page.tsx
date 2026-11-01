@@ -33,7 +33,7 @@ import {
 } from "~/components/ui/select";
 import { TemplateCard, type PublicTemplateItem } from "~/components/templates/template-card";
 import { TemplatePreviewSheet } from "~/components/templates/template-preview-sheet";
-import { useListPublicForms, useUseTemplate } from "~/hooks/api/form";
+import { useListForms, useListPublicForms, useUseTemplate } from "~/hooks/api/form";
 import { useUser } from "~/hooks/api/auth";
 import { getSafeErrorMessage } from "~/lib/error";
 import { landingTheme } from "~/config/landing-theme";
@@ -93,6 +93,7 @@ const TEMPLATE_CATEGORIES: CategoryDefinition[] = [
 export default function DashboardExplorePage() {
   const router = useRouter();
   const { user } = useUser();
+  const { forms } = useListForms();
   const { useTemplateAsync } = useUseTemplate();
 
   const [selectedFolder, setSelectedFolder] = useState<string>("ALL");
@@ -158,6 +159,14 @@ export default function DashboardExplorePage() {
     if (!user) {
       toast.info("Please sign in to clone this template to your workspace");
       router.push(`/login?redirect=/explore`);
+      return;
+    }
+
+    const MAX_FORMS_LIMIT = 14;
+    if ((forms?.length ?? 0) >= MAX_FORMS_LIMIT) {
+      toast.error(
+        `Workspace form limit reached (${MAX_FORMS_LIMIT}/${MAX_FORMS_LIMIT}). Please delete an older form to clone or use a new template.`,
+      );
       return;
     }
 

@@ -19,6 +19,7 @@ import {
   IconArrowUpRight,
   IconCopy,
   IconForms,
+  IconLayoutList,
   IconLock,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
@@ -40,6 +41,7 @@ export interface SettingsModalProps {
 }
 
 const MONTHLY_LIMIT = 250;
+const FORMS_LIMIT = 14;
 
 type TabKey = "account" | "plan" | "appearance" | "shortcuts";
 
@@ -66,6 +68,8 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
   const usagePercent = Math.min(100, Math.round((totalSubmissions / MONTHLY_LIMIT) * 100));
   const remaining = Math.max(0, MONTHLY_LIMIT - totalSubmissions);
   const activeFormsCount = forms?.length ?? 0;
+  const formsPercent = Math.min(100, Math.round((activeFormsCount / FORMS_LIMIT) * 100));
+  const formsRemaining = Math.max(0, FORMS_LIMIT - activeFormsCount);
 
   const initials = user?.fullName
     ? user.fullName
@@ -357,20 +361,55 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
               <div className="space-y-4 animate-in fade-in-50 duration-200">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div>
-                    <h3 className="text-sm font-bold text-foreground">Monthly Capacity & Quota</h3>
+                    <h3 className="text-sm font-bold text-foreground">Workspace Limits & Quotas</h3>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Monitor respondent submission usage and plan capacity.
+                      Monitor active forms created and respondent submission limits.
                     </p>
                   </div>
                   <Badge
                     variant="outline"
                     className="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-semibold"
                   >
-                    Community Free
+                    Community Beta (14 Forms)
                   </Badge>
                 </div>
 
-                {/* Response Meter Card */}
+                {/* Meter 1: Active Forms Meter Card */}
+                <div className="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-3">
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="font-semibold text-foreground flex items-center gap-1.5">
+                      <IconLayoutList className="size-3.5 text-lime-500 dark:text-[#CCFF00]" />
+                      Active Forms Created
+                    </span>
+                    <span className="font-mono text-xs font-bold text-foreground">
+                      <span className={landingTheme.primaryText}>{activeFormsCount}</span>
+                      <span className="text-muted-foreground/70"> / {FORMS_LIMIT}</span>
+                    </span>
+                  </div>
+
+                  <Progress value={formsPercent} className="h-2 bg-muted/60" />
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
+                    <div className="p-2 rounded-lg bg-card/80 border border-border/40">
+                      <span className="text-muted-foreground block text-[10px]">
+                        Forms Remaining
+                      </span>
+                      <span className="font-mono font-bold text-foreground">{formsRemaining}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-card/80 border border-border/40">
+                      <span className="text-muted-foreground block text-[10px]">Capacity Used</span>
+                      <span className="font-mono font-bold text-foreground">{formsPercent}%</span>
+                    </div>
+                    <div className="col-span-2 sm:col-span-1 p-2 rounded-lg bg-card/80 border border-border/40">
+                      <span className="text-muted-foreground block text-[10px]">Tier Cap</span>
+                      <span className="font-medium text-foreground text-[10px]">
+                        14 Forms in Beta
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Meter 2: Respondent Answers Meter Card */}
                 <div className="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-3">
                   <div className="flex items-baseline justify-between text-xs">
                     <span className="font-semibold text-foreground flex items-center gap-1.5">
@@ -387,7 +426,9 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
                     <div className="p-2 rounded-lg bg-card/80 border border-border/40">
-                      <span className="text-muted-foreground block text-[10px]">Remaining</span>
+                      <span className="text-muted-foreground block text-[10px]">
+                        Responses Left
+                      </span>
                       <span className="font-mono font-bold text-foreground">{remaining}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-card/80 border border-border/40">
@@ -401,37 +442,42 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
                   </div>
                 </div>
 
-                {/* Pro Tier Upgrade Card */}
+                {/* Pro Tier Card (Coming Soon) */}
                 <div className="rounded-xl border border-border/80 bg-gradient-to-br from-card via-muted/20 to-card p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="flex size-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                      <div className="flex size-7 items-center justify-center rounded-lg bg-lime-500/10 text-lime-600 dark:text-[#CCFF00] border border-lime-500/20">
                         <IconSparkles className="size-4" />
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-foreground block">
-                          ChaiForm Pro
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-bold text-foreground block">
+                            ChaiForm Pro
+                          </span>
+                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-muted text-muted-foreground uppercase border border-border/60">
+                            Coming Soon
+                          </span>
+                        </div>
                         <span className="text-[10px] text-muted-foreground">
-                          Unlock unlimited potential
+                          Unlimited forms, custom domains & 10k responses
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-foreground font-mono">$12 / month</span>
+                    <span className="text-xs font-bold text-foreground font-mono">₹1,499 / mo</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-muted-foreground pt-1">
-                    <div className="flex items-center gap-1.5">
-                      <IconCheck className="size-3 text-emerald-400 shrink-0" />
-                      <span>5,000 monthly responses</span>
-                    </div>
                     <div className="flex items-center gap-1.5">
                       <IconCheck className="size-3 text-emerald-400 shrink-0" />
                       <span>Unlimited published forms</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <IconCheck className="size-3 text-emerald-400 shrink-0" />
-                      <span>Custom domain support</span>
+                      <span>10,000 monthly responses</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <IconCheck className="size-3 text-emerald-400 shrink-0" />
+                      <span>Custom domains (/f/your-brand)</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <IconCheck className="size-3 text-emerald-400 shrink-0" />
@@ -443,10 +489,11 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
                     asChild
                     size="sm"
                     onClick={() => onOpenChange(false)}
-                    className={`w-full text-xs h-8.5 justify-between ${landingTheme.primaryButton}`}
+                    variant="outline"
+                    className="w-full text-xs h-8.5 justify-between border-border bg-card hover:bg-muted text-foreground"
                   >
                     <Link href="/pricing">
-                      <span className="font-semibold">Upgrade Workspace Plan</span>
+                      <span className="font-semibold">View All Plans & Capabilities</span>
                       <IconArrowUpRight className="size-3.5" />
                     </Link>
                   </Button>
