@@ -114,32 +114,34 @@ export default function SettingsPage() {
       {/* Settings Navigation Layout */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
         {/* Left Navigation Tabs Rail */}
-        <div className="md:col-span-1 flex md:flex-col gap-1 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+        <div className="md:col-span-1 flex md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0 p-1.5 rounded-xl bg-muted/25 md:bg-transparent border border-border/60 md:border-0 shrink-0">
           <button
             type="button"
             onClick={() => setActiveSection("profile")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all w-full text-left cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer shrink-0 md:w-full ${
               activeSection === "profile"
-                ? "bg-muted/80 text-foreground border border-border/70 shadow-xs"
+                ? "bg-background md:bg-muted/80 text-foreground border border-border/70 shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
             <IconUser className="size-4 shrink-0 text-muted-foreground" />
-            <span>Profile & Account</span>
+            <span className="hidden md:inline">Profile & Account</span>
+            <span className="md:hidden">Profile</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSection("plan")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all w-full text-left cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer shrink-0 md:w-full ${
               activeSection === "plan"
-                ? "bg-muted/80 text-foreground border border-border/70 shadow-xs"
+                ? "bg-background md:bg-muted/80 text-foreground border border-border/70 shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
-            <IconBolt className="size-4 shrink-0 text-lime-400" />
-            <div className="flex-1 flex items-center justify-between min-w-0">
-              <span>Plan & Usage</span>
+            <IconBolt className="size-4 shrink-0 text-lime-500 dark:text-[#ccff00]" />
+            <div className="flex items-center justify-between gap-1.5 md:flex-1">
+              <span className="hidden md:inline">Plan & Usage</span>
+              <span className="md:hidden">Plan</span>
               <span className="font-mono text-[10px] text-muted-foreground">
                 {totalSubmissions}/{MONTHLY_LIMIT}
               </span>
@@ -149,42 +151,44 @@ export default function SettingsPage() {
           <button
             type="button"
             onClick={() => setActiveSection("appearance")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all w-full text-left cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer shrink-0 md:w-full ${
               activeSection === "appearance"
-                ? "bg-muted/80 text-foreground border border-border/70 shadow-xs"
+                ? "bg-background md:bg-muted/80 text-foreground border border-border/70 shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
             <IconPalette className="size-4 shrink-0 text-muted-foreground" />
-            <span>Appearance</span>
+            <span className="hidden md:inline">Appearance</span>
+            <span className="md:hidden">Theme</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSection("developer")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all w-full text-left cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer shrink-0 md:w-full ${
               activeSection === "developer"
-                ? "bg-muted/80 text-foreground border border-border/70 shadow-xs"
+                ? "bg-background md:bg-muted/80 text-foreground border border-border/70 shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
             <IconWebhook className="size-4 shrink-0 text-muted-foreground" />
-            <span>API & Webhooks</span>
+            <span className="hidden md:inline">API & Webhooks</span>
+            <span className="md:hidden">API</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSection("shortcuts")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all w-full text-left cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer shrink-0 md:w-full ${
               activeSection === "shortcuts"
-                ? "bg-muted/80 text-foreground border border-border/70 shadow-xs"
+                ? "bg-background md:bg-muted/80 text-foreground border border-border/70 shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
             }`}
           >
             <IconKeyboard className="size-4 shrink-0 text-muted-foreground" />
-            <div className="flex-1 flex items-center justify-between">
+            <div className="flex items-center justify-between gap-1.5 md:flex-1">
               <span>Shortcuts</span>
-              <kbd className="text-[10px] font-mono px-1 rounded bg-muted text-muted-foreground border border-border/60">
+              <kbd className="hidden md:inline text-[10px] font-mono px-1 rounded bg-muted text-muted-foreground border border-border/60">
                 ⌘K
               </kbd>
             </div>

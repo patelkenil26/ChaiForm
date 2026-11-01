@@ -118,59 +118,64 @@ export function SettingsModal({ open, onOpenChange, defaultTab = "account" }: Se
           </div>
         </div>
 
-        {/* Mobile Horizontal Tabs Bar */}
-        <div className="sm:hidden flex items-center gap-1.5 px-3 py-2 border-b border-border/50 bg-muted/20 overflow-x-auto no-scrollbar shrink-0">
-          <button
-            type="button"
-            onClick={() => setActiveTab("account")}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-              activeTab === "account"
-                ? "bg-background text-foreground shadow-xs border border-border/80"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <IconUser className="size-3.5 text-muted-foreground" />
-            <span>Profile</span>
-          </button>
+        {/* Mobile 4-Option Segmented Navigation Bar (100% visible, zero truncation, no hidden scroll) */}
+        <div className="sm:hidden p-2.5 border-b border-border/60 bg-muted/25 shrink-0">
+          <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-muted/40 border border-border/70">
+            <button
+              type="button"
+              onClick={() => setActiveTab("account")}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === "account"
+                  ? "bg-background text-foreground shadow-xs border border-border/80 font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <IconUser className="size-4 shrink-0 text-muted-foreground" />
+              <span className="text-[11px] font-medium leading-none">Profile</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("plan")}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-              activeTab === "plan"
-                ? "bg-background text-foreground shadow-xs border border-border/80"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <IconBolt className="size-3.5 text-lime-400" />
-            <span>Plan ({totalSubmissions}/250)</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("plan")}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === "plan"
+                  ? "bg-background text-foreground shadow-xs border border-border/80 font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <div className="relative flex items-center justify-center">
+                <IconBolt className="size-4 shrink-0 text-lime-600 dark:text-[#ccff00]" />
+                <span className="absolute -top-0.5 -right-0.5 size-1.5 rounded-full bg-lime-500 dark:bg-[#ccff00]" />
+              </div>
+              <span className="text-[11px] font-medium leading-none">Plan</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("appearance")}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-              activeTab === "appearance"
-                ? "bg-background text-foreground shadow-xs border border-border/80"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <IconPalette className="size-3.5 text-muted-foreground" />
-            <span>Theme</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("appearance")}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === "appearance"
+                  ? "bg-background text-foreground shadow-xs border border-border/80 font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <IconPalette className="size-4 shrink-0 text-muted-foreground" />
+              <span className="text-[11px] font-medium leading-none">Theme</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("shortcuts")}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-              activeTab === "shortcuts"
-                ? "bg-background text-foreground shadow-xs border border-border/80"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <IconKeyboard className="size-3.5 text-muted-foreground" />
-            <span>Shortcuts</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("shortcuts")}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === "shortcuts"
+                  ? "bg-background text-foreground shadow-xs border border-border/80 font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <IconKeyboard className="size-4 shrink-0 text-muted-foreground" />
+              <span className="text-[11px] font-medium leading-none">Shortcuts</span>
+            </button>
+          </div>
         </div>
 
         {/* Main Body: Desktop Sidebar + Content Area */}
